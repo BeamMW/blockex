@@ -1,4 +1,18 @@
-# Blocks explorer backend deploy
+# Beam Blockchain explorer 
+
+Requirements:
+
+1. Beam explorer node from https://github.com/BeamMW/beam
+2. redis
+3. Python Django 2 (backend)
+4. Celery (for periodic blockchain updates)
+5. Angular 6 with Angular Material (frontend)
+
+# Running Beam Blockchain Explorer on local machine
+
+TODO: Add instructions
+
+# Deploying Beam Blockchain Explorer backend on Linux platform
 
 ## General Linux 
 
