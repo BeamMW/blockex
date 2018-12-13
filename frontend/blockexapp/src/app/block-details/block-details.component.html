@@ -1,0 +1,112 @@
+<mat-progress-bar mode="indeterminate" *ngIf="loading_block"></mat-progress-bar>
+<section *ngIf="!loading_block && !notFound">
+  <mat-card class="details-card-container">
+    <mat-card-content>
+      <mat-table #table [dataSource]="block.data">
+        <ng-container matColumnDef="name">
+          <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="value">
+          <mat-cell *matCellDef="let element"> {{element.value}} {{element.additional}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="block-header">
+          <mat-header-cell *matHeaderCellDef style="font-size: 18px">
+            {{block.header}}
+          </mat-header-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="['block-header']"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns.block;"></mat-row>
+      </mat-table>
+
+      <div class="expansion-data-rows">
+        <mat-expansion-panel class="expansion-data-panel">
+          <mat-expansion-panel-header class="expansion-data-header">
+            <mat-panel-title class="expansion-data-title">
+              Inputs ({{block.inputs.length}})
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-table #table [dataSource]="block.inputs">
+            <ng-container matColumnDef="commitment">
+              <mat-header-cell *matHeaderCellDef> Commitment </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.commitment}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="maturity">
+              <mat-header-cell *matHeaderCellDef> Maturity </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.maturity}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns.inputs"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns.inputs;"></mat-row>
+          </mat-table>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="expansion-data-panel">
+          <mat-expansion-panel-header class="expansion-data-header">
+            <mat-panel-title class="expansion-data-title">
+              Outputs ({{block.outputs.length}})
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-table #table [dataSource]="block.outputs">
+            <ng-container matColumnDef="commitment">
+              <mat-header-cell *matHeaderCellDef> Commitment </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.commitment}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="maturity">
+              <mat-header-cell *matHeaderCellDef> Maturity </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.maturity}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="coinbase">
+              <mat-header-cell *matHeaderCellDef> Coinbase </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.coinbase}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="incubation">
+              <mat-header-cell *matHeaderCellDef> Incubation </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.incubation}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns.outputs"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns.outputs;"></mat-row>
+          </mat-table>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="expansion-data-panel">
+          <mat-expansion-panel-header class="expansion-data-header">
+            <mat-panel-title class="expansion-data-title">
+              Kernels ({{block.kernels.length}})
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-table #table [dataSource]="block.kernels">
+            <ng-container matColumnDef="fee">
+              <mat-header-cell *matHeaderCellDef> Fee </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.fee}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns.kernels"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns.kernels;"></mat-row>
+          </mat-table>
+        </mat-expansion-panel>
+      </div>
+
+      <button mat-raised-button color="primary" class="details-button-back" (click)="backToExplorer()">Back</button>
+    </mat-card-content>
+  </mat-card>
+</section>
+
+<section *ngIf="!loading_block && notFound">
+  <mat-card class="not-found-card-container">
+    <mat-card-content class="not-found-content">
+      Block was not found. Please refine your search.
+    </mat-card-content>
+    <button mat-raised-button color="primary" class="details-button-back" (click)="backToExplorer()">Back</button>
+  </mat-card>
+</section>

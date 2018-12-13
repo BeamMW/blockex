@@ -1,0 +1,50 @@
+.mat-column-block-header{
+    color: #3f51b5;
+    font-weight: bold;
+}
+
+.mat-column-name{
+    font-weight: bold;
+    max-width: 300px;
+}
+
+.details-card-container{
+    max-width: 1140px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.expansion-data-rows{
+    margin-top: 20px;
+}
+
+.expansion-data-title{
+    font-weight: bold;
+}
+
+.expansion-data-panel{
+    margin-top: 5px;
+}
+
+.details-button-back{
+    margin-top: 50px;
+}
+
+.mat-column-commitment{
+    min-width: 520px;
+}
+
+.not-found-content{
+    font-size: 25pt;
+}
+
+.not-found-card-container{
+    max-width: 410px;
+    margin-top: 100px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}

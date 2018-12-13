@@ -1,0 +1,8 @@
+<mat-progress-bar mode="indeterminate" *ngIf="loading_status"></mat-progress-bar>
+<!-- Some charts -->
+<section class="overview-container" >
+    <div class="chart-container">
+        <app-charts-component (chartsLoaded)="onChartsLoaded($event)" [height]="height" [fullSize]="true"></app-charts-component>
+    </div>
+    <button *ngIf="!loading_status" mat-raised-button color="primary" (click)="backToExplorer()">Back</button>
+</section>

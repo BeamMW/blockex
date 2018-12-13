@@ -1,0 +1,20 @@
+.chart-item {
+    display: inline-block;
+    width: 730px;
+    margin-left: 50px;
+}
+
+.chart-item-full {
+    display: inline-block;
+    width: 1200px;
+}
+
+@media all and (max-width: 1599px) {
+    .chart-item {
+        width: 520px;
+    }
+
+    .chart-item-full {
+        width: 1000px;
+    }
+}

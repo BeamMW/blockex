@@ -1,0 +1,7 @@
+
+*.pyc
+db.sqlite3
+*.cache
+frontend/blockexapp/.firebase/hosting.ZGlzdC9ibG9ja2V4YXBw.cache
+db.sqlite3
+.idea/

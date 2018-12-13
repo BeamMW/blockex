@@ -1,0 +1,50 @@
+.canvas-chart {
+    width: 50%;
+    height: 700px;
+}
+
+table {
+  width: 100%;
+}
+
+.overview-container{
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.chart-container {
+    display: inline-table;
+    width:100%;
+    height:350px;
+    padding:20px;
+    border:1px solid #eee;
+}
+
+.block-card {
+    margin:1em 2em;
+    width:310px;
+    float:left;
+    padding-left: 30px;
+}
+
+.block-card-content {
+    font-size: 10pt;
+    padding: 30px;
+}
+
+@media all and (max-width: 1599px) {
+    .chart-container {
+        height:300px;
+    }
+
+    .block-card {
+        margin:0.5em;
+        width: 255px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .block-card-content {
+        padding: 5px;
+    }
+}

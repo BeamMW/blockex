@@ -1,0 +1,97 @@
+    <mat-progress-bar mode="indeterminate" *ngIf="loading_status || loading_blocks || loading_charts"></mat-progress-bar>
+    <!-- Some charts -->
+    <section class="overview-container">
+      <div class="chart-container">
+          <div class="chart">
+              <app-charts-component (chartsLoaded)="onChartsLoaded($event)" [height]="status.height" [fullSize]="false" (click)="showCharts()"></app-charts-component>
+          </div>
+      </div>
+      <!-- Height -->
+      <section *ngIf="!loading_status">
+        <mat-card class="block-card">
+          <mat-card-header>
+            <mat-card-subtitle>Blockchain height:</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="block-card-content">
+            <h2>{{status?.height}}</h2>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="block-card">
+          <mat-card-header>
+            <mat-card-subtitle>Latest block:</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="block-card-content">
+            <h2>{{status?.timestamp | date:'medium'}}</h2>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="block-card">
+          <mat-card-header>
+            <mat-card-subtitle>Latest block difficulty:</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="block-card-content">
+            <h2>{{status?.difficulty}}</h2>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="block-card">
+          <mat-card-header>
+            <mat-card-subtitle>Total emission:</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="block-card-content">
+            <h2>{{status?.total_emission | number:'.'}} beam</h2>
+          </mat-card-content>
+        </mat-card>
+      </section>
+    </section>
+    <div style="clear: both"></div>
+    <!-- Top blocks section-->
+    <section *ngIf="!loading_status">
+      <mat-paginator [pageSize]="20" [pageIndex]="page" [length]="count" (page)="pageEvent = loadBlocks($event)" showFirstLastButtons></mat-paginator>
+      <mat-card *ngIf="!loading_blocks">
+        <mat-card-content>
+          <table  mat-table [dataSource]="blocks" class="mat-elevation-z8">
+            <!-- Height Column -->
+            <ng-container matColumnDef="height">
+              <th mat-header-cell *matHeaderCellDef> Height </th>
+              <td mat-cell *matCellDef="let element"> {{element.height}} </td>
+            </ng-container>
+            <!-- Hash Column -->
+            <ng-container matColumnDef="hash">
+              <th mat-header-cell *matHeaderCellDef> Hash </th>
+              <td mat-cell *matCellDef="let element">
+                <a [routerLink]="['/block', element.hash]">{{element.hash}}</a></td>
+            </ng-container>
+            <ng-container matColumnDef="age">
+              <th mat-header-cell *matHeaderCellDef> Age </th>
+              <td mat-cell *matCellDef="let element"> {{element.timestamp | date:'medium'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="difficulty">
+              <th mat-header-cell *matHeaderCellDef> Difficulty </th>
+              <td mat-cell *matCellDef="let element"> {{element.difficulty}} </td>
+            </ng-container>
+            <ng-container matColumnDef="inputs">
+              <th mat-header-cell *matHeaderCellDef> # inputs </th>
+              <td mat-cell *matCellDef="let element"> {{element.inputs.length}} </td>
+            </ng-container>
+            <ng-container matColumnDef="outputs">
+              <th mat-header-cell *matHeaderCellDef> # outputs </th>
+              <td mat-cell *matCellDef="let element"> {{element.outputs.length}} </td>
+            </ng-container>
+            <ng-container matColumnDef="kernels">
+              <th mat-header-cell *matHeaderCellDef> # kernels </th>
+              <td mat-cell *matCellDef="let element"> {{element.kernels.length}} </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button (click)="showBlockDetails(element.hash)" >
+                  <mat-icon aria-label="Details">details</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </section>
+<router-outlet></router-outlet>

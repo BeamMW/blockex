@@ -1,0 +1,15 @@
+<header>
+  <mat-toolbar style="padding:0" color="primary">
+    <img (click)="navigateToHomepage()" class="logo-title" src="assets/logo.png" width=60 height=60 alt="">
+    <span (click)="navigateToHomepage()" class="logo-title">Beam Block Explorer </span>
+    <span class="env-title">(Testnet3)</span>
+    <span style="flex: 1 1 auto;"></span>
+    <form style="margin-right: 20px">
+      <mat-form-field style="width:400px" floatLabel="never">
+        <input matInput #searchInput (keyup.enter)="searchProcess(searchInput.value)" placeholder="Search block by hash..." type="search">
+      </mat-form-field>
+      <button mat-flat-button class="search-button" (click)="searchProcess(searchInput.value)">Search</button>
+    </form>
+  </mat-toolbar>
+</header>
+<router-outlet></router-outlet>
