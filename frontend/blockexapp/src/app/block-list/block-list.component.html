@@ -1,13 +1,13 @@
     <mat-progress-bar mode="indeterminate" *ngIf="loading_status || loading_blocks || loading_charts"></mat-progress-bar>
     <!-- Some charts -->
-    <section class="overview-container">
+    <section class="overview-container" *ngIf="!loading_status">
       <div class="chart-container">
           <div class="chart">
               <app-charts-component (chartsLoaded)="onChartsLoaded($event)" [height]="status.height" [fullSize]="false" (click)="showCharts()"></app-charts-component>
           </div>
       </div>
       <!-- Height -->
-      <section *ngIf="!loading_status">
+      <section>
         <mat-card class="block-card">
           <mat-card-header>
             <mat-card-subtitle>Blockchain height:</mat-card-subtitle>
