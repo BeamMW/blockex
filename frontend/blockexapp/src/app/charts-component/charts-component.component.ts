@@ -66,13 +66,13 @@ export class ChartsComponentComponent implements OnInit {
               data: {
                   labels: chartsData.rangeLabels,
                   datasets: [{
-                      label: "Blocks",
+                      label: "Blocks per hour",
                       data: chartsData.range,
                       borderColor: "red",
                       fill: false,
                       yAxisID: 'y-axis-1',
                   }, {
-                      label: "Difficulty",
+                      label: "Difficulty per hour",
                       data: chartsData.difficulty,
                       borderColor: "green",
                       fill: false,
@@ -119,7 +119,7 @@ export class ChartsComponentComponent implements OnInit {
                       yAxes: [{
                           scaleLabel: {
                               display: true,
-                              labelString: 'Blocks'
+                              labelString: 'Blocks per hour'
                           },
                           id: 'y-axis-1',
                           position: 'left',
@@ -127,7 +127,7 @@ export class ChartsComponentComponent implements OnInit {
                       }, {
                           scaleLabel: {
                               display: true,
-                              labelString: 'Difficulty'
+                              labelString: 'Difficulty per hour'
                           },
                           type: 'linear',
                           display: true,
