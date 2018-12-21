@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../services';
+import { ChartsComponent } from '../charts-component/charts-component.component';
 import { Observable, of} from 'rxjs';
 import { map, delay, flatMap, concatAll, concatMap } from 'rxjs/operators';
 import { Block } from '../models';
@@ -14,10 +15,14 @@ import { Router} from '@angular/router';
   styleUrls: ['./block-list.component.css']
 })
 export class BlockListComponent implements OnInit {
+  @ViewChild(ChartsComponent) child: ChartsComponent;
 
-  status: any; // basically latest block and some data
+  status : any; // basically latest block and some data
+  lastHeight : number;
 
-  blocks : any = [];
+  blocks : any;
+  dataSource : any;
+  updatesCounter : number = 0;
 
   count : number;
   page : number = 0;
@@ -27,15 +32,14 @@ export class BlockListComponent implements OnInit {
   next : string;
   prev : string;
 
-  displayedColumns: string[] = ['height', 'hash', 'age', 'difficulty', 'inputs', 'outputs', 'kernels', 'actions'];
+  displayedColumns : string[] = ['height', 'hash', 'age',
+      'difficulty', 'inputs', 'outputs', 'kernels', 'actions'];
 
-  loading_status: boolean = false;
-  loading_blocks: boolean = false;
-  loading_charts: boolean = false;
+  loading_status : boolean = false;
+  loading_blocks : boolean = false;
+  loading_charts : boolean = false;
 
-  constructor(private dataService: DataService, private router: Router) {
-
-  }
+  constructor(private dataService: DataService, private router: Router) {}
 
   public loadBlocks(event?:PageEvent){
 
@@ -48,6 +52,8 @@ export class BlockListComponent implements OnInit {
       console.log('Blocks',data);
 
       this.blocks = data['results'];
+      this.dataSource = new MatTableDataSource(this.blocks);
+
       this.count = data['count'];
       this.prev = data['prev'];
       this.next = data['next'];
@@ -63,24 +69,49 @@ export class BlockListComponent implements OnInit {
   }
 
   public showCharts() {
-      this.router.navigate(
-          ['/charts', this.status.height]
-      );
+    this.router.navigate(
+      ['/charts', this.status.height]
+    );
   }
 
   public showBlockDetails(hash) {
-      this.router.navigate(
-          ['/block', hash]
-      );
+    this.router.navigate(
+      ['/block', hash]
+    );
+  }
+
+  public updateBlocks(){
+    const MINUTES_IN_HOUR = 60;
+    this.dataService.loadStatus().subscribe((status) => {
+      if (this.lastHeight < status.height){
+        this.updatesCounter++;
+        this.lastHeight = status.height;
+        this.status = status;
+
+        this.dataService.loadBlock(status.hash).subscribe((blockItem) => {
+          this.blocks.pop();
+          this.blocks.unshift(blockItem);
+          this.dataSource._updateChangeSubscription()
+        });
+
+        //trigger charts update
+        if (this.updatesCounter === MINUTES_IN_HOUR){
+          this.updatesCounter = 0;
+          this.child.updateCharts(status.height);
+        }
+      }
+    })
   }
 
   ngOnInit() {
+    setInterval(() => this.updateBlocks(), 60000);
     this.loading_status = true;
     this.loading_charts = true;
 
     this.dataService.loadStatus().subscribe((status) => {
       console.log('Status', status);
       this.status = status;
+      this.lastHeight = status.height;
       this.loading_status = false;
     });
 

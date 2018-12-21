@@ -1,0 +1,6 @@
+export enum chartsConsts {
+  COUNT_OF_BLOCK_IN_CHART = 5000,
+  MINUTE = 60000,
+  COUNT_OF_MINUTES = 60,
+  FIXED_BLOCKS_COORD = 60
+}

@@ -27,7 +27,7 @@ import { BlockDetailsComponent } from './block-details/block-details.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { BlockListComponent } from './block-list/block-list.component';
 import { BlockChartsComponent } from './block-charts/block-charts.component';
-import { ChartsComponentComponent } from './charts-component/charts-component.component';
+import { ChartsComponent } from './charts-component/charts-component.component';
 
 
 @NgModule({
@@ -37,7 +37,7 @@ import { ChartsComponentComponent } from './charts-component/charts-component.co
     BlockDetailsComponent,
     BlockListComponent,
     BlockChartsComponent,
-    ChartsComponentComponent
+    ChartsComponent
   ],
   imports: [
     BrowserModule,

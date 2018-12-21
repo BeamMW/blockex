@@ -17,7 +17,7 @@ export class DataService {
   }
 
   loadStatus() {
-  	return this.http.get<Status[]>(this.API_BASE + '/explorer/status/');
+  	return this.http.get<Status>(this.API_BASE + '/explorer/status/');
   }
 
   loadBlock(hash) {

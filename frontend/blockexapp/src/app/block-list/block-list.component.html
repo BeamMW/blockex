@@ -3,7 +3,10 @@
     <section class="overview-container" *ngIf="!loading_status">
       <div class="chart-container">
           <div class="chart">
-              <app-charts-component (chartsLoaded)="onChartsLoaded($event)" [height]="status.height" [fullSize]="false" (click)="showCharts()"></app-charts-component>
+              <app-charts-component (chartsLoaded)="onChartsLoaded($event)"
+                                    [height]="status.height"
+                                    [fullSize]="false"
+                                    (click)="showCharts()"></app-charts-component>
           </div>
       </div>
       <!-- Height -->
@@ -48,7 +51,7 @@
       <mat-paginator [pageSize]="20" [pageIndex]="page" [length]="count" (page)="pageEvent = loadBlocks($event)" showFirstLastButtons></mat-paginator>
       <mat-card *ngIf="!loading_blocks">
         <mat-card-content>
-          <table  mat-table [dataSource]="blocks" class="mat-elevation-z8">
+          <table  mat-table [dataSource]="dataSource" class="mat-elevation-z8">
             <!-- Height Column -->
             <ng-container matColumnDef="height">
               <th mat-header-cell *matHeaderCellDef> Height </th>
