@@ -82,13 +82,17 @@ export class BlockListComponent implements OnInit {
 
   public updateBlocks(){
     const MINUTES_IN_HOUR = 60;
+    const MAX_TABLE_SIZE = 20;
     this.dataService.loadStatus().subscribe((status) => {
       if (this.lastHeight < status.height){
         this.updatesCounter++;
 
-        this.dataService.loadBlocksRange(this.lastHeight, status.height, true).subscribe((blocksToAdd) => {
+        this.dataService.loadBlocksRange(this.lastHeight + 1, status.height, true).subscribe((blocksToAdd) => {
           blocksToAdd.reverse();
-          this.blocks.splice(0, blocksToAdd.length, ...blocksToAdd);
+          if (this.blocks.length === MAX_TABLE_SIZE) {
+            this.blocks.splice(this.blocks.length - blocksToAdd.length, blocksToAdd.length);
+          }
+          this.blocks.unshift(...blocksToAdd);
 
           this.lastHeight = status.height;
           this.status = status;
