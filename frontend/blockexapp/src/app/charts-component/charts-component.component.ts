@@ -190,7 +190,7 @@ export class ChartsComponent implements OnInit {
 
   updateCharts(height) {
     this.dataService.loadBlocksRange(height - chartsConsts.COUNT_OF_BLOCK_IN_CHART,
-      this.height).subscribe((data) => {
+      this.height, false).subscribe((data) => {
       let chartsData = this.constructChartsData(data);
       this.chart.data.datasets[0].data = chartsData.range;
       this.chart.data.labels = chartsData.rangeLabels;
@@ -206,7 +206,7 @@ export class ChartsComponent implements OnInit {
 
   ngOnInit() {
     this.dataService.loadBlocksRange(this.height - chartsConsts.COUNT_OF_BLOCK_IN_CHART,
-        this.height).subscribe((data) => {
+        this.height, false).subscribe((data) => {
       let chartsData = this.constructChartsData(data);
       this.initCharts(chartsData);
     });

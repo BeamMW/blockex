@@ -85,12 +85,13 @@ export class BlockListComponent implements OnInit {
     this.dataService.loadStatus().subscribe((status) => {
       if (this.lastHeight < status.height){
         this.updatesCounter++;
-        this.lastHeight = status.height;
-        this.status = status;
 
-        this.dataService.loadBlock(status.hash).subscribe((blockItem) => {
-          this.blocks.pop();
-          this.blocks.unshift(blockItem);
+        this.dataService.loadBlocksRange(this.lastHeight, status.height, true).subscribe((blocksToAdd) => {
+          blocksToAdd.reverse();
+          this.blocks.splice(0, blocksToAdd.length, ...blocksToAdd);
+
+          this.lastHeight = status.height;
+          this.status = status;
           this.dataSource._updateChangeSubscription()
         });
 

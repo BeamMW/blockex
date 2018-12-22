@@ -22,9 +22,13 @@ def get_block_range(request):
 
     from_height = request.GET['from']
     to_height = request.GET['to']
+    from_update = request.GET.get('update')
 
     blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height)
-    serializer = BlockHeaderSerializer(blocks, many=True)
+    if from_update is None:
+        serializer = BlockHeaderSerializer(blocks, many=True)
+    else:
+        serializer = BlockSerializer(blocks, many=True)
 
     return Response(serializer.data, status=HTTP_200_OK)
 
