@@ -52,8 +52,7 @@ export class BlockDetailsComponent implements OnInit {
               {name: 'Difficulty', value: blockItem.difficulty, additional: ''},
               {name: 'Subsidy', value: blockItem.subsidy.toLocaleString(), additional: 'Groths'},
               {name: 'Chainwork', value: blockItem.chainwork, additional: ''},
-              {name: 'Age', value: new Date(blockItem.timestamp).toLocaleDateString("en-US",
-                      {
+              {name: 'Age', value: new Date(blockItem.timestamp).toLocaleDateString("en-US", {
                           year: 'numeric', month: 'long',
                           day: 'numeric', hour: 'numeric',
                           minute: 'numeric', second: 'numeric' }), additional: ''}

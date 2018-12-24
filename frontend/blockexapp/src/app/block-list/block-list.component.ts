@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../services';
 import { ChartsComponent } from '../charts-component/charts-component.component';
-import { Observable, of} from 'rxjs';
-import { map, delay, flatMap, concatAll, concatMap } from 'rxjs/operators';
-import { Block } from '../models';
+import { blockListConsts } from '../consts';
 
 import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {PageEvent} from '@angular/material';
@@ -81,15 +79,17 @@ export class BlockListComponent implements OnInit {
   }
 
   public updateBlocks(){
-    const MINUTES_IN_HOUR = 60;
-    const MAX_TABLE_SIZE = 20;
     this.dataService.loadStatus().subscribe((status) => {
       if (this.lastHeight < status.height){
         this.updatesCounter++;
 
         this.dataService.loadBlocksRange(this.lastHeight + 1, status.height, true).subscribe((blocksToAdd) => {
           blocksToAdd.reverse();
-          if (this.blocks.length === MAX_TABLE_SIZE) {
+
+          if (blocksToAdd.length > blockListConsts.MAX_TABLE_SIZE) {
+            this.blocks = [];
+            this.blocks.push(blocksToAdd.slice(0, blockListConsts.MAX_TABLE_SIZE));
+          } else if (this.blocks.length === blockListConsts.MAX_TABLE_SIZE) {
             this.blocks.splice(this.blocks.length - blocksToAdd.length, blocksToAdd.length);
           }
           this.blocks.unshift(...blocksToAdd);
@@ -100,7 +100,7 @@ export class BlockListComponent implements OnInit {
         });
 
         //trigger charts update
-        if (this.updatesCounter === MINUTES_IN_HOUR){
+        if (this.updatesCounter === blockListConsts.MINUTES_IN_HOUR){
           this.updatesCounter = 0;
           this.child.updateCharts(status.height);
         }

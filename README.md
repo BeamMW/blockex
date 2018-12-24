@@ -18,18 +18,13 @@ TODO: Add instructions
 
 `sudo apt-get update`
 
-`sudo apt-get install nginx python3-pip ufw python3-venv`
+`sudo apt-get install nginx python3-pip ufw python3-venv redis`
 
-`pip install redis==2.10.6`
 ## Start beam-exlplorer node (testnet 3)
 
 `./explorer-node --peer=52.76.251.61:8100`
 
 ## Pull lastest blockchain explorer code from git
-
-`mkdir /var/www/blockex` (first time only)
-
-`cd /var/www/blockex`
 
 `git clone https://github.com/BeamMW/blockex.git` or
 `git pull origin master` to update
