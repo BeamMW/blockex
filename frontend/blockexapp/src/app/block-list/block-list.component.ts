@@ -89,10 +89,12 @@ export class BlockListComponent implements OnInit {
           if (blocksToAdd.length > blockListConsts.MAX_TABLE_SIZE) {
             this.blocks = [];
             this.blocks.push(blocksToAdd.slice(0, blockListConsts.MAX_TABLE_SIZE));
-          } else if (this.blocks.length === blockListConsts.MAX_TABLE_SIZE) {
-            this.blocks.splice(this.blocks.length - blocksToAdd.length, blocksToAdd.length);
+          } else {
+            if (this.blocks.length === blockListConsts.MAX_TABLE_SIZE) {
+              this.blocks.splice(this.blocks.length - blocksToAdd.length, blocksToAdd.length);
+            }
+            this.blocks.unshift(...blocksToAdd);
           }
-          this.blocks.unshift(...blocksToAdd);
 
           this.lastHeight = status.height;
           this.status = status;
