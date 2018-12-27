@@ -25,7 +25,7 @@ export class AppComponent  {
   }
 
   searchProcess(searchValue) {
-      this.dataService.loadBlock(searchValue).subscribe((blockItem) => {
+      this.dataService.searchBlock(searchValue).subscribe((blockItem) => {
           this.router.navigate(
               ['/block', blockItem.hash]
           );

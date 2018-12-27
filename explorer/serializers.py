@@ -14,7 +14,7 @@ class OutputSerializer(serializers.ModelSerializer):
 class KernelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kernel
-        fields = ('fee',)
+        fields = ('fee', 'excess', 'block_id', 'kernel_id', 'minHeight', 'maxHeight')
 
 
 class BlockSerializer(serializers.ModelSerializer):

@@ -91,6 +91,26 @@
               <mat-cell *matCellDef="let element"> {{element.fee}} </mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="excess">
+              <mat-header-cell *matHeaderCellDef> Excess </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.excess}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.kernel_id}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="min-height">
+              <mat-header-cell *matHeaderCellDef> Min Height </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.minHeight}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="max-height">
+              <mat-header-cell *matHeaderCellDef> Max Height </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.maxHeight}} </mat-cell>
+            </ng-container>
+
             <mat-header-row *matHeaderRowDef="displayedColumns.kernels"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns.kernels;"></mat-row>
           </mat-table>

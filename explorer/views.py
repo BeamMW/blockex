@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Sum
+from django.core.exceptions import ObjectDoesNotExist
+import json
 
 # Create your views here.
 from .models import *
@@ -43,13 +45,18 @@ def search(request):
     q = request.GET['q']
 
     if q:
-        blocks_by_hash = Block.objects.filter(hash__search=q)
-        blocks_by_height = Block.objects.annotate(as_char=Cast('char', IntergeField())).filter(hash__search=q)
-
-
-        if len(blocks) > 0:
-            serializer = BlockSerializer(blocks, many=True)
-            return Response(serializer.data, status=HTTP_200_OK)
+        try:
+            kernel_by_id = Kernel.objects.get(kernel_id=q)
+            serialized_kernel = KernelSerializer(kernel_by_id)
+            if serialized_kernel:
+                b = Block.objects.get(id=serialized_kernel.data['block_id'])
+        except ObjectDoesNotExist:
+            try:
+                b = Block.objects.get(hash=q)
+            except ObjectDoesNotExist:
+                return Response(json.dumps({'found': False}), status=HTTP_200_OK)
+        serializer = BlockSerializer(b)
+        return Response(serializer.data, status=HTTP_200_OK)
 
     return Response(json.dumps({'found': False}), status=HTTP_200_OK)
 

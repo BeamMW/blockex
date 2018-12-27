@@ -85,6 +85,7 @@ export class BlockListComponent implements OnInit {
 
         this.dataService.loadBlocksRange(this.lastHeight + 1, status.height, true).subscribe((blocksToAdd) => {
           blocksToAdd.reverse();
+          this.count += blocksToAdd.length;
 
           if (blocksToAdd.length > blockListConsts.MAX_TABLE_SIZE) {
             this.blocks = [];

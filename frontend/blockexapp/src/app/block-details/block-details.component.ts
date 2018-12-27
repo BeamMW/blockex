@@ -15,7 +15,7 @@ export class BlockDetailsComponent implements OnInit {
   notFound: boolean = false;
 
   displayedColumns: any = {
-    kernels: ['fee'],
+    kernels: ['fee', 'excess', 'id', 'min-height','max-height'],
     inputs: ['commitment', 'maturity'],
     outputs: ['commitment', 'maturity', 'coinbase', 'incubation'],
     block: ['name', 'value']

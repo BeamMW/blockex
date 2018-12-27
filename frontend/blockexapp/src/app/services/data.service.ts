@@ -29,6 +29,10 @@ export class DataService {
     return this.http.get<Block[]>(this.API_BASE + '/explorer/blocks/' + '?page=' + (page+1));
   }
 
+  searchBlock(query) {
+    return this.http.get<Block>(this.API_BASE + '/explorer/search/' + '?q=' + query);
+  }
+
   loadBlocksRange(blockFrom, blockTo, update) {
       return this.http.get<Block[]>(this.API_BASE + '/explorer/range/'
         + '?from=' + blockFrom + '&to=' + (blockTo + 1)

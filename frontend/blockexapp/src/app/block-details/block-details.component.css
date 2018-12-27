@@ -9,7 +9,7 @@
 }
 
 .details-card-container{
-    max-width: 1140px;
+    max-width: 1290px;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
@@ -47,4 +47,16 @@
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
+}
+
+.mat-column-fee {
+    max-width: 40px;
+}
+
+.mat-column-excess {
+    min-width: 500px;
+}
+
+.mat-column-id {
+    min-width: 500px;
 }

@@ -64,9 +64,14 @@ class Output(models.Model):
 class Kernel(models.Model):
     block = models.ForeignKey(Block, related_name='kernels', on_delete=models.CASCADE)
     fee = models.FloatField()
+    kernel_id = models.CharField(null=False, blank=False, max_length=128)
+    excess = models.CharField(null=False, blank=False, max_length=128)
+    minHeight = models.IntegerField()
+    maxHeight = models.CharField(null=False, blank=False, max_length=128)
 
     def from_json(self, _json):
+        self.excess = _json['excess']
         self.fee = _json['fee']
-    
-
-
+        self.kernel_id = _json['id']
+        self.minHeight = _json['minHeight']
+        self.maxHeight = _json['maxHeight']
