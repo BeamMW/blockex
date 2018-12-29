@@ -69,6 +69,6 @@ def get_status(request):
      total_emission = Block.objects.all().aggregate(Sum('subsidy'))
 
      data = serializer.data
-     data['total_emission'] = int(total_emission['subsidy__sum']) * 10**-6
+     data['total_emission'] = int(total_emission['subsidy__sum']) * 10**-8
 
      return Response(data, status=HTTP_200_OK)

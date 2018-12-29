@@ -35,11 +35,6 @@
               <mat-cell *matCellDef="let element"> {{element.commitment}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="maturity">
-              <mat-header-cell *matHeaderCellDef> Maturity </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.maturity}} </mat-cell>
-            </ng-container>
-
             <mat-header-row *matHeaderRowDef="displayedColumns.inputs"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns.inputs;"></mat-row>
           </mat-table>
@@ -66,11 +61,6 @@
             <ng-container matColumnDef="coinbase">
               <mat-header-cell *matHeaderCellDef> Coinbase </mat-header-cell>
               <mat-cell *matCellDef="let element"> {{element.coinbase}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="incubation">
-              <mat-header-cell *matHeaderCellDef> Incubation </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.incubation}} </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns.outputs"></mat-header-row>

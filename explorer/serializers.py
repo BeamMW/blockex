@@ -4,12 +4,12 @@ from rest_framework import serializers
 class InputSerializer(serializers.ModelSerializer):
     class Meta:
         model = Input
-        fields = ('commitment', 'maturity')
+        fields = ('commitment')
 
 class OutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = Output
-        fields = ('commitment', 'maturity', 'coinbase', 'incubation')
+        fields = ('commitment', 'maturity', 'coinbase')
 
 class KernelSerializer(serializers.ModelSerializer):
     class Meta:

@@ -11,7 +11,8 @@
 
 @media all and (max-width: 1599px) {
     .chart-item {
-        width: 570px;
+        width: 595px;
+        margin-left: 5px;
     }
 
     .chart-item-full {
