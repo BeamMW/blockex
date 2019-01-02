@@ -27,6 +27,14 @@ table {
     padding-left: 30px;
 }
 
+.height-card {
+    max-width:150px;
+}
+
+.hashrate-block {
+    max-width:150px;
+}
+
 .block-card-content {
     font-size: 10pt;
     padding: 30px;

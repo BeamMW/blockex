@@ -21,6 +21,7 @@ export class ChartsComponent implements OnInit {
 
   constructChartsData(data) {
     let initialDate = new Date(data[0].timestamp);
+    let avgDifficulty = 0;
     let chartsData = {
       range: [],
       rangeLabels: [],
@@ -39,13 +40,15 @@ export class ChartsComponent implements OnInit {
       if (new Date(item.timestamp).getTime() <= initialDateWithOffset) {
         blocksCounter++;
         feeCounter += item.fee;
+        avgDifficulty += item.difficulty;
       } else {
         chartsData.rangeLabels.push(item.timestamp);
         chartsData.range.push(blocksCounter);
-        chartsData.difficulty.push(item.difficulty);
+        chartsData.difficulty.push(avgDifficulty / blocksCounter);
         chartsData.fee.push(feeCounter);
         feeCounter = item.fee;
         blocksCounter = 1;
+        avgDifficulty = 0;
         initialDate = new Date(item.timestamp);
       }
     });
@@ -71,7 +74,7 @@ export class ChartsComponent implements OnInit {
           fill: false,
           yAxisID: 'y-axis-1',
         }, {
-          label: "Difficulty per hour",
+          label: "Average difficulty",
           data: chartsData.difficulty,
           borderColor: "green",
           fill: false,
@@ -126,7 +129,7 @@ export class ChartsComponent implements OnInit {
           }, {
             scaleLabel: {
               display: true,
-              labelString: 'Difficulty per hour'
+              labelString: 'Average difficulty'
             },
             type: 'linear',
             display: true,
