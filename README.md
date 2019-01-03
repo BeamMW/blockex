@@ -18,7 +18,7 @@ TODO: Add instructions
 
 `sudo apt-get update`
 
-`sudo apt-get install nginx python3-pip ufw python3-venv redis`
+`sudo apt-get install nginx python3-pip ufw python3-venv redis==2.10.6`
 
 ## Start beam-exlplorer node (testnet 3)
 

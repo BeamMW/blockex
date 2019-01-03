@@ -11,7 +11,7 @@ import { Status, Block } from '../models';
 })
 export class DataService {
 
-  API_BASE = "https://explorer.beam.mw";
+  API_BASE = "https://mainnet-explorer.beam.mw";
 
   constructor(private http: HttpClient) { 
   }
