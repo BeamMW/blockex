@@ -32,7 +32,15 @@ table {
 }
 
 .hashrate-block {
-    max-width:150px;
+    max-width:290px;
+}
+
+.difficulty-card {
+    max-width: 210px;
+}
+
+.emission-block {
+    max-width: 230px;
 }
 
 .block-card-content {

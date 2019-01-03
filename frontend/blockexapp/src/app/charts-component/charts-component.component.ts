@@ -96,6 +96,13 @@ export class ChartsComponent implements OnInit {
         }]
       },
       options: {
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+              return tooltipItem.yLabel.toLocaleString();
+            }
+          }
+        },
         responsive: true,
         title: {
           display: true,
@@ -130,6 +137,11 @@ export class ChartsComponent implements OnInit {
             scaleLabel: {
               display: true,
               labelString: 'Average difficulty'
+            },
+            ticks: {
+              callback: function(label, index, labels) {
+                return label.toLocaleString();
+              }
             },
             type: 'linear',
             display: true,
