@@ -12,12 +12,14 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.status import HTTP_200_OK
 from .serializers import *
+import redis
+import io
+from rest_framework.parsers import JSONParser
 
 
 class BlockViewSet(viewsets.ModelViewSet):
     queryset = Block.objects.all().order_by('-height')
     serializer_class = BlockSerializer
-
 
 @api_view(['GET'])
 def get_block_range(request):
@@ -28,8 +30,23 @@ def get_block_range(request):
 
     blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height)
     if from_update is None:
-        serializer = BlockHeaderSerializer(blocks, many=True)
+        graph_data = _redis.get('graph_data')
+        if graph_data:
+            stream = io.BytesIO(graph_data)
+            data = JSONParser().parse(stream)
+            return Response(data, status=HTTP_200_OK)
+        else:
+            serializer = BlockHeaderSerializer(blocks, many=True)
+            _redis.set('graph_data', JSONRenderer().render(serializer.data))
     else:
+        block_data = _redis.get('block_data')
+        if block_data:
+            stream = io.BytesIO(block_data)
+            data = JSONParser().parse(stream)
+            return Response(data, status=HTTP_200_OK)
+        else:
+            serializer = BlockSerializer(blocks, many=True)
+            _redis.set('block_data', JSONRenderer().render(serializer.data))
         serializer = BlockSerializer(blocks, many=True)
 
     return Response(serializer.data, status=HTTP_200_OK)
