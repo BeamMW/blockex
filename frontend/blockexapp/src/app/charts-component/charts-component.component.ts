@@ -168,6 +168,13 @@ export class ChartsComponent implements OnInit {
         }]
       },
       options: {
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+              return tooltipItem.yLabel.toLocaleString() + ' Groth';
+            }
+          }
+        },
         responsive: true,
         title: {
           display: true,
@@ -193,7 +200,12 @@ export class ChartsComponent implements OnInit {
           yAxes: [{
             scaleLabel: {
               display: true,
-              labelString: 'Fee'
+              labelString: 'Fee, Groth'
+            },
+            ticks: {
+              callback: function(label, index, labels) {
+                return label.toLocaleString();
+              }
             },
             display: true
           }]
