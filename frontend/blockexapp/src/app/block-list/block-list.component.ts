@@ -43,7 +43,7 @@ export class BlockListComponent implements OnInit {
 
     this.loading_blocks = true;
     this.page = event ? event.pageIndex : 0;
-    
+
     console.log('loadBlocks, page=', this.page);
     this.dataService.loadBlocks(this.page).subscribe((data) => {
       this.loading_blocks = false;
@@ -56,7 +56,7 @@ export class BlockListComponent implements OnInit {
       this.prev = data['prev'];
       this.next = data['next'];
      });
-    
+
     return event;
   }
 
@@ -80,7 +80,7 @@ export class BlockListComponent implements OnInit {
 
   public updateBlocks(){
     this.dataService.loadStatus().subscribe((status) => {
-      if (this.lastHeight < status.height){
+      if (this.lastHeight < status.height && (status.height - this.lastHeight <= blockListConsts.MAX_TABLE_SIZE)){
         this.updatesCounter++;
 
         this.dataService.loadBlocksRange(this.lastHeight + 1, status.height, true).subscribe((blocksToAdd) => {
@@ -107,6 +107,13 @@ export class BlockListComponent implements OnInit {
           this.updatesCounter = 0;
           this.child.updateCharts(status.height);
         }
+      } else if (this.lastHeight < status.height && (status.height - this.lastHeight > blockListConsts.MAX_TABLE_SIZE)) {
+          this.dataService.loadBlocks(this.page).subscribe((data) => {
+          this.count = data['count'];
+          this.blocks.splice(0, blockListConsts.MAX_TABLE_SIZE);
+          this.blocks.push(...data['results']);
+          this.dataSource._updateChangeSubscription()
+        });
       }
     })
   }
