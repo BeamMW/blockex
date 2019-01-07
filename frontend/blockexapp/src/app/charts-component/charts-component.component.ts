@@ -216,7 +216,7 @@ export class ChartsComponent implements OnInit {
   }
 
   updateCharts(height) {
-    this.dataService.loadBlocksRange(height - chartsConsts.COUNT_OF_BLOCK_IN_CHART,
+    /*this.dataService.loadBlocksRange(height - chartsConsts.COUNT_OF_BLOCK_IN_CHART,
       this.height, false).subscribe((data) => {
       let chartsData = this.constructChartsData(data);
       this.chart.data.datasets[0].data = chartsData.range;
@@ -228,12 +228,11 @@ export class ChartsComponent implements OnInit {
       this.feeChart.data.datasets[0].data = chartsData.fee;
       this.feeChart.data.labels = chartsData.rangeLabels;
       this.feeChart.update();
-    });
+    });*/
   }
 
   ngOnInit() {
-    this.dataService.loadBlocksRange(this.height - chartsConsts.COUNT_OF_BLOCK_IN_CHART,
-        this.height, false).subscribe((data) => {
+    this.dataService.loadBlocksRange().subscribe((data) => {
       let chartsData = this.constructChartsData(data);
       this.initCharts(chartsData);
     });

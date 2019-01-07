@@ -83,7 +83,7 @@ export class BlockListComponent implements OnInit {
       if (this.lastHeight < status.height && (status.height - this.lastHeight <= blockListConsts.MAX_TABLE_SIZE)){
         this.updatesCounter++;
 
-        this.dataService.loadBlocksRange(this.lastHeight + 1, status.height, true).subscribe((blocksToAdd) => {
+        /*this.dataService.loadBlocksRange(this.lastHeight + 1, status.height, true).subscribe((blocksToAdd) => {
           blocksToAdd.reverse();
           this.count += blocksToAdd.length;
 
@@ -100,7 +100,7 @@ export class BlockListComponent implements OnInit {
           this.lastHeight = status.height;
           this.status = status;
           this.dataSource._updateChangeSubscription()
-        });
+        });*/
 
         //trigger charts update
         if (this.updatesCounter === blockListConsts.MINUTES_IN_HOUR){
@@ -119,7 +119,7 @@ export class BlockListComponent implements OnInit {
   }
 
   ngOnInit() {
-    setInterval(() => this.updateBlocks(), 60000);
+    //setInterval(() => this.updateBlocks(), 60000);
     this.loading_status = true;
     this.loading_charts = true;
 

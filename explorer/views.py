@@ -12,10 +12,13 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.status import HTTP_200_OK
 from .serializers import *
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 import redis
 import io
 from rest_framework.parsers import JSONParser
 
+_redis = redis.Redis(host='localhost', port=6379, db=0)
 
 class BlockViewSet(viewsets.ModelViewSet):
     queryset = Block.objects.all().order_by('-height')
@@ -23,33 +26,26 @@ class BlockViewSet(viewsets.ModelViewSet):
 
 @api_view(['GET'])
 def get_block_range(request):
-
-    from_height = request.GET['from']
-    to_height = request.GET['to']
-    from_update = request.GET.get('update')
-
-    blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height)
-    if from_update is None:
-        graph_data = _redis.get('graph_data')
-        if graph_data:
-            stream = io.BytesIO(graph_data)
-            data = JSONParser().parse(stream)
-            return Response(data, status=HTTP_200_OK)
-        else:
-            serializer = BlockHeaderSerializer(blocks, many=True)
-            _redis.set('graph_data', JSONRenderer().render(serializer.data))
+    graph_data = _redis.get("graph_data")
+    if graph_data:
+        stream = io.BytesIO(graph_data)
+        data = JSONParser().parse(stream)
+        return Response(data, status=HTTP_200_OK)
     else:
-        block_data = _redis.get('block_data')
-        if block_data:
-            stream = io.BytesIO(block_data)
-            data = JSONParser().parse(stream)
-            return Response(data, status=HTTP_200_OK)
-        else:
-            serializer = BlockSerializer(blocks, many=True)
-            _redis.set('block_data', JSONRenderer().render(serializer.data))
-        serializer = BlockSerializer(blocks, many=True)
+        latest_block_height = _redis.get('latest_block_height')
+        if not latest_block_height:
+            latest_block = Block.objects.latest('height')
+            latest_block_height = int(latest_block.height);
+            _redis.set('latest_block_height', latest_block_height)
 
-    return Response(serializer.data, status=HTTP_200_OK)
+        from_height = int(latest_block_height) - 4320
+        to_height = int(latest_block_height)
+
+        blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height)
+        serializer = BlockHeaderSerializer(blocks, many=True)
+        _redis.set('graph_data', JSONRenderer().render(serializer.data))
+
+        return Response(serializer.data, status=HTTP_200_OK)
 
 @api_view(['GET'])
 def get_block(request):
@@ -80,12 +76,24 @@ def search(request):
 
 @api_view(['GET'])
 def get_status(request):
-     b = Block.objects.latest('height')
-     serializer = BlockHeaderSerializer(b)
+    b = _redis.get('latest_block')
 
-     total_emission = Block.objects.all().aggregate(Sum('subsidy'))
+    if b:
+       stream = io.BytesIO(b)
+       data = JSONParser().parse(stream)
+    else:
+       b = Block.objects.latest('height')
+       serializer = BlockHeaderSerializer(b)
+       _redis.set('latest_block', JSONRenderer().render(serializer.data))
+       data = serializer.data
 
-     data = serializer.data
-     data['total_emission'] = int(total_emission['subsidy__sum']) * 10**-8
+    total_emission = _redis.get('total_emission')
+    if total_emission:
+        data['total_emission'] = total_emission
+    else:
+       te = Block.objects.all().aggregate(Sum('subsidy'))
+       total_emission = int(te['subsidy__sum']) * 10**-8
+       _redis.set('total_emission', total_emission)
+       data['total_emission'] = total_emission
 
-     return Response(data, status=HTTP_200_OK)
+    return Response(data, status=HTTP_200_OK)

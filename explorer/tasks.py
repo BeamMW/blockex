@@ -92,6 +92,9 @@ def update_blockchain():
     _redis.set('beam_blockex_last_height', current_height)
     _redis.delete('graph_data')
     _redis.delete('block_data')
+    _redis.delete('total_emission')
+    _redis.delete('latest_block')
+    _redis.delete('latest_block_height')
 
 
 
