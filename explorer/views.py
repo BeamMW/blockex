@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.core.exceptions import ObjectDoesNotExist
 import json
 
@@ -14,6 +14,7 @@ from rest_framework.status import HTTP_200_OK
 from .serializers import *
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from datetime import datetime, timedelta
 import redis
 import io
 from rest_framework.parsers import JSONParser
@@ -35,7 +36,7 @@ def get_block_range(request):
         latest_block_height = _redis.get('latest_block_height')
         if not latest_block_height:
             latest_block = Block.objects.latest('height')
-            latest_block_height = int(latest_block.height);
+            latest_block_height = int(latest_block.height)
             _redis.set('latest_block_height', latest_block_height)
 
         from_height = int(latest_block_height) - 4320
@@ -97,3 +98,26 @@ def get_status(request):
        data['total_emission'] = total_emission
 
     return Response(data, status=HTTP_200_OK)
+
+@api_view(['GET'])
+def get_major_block(request):
+    access_key = 'E9B60D665A110DD4AAE1D36AF633FF25ED932CFED0413FF005C58A986BA7794A'
+    key = request.GET['key']
+
+    if key and key == access_key:
+        period = request.GET.get('period')
+        blocks = Block.objects.all()
+        if period:
+            created_at_to = datetime.now()
+            created_at_from = datetime.now() - timedelta(hours=int(period))
+            blocks = blocks.filter(created_at__gte = created_at_from, created_at__lt = created_at_to)
+
+        block = blocks.annotate(summ=Count('outputs' , distinct=True)
+                                                      +Count('inputs' , distinct=True)
+                                                      +Count('kernels' , distinct=True)).latest('summ')
+        serializer = BlockSerializer(block)
+        return Response(serializer.data, status=HTTP_200_OK)
+    else:
+        return Response({'Incorrect access key'}, status=404)
+
+

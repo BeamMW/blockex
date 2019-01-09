@@ -4,7 +4,7 @@ from rest_framework import serializers
 class InputSerializer(serializers.ModelSerializer):
     class Meta:
         model = Input
-        fields = ('commitment', )
+        fields = ('commitment', 'maturity')
 
 class OutputSerializer(serializers.ModelSerializer):
     class Meta:

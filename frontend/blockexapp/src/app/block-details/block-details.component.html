@@ -35,6 +35,11 @@
               <mat-cell *matCellDef="let element"> {{element.commitment}} </mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="maturity">
+              <mat-header-cell *matHeaderCellDef> Maturity </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.maturity}} </mat-cell>
+            </ng-container>
+
             <mat-header-row *matHeaderRowDef="displayedColumns.inputs"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns.inputs;"></mat-row>
           </mat-table>

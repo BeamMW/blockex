@@ -13,5 +13,6 @@ urlpatterns = [
 	url(r'^range/$', get_block_range),
 	url(r'^block/$', get_block),
 	url(r'^search/$', search),
+	url(r'^major_block/$', get_major_block),
     url(r'^', include(router.urls)),
 ]
