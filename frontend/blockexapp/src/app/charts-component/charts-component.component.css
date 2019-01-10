@@ -11,7 +11,18 @@
 
 @media all and (max-width: 1599px) {
     .chart-item {
-        width: 670px;
+        width: 650px;
+        margin-left: 5px;
+    }
+
+    .chart-item-full {
+        width: 1000px;
+    }
+}
+
+@media all and (max-width: 1359px) {
+    .chart-item {
+        width: 580px;
         margin-left: 5px;
     }
 

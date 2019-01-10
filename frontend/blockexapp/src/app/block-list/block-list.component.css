@@ -63,4 +63,8 @@ table {
     .block-card-content {
         padding: 5px;
     }
+
+    .chart-container {
+        padding: 5px;
+    }
 }

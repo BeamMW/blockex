@@ -131,7 +131,7 @@ export class ChartsComponent implements OnInit {
               labelString: 'Blocks per hour'
             },
             ticks: {
-              suggestedMax: 120
+              suggestedMax: 130
             },
             id: 'y-axis-1',
             position: 'left',
