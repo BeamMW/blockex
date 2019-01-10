@@ -130,6 +130,9 @@ export class ChartsComponent implements OnInit {
               display: true,
               labelString: 'Blocks per hour'
             },
+            ticks: {
+              suggestedMax: 120
+            },
             id: 'y-axis-1',
             position: 'left',
             display: true
@@ -139,6 +142,7 @@ export class ChartsComponent implements OnInit {
               labelString: 'Average difficulty'
             },
             ticks: {
+              suggestedMin: 0,
               callback: function(label, index, labels) {
                 return label.toLocaleString();
               }
