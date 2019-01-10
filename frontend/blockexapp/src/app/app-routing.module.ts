@@ -7,7 +7,7 @@ import { BlockListComponent } from './block-list/block-list.component'
 import { BlockChartsComponent } from './block-charts/block-charts.component'
 
 const routes: Routes = [
-  {path: '', redirectTo: '/blocks', pathMatch: 'full' },
+  {path: '', component: BlockListComponent, pathMatch: 'full' },
   { path: 'block/:hash', component: BlockDetailsComponent },
   { path: 'block-not-found', component: BlockNotFoundComponent },
   { path: 'blocks', component: BlockListComponent },

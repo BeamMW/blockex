@@ -15,7 +15,7 @@ export class BlockChartsComponent implements OnInit {
 
   backToExplorer() {
       this.router.navigate(
-          ['/blocks']
+          ['']
       );
   }
 

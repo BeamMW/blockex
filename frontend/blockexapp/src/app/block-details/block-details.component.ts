@@ -28,7 +28,7 @@ export class BlockDetailsComponent implements OnInit {
 
   backToExplorer() {
       this.router.navigate(
-          ['/blocks']
+          ['']
       );
   }
 

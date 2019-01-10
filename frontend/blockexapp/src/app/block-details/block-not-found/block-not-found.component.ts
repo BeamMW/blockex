@@ -14,7 +14,7 @@ export class BlockNotFoundComponent implements OnInit {
 
   backToExplorer() {
     this.router.navigate(
-      ['/blocks']
+      ['']
     );
   }
 
