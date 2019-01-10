@@ -15,6 +15,7 @@ from .serializers import *
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from datetime import datetime, timedelta
+from django.utils import timezone
 import redis
 import io
 from rest_framework.parsers import JSONParser
@@ -68,11 +69,11 @@ def search(request):
             try:
                 b = Block.objects.get(hash=q)
             except ObjectDoesNotExist:
-                return Response(json.dumps({'found': False}), status=HTTP_200_OK)
+                return Response({'found': False}, status=HTTP_200_OK)
         serializer = BlockSerializer(b)
         return Response(serializer.data, status=HTTP_200_OK)
 
-    return Response(json.dumps({'found': False}), status=HTTP_200_OK)
+    return Response({'found': False}, status=HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -108,8 +109,8 @@ def get_major_block(request):
         period = request.GET.get('period')
         blocks = Block.objects.all()
         if period:
-            created_at_to = datetime.now()
-            created_at_from = datetime.now() - timedelta(hours=int(period))
+            created_at_to = datetime.now(tz=timezone.utc)
+            created_at_from = datetime.now(tz=timezone.utc) - timedelta(hours=int(period))
             blocks = blocks.filter(created_at__gte = created_at_from, created_at__lt = created_at_to)
 
         block = blocks.annotate(summ=Count('outputs' , distinct=True)

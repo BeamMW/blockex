@@ -26,12 +26,18 @@ export class AppComponent  {
 
   searchProcess(searchValue) {
       this.dataService.searchBlock(searchValue).subscribe((blockItem) => {
+        if (blockItem.found !== undefined && !blockItem.found) {
           this.router.navigate(
-              ['/block', blockItem.hash]
+            ['/block-not-found']
           );
+        } else if (blockItem.hash !== undefined){
+          this.router.navigate(
+            ['/block', blockItem.hash]
+          );
+        }
       }, (error) => {
           this.router.navigate(
-              ['/block', 'notfound']
+              ['/block-not-found']
           );
       });
   }

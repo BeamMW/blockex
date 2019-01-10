@@ -1,0 +1,13 @@
+.not-found-content{
+  font-size: 25pt;
+}
+
+.not-found-card-container{
+  text-align: center;
+  max-width: 410px;
+  margin-top: 100px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}

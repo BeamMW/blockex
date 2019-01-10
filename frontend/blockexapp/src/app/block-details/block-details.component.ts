@@ -33,7 +33,6 @@ export class BlockDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    const NOT_FOUND = 'notfound';
     this.loading_block = true;
     this.block = {
       header: '',
@@ -43,29 +42,25 @@ export class BlockDetailsComponent implements OnInit {
       kernels: []
     };
     this.route.params.subscribe( (params) => {
-      if (params.hash !== 'notfound') {
-        this.dataService.loadBlock(params.hash).subscribe((blockItem) => {
-          this.block.header = 'Block ' + blockItem.height;
-          this.block.data = [
-            {name: 'Fee', value: blockItem.fee, additional: blockItem.fee !== 0 ? 'Groth' : ''},
-            {name: 'Hash', value: blockItem.hash, additional: ''},
-            {name: 'Difficulty', value: blockItem.difficulty.toLocaleString(), additional: ''},
-            {name: 'Subsidy', value: blockItem.subsidy.toLocaleString(), additional: 'Groth'},
-            {name: 'Chainwork', value: blockItem.chainwork, additional: ''},
-            {name: 'Age', value: new Date(blockItem.timestamp).toLocaleDateString("en-US", {
-              year: 'numeric', month: 'long',
-              day: 'numeric', hour: 'numeric',
-              minute: 'numeric', second: 'numeric' }), additional: ''}
-          ];
-          this.block.inputs = blockItem.inputs;
-          this.block.outputs = blockItem.outputs;
-          this.block.kernels = blockItem.kernels;
+      this.dataService.loadBlock(params.hash).subscribe((blockItem) => {
+        this.block.header = 'Block ' + blockItem.height;
+        this.block.data = [
+          {name: 'Fee', value: blockItem.fee, additional: blockItem.fee !== 0 ? 'Groth' : ''},
+          {name: 'Hash', value: blockItem.hash, additional: ''},
+          {name: 'Difficulty', value: blockItem.difficulty.toLocaleString(), additional: ''},
+          {name: 'Subsidy', value: blockItem.subsidy.toLocaleString(), additional: 'Groth'},
+          {name: 'Chainwork', value: blockItem.chainwork, additional: ''},
+          {name: 'Age', value: new Date(blockItem.timestamp).toLocaleDateString("en-US", {
+            year: 'numeric', month: 'long',
+            day: 'numeric', hour: 'numeric',
+            minute: 'numeric', second: 'numeric' }), additional: ''}
+        ];
+        this.block.inputs = blockItem.inputs;
+        this.block.outputs = blockItem.outputs;
+        this.block.kernels = blockItem.kernels;
 
-          console.log(blockItem);
-        });
-      } else if (params.hash == NOT_FOUND) {
-          this.notFound = true;
-      }
+        console.log(blockItem);
+      });
       this.loading_block = false;
     });
   }
