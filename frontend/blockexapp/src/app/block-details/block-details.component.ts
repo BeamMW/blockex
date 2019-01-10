@@ -58,8 +58,6 @@ export class BlockDetailsComponent implements OnInit {
         this.block.inputs = blockItem.inputs;
         this.block.outputs = blockItem.outputs;
         this.block.kernels = blockItem.kernels;
-
-        console.log(blockItem);
       });
       this.loading_block = false;
     });

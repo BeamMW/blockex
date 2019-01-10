@@ -25,7 +25,6 @@ export class DataService {
   }
 
   loadBlocks(page = 1) {
-    console.log("DataService::loadBlocks", this.API_BASE + '/explorer/blocks/' + '?page=' + (page+1));
     return this.http.get<Block[]>(this.API_BASE + '/explorer/blocks/' + '?page=' + (page+1));
   }
 

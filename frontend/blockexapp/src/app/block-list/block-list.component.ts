@@ -44,10 +44,8 @@ export class BlockListComponent implements OnInit {
     this.loading_blocks = true;
     this.page = event ? event.pageIndex : 0;
 
-    console.log('loadBlocks, page=', this.page);
     this.dataService.loadBlocks(this.page).subscribe((data) => {
       this.loading_blocks = false;
-      console.log('Blocks',data);
 
       this.blocks = data['results'];
       this.dataSource = new MatTableDataSource(this.blocks);
@@ -124,7 +122,6 @@ export class BlockListComponent implements OnInit {
     this.loading_charts = true;
 
     this.dataService.loadStatus().subscribe((status) => {
-      console.log('Status', status);
       this.status = status;
       this.lastHeight = status.height;
       this.loading_status = false;
