@@ -62,7 +62,7 @@ def search(request):
     if q:
         try:
             b = Block.objects.get(height=q)
-        except ObjectDoesNotExist:
+        except (ValueError, ObjectDoesNotExist):
             try:
                 kernel_by_id = Kernel.objects.get(kernel_id=q)
                 serialized_kernel = KernelSerializer(kernel_by_id)
