@@ -5,7 +5,8 @@
     <span style="flex: 1 1 auto;"></span>
     <form style="margin-right: 20px">
       <mat-form-field style="width:400px" floatLabel="never">
-        <input matInput #searchInput (keyup.enter)="searchProcess(searchInput.value)" placeholder="Search block by hash or kernel id..." type="search">
+        <input matInput #searchInput (keyup.enter)="searchProcess(searchInput.value)"
+               placeholder="Search by height, hash, kernel id..." type="search">
       </mat-form-field>
       <button mat-flat-button class="search-button" (click)="searchProcess(searchInput.value)">Search</button>
     </form>

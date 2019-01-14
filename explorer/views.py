@@ -61,15 +61,18 @@ def search(request):
 
     if q:
         try:
-            kernel_by_id = Kernel.objects.get(kernel_id=q)
-            serialized_kernel = KernelSerializer(kernel_by_id)
-            if serialized_kernel:
-                b = Block.objects.get(id=serialized_kernel.data['block_id'])
+            b = Block.objects.get(height=q)
         except ObjectDoesNotExist:
             try:
-                b = Block.objects.get(hash=q)
+                kernel_by_id = Kernel.objects.get(kernel_id=q)
+                serialized_kernel = KernelSerializer(kernel_by_id)
+                if serialized_kernel:
+                    b = Block.objects.get(id=serialized_kernel.data['block_id'])
             except ObjectDoesNotExist:
-                return Response({'found': False}, status=HTTP_200_OK)
+                try:
+                    b = Block.objects.get(hash=q)
+                except ObjectDoesNotExist:
+                    return Response({'found': False}, status=HTTP_200_OK)
         serializer = BlockSerializer(b)
         return Response(serializer.data, status=HTTP_200_OK)
 
