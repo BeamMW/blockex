@@ -14,5 +14,6 @@ urlpatterns = [
 	url(r'^block/$', get_block),
 	url(r'^search/$', search),
 	url(r'^major_block/$', get_major_block),
+	url(r'^totalcoins/$', get_total_coins),
     url(r'^', include(router.urls)),
 ]

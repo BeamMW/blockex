@@ -22,9 +22,11 @@ from rest_framework.parsers import JSONParser
 
 _redis = redis.Redis(host='localhost', port=6379, db=0)
 
+
 class BlockViewSet(viewsets.ModelViewSet):
     queryset = Block.objects.all().order_by('-height')
     serializer_class = BlockSerializer
+
 
 @api_view(['GET'])
 def get_block_range(request):
@@ -49,11 +51,13 @@ def get_block_range(request):
 
         return Response(serializer.data, status=HTTP_200_OK)
 
+
 @api_view(['GET'])
 def get_block(request):
-     b = Block.objects.get(hash=request.GET['hash'])
-     serializer = BlockSerializer(b)
-     return Response(serializer.data, status=HTTP_200_OK)
+    b = Block.objects.get(hash=request.GET['hash'])
+    serializer = BlockSerializer(b)
+    return Response(serializer.data, status=HTTP_200_OK)
+
 
 @api_view(['GET'])
 def search(request):
@@ -84,24 +88,25 @@ def get_status(request):
     b = _redis.get('latest_block')
 
     if b:
-       stream = io.BytesIO(b)
-       data = JSONParser().parse(stream)
+        stream = io.BytesIO(b)
+        data = JSONParser().parse(stream)
     else:
-       b = Block.objects.latest('height')
-       serializer = BlockHeaderSerializer(b)
-       _redis.set('latest_block', JSONRenderer().render(serializer.data))
-       data = serializer.data
+        b = Block.objects.latest('height')
+        serializer = BlockHeaderSerializer(b)
+        _redis.set('latest_block', JSONRenderer().render(serializer.data))
+        data = serializer.data
 
     total_emission = _redis.get('total_emission')
     if total_emission:
         data['total_emission'] = total_emission
     else:
-       te = Block.objects.all().aggregate(Sum('subsidy'))
-       total_emission = int(te['subsidy__sum']) * 10**-8
-       _redis.set('total_emission', total_emission)
-       data['total_emission'] = total_emission
+        te = Block.objects.all().aggregate(Sum('subsidy'))
+        total_emission = int(te['subsidy__sum']) * 10**-8
+        _redis.set('total_emission', total_emission)
+        data['total_emission'] = total_emission
 
     return Response(data, status=HTTP_200_OK)
+
 
 @api_view(['GET'])
 def get_major_block(request):
@@ -114,14 +119,21 @@ def get_major_block(request):
         if period:
             created_at_to = datetime.now(tz=timezone.utc)
             created_at_from = datetime.now(tz=timezone.utc) - timedelta(hours=int(period))
-            blocks = blocks.filter(created_at__gte = created_at_from, created_at__lt = created_at_to)
+            blocks = blocks.filter(created_at__gte=created_at_from, created_at__lt=created_at_to)
 
-        block = blocks.annotate(summ=Count('outputs' , distinct=True)
-                                                      +Count('inputs' , distinct=True)
-                                                      +Count('kernels' , distinct=True)).latest('summ')
+        block = blocks.annotate(summ=Count('outputs', distinct=True) + Count('inputs', distinct=True)
+                                     + Count('kernels', distinct=True)).latest('summ')
         serializer = BlockSerializer(block)
         return Response(serializer.data, status=HTTP_200_OK)
     else:
         return Response({'Incorrect access key'}, status=404)
 
 
+@api_view(['GET'])
+def get_total_coins(request):
+    total_emission = _redis.get('total_emission')
+    if not total_emission:
+        te = Block.objects.all().aggregate(Sum('subsidy'))
+        total_emission = int(te['subsidy__sum']) * 10 ** -8
+        _redis.set('total_emission', total_emission)
+    return Response(total_emission, status=HTTP_200_OK)
