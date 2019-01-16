@@ -137,3 +137,21 @@ def get_total_coins(request):
         total_emission = int(te['subsidy__sum']) * 10 ** -8
         _redis.set('total_emission', total_emission)
     return Response(json.loads(total_emission), content_type='text/plain', status=HTTP_200_OK)
+
+
+@api_view(['GET'])
+def get_block_by_kernel(request):
+    kernel_id = request.GET['kernel_id']
+
+    if kernel_id:
+        try:
+            kernel_by_id = Kernel.objects.get(kernel_id=kernel_id)
+            serialized_kernel = KernelSerializer(kernel_by_id)
+            if serialized_kernel:
+                block = Block.objects.get(id=serialized_kernel.data['block_id'])
+                serializer = BlockSerializer(block)
+                return Response({'block': serializer.data['height']}, status=HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response({'Incorrect kernel id'}, status=404)
+    else:
+        return Response({'Incorrect kernel id'}, status=404)
