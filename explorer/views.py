@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Sum, Count
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
 import json
 
 # Create your views here.
