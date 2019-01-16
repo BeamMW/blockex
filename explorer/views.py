@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Sum, Count
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse
 import json
 
 # Create your views here.
@@ -136,4 +137,4 @@ def get_total_coins(request):
         te = Block.objects.all().aggregate(Sum('subsidy'))
         total_emission = int(te['subsidy__sum']) * 10 ** -8
         _redis.set('total_emission', total_emission)
-    return Response(total_emission, status=HTTP_200_OK)
+    return Response(json.loads(total_emission), content_type='text/plain', status=HTTP_200_OK)
