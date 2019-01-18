@@ -108,7 +108,7 @@ def get_status(request):
     data['coins_in_circulation_treasury'] = 0
     data['total_coins_in_circulation'] = data['coins_in_circulation_mined']
     data['next_treasury_emission_block_height'] = 43800
-    data['next_treasury_emission_coin_amount'] = 87600000000000
+    data['next_treasury_emission_coin_amount'] = 876000
     data['total_emission'] = 262800000
 
     return Response(data, status=HTTP_200_OK)
