@@ -37,10 +37,50 @@
         </mat-card>
         <mat-card class="block-card emission-block">
           <mat-card-header>
+            <mat-card-subtitle>Coins in circulation (mined):</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="block-card-content">
+            <h2>{{status?.coins_in_circulation_mined | number:'.'}} Beams</h2>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="block-card hashrate-block">
+          <mat-card-header>
+            <mat-card-subtitle>Coins in circulation (treasury):</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="block-card-content">
+            <h2>{{status?.coins_in_circulation_treasury | number:'.'}} Beams</h2>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="block-card hashrate-block">
+          <mat-card-header>
+            <mat-card-subtitle>Total coins in circulation:</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="block-card-content">
+            <h2>{{status?.total_coins_in_circulation | number:'.'}} Beams</h2>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="block-card hashrate-block">
+          <mat-card-header>
+            <mat-card-subtitle>Next treasury emission block height:</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="block-card-content">
+            <h2>{{status?.next_treasury_emission_block_height | number:'.'}}</h2>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="block-card hashrate-block">
+          <mat-card-header>
+            <mat-card-subtitle>Next treasury emission coin amount:</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="block-card-content">
+            <h2>{{status?.next_treasury_emission_coin_amount | number:'.'}}</h2>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="block-card hashrate-block">
+          <mat-card-header>
             <mat-card-subtitle>Total emission:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
-            <h2>{{status?.total_emission | number:'.'}} beam</h2>
+            <h2>{{status?.total_emission | number:'.'}} Beams</h2>
           </mat-card-content>
         </mat-card>
         <mat-card class="block-card hashrate-block">

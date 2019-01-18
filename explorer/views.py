@@ -98,12 +98,18 @@ def get_status(request):
 
     total_emission = _redis.get('total_emission')
     if total_emission:
-        data['total_emission'] = total_emission
+        data['coins_in_circulation_mined'] = total_emission
     else:
         te = Block.objects.all().aggregate(Sum('subsidy'))
         total_emission = int(te['subsidy__sum']) * 10**-8
         _redis.set('total_emission', total_emission)
-        data['total_emission'] = total_emission
+        data['coins_in_circulation_mined'] = total_emission
+
+    data['coins_in_circulation_treasury'] = 0
+    data['total_coins_in_circulation'] = data['coins_in_circulation_mined']
+    data['next_treasury_emission_block_height'] = 43800
+    data['next_treasury_emission_coin_amount'] = 87600000000000
+    data['total_emission'] = 262800000
 
     return Response(data, status=HTTP_200_OK)
 
@@ -130,13 +136,44 @@ def get_major_block(request):
 
 
 @api_view(['GET'])
-def get_total_coins(request):
-    total_emission = _redis.get('total_emission')
-    if not total_emission:
+def get_coins_in_circulation_mined(request):
+    coins_in_circulation = _redis.get('total_emission')
+    if not coins_in_circulation:
         te = Block.objects.all().aggregate(Sum('subsidy'))
-        total_emission = int(te['subsidy__sum']) * 10 ** -8
-        _redis.set('total_emission', total_emission)
-    return Response(json.loads(total_emission), content_type='text/plain', status=HTTP_200_OK)
+        coins_in_circulation = int(te['subsidy__sum']) * 10 ** -8
+        _redis.set('total_emission', coins_in_circulation)
+    return Response(json.loads(coins_in_circulation), content_type='text/plain', status=HTTP_200_OK)
+
+
+@api_view(['GET'])
+def get_coins_in_circulation_treasury(request):
+    return Response(json.loads('0'), content_type='text/plain', status=HTTP_200_OK)
+
+
+@api_view(['GET'])
+def get_total_coins_in_circulation(request):
+    coins_in_circulation = float(_redis.get('total_emission'))
+    if not coins_in_circulation:
+        te = Block.objects.all().aggregate(Sum('subsidy'))
+        #TODO: summ of coins_in_circulation_treasury + coins_in_circulation_mined
+        coins_in_circulation = int(te['subsidy__sum']) * 10 ** -8
+        _redis.set('total_emission', coins_in_circulation)
+    return Response(json.loads(coins_in_circulation), content_type='text/plain', status=HTTP_200_OK)
+
+
+@api_view(['GET'])
+def get_next_treasury_emission_block_height(request):
+    return Response(json.loads('43800'), content_type='text/plain', status=HTTP_200_OK)
+
+
+@api_view(['GET'])
+def get_next_treasury_emission_coin_amount(request):
+    return Response(json.loads('87600000000000'), content_type='text/plain', status=HTTP_200_OK)
+
+
+@api_view(['GET'])
+def get_total_emission(request):
+    return Response(json.loads('262800000'), content_type='text/plain', status=HTTP_200_OK)
 
 
 @api_view(['GET'])
