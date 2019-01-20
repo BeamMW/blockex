@@ -132,17 +132,16 @@ You are done with the backend!!!
 
 # Explorer API documentation 
 
-## Return coins in circulation mined value.
+##schemes: 
+ https
 
-###schemes: 
-- https
-
-###host: 
+##host: 
 mainnet-explorer.beam.mw
 
-###basePath: 
+##basePath: 
 /explorer 
 
+## Return coins in circulation mined value.
 
 URL
 
