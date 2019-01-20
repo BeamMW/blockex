@@ -152,10 +152,9 @@ def get_coins_in_circulation_treasury(request):
 
 @api_view(['GET'])
 def get_total_coins_in_circulation(request):
-    coins_in_circulation = float(_redis.get('total_emission'))
+    coins_in_circulation = _redis.get('total_emission')
     if not coins_in_circulation:
         te = Block.objects.all().aggregate(Sum('subsidy'))
-        #TODO: summ of coins_in_circulation_treasury + coins_in_circulation_mined
         coins_in_circulation = int(te['subsidy__sum']) * 10 ** -8
         _redis.set('total_emission', coins_in_circulation)
     return Response(json.loads(coins_in_circulation), content_type='text/plain', status=HTTP_200_OK)
