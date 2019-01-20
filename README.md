@@ -129,3 +129,71 @@ To reload nginx after config init or change `sudo systemctl restart nginx`
 `ufw sudo ufw allow 'Nginx Full'`
 
 You are done with the backend!!!
+
+# Explorer API documentation 
+
+## Return coins in circulation mined value.
+
+URL
+
+https://mainnet-explorer.beam.mw/explorer/coins_in_circulation_mined/?format=json
+
+Success Response:
+
+Code: 200 
+Content: { coins_text_value }
+
+## Return coins in circulation treasury value.
+
+URL
+
+https://mainnet-explorer.beam.mw/explorer/coins_in_circulation_treasury/?format=json
+
+Success Response:
+
+Code: 200 
+Content: { coins_text_value }
+
+## Return total coins in circulation value.
+
+URL
+
+https://mainnet-explorer.beam.mw/explorer/total_coins_in_circulation/?format=json
+
+Success Response:
+
+Code: 200 
+Content: { coins_text_value }
+
+## Return next treasury emission block height value.
+
+URL
+
+https://mainnet-explorer.beam.mw/explorer/next_treasury_emission_block_height/?format=json
+
+Success Response:
+
+Code: 200 
+Content: { height_text_value }
+
+## Return next treasury emission coin amount.
+
+URL
+
+https://mainnet-explorer.beam.mw/explorer/next_treasury_emission_coin_amount/?format=json
+
+Success Response:
+
+Code: 200 
+Content: { coins_text_value }
+
+## Return total emission value.
+
+URL
+
+https://mainnet-explorer.beam.mw/explorer/total_emission/?format=json
+
+Success Response:
+
+Code: 200 
+Content: { total_emission_text_value }
