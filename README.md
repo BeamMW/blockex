@@ -134,9 +134,19 @@ You are done with the backend!!!
 
 ## Return coins in circulation mined value.
 
+###schemes: 
+- https
+
+###host: 
+mainnet-explorer.beam.mw
+
+###basePath: 
+/explorer 
+
+
 URL
 
-https://mainnet-explorer.beam.mw/explorer/coins_in_circulation_mined/?format=json
+/coins_in_circulation_mined/?format=json
 
 Success Response:
 
@@ -147,7 +157,7 @@ Content: { coins_text_value }
 
 URL
 
-https://mainnet-explorer.beam.mw/explorer/coins_in_circulation_treasury/?format=json
+/coins_in_circulation_treasury/?format=json
 
 Success Response:
 
@@ -158,7 +168,7 @@ Content: { coins_text_value }
 
 URL
 
-https://mainnet-explorer.beam.mw/explorer/total_coins_in_circulation/?format=json
+/explorer/total_coins_in_circulation/?format=json
 
 Success Response:
 
@@ -169,7 +179,7 @@ Content: { coins_text_value }
 
 URL
 
-https://mainnet-explorer.beam.mw/explorer/next_treasury_emission_block_height/?format=json
+/next_treasury_emission_block_height/?format=json
 
 Success Response:
 
@@ -180,7 +190,7 @@ Content: { height_text_value }
 
 URL
 
-https://mainnet-explorer.beam.mw/explorer/next_treasury_emission_coin_amount/?format=json
+/next_treasury_emission_coin_amount/?format=json
 
 Success Response:
 
@@ -191,7 +201,7 @@ Content: { coins_text_value }
 
 URL
 
-https://mainnet-explorer.beam.mw/explorer/total_emission/?format=json
+/total_emission/?format=json
 
 Success Response:
 
