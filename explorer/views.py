@@ -142,12 +142,12 @@ def get_coins_in_circulation_mined(request):
         te = Block.objects.all().aggregate(Sum('subsidy'))
         coins_in_circulation = int(te['subsidy__sum']) * 10 ** -8
         _redis.set('total_emission', coins_in_circulation)
-    return Response(json.loads(coins_in_circulation), content_type='text/plain', status=HTTP_200_OK)
+    return Response(json.loads(coins_in_circulation), status=HTTP_200_OK)
 
 
 @api_view(['GET'])
 def get_coins_in_circulation_treasury(request):
-    return Response(json.loads('0'), content_type='text/plain', status=HTTP_200_OK)
+    return Response(json.loads('0'), status=HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -157,22 +157,22 @@ def get_total_coins_in_circulation(request):
         te = Block.objects.all().aggregate(Sum('subsidy'))
         coins_in_circulation = int(te['subsidy__sum']) * 10 ** -8
         _redis.set('total_emission', coins_in_circulation)
-    return Response(json.loads(coins_in_circulation), content_type='text/plain', status=HTTP_200_OK)
+    return Response(json.loads(coins_in_circulation), status=HTTP_200_OK)
 
 
 @api_view(['GET'])
 def get_next_treasury_emission_block_height(request):
-    return Response(json.loads('43800'), content_type='text/plain', status=HTTP_200_OK)
+    return Response(json.loads('43800'), status=HTTP_200_OK)
 
 
 @api_view(['GET'])
 def get_next_treasury_emission_coin_amount(request):
-    return Response(json.loads('87600000000000'), content_type='text/plain', status=HTTP_200_OK)
+    return Response(json.loads('87600000000000'), status=HTTP_200_OK)
 
 
 @api_view(['GET'])
 def get_total_emission(request):
-    return Response(json.loads('262800000'), content_type='text/plain', status=HTTP_200_OK)
+    return Response(json.loads('262800000'), status=HTTP_200_OK)
 
 
 @api_view(['GET'])
