@@ -17,6 +17,7 @@ urlpatterns = [
 	url(r'^coins_in_circulation_mined/$', get_coins_in_circulation_mined),
 	url(r'^coins_in_circulation_treasury/$', get_coins_in_circulation_treasury),
 	url(r'^total_coins_in_circulation/$', get_total_coins_in_circulation),
+	url(r'^totalcoins/$', get_total_coins_in_circulation),
 	url(r'^next_treasury_emission_block_height/$', get_next_treasury_emission_block_height),
 	url(r'^next_treasury_emission_coin_amount/$', get_next_treasury_emission_coin_amount),
 	url(r'^total_emission/$', get_total_emission),
