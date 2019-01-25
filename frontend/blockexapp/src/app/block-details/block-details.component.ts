@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../services';
 import { Router} from '@angular/router';
+import { routesConsts } from "../consts";
 
 @Component({
   selector: 'app-block-details',
@@ -28,7 +29,7 @@ export class BlockDetailsComponent implements OnInit {
 
   backToExplorer() {
       this.router.navigate(
-          ['']
+          [routesConsts.HOME]
       );
   }
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
+import { routesConsts } from "../../consts";
 
 @Component({
   selector: 'app-block-not-found',
@@ -14,7 +15,7 @@ export class BlockNotFoundComponent implements OnInit {
 
   backToExplorer() {
     this.router.navigate(
-      ['']
+      [routesConsts.HOME]
     );
   }
 

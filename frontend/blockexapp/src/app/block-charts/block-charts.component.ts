@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import { routesConsts } from "../consts";
 
 @Component({
   selector: 'app-block-charts',
@@ -15,7 +16,7 @@ export class BlockChartsComponent implements OnInit {
 
   backToExplorer() {
       this.router.navigate(
-          ['']
+          [routesConsts.HOME]
       );
   }
 

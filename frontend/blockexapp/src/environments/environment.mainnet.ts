@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: "https://staging-explorer.beam.mw"
+  apiBaseUrl: "https://mainnet-explorer.beam.mw"
 };

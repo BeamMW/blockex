@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of} from 'rxjs';
-import {Http, Response} from "@angular/http";
-import { map, delay, flatMap, concatAll, concatMap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 import { Status, Block } from '../models';
 
@@ -11,7 +9,7 @@ import { Status, Block } from '../models';
 })
 export class DataService {
 
-  API_BASE = "https://mainnet-explorer.beam.mw";
+  API_BASE = environment.apiBaseUrl ;
 
   constructor(private http: HttpClient) { 
   }

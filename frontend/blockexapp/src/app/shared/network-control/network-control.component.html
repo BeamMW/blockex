@@ -1,0 +1,8 @@
+<h4 style="float: left; padding: 0 20px">Network</h4>
+<mat-form-field>
+  <mat-select placeholder="{{placeholder}}">
+     <mat-option *ngFor="let host of networkHosts" [value]="host.value" (click)="OnChange(host.value)">
+        {{host.title}}
+     </mat-option>
+  </mat-select>
+</mat-form-field>

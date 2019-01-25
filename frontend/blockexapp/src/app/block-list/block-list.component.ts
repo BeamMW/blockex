@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../services';
 import { ChartsComponent } from '../charts-component/charts-component.component';
-import { blockListConsts } from '../consts';
+import { blockListConsts, routesConsts } from '../consts';
 
 import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {PageEvent} from '@angular/material';
@@ -66,13 +66,13 @@ export class BlockListComponent implements OnInit {
 
   public showCharts() {
     this.router.navigate(
-      ['/charts', this.status.height]
+      [routesConsts.CHARTS, this.status.height]
     );
   }
 
   public showBlockDetails(hash) {
     this.router.navigate(
-      ['/block', hash]
+      [routesConsts.BLOCK_DETAILS, hash]
     );
   }
 

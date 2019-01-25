@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { TimeagoModule } from 'ngx-timeago';
 import {TimeAgoPipe} from 'time-ago-pipe';
+import { SharedModule } from './shared/shared.module';
 
 import {
     MatExpansionModule,
@@ -48,6 +49,7 @@ import { BlockNotFoundComponent } from './block-details/block-not-found/block-no
     HttpClientModule,
     BrowserAnimationsModule,
     TimeagoModule.forRoot(),
+    SharedModule,
     // Material
     MatExpansionModule,
     MatButtonModule, 

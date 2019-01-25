@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from './services';
-import { Observable, of} from 'rxjs';
-import { map, delay, flatMap, concatAll, concatMap } from 'rxjs/operators';
-import { Block } from './models';
-import {MatPaginator, MatTableDataSource} from '@angular/material';
+import { routesConsts } from './consts';
 import {Router} from "@angular/router";
 
 @Component({
@@ -20,7 +17,7 @@ export class AppComponent  {
 
   navigateToHomepage(){
       this.router.navigate(
-          ['/']
+          [routesConsts.HOME]
       );
   }
 
@@ -28,16 +25,16 @@ export class AppComponent  {
       this.dataService.searchBlock(searchValue).subscribe((blockItem) => {
         if (blockItem.found !== undefined && !blockItem.found) {
           this.router.navigate(
-            ['/block-not-found']
+            [routesConsts.BLOCK_NOT_FOUND]
           );
         } else if (blockItem.hash !== undefined){
           this.router.navigate(
-            ['/block', blockItem.hash]
+            [routesConsts.BLOCK_DETAILS, blockItem.hash]
           );
         }
       }, (error) => {
           this.router.navigate(
-              ['/block-not-found']
+              [routesConsts.BLOCK_NOT_FOUND]
           );
       });
   }

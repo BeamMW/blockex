@@ -1,6 +1,7 @@
     <mat-progress-bar mode="indeterminate" *ngIf="loading_status || loading_blocks || loading_charts"></mat-progress-bar>
     <!-- Some charts -->
     <section class="overview-container" *ngIf="!loading_status">
+      <app-network-control></app-network-control>
       <div class="chart-container">
           <div class="chart">
               <app-charts-component (chartsLoaded)="onChartsLoaded($event)"
