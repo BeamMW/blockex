@@ -12,7 +12,7 @@ import redis
 
 from .models import *
 
-
+HEIGHT_STEP = 43800
 BEAM_NODE_API = 'http://localhost:8888'
 
 @periodic_task(run_every=(crontab(minute='*/1')), name="update_blockchain", ignore_result=True)
@@ -39,6 +39,45 @@ def update_blockchain():
 
     current_height = int(r.json()['height'])
 
+    # Total emission
+    total_coins_emission = _redis.get('total_coins_emission')
+
+    if not total_coins_emission:
+        total_coins_emission = HEIGHT_STEP * 60 * 100
+        _redis.set('total_coins_emission', total_coins_emission)
+
+    # Next treasury emission block height
+
+    current_height_step_amount = current_height // HEIGHT_STEP
+    last_height_step_amount = last_height // HEIGHT_STEP
+
+    next_treasury_emission_height = _redis.get('next_treasury_emission_height')
+    if not next_treasury_emission_height or (current_height_step_amount > last_height_step_amount):
+        next_treasury_emission_height = (current_height_step_amount + 1) * HEIGHT_STEP
+        _redis.set('next_treasury_emission_height', next_treasury_emission_height)
+
+    # Coins in circulation treasury
+
+    coins_in_circulation_treasury = _redis.get('coins_in_circulation_treasury')
+    if (not coins_in_circulation_treasury) or (current_height_step_amount > last_height_step_amount):
+
+        if treasury_height_step_amount > 12:
+            coins_in_circulation_treasury = 12 * 20 * HEIGHT_STEP + \
+                                            (treasury_height_step_amount - 12) * 10 * HEIGHT_STEP
+        else:
+            coins_in_circulation_treasury = treasury_height_step_amount * 20 * HEIGHT_STEP
+        _redis.set('coins_in_circulation_treasury', coins_in_circulation_treasury)
+
+    # Next treasury emission coin amount
+
+    next_treasury_coin_amount = _redis.get('next_treasury_coin_amount')
+    if (not next_treasury_coin_amount) or (current_height_step_amount > last_height_step_amount):
+
+        if current_height_step_amount > 12:
+            next_treasury_coin_amount = 10 * HEIGHT_STEP
+        else:
+            next_treasury_coin_amount = 20 * HEIGHT_STEP
+        _redis.set('next_treasury_coin_amount', next_treasury_coin_amount)
 
     # Retrieve missing blocks in 100 block pages
 
@@ -92,7 +131,8 @@ def update_blockchain():
     _redis.set('beam_blockex_last_height', current_height)
     _redis.delete('graph_data')
     _redis.delete('block_data')
-    _redis.delete('total_emission')
+    _redis.delete('coins_in_circulation_mined')
+    _redis.delete('total_coins_in_circulation')
     _redis.delete('latest_block')
     _redis.delete('latest_block_height')
 
