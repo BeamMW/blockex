@@ -169,10 +169,10 @@ def get_total_coins_in_circulation(request):
             total_coins_in_circulation = coins_in_circulation_mined
         coins_in_circulation_treasury = _redis.get('coins_in_circulation_treasury')
         if coins_in_circulation_treasury:
-            total_coins_in_circulation = float(total_coins_in_circulation) + float(coins_in_circulation_treasury)
+            total_coins_in_circulation = float(coins_in_circulation_mined) + float(coins_in_circulation_treasury)
 
     _redis.set('total_coins_in_circulation', total_coins_in_circulation)
-    return Response(json.loads(total_coins_in_circulation), status=HTTP_200_OK)
+    return Response(float(total_coins_in_circulation), status=HTTP_200_OK)
 
 
 @api_view(['GET'])
