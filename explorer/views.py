@@ -106,8 +106,11 @@ def get_status(request):
         data['coins_in_circulation_mined'] = coins_in_circulation_mined
 
     coins_in_circulation_treasury = _redis.get('coins_in_circulation_treasury')
+    if not coins_in_circulation_treasury:
+        coins_in_circulation_treasury = 0
+
     data['coins_in_circulation_treasury'] = coins_in_circulation_treasury
-    data['total_coins_in_circulation'] = int(coins_in_circulation_mined) + int(coins_in_circulation_treasury)
+    data['total_coins_in_circulation'] = float(coins_in_circulation_mined) + float(coins_in_circulation_treasury)
     data['next_treasury_emission_block_height'] = _redis.get('next_treasury_emission_height')
     data['next_treasury_emission_coin_amount'] = _redis.get('next_treasury_coin_amount')
     data['total_emission'] = _redis.get('total_coins_emission')
@@ -163,9 +166,10 @@ def get_total_coins_in_circulation(request):
             te = Block.objects.all().aggregate(Sum('subsidy'))
             coins_in_circulation_mined = int(te['subsidy__sum']) * 10 ** -8
             _redis.set('coins_in_circulation_mined', coins_in_circulation_mined)
+            total_coins_in_circulation = coins_in_circulation_mined
         coins_in_circulation_treasury = _redis.get('coins_in_circulation_treasury')
         if coins_in_circulation_treasury:
-            total_coins_in_circulation = int(total_coins_in_circulation) + int(coins_in_circulation_treasury)
+            total_coins_in_circulation = float(total_coins_in_circulation) + float(coins_in_circulation_treasury)
 
     _redis.set('total_coins_in_circulation', total_coins_in_circulation)
     return Response(json.loads(total_coins_in_circulation), status=HTTP_200_OK)

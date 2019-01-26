@@ -61,11 +61,11 @@ def update_blockchain():
     coins_in_circulation_treasury = _redis.get('coins_in_circulation_treasury')
     if (not coins_in_circulation_treasury) or (current_height_step_amount > last_height_step_amount):
 
-        if treasury_height_step_amount > 12:
+        if current_height_step_amount > 12:
             coins_in_circulation_treasury = 12 * 20 * HEIGHT_STEP + \
-                                            (treasury_height_step_amount - 12) * 10 * HEIGHT_STEP
+                                            (current_height_step_amount - 12) * 10 * HEIGHT_STEP
         else:
-            coins_in_circulation_treasury = treasury_height_step_amount * 20 * HEIGHT_STEP
+            coins_in_circulation_treasury = current_height_step_amount * 20 * HEIGHT_STEP
         _redis.set('coins_in_circulation_treasury', coins_in_circulation_treasury)
 
     # Next treasury emission coin amount
