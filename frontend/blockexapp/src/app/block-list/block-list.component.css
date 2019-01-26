@@ -16,7 +16,7 @@ table {
     display: inline-table;
     width:100%;
     height:350px;
-    padding:20px;
+    padding:5px;
     border:1px solid #eee;
 }
 
@@ -24,7 +24,7 @@ table {
     margin:1em 2em;
     width:310px;
     float:left;
-    padding-left: 30px;
+    padding: 10px 0;
 }
 
 .height-card {
@@ -44,11 +44,37 @@ table {
 }
 
 .block-card-content {
+    margin: 0 16px;
     font-size: 10pt;
-    padding: 30px;
+}
+
+.next-treasury-amount-block,
+.next-treasury-height-block {
+    min-width: 260px;
+}
+
+.total-coins-block,
+.total-emission-block {
+    max-width: 240px;
+}
+
+.coins-treasury-block {
+    max-width: 225px;
+}
+
+.hashrate-block {
+    max-width: 230px;
 }
 
 @media all and (max-width: 1599px) {
+    .block-card-header {
+        font-size: 10px !important;
+    }
+
+    .block-card-header {
+        font-size: 12px !important;
+    }
+
     .chart-container {
         height:300px;
     }
@@ -56,15 +82,7 @@ table {
     .block-card {
         margin:0.5em;
         width: 260px;
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    .block-card-content {
-        padding: 5px;
-    }
-
-    .chart-container {
-        padding: 5px;
+        padding-left: 0;
+        padding-right: 0;
     }
 }
