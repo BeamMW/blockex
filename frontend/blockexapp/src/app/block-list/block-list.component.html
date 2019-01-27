@@ -14,91 +14,91 @@
       <section>
         <mat-card class="block-card height-card">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle>Blockchain height:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">Blockchain height:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
-            <h2>{{status?.height}}</h2>
+            <h2 class="block-card-content-title">{{status?.height}}</h2>
           </mat-card-content>
         </mat-card>
 
-        <mat-card class="block-card">
+        <mat-card class="block-card latest-block-card">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle>Latest block:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">Latest block:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
-            <h2>{{status?.timestamp | date:'medium'}}</h2>
+            <h2 class="block-card-content-title">{{status?.timestamp | date:'medium'}}</h2>
           </mat-card-content>
         </mat-card>
 
         <mat-card class="block-card difficulty-card">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle>Latest block difficulty:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">Latest block difficulty:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
-            <h2>{{status?.difficulty | number:'.'}}</h2>
+            <h2 class="block-card-content-title">{{status?.difficulty | number:'.'}}</h2>
           </mat-card-content>
         </mat-card>
 
         <mat-card class="block-card coins-mined-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle>Coins in circulation (mined):</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">Coins in circulation (mined):</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
-            <h2>{{status?.coins_in_circulation_mined | number:'.'}} Beams</h2>
+            <h2 class="block-card-content-title">{{status?.coins_in_circulation_mined | number:'.'}} Beams</h2>
           </mat-card-content>
         </mat-card>
 
         <mat-card class="block-card coins-treasury-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle>Coins in circulation (treasury):</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">Coins in circulation (treasury):</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
-            <h2>{{status?.coins_in_circulation_treasury | number:'.'}} Beams</h2>
+            <h2 class="block-card-content-title">{{status?.coins_in_circulation_treasury | number:'.'}} Beams</h2>
           </mat-card-content>
         </mat-card>
 
         <mat-card class="block-card total-coins-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle>Total coins in circulation:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">Total coins in circulation:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
-            <h2>{{status?.total_coins_in_circulation | number:'.'}} Beams</h2>
+            <h2 class="block-card-content-title">{{status?.total_coins_in_circulation | number:'.'}} Beams</h2>
           </mat-card-content>
         </mat-card>
 
         <mat-card class="block-card next-treasury-height-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle>Next treasury emission block height:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">Next treasury emission block height:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
-            <h2>{{status?.next_treasury_emission_block_height | number:'.'}}</h2>
+            <h2 class="block-card-content-title">{{status?.next_treasury_emission_block_height | number:'.'}}</h2>
           </mat-card-content>
         </mat-card>
 
         <mat-card class="block-card next-treasury-amount-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle>Next treasury emission coin amount:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">Next treasury emission coin amount:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
-            <h2>{{status?.next_treasury_emission_coin_amount | number:'.'}} Beams</h2>
+            <h2 class="block-card-content-title">{{status?.next_treasury_emission_coin_amount | number:'.'}} Beams</h2>
           </mat-card-content>
         </mat-card>
 
         <mat-card class="block-card total-emission-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle>Total emission:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">Total emission:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
-            <h2>{{status?.total_emission | number:'.'}} Beams</h2>
+            <h2 class="block-card-content-title">{{status?.total_emission | number:'.'}} Beams</h2>
           </mat-card-content>
         </mat-card>
 
         <mat-card class="block-card hashrate-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle>Hashrate:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">Hashrate:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
-            <h2>{{status?.difficulty / 60 | number:'.'}} Sol/s</h2>
+            <h2 class="block-card-content-title">{{status?.difficulty / 60 | number:'.'}} Sol/s</h2>
           </mat-card-content>
         </mat-card>
       </section>

@@ -62,19 +62,15 @@ table {
     max-width: 225px;
 }
 
+.latest-block-card {
+    min-width: 280px;
+}
+
 .hashrate-block {
     max-width: 230px;
 }
 
 @media all and (max-width: 1599px) {
-    .block-card-header {
-        font-size: 10px !important;
-    }
-
-    .block-card-header {
-        font-size: 12px !important;
-    }
-
     .chart-container {
         height:300px;
     }
@@ -84,5 +80,50 @@ table {
         width: 260px;
         padding-left: 0;
         padding-right: 0;
+    }
+}
+
+@media all and (max-width: 1359px) {
+    .block-card {
+        width: 225px;
+    }
+
+    .height-card {
+        max-width:135px;
+    }
+
+    .latest-block-card {
+        min-width: 235px;
+    }
+
+    .difficulty-card {
+        max-width: 150px;
+    }
+
+    .total-emission-block,
+    .total-coins-block,
+    .coins-mined-block {
+        max-width: 185px;
+    }
+
+    .next-treasury-amount-block,
+    .next-treasury-height-block {
+        min-width: 235px;
+    }
+
+    .hashrate-block {
+        max-width: 180px;
+    }
+
+    .coins-treasury-block {
+        max-width: 195px;
+    }
+
+    .block-card-header-title {
+        font-size: 12px;
+    }
+
+    .block-card-content-title {
+        font-size: 16px;
     }
 }

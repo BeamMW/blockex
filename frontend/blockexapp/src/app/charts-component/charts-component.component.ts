@@ -120,7 +120,7 @@ export class ChartsComponent implements OnInit {
             minUnit: 'hour',
             time: {
               displayFormats: {
-                hour: 'MMM D, h:mm A'
+                hour: 'MMM D'
               }
             },
             display: true
@@ -196,7 +196,7 @@ export class ChartsComponent implements OnInit {
             minUnit: 'hour',
             time: {
               displayFormats: {
-                hour: 'MMM D, h:mm A'
+                hour: 'MMM D'
               }
             },
             display: true
