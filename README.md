@@ -141,68 +141,110 @@ mainnet-explorer.beam.mw
 ### basePath: 
 /explorer 
 
-## Return coins in circulation mined value.
+## Сoins in circulation mined value.
 
-URL
+Return coins in circulation mined value.
+
+### URL
 
 /coins_in_circulation_mined/?format=json
 
-Success Response:
+### Method:
 
-Code: 200 
+GET
+
+### Success Response:
+
+Code: 200
+ 
 Content: { coins_text_value }
 
-## Return coins in circulation treasury value.
+## Coins in circulation treasury value.
 
-URL
+Return coins in circulation treasury value
+
+### URL
 
 /coins_in_circulation_treasury/?format=json
 
-Success Response:
+### Method:
+
+GET
+
+### Success Response:
 
 Code: 200 
+
 Content: { coins_text_value }
 
-## Return total coins in circulation value.
+## Total coins in circulation value.
 
-URL
+Return total coins in circulation value
+
+### URL
 
 /explorer/total_coins_in_circulation/?format=json
 
-Success Response:
+### Method:
+
+GET
+
+### Success Response:
 
 Code: 200 
+
 Content: { coins_text_value }
 
-## Return next treasury emission block height value.
+## Next treasury emission block height value.
 
-URL
+Return next treasury emission block height value
+
+### URL
 
 /next_treasury_emission_block_height/?format=json
 
-Success Response:
+### Method:
+
+GET
+
+### Success Response:
 
 Code: 200 
+
 Content: { height_text_value }
 
-## Return next treasury emission coin amount.
+## Next treasury emission coin amount.
 
-URL
+Return next treasury emission coin amount
+
+### URL
 
 /next_treasury_emission_coin_amount/?format=json
 
-Success Response:
+### Method:
+
+GET
+
+### Success Response:
 
 Code: 200 
+
 Content: { coins_text_value }
 
-## Return total emission value.
+## Total emission value.
 
-URL
+Return total emission value
+
+### URL
 
 /total_emission/?format=json
 
-Success Response:
+### Method:
+
+GET
+
+### Success Response:
 
 Code: 200 
+
 Content: { total_emission_text_value }
