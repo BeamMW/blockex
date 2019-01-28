@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {routesConsts} from "../../consts";
 
 @Component({
   selector: 'app-network-control',
   templateUrl: './network-control.component.html',
-  styleUrls: ['./network-control.component.css']
+  styleUrls: ['./network-control.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class NetworkControlComponent implements OnInit {
   placeholder: string;
