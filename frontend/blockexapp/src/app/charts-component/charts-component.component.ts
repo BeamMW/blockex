@@ -104,6 +104,7 @@ export class ChartsComponent implements OnInit {
           }
         },
         responsive: true,
+        maintainAspectRatio: false,
         title: {
           display: true,
           text: 'Blocks and Difficulty'
@@ -180,6 +181,7 @@ export class ChartsComponent implements OnInit {
           }
         },
         responsive: true,
+        maintainAspectRatio: false,
         title: {
           display: true,
           text: 'Fee'

@@ -1,11 +1,13 @@
 .chart-item {
     display: inline-block;
     width: 730px;
+    height: 350px;
     margin-left: 50px;
 }
 
 .chart-item-full {
     display: inline-block;
+    height: 600px;
     width: 1200px;
 }
 
@@ -29,4 +31,12 @@
     .chart-item-full {
         width: 1000px;
     }
+}
+
+
+@media all and (max-width: 600px) {
+  .chart-item {
+      width: 350px;
+      height: 400px;
+  }
 }

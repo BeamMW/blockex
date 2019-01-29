@@ -47,3 +47,56 @@
 .mat-column-id {
     min-width: 500px;
 }
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.mat-table {
+    overflow: auto;
+}
+
+.mobile-label {
+    display: none;
+}
+
+
+@media(max-width: 600px) {
+  .mobile-label {
+      width: 95px;
+      display: inline-block;
+      font-weight: bold;
+  }
+
+  .mat-header-row {
+     display: none;
+  }
+
+  .mat-row {
+      flex-direction: column;
+      align-items: start;
+      padding: 8px 10px;
+      max-height: 370px;
+  }
+
+  .mat-column-fee {
+      max-width: 200px;
+  }
+
+  .commitment-cell,
+  .kernel-id-cell,
+  .excess-cell {
+      max-width: 190px;
+  }
+
+  .value-table-cell {
+      max-width: 250px;
+  }
+
+  mat-cell:first-of-type {
+      padding-left: 0;
+  }
+}
+

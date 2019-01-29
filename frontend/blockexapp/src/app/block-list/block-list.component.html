@@ -105,53 +105,75 @@
     </section>
     <div style="clear: both"></div>
     <!-- Top blocks section-->
-    <section *ngIf="!loading_status">
+<section *ngIf="!loading_status">
       <mat-paginator [pageSize]="20" [pageIndex]="page" [length]="count" (page)="pageEvent = loadBlocks($event)" showFirstLastButtons></mat-paginator>
       <mat-card *ngIf="!loading_blocks">
-        <mat-card-content>
-          <table  mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <mat-card-content class="table-container">
+          <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
             <!-- Height Column -->
             <ng-container matColumnDef="height">
-              <th mat-header-cell *matHeaderCellDef> Height </th>
-              <td mat-cell *matCellDef="let element"> {{element.height}} </td>
+              <mat-header-cell class="height-cell-header" *matHeaderCellDef> Height </mat-header-cell>
+              <mat-cell class="height-cell" *matCellDef="let element">
+                <span class="mobile-label">Height:</span>
+                {{element.height}}
+              </mat-cell>
             </ng-container>
             <!-- Hash Column -->
             <ng-container matColumnDef="hash">
-              <th mat-header-cell *matHeaderCellDef> Hash </th>
-              <td mat-cell *matCellDef="let element">
-                <a [routerLink]="['/block', element.hash]">{{element.hash}}</a></td>
+              <mat-header-cell class="hash-cell-header" *matHeaderCellDef> Hash </mat-header-cell>
+              <mat-cell class="hash-cell" *matCellDef="let element">
+                <span class="mobile-label">Hash:</span>
+                <span class="block-details-link" [routerLink]="['/block', element.hash]">
+                  {{element.hash}}
+                </span>
+              </mat-cell>
             </ng-container>
             <ng-container matColumnDef="age">
-              <th mat-header-cell *matHeaderCellDef> Age </th>
-              <td mat-cell *matCellDef="let element"> {{element.timestamp | date:'medium'}} </td>
+              <mat-header-cell class="age-cell-header" *matHeaderCellDef> Age </mat-header-cell>
+              <mat-cell class="age-cell" *matCellDef="let element">
+                <span class="mobile-label">Age:</span>
+                {{element.timestamp | date:'medium'}}
+              </mat-cell>
             </ng-container>
             <ng-container matColumnDef="difficulty">
-              <th mat-header-cell *matHeaderCellDef> Difficulty </th>
-              <td mat-cell *matCellDef="let element"> {{element.difficulty | number:'.'}} </td>
+              <mat-header-cell *matHeaderCellDef> Difficulty </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <span class="mobile-label">Difficulty:</span>
+                {{element.difficulty | number:'.'}}
+              </mat-cell>
             </ng-container>
             <ng-container matColumnDef="inputs">
-              <th mat-header-cell *matHeaderCellDef> # inputs </th>
-              <td mat-cell *matCellDef="let element"> {{element.inputs.length}} </td>
+              <mat-header-cell *matHeaderCellDef> # inputs </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <span class="mobile-label"># inputs:</span>
+                {{element.inputs.length}}
+              </mat-cell>
             </ng-container>
             <ng-container matColumnDef="outputs">
-              <th mat-header-cell *matHeaderCellDef> # outputs </th>
-              <td mat-cell *matCellDef="let element"> {{element.outputs.length}} </td>
+              <mat-header-cell *matHeaderCellDef> # outputs </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <span class="mobile-label"># outputs:</span>
+                {{element.outputs.length}}
+              </mat-cell>
             </ng-container>
             <ng-container matColumnDef="kernels">
-              <th mat-header-cell *matHeaderCellDef> # kernels </th>
-              <td mat-cell *matCellDef="let element"> {{element.kernels.length}} </td>
+              <mat-header-cell *matHeaderCellDef> # kernels </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <span class="mobile-label"># kernels:</span>
+                {{element.kernels.length}}
+              </mat-cell>
             </ng-container>
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let element">
+              <mat-header-cell class="actions-cell-header" *matHeaderCellDef></mat-header-cell>
+              <mat-cell class="actions-cell" *matCellDef="let element">
                 <button mat-icon-button (click)="showBlockDetails(element.hash)" >
                   <mat-icon aria-label="Details">details</mat-icon>
                 </button>
-              </td>
+              </mat-cell>
             </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
         </mat-card-content>
       </mat-card>
     </section>

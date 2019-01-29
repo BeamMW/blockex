@@ -11,6 +11,33 @@
     cursor: pointer;
 }
 
-table {
-  width: 100%;
+.header-toolbar {
+    padding: 0;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
 }
+
+table {
+    width: 100%;
+}
+
+.search-form-field {
+    width: 400px;
+}
+
+@media(max-width: 600px) {
+  .search-form-field {
+      width: 100%;
+  }
+
+  .search-form-field {
+      padding: 5px;
+  }
+
+  .header-toolbar {
+      height: 135px;
+  }
+}
+
+

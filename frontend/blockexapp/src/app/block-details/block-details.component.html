@@ -2,6 +2,7 @@
 <app-network-control></app-network-control>
 <section *ngIf="!loading_block">
   <mat-card class="details-card-container">
+    <span class="mobile-label mat-column-block-header">{{block.header}}</span>
     <mat-card-content>
       <mat-table #table [dataSource]="block.data">
         <ng-container matColumnDef="name">
@@ -9,7 +10,9 @@
         </ng-container>
 
         <ng-container matColumnDef="value">
-          <mat-cell *matCellDef="let element"> {{element.value}} {{element.additional}} </mat-cell>
+          <mat-cell *matCellDef="let element">
+            <span class="value-table-cell">{{element.value}} {{element.additional}}</span>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="block-header">
@@ -30,20 +33,28 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <mat-table #table [dataSource]="block.inputs">
-            <ng-container matColumnDef="commitment">
-              <mat-header-cell *matHeaderCellDef> Commitment </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.commitment}} </mat-cell>
-            </ng-container>
+          <div class="table-container">
+            <mat-table #table [dataSource]="block.inputs">
+              <ng-container matColumnDef="commitment">
+                <mat-header-cell *matHeaderCellDef> Commitment </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="mobile-label">Commitment:</span>
+                  <span class="commitment-cell">{{element.commitment}}</span>
+                </mat-cell>
+              </ng-container>
 
-            <ng-container matColumnDef="maturity">
-              <mat-header-cell *matHeaderCellDef> Maturity </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.maturity}} </mat-cell>
-            </ng-container>
+              <ng-container matColumnDef="maturity">
+                <mat-header-cell *matHeaderCellDef> Maturity </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="mobile-label">Maturity:</span>
+                  {{element.maturity}}
+                </mat-cell>
+              </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns.inputs"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns.inputs;"></mat-row>
-          </mat-table>
+              <mat-header-row *matHeaderRowDef="displayedColumns.inputs"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns.inputs;"></mat-row>
+            </mat-table>
+          </div>
         </mat-expansion-panel>
 
         <mat-expansion-panel class="expansion-data-panel">
@@ -53,25 +64,36 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <mat-table #table [dataSource]="block.outputs">
-            <ng-container matColumnDef="commitment">
-              <mat-header-cell *matHeaderCellDef> Commitment </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.commitment}} </mat-cell>
-            </ng-container>
+          <div class="table-container">
+            <mat-table #table [dataSource]="block.outputs">
+              <ng-container matColumnDef="commitment">
+                <mat-header-cell *matHeaderCellDef> Commitment </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="mobile-label">Commitment:</span>
+                  <span class="commitment-cell"> {{element.commitment}} </span>
+                </mat-cell>
+              </ng-container>
 
-            <ng-container matColumnDef="maturity">
-              <mat-header-cell *matHeaderCellDef> Maturity </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.maturity}} </mat-cell>
-            </ng-container>
+              <ng-container matColumnDef="maturity">
+                <mat-header-cell *matHeaderCellDef> Maturity </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="mobile-label">Maturity:</span>
+                  {{element.maturity}}
+                </mat-cell>
+              </ng-container>
 
-            <ng-container matColumnDef="coinbase">
-              <mat-header-cell *matHeaderCellDef> Coinbase </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.coinbase}} </mat-cell>
-            </ng-container>
+              <ng-container matColumnDef="coinbase">
+                <mat-header-cell *matHeaderCellDef> Coinbase </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="mobile-label">Coinbase:</span>
+                  {{element.coinbase}}
+                </mat-cell>
+              </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns.outputs"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns.outputs;"></mat-row>
-          </mat-table>
+              <mat-header-row *matHeaderRowDef="displayedColumns.outputs"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns.outputs;"></mat-row>
+            </mat-table>
+          </div>
         </mat-expansion-panel>
 
         <mat-expansion-panel class="expansion-data-panel">
@@ -84,17 +106,26 @@
           <mat-table #table [dataSource]="block.kernels">
             <ng-container matColumnDef="fee">
               <mat-header-cell *matHeaderCellDef> Fee </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.fee}} </mat-cell>
+              <mat-cell *matCellDef="let element">
+                <span class="mobile-label">Fee:</span>
+                <span class="fee-cell">{{element.fee}}</span>
+              </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="excess">
               <mat-header-cell *matHeaderCellDef> Excess </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.excess}} </mat-cell>
+              <mat-cell *matCellDef="let element">
+                <span class="mobile-label">Excess:</span>
+                <span class="excess-cell">{{element.excess}}</span>
+              </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="id">
               <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.kernel_id}} </mat-cell>
+              <mat-cell *matCellDef="let element">
+                <span class="mobile-label">Id:</span>
+                <span class="kernel-id-cell">{{element.kernel_id}}</span>
+              </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns.kernels"></mat-header-row>
