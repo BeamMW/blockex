@@ -75,6 +75,11 @@
     color: rgb(0, 0, 238);
 }
 
+.height-cell,
+.height-cell-header{
+    max-width: 90px;
+}
+
 .hash-cell,
 .hash-cell-header{
     min-width: 530px;
