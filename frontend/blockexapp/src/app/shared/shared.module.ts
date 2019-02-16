@@ -4,13 +4,24 @@ import { NetworkControlComponent } from './network-control/network-control.compo
 
 import {
   MatSelectModule,
+  MatToolbarModule,
+  MatInputModule,
 } from '@angular/material';
+import { HeaderComponent } from './header/header.component';
 @NgModule({
   imports: [
     CommonModule,
-    MatSelectModule
+    MatSelectModule,
+    MatToolbarModule,
+    MatInputModule
   ],
-  declarations: [NetworkControlComponent],
-  exports:      [NetworkControlComponent]
+  declarations: [
+    NetworkControlComponent,
+    HeaderComponent
+  ],
+  exports: [
+    NetworkControlComponent,
+    HeaderComponent
+  ]
 })
 export class SharedModule { }

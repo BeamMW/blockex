@@ -1,0 +1,119 @@
+.canvas-chart {
+    width: 50%;
+    height: 700px;
+}
+
+.search-button{
+    margin-right: 5px;
+}
+
+.logo-title {
+    margin-left: 140px;
+    cursor: pointer;
+}
+
+.logo-title-beam {
+    color: #25c1ff;
+    font-weight: bolder;
+    letter-spacing: 12px;
+    font-size: 17px;
+    margin-top: -10px;
+    height: 22px;
+    margin-left: 25px;
+}
+
+.logo-title-text{
+    font-size: 13px;
+    margin-left: 25px;
+    height: 20px;
+}
+
+.logo-title-content {
+  cursor: pointer;
+}
+
+.header-toolbar-mainnet {
+    background-attachment: fixed;
+    height: 111px;
+    font-family: 'ProximaNova', sans-serif;
+    background-blend-mode:  normal, multiply, multiply, multiply;
+    background-image:
+        linear-gradient(120deg, #032e49, #0073a6),
+        radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5)),
+        linear-gradient(to left, rgba(255, 255, 255, 0.5), #d33b65),
+        linear-gradient(297deg, #156fc3, rgba(255, 255, 255, 0.5)),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0), rgba(21, 6, 40, 0.12));
+    padding: 0;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.header-search-input {
+  width: 300px;
+  height: 31px;
+  opacity: 0.3;
+  border-radius: 20px;
+}
+
+.header-toolbar-testnet {
+    background-attachment: fixed;
+    height: 111px;
+    font-family: 'ProximaNova', sans-serif;
+    background-blend-mode: normal, multiply, multiply, multiply;
+    background-image: linear-gradient(120deg, #1e172c, #4a2c7c),
+        radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.5),
+        rgba(0, 0, 0, 0.5)), linear-gradient(to left, rgba(255, 255, 255, 0.5), #d33b65),
+        linear-gradient(297deg, #156fc3, rgba(255, 255, 255, 0.5)),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0), rgba(21, 6, 40, 0.12));
+    padding: 0;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#searchInput {
+    margin-right: 120px;
+    text-indent: 20px;
+    border: 1px solid #ffffff;
+    width: 300px;
+    height: 31px;
+    border-radius: 20px;
+    opacity: 0.5;
+    font-family: ProximaNova;
+    font-size: 14px;
+    font-weight: normal;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+#searchInput:focus{
+    outline: none;
+}
+
+#searchInput::placeholder {
+    color: #ffffff;
+    font-weight: normal;
+}
+
+table {
+    width: 100%;
+}
+
+.search-form-field {
+    width: 400px;
+}
+
+@media(max-width: 600px) {
+  .search-form-field {
+      width: 100%;
+  }
+
+  .search-form-field {
+      padding: 5px;
+  }
+
+  .header-toolbar {
+      height: 135px;
+  }
+}

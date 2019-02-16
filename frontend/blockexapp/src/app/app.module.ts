@@ -30,6 +30,7 @@ import { BlockListComponent } from './block-list/block-list.component';
 import { BlockChartsComponent } from './block-charts/block-charts.component';
 import { ChartsComponent } from './charts-component/charts-component.component';
 import { BlockNotFoundComponent } from './block-details/block-not-found/block-not-found.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
 @NgModule({
@@ -65,6 +66,7 @@ import { BlockNotFoundComponent } from './block-details/block-not-found/block-no
     MatFormFieldModule,
     MatPaginatorModule,
     AppRoutingModule,
+    NgxChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

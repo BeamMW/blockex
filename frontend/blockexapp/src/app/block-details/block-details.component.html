@@ -1,16 +1,15 @@
-<mat-progress-bar mode="indeterminate" *ngIf="loading_block"></mat-progress-bar>
-<app-network-control></app-network-control>
+<!--<mat-progress-bar mode="indeterminate" *ngIf="loading_block"></mat-progress-bar>-->
 <section *ngIf="!loading_block">
   <mat-card class="details-card-container">
     <span class="mobile-label mat-column-block-header">{{block.header}}</span>
     <mat-card-content>
       <mat-table #table [dataSource]="block.data">
-        <ng-container matColumnDef="name">
+        <ng-container class="main-table-name" matColumnDef="name">
           <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="value">
-          <mat-cell *matCellDef="let element">
+          <mat-cell class="main-table-value" *matCellDef="let element">
             <span class="value-table-cell">{{element.value}} {{element.additional}}</span>
           </mat-cell>
         </ng-container>
@@ -22,14 +21,14 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="['block-header']"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns.block;"></mat-row>
+        <mat-row class="main-table-row" *matRowDef="let row; columns: displayedColumns.block;"></mat-row>
       </mat-table>
 
       <div class="expansion-data-rows">
         <mat-expansion-panel class="expansion-data-panel">
           <mat-expansion-panel-header class="expansion-data-header">
             <mat-panel-title class="expansion-data-title">
-              Inputs ({{block.inputs.length}})
+              INPUTS: {{block.inputs.length}}
             </mat-panel-title>
           </mat-expansion-panel-header>
 
@@ -60,7 +59,7 @@
         <mat-expansion-panel class="expansion-data-panel">
           <mat-expansion-panel-header class="expansion-data-header">
             <mat-panel-title class="expansion-data-title">
-              Outputs ({{block.outputs.length}})
+              OUTPUTS: {{block.outputs.length}}
             </mat-panel-title>
           </mat-expansion-panel-header>
 
@@ -99,7 +98,7 @@
         <mat-expansion-panel class="expansion-data-panel">
           <mat-expansion-panel-header class="expansion-data-header">
             <mat-panel-title class="expansion-data-title">
-              Kernels ({{block.kernels.length}})
+              KERNELS: {{block.kernels.length}}
             </mat-panel-title>
           </mat-expansion-panel-header>
 
@@ -134,7 +133,7 @@
         </mat-expansion-panel>
       </div>
 
-      <button mat-raised-button color="primary" class="details-button-back" (click)="backToExplorer()">Back</button>
+      <!--<button mat-raised-button color="primary" class="details-button-back" (click)="backToExplorer()">Back</button>-->
     </mat-card-content>
   </mat-card>
 </section>

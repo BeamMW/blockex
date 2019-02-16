@@ -1,6 +1,16 @@
+mat-table,
+.expansion-data-title{
+    font-family: ProximaNova;
+}
+
 .mat-column-block-header{
-    color: #3f51b5;
+    font-size: 20px;
     font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
 }
 
 .mat-column-name{
@@ -9,11 +19,41 @@
 }
 
 .details-card-container{
+    box-shadow: none;
     max-width: 1290px;
     padding-right: 15px;
     padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
+    margin-left: 130px;
+    margin-right: 105px;
+}
+
+.mat-header-row,
+.mat-row {
+    border: none;
+}
+
+.main-table-row{
+  background-color: rgb(251,251,251);
+}
+
+.main-table-name{
+  font-size: 12px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: 0.3px;
+  color: #333333;
+}
+
+.main-table-value{
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #333333;
 }
 
 .expansion-data-rows{

@@ -1,15 +1,4 @@
 <header>
-  <mat-toolbar class="header-toolbar" color="primary">
-      <img (click)="navigateToHomepage()" class="logo-title" src="assets/logo.png" width=60 height=60 alt="">
-      <span (click)="navigateToHomepage()" class="logo-title">Beam Block Explorer </span>
-      <span style="flex: 1 1 auto;"></span>
-      <form>
-        <mat-form-field class="search-form-field" floatLabel="never">
-          <input matInput #searchInput (keyup.enter)="searchProcess(searchInput.value)"
-                 placeholder="Search by height, hash, kernel id..." type="search">
-        </mat-form-field>
-        <button mat-flat-button class="search-button" (click)="searchProcess(searchInput.value)">Search</button>
-      </form>
-  </mat-toolbar>
+  <app-header></app-header>
 </header>
 <router-outlet></router-outlet>

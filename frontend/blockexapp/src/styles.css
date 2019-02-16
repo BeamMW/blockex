@@ -1,2 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+/*@import '~highcharts/css/highcharts.css';*/
+
+@font-face {
+  font-family: "ProximaNova";
+  src: url("./assets/fonts/proximanova-regular.otf");
+}
+
+body {
+    margin: 0;
+}

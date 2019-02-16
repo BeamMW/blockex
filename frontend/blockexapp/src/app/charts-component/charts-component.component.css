@@ -11,6 +11,21 @@
     width: 1200px;
 }
 
+.highcharts-credits {
+    display: none;
+}
+
+#blocks-chart {
+    float: left;
+    max-width: 580px;
+}
+
+#fee-chart {
+    margin-left: 38px;
+    float: left;
+    max-width: 560px;
+}
+
 @media all and (max-width: 1599px) {
     .chart-item {
         width: 650px;
@@ -37,6 +52,5 @@
 @media all and (max-width: 600px) {
   .chart-item {
       width: 350px;
-      height: 400px;
   }
 }

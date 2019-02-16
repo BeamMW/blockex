@@ -1,3 +1,100 @@
 .mat-select-panel{
-  margin-top: 40px;
+    margin-top: 40px;
+}
+.onoffswitch {
+    margin-right: 136px;
+    position: relative;
+    height: 31px;
+    width: 288px;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid rgb(150,141,158);
+    border-radius: 20px;
+}
+.onoffswitch-inner {
+    display: block;
+    width: 200%;
+    margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before,
+.onoffswitch-inner:after {
+    display: block;
+    float: left;
+    width: 50%;
+    height: 31px;
+    padding: 0;
+    line-height: 30px;
+    font-size: 24px;
+    color: white;
+    font-family: Trebuchet, Arial, sans-serif;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "MAINNET";
+    padding-left: 14px;
+    background-color: rgba(255, 255, 255, 0);
+    font-family: ProximaNova;
+    font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
+    letter-spacing: 7px;
+    color: rgb(150,141,158);
+}
+.onoffswitch-inner:after {
+    content: "TESTNET";
+    padding-right: 14px;
+    background-color: rgba(255, 255, 255, 0);
+    font-family: ProximaNova;
+    font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
+    letter-spacing: 7px;
+    color: rgb(150,141,158);
+    text-align: right;
+}
+
+.onoffswitch-switch {
+    width: 145px;
+    height: 33px;
+    border-radius: 15.5px;
+    border: none;
+    box-shadow: 0 2px 7px 0 #00163a;
+    background-image: linear-gradient(103deg, #4ae2ff, #24c1ff);
+    display: block;
+    margin: 0.5px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 130px;
+    transition: all 0.3s ease-in 0s;
+    font-family: ProximaNova;
+    font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
+    letter-spacing: 7px;
+    color: #311e46;
+    padding-left: 15px;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: -2px;
+    width: 141px;
+    height: 33px;
+    border: none;
+    border-radius: 15.5px;
+    box-shadow: 0 2px 7px 0 #00163a;
+    background-image: linear-gradient(282deg, #8e54ff, #a479f8);
 }

@@ -46,12 +46,12 @@ export class BlockDetailsComponent implements OnInit {
       this.dataService.loadBlock(params.hash).subscribe((blockItem) => {
         this.block.header = 'Block ' + blockItem.height;
         this.block.data = [
-          {name: 'Fee', value: blockItem.fee, additional: blockItem.fee !== 0 ? 'Groth' : ''},
-          {name: 'Hash', value: blockItem.hash, additional: ''},
-          {name: 'Difficulty', value: blockItem.difficulty.toLocaleString(), additional: ''},
-          {name: 'Subsidy', value: blockItem.subsidy.toLocaleString(), additional: 'Groth'},
-          {name: 'Chainwork', value: blockItem.chainwork, additional: ''},
-          {name: 'Age', value: new Date(blockItem.timestamp).toLocaleDateString("en-US", {
+          {name: 'FEE:', value: blockItem.fee, additional: blockItem.fee !== 0 ? 'Groth' : ''},
+          {name: 'HASH:', value: blockItem.hash, additional: ''},
+          {name: 'DIFFICULTY:', value: blockItem.difficulty.toLocaleString(), additional: ''},
+          {name: 'SUBSIDY:', value: blockItem.subsidy.toLocaleString(), additional: 'Groth'},
+          {name: 'CHAINWORK:', value: blockItem.chainwork, additional: ''},
+          {name: 'AGE:', value: new Date(blockItem.timestamp).toLocaleDateString("en-US", {
             year: 'numeric', month: 'long',
             day: 'numeric', hour: 'numeric',
             minute: 'numeric', second: 'numeric' }), additional: ''}

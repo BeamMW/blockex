@@ -1,7 +1,7 @@
-    <mat-progress-bar mode="indeterminate" *ngIf="loading_status || loading_blocks || loading_charts"></mat-progress-bar>
+    <!--<mat-progress-bar mode="indeterminate" *ngIf="loading_status || loading_blocks || loading_charts"></mat-progress-bar>-->
     <!-- Some charts -->
-    <section class="overview-container" *ngIf="!loading_status">
-      <app-network-control></app-network-control>
+    <div [class.overview-container-mainnet]=isMainnet [class.overview-container-testnet]=!isMainnet
+         *ngIf="!loading_status">
       <div class="chart-container">
           <div class="chart">
               <app-charts-component (chartsLoaded)="onChartsLoaded($event)"
@@ -11,10 +11,10 @@
           </div>
       </div>
       <!-- Height -->
-      <section>
+      <div class="block-cards-container">
         <mat-card class="block-card height-card">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle class="block-card-header-title">Blockchain height:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">BLOCKCHAIN HEIGHT:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
             <h2 class="block-card-content-title">{{status?.height}}</h2>
@@ -23,7 +23,7 @@
 
         <mat-card class="block-card latest-block-card">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle class="block-card-header-title">Latest block:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">LATEST BLOCK:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
             <h2 class="block-card-content-title">{{status?.timestamp | date:'medium'}}</h2>
@@ -32,7 +32,7 @@
 
         <mat-card class="block-card difficulty-card">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle class="block-card-header-title">Latest block difficulty:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">LATEST BLOCK DIFFICULTY:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
             <h2 class="block-card-content-title">{{status?.difficulty | number:'.'}}</h2>
@@ -41,7 +41,7 @@
 
         <mat-card class="block-card coins-mined-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle class="block-card-header-title">Coins in circulation (mined):</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">COINS IN CIRCULATION (MINED):</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
             <h2 class="block-card-content-title">{{status?.coins_in_circulation_mined | number:'.'}} Beams</h2>
@@ -50,7 +50,7 @@
 
         <mat-card class="block-card coins-treasury-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle class="block-card-header-title">Coins in circulation (treasury):</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">COINS IN CIRCULATION (TREASURY):</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
             <h2 class="block-card-content-title">{{status?.coins_in_circulation_treasury | number:'.'}} Beams</h2>
@@ -59,7 +59,7 @@
 
         <mat-card class="block-card total-coins-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle class="block-card-header-title">Total coins in circulation:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">TOTAL COINS IN CIRCULATION:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
             <h2 class="block-card-content-title">{{status?.total_coins_in_circulation | number:'.'}} Beams</h2>
@@ -68,7 +68,7 @@
 
         <mat-card class="block-card next-treasury-height-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle class="block-card-header-title">Next treasury emission block height:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">NEXT TREASURY EMISSION BLOCK HEIGHT:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
             <h2 class="block-card-content-title">{{status?.next_treasury_emission_block_height | number:'.'}}</h2>
@@ -77,7 +77,7 @@
 
         <mat-card class="block-card next-treasury-amount-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle class="block-card-header-title">Next treasury emission coin amount:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">NEXT TREASURY EMISSION COIN AMOUNT:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
             <h2 class="block-card-content-title">{{status?.next_treasury_emission_coin_amount | number:'.'}} Beams</h2>
@@ -86,7 +86,7 @@
 
         <mat-card class="block-card total-emission-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle class="block-card-header-title">Total emission:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">TOTAL EMISSION:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
             <h2 class="block-card-content-title">{{status?.total_emission | number:'.'}} Beams</h2>
@@ -95,86 +95,95 @@
 
         <mat-card class="block-card hashrate-block">
           <mat-card-header class="block-card-header">
-            <mat-card-subtitle class="block-card-header-title">Hashrate:</mat-card-subtitle>
+            <mat-card-subtitle class="block-card-header-title">HASHRATE:</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content class="block-card-content">
             <h2 class="block-card-content-title">{{status?.difficulty / 60 | number:'.'}} Sol/s</h2>
           </mat-card-content>
         </mat-card>
-      </section>
-    </section>
+      </div>
+    </div>
     <div style="clear: both"></div>
     <!-- Top blocks section-->
-<section *ngIf="!loading_status">
-      <mat-paginator [pageSize]="20" [pageIndex]="page" [length]="count" (page)="pageEvent = loadBlocks($event)" showFirstLastButtons></mat-paginator>
-      <mat-card *ngIf="!loading_blocks">
-        <mat-card-content class="table-container">
-          <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-            <!-- Height Column -->
-            <ng-container matColumnDef="height">
-              <mat-header-cell class="height-cell-header" *matHeaderCellDef> Height </mat-header-cell>
-              <mat-cell class="height-cell" *matCellDef="let element">
-                <span class="mobile-label">Height:</span>
+<div *ngIf="!loading_status">
+  <!--[pageSizeOptions]="pageSizeOptions"-->
+      <mat-paginator [class.blocks-table-paginator-mainnet]=isMainnet
+                     [class.blocks-table-paginator-testnet]=!isMainnet
+                     [pageSize]="20" [pageIndex]="page" [length]="count"
+                     (page)="pageEvent = loadBlocks($event)" showFirstLastButtons></mat-paginator>
+      <div class="table-container" *ngIf="!loading_blocks">
+        <mat-table [dataSource]="dataSource" class="blocks-table mat-elevation-z8">
+          <!-- Height Column -->
+          <ng-container matColumnDef="height">
+            <mat-header-cell class="height-cell-header" *matHeaderCellDef> HEIGHT: </mat-header-cell>
+            <mat-cell class="height-cell" *matCellDef="let element">
+              <span class="mobile-label">Height:</span>
+              <span class="desktop-label">
                 {{element.height}}
-              </mat-cell>
-            </ng-container>
-            <!-- Hash Column -->
-            <ng-container matColumnDef="hash">
-              <mat-header-cell class="hash-cell-header" *matHeaderCellDef> Hash </mat-header-cell>
-              <mat-cell class="hash-cell" *matCellDef="let element">
-                <span class="mobile-label">Hash:</span>
-                <span class="block-details-link" [routerLink]="['/block', element.hash]">
-                  {{element.hash}}
-                </span>
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="age">
-              <mat-header-cell class="age-cell-header" *matHeaderCellDef> Age </mat-header-cell>
-              <mat-cell class="age-cell" *matCellDef="let element">
-                <span class="mobile-label">Age:</span>
+              </span>
+            </mat-cell>
+          </ng-container>
+          <!-- Hash Column -->
+          <ng-container matColumnDef="hash">
+            <mat-header-cell class="hash-cell-header" *matHeaderCellDef> HASH: </mat-header-cell>
+            <mat-cell class="hash-cell" *matCellDef="let element">
+              <span class="mobile-label">Hash:</span>
+              <span class="desktop-label">
+                {{element.hash}}
+              </span>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="age">
+            <mat-header-cell class="age-cell-header" *matHeaderCellDef> AGE: </mat-header-cell>
+            <mat-cell class="age-cell" *matCellDef="let element">
+              <span class="mobile-label">Age:</span>
+              <span class="desktop-label">
                 {{element.timestamp | date:'medium'}}
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="difficulty">
-              <mat-header-cell *matHeaderCellDef> Difficulty </mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                <span class="mobile-label">Difficulty:</span>
+              </span>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="difficulty">
+            <mat-header-cell *matHeaderCellDef> DIFFICULTY: </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <span class="mobile-label">Difficulty:</span>
+              <span class="desktop-label">
                 {{element.difficulty | number:'.'}}
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="inputs">
-              <mat-header-cell *matHeaderCellDef> # inputs </mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                <span class="mobile-label"># inputs:</span>
+              </span>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="inputs">
+            <mat-header-cell *matHeaderCellDef> #INPUTS: </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <span class="mobile-label"># inputs:</span>
+              <span class="desktop-label">
                 {{element.inputs.length}}
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="outputs">
-              <mat-header-cell *matHeaderCellDef> # outputs </mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                <span class="mobile-label"># outputs:</span>
+              </span>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="outputs">
+            <mat-header-cell *matHeaderCellDef> #OUTPUTS: </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <span class="mobile-label"># outputs:</span>
+              <span class="desktop-label">
                 {{element.outputs.length}}
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="kernels">
-              <mat-header-cell *matHeaderCellDef> # kernels </mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                <span class="mobile-label"># kernels:</span>
+              </span>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="kernels">
+            <mat-header-cell *matHeaderCellDef> #KERNELS: </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <span class="mobile-label"># kernels:</span>
+              <span class="desktop-label">
                 {{element.kernels.length}}
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="actions">
-              <mat-header-cell class="actions-cell-header" *matHeaderCellDef></mat-header-cell>
-              <mat-cell class="actions-cell" *matCellDef="let element">
-                <button mat-icon-button (click)="showBlockDetails(element.hash)" >
-                  <mat-icon aria-label="Details">details</mat-icon>
-                </button>
-              </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-          </mat-table>
-        </mat-card-content>
-      </mat-card>
-    </section>
+              </span>
+            </mat-cell>
+          </ng-container>
+          <mat-header-row [class.blocks-table-header-mainnet]=isMainnet
+                          [class.blocks-table-header-testnet]=!isMainnet
+                          *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row class="blocks-table-row" (click)="showBlockDetails(row)"
+                   *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+      </div>
+    </div>
 <router-outlet></router-outlet>

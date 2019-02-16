@@ -1,8 +1,18 @@
-import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ChangeDetectorRef,
+  ViewChild,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit} from '@angular/core';
 import { DataService } from '../services';
 import { Chart } from 'chart.js';
 import {Router} from "@angular/router";
 import { chartsConsts } from '../consts';
+
+import * as Highcharts from 'highcharts';
 
 @Component({
   selector: 'app-charts-component',
@@ -13,11 +23,37 @@ export class ChartsComponent implements OnInit {
   @Input() height: any;
   @Input() fullSize: boolean;
   @Output() chartsLoaded = new EventEmitter<boolean>();
+  @ViewChild('charts') public chartEl: ElementRef;
+  @ViewChild('feeChart') public feeChartEl: ElementRef;
 
   feeChart : any;
   chart : any;
 
-  constructor(private dataService: DataService, private router: Router) { }
+  charts = [];
+  chartOptions = {};
+  feeChartOptions = {};
+  chartsData : any = [];
+
+  constructor(private changeDetectionRef: ChangeDetectorRef, private dataService: DataService, private router: Router) { }
+
+  createChart(container, options?: Object) {
+    let opts = !!options ? options : this.chartOptions;
+    let e = document.createElement("div");
+
+    container.appendChild(e);
+
+    let chartOptions = opts['chart'];
+    if (!!chartOptions) {
+      chartOptions['renderTo'] = e;
+    }
+    else {
+      chartOptions = {
+        'renderTo': e
+      }
+    }
+
+    this.charts.push(new Highcharts.Chart(opts));
+  }
 
   constructChartsData(data) {
     let initialDate = new Date(data[0].timestamp);
@@ -42,10 +78,11 @@ export class ChartsComponent implements OnInit {
         feeCounter += item.fee;
         avgDifficulty += item.difficulty;
       } else {
-        chartsData.rangeLabels.push(item.timestamp);
-        chartsData.range.push(blocksCounter);
-        chartsData.difficulty.push(avgDifficulty / blocksCounter);
-        chartsData.fee.push(feeCounter);
+        let timestampVal = + new Date(item.timestamp);
+        chartsData.range.push([timestampVal, blocksCounter]);
+        chartsData.difficulty.push([timestampVal, avgDifficulty / blocksCounter]);
+        chartsData.fee.push([timestampVal, feeCounter]);
+        chartsData.fixedLine.push([timestampVal, chartsConsts.FIXED_BLOCKS_COORD]);
         feeCounter = item.fee;
         blocksCounter = 1;
         avgDifficulty = 0;
@@ -55,192 +92,330 @@ export class ChartsComponent implements OnInit {
 
     let averageBlocks = data.length / chartsData.range.length;
     chartsData.averageBlocks.length = chartsData.range.length;
-    chartsData.fixedLine.length = chartsData.range.length;
     chartsData.averageBlocks.fill(averageBlocks, 0, chartsData.range.length);
-    chartsData.fixedLine.fill(chartsConsts.FIXED_BLOCKS_COORD, 0, chartsData.range.length);
 
     return chartsData;
   }
 
   initCharts(chartsData) {
-    this.chart = new Chart(document.getElementById("canvas"), {
-      type: 'line',
-      data: {
-        labels: chartsData.rangeLabels,
-        datasets: [{
-          label: "Blocks per hour",
-          data: chartsData.range,
-          borderColor: "red",
-          fill: false,
-          yAxisID: 'y-axis-1',
-        }, {
-          label: "Average difficulty",
-          data: chartsData.difficulty,
-          borderColor: "green",
-          fill: false,
-          yAxisID: 'y-axis-2'
-        }, {
-          label: "Average blocks",
-          data: chartsData.averageBlocks,
-          borderColor: "#808080",
-          radius: 0,
-          borderWidth: 1,
-          fill: false
-        }, {
-          label: "Fixed 60 blocks",
-          data: chartsData.fixedLine,
-          borderColor: "#F08080",
-          radius: 0,
-          borderWidth: 1,
-          fill: false
-        }]
+    this.chartOptions = {
+      title: {
+        text: 'BLOCKS AND DIFFICULTY',
+        margin: 35,
+        x: -140,
+        style: {
+          'font-size': '12px',
+          'font-weight': '600',
+          'font-style': 'normal',
+          'font-stretch': 'normal',
+          'line-height': 'normal',
+          'letter-spacing': '0.3px',
+          'text-align': 'center',
+          'color': '#ffffff'
+        }
       },
-      options: {
-        tooltips: {
-          callbacks: {
-            label: function(tooltipItem, data) {
-              return tooltipItem.yLabel.toLocaleString();
-            }
+      credits: {
+          enabled: false
+        },
+      yAxis: [{
+        lineWidth: 0,
+        lineColor: '#ff51ff',
+        gridLineColor: 'rgba(255, 255, 255, 0.1)',
+        title: {
+          text: 'Blocks per hour',
+          margin: 34,
+          style: {
+            'font-size': '12px',
+            'font-weight': '600',
+            'font-style': 'normal',
+            'font-stretch': 'normal',
+            'line-height': 'normal',
+            'letter-spacing': '0.3px',
+            'color': '#ffffff'
           }
         },
-        responsive: true,
-        maintainAspectRatio: false,
-        title: {
-          display: true,
-          text: 'Blocks and Difficulty'
-        },
-        scales: {
-          xAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: "Date"
-            },
-            type: 'time',
-            unit: 'hour',
-            unitStepSize: 24,
-            minUnit: 'hour',
-            time: {
-              displayFormats: {
-                hour: 'MMM D'
-              }
-            },
-            display: true
-          }],
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Blocks per hour'
-            },
-            ticks: {
-              suggestedMax: 130
-            },
-            id: 'y-axis-1',
-            position: 'left',
-            display: true
-          }, {
-            scaleLabel: {
-              display: true,
-              labelString: 'Average difficulty'
-            },
-            ticks: {
-              suggestedMin: 0,
-              callback: function(label, index, labels) {
-                return label.toLocaleString();
-              }
-            },
-            type: 'linear',
-            display: true,
-            position: 'right',
-            id: 'y-axis-2',
-
-            gridLines: {
-              drawOnChartArea: false
-            }
-          }]
+        labels: {
+          style: {
+            'opacity': '0.5',
+            'font-size': '12px',
+            'font-weight': 'normal',
+            'font-style': 'normal',
+            'font-stretch': 'normal',
+            'line-height': 'normal',
+            'letter-spacing': 'normal',
+            'color': '#ffffff'
+          }
         }
-      }
-    });
-
-    this.feeChart = new Chart(document.getElementById("canvas-fee"), {
-      type: 'line',
-      data: {
-        labels: chartsData.rangeLabels,
-        datasets: [{
-          label: "Fee",
-          data: chartsData.fee,
-          borderColor: "Blue",
-          fill: false
-        }]
-      },
-      options: {
-        tooltips: {
-          callbacks: {
-            label: function(tooltipItem, data) {
-              return tooltipItem.yLabel.toLocaleString() + ' Groth';
-            }
+      }, {
+        min: 0,
+        lineWidth: 0,
+        gridLineColor: 'rgba(255, 255, 255, 0.1)',
+        opposite: true,
+        title: {
+          rotation: 270,
+          text: 'Average difficulty',
+          margin: 34,
+          style: {
+            'font-size': '12px',
+            'font-weight': '600',
+            'font-style': 'normal',
+            'font-stretch': 'normal',
+            'line-height': 'normal',
+            'letter-spacing': '0.3px',
+            'color': '#ffffff'
           }
         },
-        responsive: true,
-        maintainAspectRatio: false,
-        title: {
-          display: true,
-          text: 'Fee'
-        },
-        scales: {
-          xAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: "Date"
-            },
-            type: 'time',
-            unit: 'hour',
-            unitStepSize: 24,
-            minUnit: 'hour',
-            time: {
-              displayFormats: {
-                hour: 'MMM D'
-              }
-            },
-            display: true
-          }],
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Fee, Groth'
-            },
-            ticks: {
-              callback: function(label, index, labels) {
-                return label.toLocaleString();
-              }
-            },
-            display: true
-          }]
+        labels: {
+          style: {
+            'opacity': '0.5',
+            'font-size': '12px',
+            'font-weight': 'normal',
+            'font-style': 'normal',
+            'font-stretch': 'normal',
+            'line-height': 'normal',
+            'letter-spacing': 'normal',
+            'color': '#ffffff'
+          }
         }
+      }],
+      xAxis: {
+        lineWidth: 0,
+        minorGridLineWidth: 0,
+        lineColor: 'transparent',
+        minorTickLength: 0,
+        tickLength: 0,
+        type: 'datetime',
+        minTickInterval: chartsConsts.MILLISECONDS_IN_DAY,
+        gridLineColor: 'rgba(255, 255, 255, 0.1)',
+        gridLineWidth: 1,
+        labels: {
+          format: '{value:%b-%e}',
+          style: {
+            'opacity': '0.5',
+            'font-size': '12px',
+            'font-weight': 'normal',
+            'font-style': 'normal',
+            'font-stretch': 'normal',
+            'line-height': 'normal',
+            'letter-spacing': 'normal',
+            'color': '#ffffff'
+          }
+        }
+      },
+      legend: {
+        width:300,
+        itemWidth: 150,
+        itemMarginBottom:10,
+        itemStyle: {
+          width: 140,
+          'font-family': 'ProximaNova',
+          'font-size': '12px',
+          'font-weight': 'normal',
+          'font-style': 'normal',
+          'font-stretch': 'normal',
+          'line-height': 'normal',
+          'letter-spacing': '0.5px',
+          'color': '#ffffff'
+        },
+        layout: 'horizontal',
+        align: 'center',
+        verticalAlign: 'bottom',
+        x: -60,
+        y: 0
+      },
+      plotOptions: {
+        series: {
+          //pointStart: 2010,
+          point: {
+          }
+        }
+      },
+      series: [{
+        marker: {
+          fillColor: 'rgba(255,255,255,0)',
+          lineWidth: 2,
+          radius: 1,
+          symbol: 'circle',
+          lineColor: null
+        },
+        name: 'Blocks per hour',
+        color: '#ff51ff',
+        data: chartsData.range
+      }, {
+        marker: {
+          fillColor: 'rgba(255,255,255,0)',
+          lineWidth: 2,
+          radius: 1,
+          symbol: 'circle',
+          lineColor: null
+        },
+        name: 'Average difficulty',
+        color: '#24c1ff',
+        data: chartsData.difficulty,
+        yAxis: 1
+      }, {
+        marker: {
+          enabled: false
+        },
+        lineWidth: 1,
+        name: 'Fixed 60 blocks',
+        color: '#24c1ff',
+        data: chartsData.fixedLine
+      }, /*{
+        marker: {
+          fillColor: 'rgba(255,255,255,0.002)',
+          lineWidth: 2,
+          radius: 1,
+          lineColor: null
+        },
+        name: 'Average blocks',
+        color: '#ff51ff',
+        data: chartsData.averageBlocks
+      }*/],
+      chart: {
+        height: 480,
+        marginBottom: 100,
+        backgroundColor: 'rgba(255,255,255,0)',
+        style: {
+          fontFamily: 'ProximaNova',
+        },
+        type: 'line',
+        //styledMode: true
       }
-    });
-    this.chartsLoaded.emit(true);
-  }
-
-  updateCharts(height) {
-    /*this.dataService.loadBlocksRange(height - chartsConsts.COUNT_OF_BLOCK_IN_CHART,
-      this.height, false).subscribe((data) => {
-      let chartsData = this.constructChartsData(data);
-      this.chart.data.datasets[0].data = chartsData.range;
-      this.chart.data.labels = chartsData.rangeLabels;
-      this.chart.data.datasets[1].data = chartsData.difficulty;
-      this.chart.data.datasets[2].data = chartsData.averageBlocks;
-      this.chart.update();
-
-      this.feeChart.data.datasets[0].data = chartsData.fee;
-      this.feeChart.data.labels = chartsData.rangeLabels;
-      this.feeChart.update();
-    });*/
+    };
+    this.feeChartOptions = {
+      title: {
+        text: 'FEE',
+        margin: 35,
+        x: -140,
+        style: {
+          'font-size': '12px',
+          'font-weight': '600',
+          'font-style': 'normal',
+          'font-stretch': 'normal',
+          'line-height': 'normal',
+          'letter-spacing': '0.3px',
+          'text-align': 'center',
+          'color': '#ffffff'
+        }
+      },
+      credits: {
+          enabled: false
+        },
+      yAxis: {
+        lineWidth: 0,
+        lineColor: '#ff51ff',
+        gridLineColor: 'rgba(255, 255, 255, 0.1)',
+        title: {
+          text: 'Fee, groth',
+          margin: 34,
+          style: {
+            'font-size': '12px',
+            'font-weight': '600',
+            'font-style': 'normal',
+            'font-stretch': 'normal',
+            'line-height': 'normal',
+            'letter-spacing': '0.3px',
+            'color': '#ffffff'
+          }
+        },
+        labels: {
+          style: {
+            'opacity': '0.5',
+            'font-size': '12px',
+            'font-weight': 'normal',
+            'font-style': 'normal',
+            'font-stretch': 'normal',
+            'line-height': 'normal',
+            'letter-spacing': 'normal',
+            'color': '#ffffff'
+          }
+        }
+      },
+      xAxis: {
+        lineWidth: 0,
+        minorGridLineWidth: 0,
+        lineColor: 'transparent',
+        minorTickLength: 0,
+        tickLength: 0,
+        type: 'datetime',
+        minTickInterval: chartsConsts.MILLISECONDS_IN_DAY,
+        gridLineColor: 'rgba(255, 255, 255, 0.1)',
+        gridLineWidth: 1,
+        labels: {
+          format: '{value:%b-%e}',
+          style: {
+            'opacity': '0.5',
+            'font-size': '12px',
+            'font-weight': 'normal',
+            'font-style': 'normal',
+            'font-stretch': 'normal',
+            'line-height': 'normal',
+            'letter-spacing': 'normal',
+            'color': '#ffffff'
+          }
+        }
+      },
+      legend: {
+        width:300,
+        itemWidth: 150,
+        itemMarginBottom:10,
+        itemStyle: {
+          width: 140,
+          'font-family': 'ProximaNova',
+          'font-size': '12px',
+          'font-weight': 'normal',
+          'font-style': 'normal',
+          'font-stretch': 'normal',
+          'line-height': 'normal',
+          'letter-spacing': '0.5px',
+          'color': '#ffffff'
+        },
+        layout: 'horizontal',
+        align: 'center',
+        verticalAlign: 'bottom',
+        x: -60,
+        y: 0
+      },
+      plotOptions: {
+        series: {
+          //pointStart: 2010,
+          point: {
+          }
+        }
+      },
+      series: [{
+        marker: {
+          fillColor: 'rgba(255,255,255,0)',
+          lineWidth: 2,
+          radius: 1,
+          symbol: 'circle',
+          lineColor: null
+        },
+        name: 'Fee, Groth',
+        color: '#00e2c2',
+        data: chartsData.fee,
+      }],
+      chart: {
+        float: 'left',
+        height: 480,
+        marginBottom: 100,
+        backgroundColor: 'rgba(255,255,255,0)',
+        style: {
+          fontFamily: 'ProximaNova',
+        },
+        type: 'line',
+        //styledMode: true
+      }
+    };
   }
 
   ngOnInit() {
     this.dataService.loadBlocksRange().subscribe((data) => {
       let chartsData = this.constructChartsData(data);
       this.initCharts(chartsData);
+      this.createChart(this.chartEl.nativeElement, this.chartOptions);
+      this.createChart(this.feeChartEl.nativeElement, this.feeChartOptions);
     });
   }
 

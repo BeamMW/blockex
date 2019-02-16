@@ -1,8 +1,8 @@
-<h4 style="float: left; padding: 0 20px">Network</h4>
-<mat-form-field>
-  <mat-select placeholder="{{placeholder}}">
-     <mat-option *ngFor="let host of networkHosts" [value]="host.value" (click)="OnChange(host.value)">
-        {{host.title}}
-     </mat-option>
-  </mat-select>
-</mat-form-field>
+<div class="onoffswitch" *ngIf="visible" (click)="changedSwitchPosition()">
+    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+           id="myonoffswitch" checked="isChecked">
+    <label class="onoffswitch-label" for="myonoffswitch">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch">{{switchText}}</span>
+    </label>
+</div>

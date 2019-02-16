@@ -1,28 +1,37 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {routesConsts} from "../../consts";
+import {environment} from "../../../environments/environment";
+import {Router, NavigationEnd} from "@angular/router";
 
 @Component({
   selector: 'app-network-control',
   templateUrl: './network-control.component.html',
   styleUrls: ['./network-control.component.css'],
-  encapsulation: ViewEncapsulation.None
 })
 export class NetworkControlComponent implements OnInit {
   placeholder: string;
+  status: boolean = false;
+  visible: boolean = false;
+  switchText: string = environment.production ? routesConsts.MAINNET_TITLE.toUpperCase()
+    : routesConsts.TESTNET_TITLE.toUpperCase();
+  isMainnet: boolean = false;
   networkHosts: {title: string; value: string}[] = [];
 
-  constructor() { }
+  constructor(private router: Router) {}
 
-  OnChange(host) {
-    window.location.href = window.location.protocol + '//' + host;
+  changedSwitchPosition() {
+    this.switchText = environment.production ? routesConsts.TESTNET_TITLE.toUpperCase()
+      : routesConsts.MAINNET_TITLE.toUpperCase();
+    window.location.href = window.location.protocol + '//' + (environment.production ? routesConsts.TESTNET_HOST
+      : routesConsts.MAINNET_HOST);
   }
 
   ngOnInit() {
-    this.networkHosts.push({title: routesConsts.MAINNET_TITLE, value: routesConsts.MAINNET_HOST});
-    this.networkHosts.push({title: routesConsts.TESTNET_TITLE, value: routesConsts.TESTNET_HOST});
-
-    let hostName = this.networkHosts.find(item => item.value === window.location.hostname);
-    this.placeholder = hostName !== undefined ? hostName.title : "Network";
+    this.router.events.subscribe(event => {
+      if(event instanceof NavigationEnd) {
+        this.visible = this.router.url == routesConsts.HOME;
+      }
+    });
   }
 
 }

@@ -6,17 +6,21 @@ import { blockListConsts, routesConsts } from '../consts';
 import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {PageEvent} from '@angular/material';
 import { Router} from '@angular/router';
+import {environment} from "../../environments/environment";
+
 
 @Component({
   selector: 'app-block-list',
   templateUrl: './block-list.component.html',
-  styleUrls: ['./block-list.component.css']
+  styleUrls: ['./block-list.component.css'],
 })
 export class BlockListComponent implements OnInit {
   @ViewChild(ChartsComponent) child: ChartsComponent;
 
+  isMainnet: boolean = false;
   status : any; // basically latest block and some data
   lastHeight : number;
+  //pageSizeOptions: number[] = [20, 50, 100];
 
   blocks : any;
   dataSource : any;
@@ -31,7 +35,7 @@ export class BlockListComponent implements OnInit {
   prev : string;
 
   displayedColumns : string[] = ['height', 'hash', 'age',
-      'difficulty', 'inputs', 'outputs', 'kernels', 'actions'];
+      'difficulty', 'inputs', 'outputs', 'kernels'];
 
   loading_status : boolean = false;
   loading_blocks : boolean = false;
@@ -65,14 +69,14 @@ export class BlockListComponent implements OnInit {
   }
 
   public showCharts() {
-    this.router.navigate(
+    /*this.router.navigate(
       [routesConsts.CHARTS, this.status.height]
-    );
+    );*/
   }
 
-  public showBlockDetails(hash) {
+  public showBlockDetails(block) {
     this.router.navigate(
-      [routesConsts.BLOCK_DETAILS, hash]
+      [routesConsts.BLOCK_DETAILS, block.hash]
     );
   }
 
@@ -103,7 +107,7 @@ export class BlockListComponent implements OnInit {
         //trigger charts update
         if (this.updatesCounter === blockListConsts.MINUTES_IN_HOUR){
           this.updatesCounter = 0;
-          this.child.updateCharts(status.height);
+          //this.child.updateCharts(status.height);
         }
       } else if (this.lastHeight < status.height && (status.height - this.lastHeight > blockListConsts.MAX_TABLE_SIZE)) {
           this.dataService.loadBlocks(this.page).subscribe((data) => {
@@ -117,6 +121,7 @@ export class BlockListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isMainnet = environment.production;
     //setInterval(() => this.updateBlocks(), 60000);
     this.loading_status = true;
     this.loading_charts = true;
