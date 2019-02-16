@@ -15,7 +15,7 @@ mat-table,
 
 .mat-column-name{
     font-weight: bold;
-    max-width: 300px;
+    max-width: 145px;
 }
 
 .details-card-container{
@@ -33,27 +33,27 @@ mat-table,
 }
 
 .main-table-row{
-  background-color: rgb(251,251,251);
+    background-color: rgb(251,251,251);
 }
 
 .main-table-name{
-  font-size: 12px;
-  font-weight: 600;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: 0.3px;
-  color: #333333;
+    font-size: 12px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #333333;
 }
 
 .main-table-value{
-  font-size: 12px;
-  font-weight: normal;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  color: #333333;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
 }
 
 .expansion-data-rows{
@@ -65,7 +65,40 @@ mat-table,
 }
 
 .expansion-data-panel{
+    border-radius: unset;
+    box-shadow: none;
     margin-top: 5px;
+}
+
+.mainnet {
+    background-color: #d9e6ed !important;
+}
+
+.testnet {
+    background-color: #e4d9ed !important;
+}
+
+:host ::ng-deep.mat-expansion-panel-body {
+    padding: 0 !important;
+}
+
+.inputs-table-header,
+.outputs-table-header,
+.kernels-table-header {
+    background-color: rgb(241,241,241);
+    font-size: 12px;
+    font-weight: bolder;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+.inputs-table .mat-row:nth-child(odd),
+.outputs-table .mat-row:nth-child(odd),
+.kernels-table .mat-row:nth-child(odd){
+    background-color: rgb(251,251,251);
 }
 
 .details-button-back{
@@ -73,7 +106,7 @@ mat-table,
 }
 
 .mat-column-commitment{
-    min-width: 520px;
+    min-width: 720px;
 }
 
 .mat-column-fee {

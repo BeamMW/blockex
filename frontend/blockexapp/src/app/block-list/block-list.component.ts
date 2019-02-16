@@ -80,49 +80,8 @@ export class BlockListComponent implements OnInit {
     );
   }
 
-  public updateBlocks(){
-    this.dataService.loadStatus().subscribe((status) => {
-      if (this.lastHeight < status.height && (status.height - this.lastHeight <= blockListConsts.MAX_TABLE_SIZE)){
-        this.updatesCounter++;
-
-        /*this.dataService.loadBlocksRange(this.lastHeight + 1, status.height, true).subscribe((blocksToAdd) => {
-          blocksToAdd.reverse();
-          this.count += blocksToAdd.length;
-
-          if (blocksToAdd.length > blockListConsts.MAX_TABLE_SIZE) {
-            this.blocks = [];
-            this.blocks.push(blocksToAdd.slice(0, blockListConsts.MAX_TABLE_SIZE));
-          } else {
-            if (this.blocks.length === blockListConsts.MAX_TABLE_SIZE) {
-              this.blocks.splice(this.blocks.length - blocksToAdd.length, blocksToAdd.length);
-            }
-            this.blocks.unshift(...blocksToAdd);
-          }
-
-          this.lastHeight = status.height;
-          this.status = status;
-          this.dataSource._updateChangeSubscription()
-        });*/
-
-        //trigger charts update
-        if (this.updatesCounter === blockListConsts.MINUTES_IN_HOUR){
-          this.updatesCounter = 0;
-          //this.child.updateCharts(status.height);
-        }
-      } else if (this.lastHeight < status.height && (status.height - this.lastHeight > blockListConsts.MAX_TABLE_SIZE)) {
-          this.dataService.loadBlocks(this.page).subscribe((data) => {
-          this.count = data['count'];
-          this.blocks.splice(0, blockListConsts.MAX_TABLE_SIZE);
-          this.blocks.push(...data['results']);
-          this.dataSource._updateChangeSubscription()
-        });
-      }
-    })
-  }
-
   ngOnInit() {
     this.isMainnet = environment.production;
-    //setInterval(() => this.updateBlocks(), 60000);
     this.loading_status = true;
     this.loading_charts = true;
 

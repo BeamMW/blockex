@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../services';
 import { Router} from '@angular/router';
 import { routesConsts } from "../consts";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-block-details',
@@ -14,6 +15,7 @@ export class BlockDetailsComponent implements OnInit {
   block: any;
   loading_block: boolean = false;
   notFound: boolean = false;
+  isMainnet: boolean = false;
 
   displayedColumns: any = {
     kernels: ['fee', 'excess', 'id'],
@@ -34,6 +36,7 @@ export class BlockDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isMainnet = environment.production;
     this.loading_block = true;
     this.block = {
       header: '',

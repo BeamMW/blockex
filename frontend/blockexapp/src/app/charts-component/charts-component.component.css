@@ -15,6 +15,22 @@
     display: none;
 }
 
+/*:host ::ng-deep.highcharts-tooltip>span {
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    background-color: rgba(255, 255, 255, 0.2);
+    height:300px;
+    width:300px;
+    font-family: ProximaNova;
+    font-size: 20px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+}*/
+
 #blocks-chart {
     float: left;
     max-width: 580px;

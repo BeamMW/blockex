@@ -60,14 +60,13 @@ export class ChartsComponent implements OnInit {
     let avgDifficulty = 0;
     let chartsData = {
       range: [],
-      rangeLabels: [],
+      dates: [],
       difficulty: [],
       fee: [],
       fixedLine: [],
       averageBlocks: []
     };
     let blocksCounter = 0, feeCounter = 0;
-    chartsData.rangeLabels.push(initialDate);
 
     data.map((item) => {
       let initialDateWithOffset = initialDate.getTime()
@@ -79,6 +78,7 @@ export class ChartsComponent implements OnInit {
         avgDifficulty += item.difficulty;
       } else {
         let timestampVal = + new Date(item.timestamp);
+        chartsData.dates.push(timestampVal);
         chartsData.range.push([timestampVal, blocksCounter]);
         chartsData.difficulty.push([timestampVal, avgDifficulty / blocksCounter]);
         chartsData.fee.push([timestampVal, feeCounter]);
@@ -91,8 +91,11 @@ export class ChartsComponent implements OnInit {
     });
 
     let averageBlocks = data.length / chartsData.range.length;
-    chartsData.averageBlocks.length = chartsData.range.length;
-    chartsData.averageBlocks.fill(averageBlocks, 0, chartsData.range.length);
+    chartsData.dates.map((item) => {
+      chartsData.averageBlocks.push([item, averageBlocks]);
+    });
+
+    console.log(chartsData.averageBlocks);
 
     return chartsData;
   }
@@ -225,10 +228,20 @@ export class ChartsComponent implements OnInit {
       },
       plotOptions: {
         series: {
-          //pointStart: 2010,
           point: {
           }
         }
+      },
+      tooltip: {
+        useHTML:true,
+        //backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        borderWidth: 0,
+        shadow: false,
+
+        /*formatter: function () {
+            return 'The value for <b>' + this.x +
+                '</b> is <b>' + this.y + '</b>';
+        }*/
       },
       series: [{
         marker: {
@@ -261,17 +274,15 @@ export class ChartsComponent implements OnInit {
         name: 'Fixed 60 blocks',
         color: '#24c1ff',
         data: chartsData.fixedLine
-      }, /*{
+      }, {
         marker: {
-          fillColor: 'rgba(255,255,255,0.002)',
-          lineWidth: 2,
-          radius: 1,
-          lineColor: null
+          enabled: false
         },
+        lineWidth: 1,
         name: 'Average blocks',
         color: '#ff51ff',
         data: chartsData.averageBlocks
-      }*/],
+      }],
       chart: {
         height: 480,
         marginBottom: 100,
@@ -279,15 +290,14 @@ export class ChartsComponent implements OnInit {
         style: {
           fontFamily: 'ProximaNova',
         },
-        type: 'line',
-        //styledMode: true
+        type: 'line'
       }
     };
     this.feeChartOptions = {
       title: {
         text: 'FEE',
         margin: 35,
-        x: -140,
+        x: -190,
         style: {
           'font-size': '12px',
           'font-weight': '600',
