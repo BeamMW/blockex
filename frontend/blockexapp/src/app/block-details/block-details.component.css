@@ -82,17 +82,20 @@ mat-table,
     padding: 0 !important;
 }
 
-.inputs-table-header,
-.outputs-table-header,
-.kernels-table-header {
-    background-color: rgb(241,241,241);
+:host ::ng-deep.mat-header-row .mat-header-cell {
+    font-weight: bolder !important;
+    color: #333333;
     font-size: 12px;
-    font-weight: bolder;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
     letter-spacing: normal;
-    color: #333333;
+}
+
+.inputs-table-header,
+.outputs-table-header,
+.kernels-table-header {
+    background-color: rgb(241,241,241);
 }
 
 .inputs-table .mat-row:nth-child(odd),
