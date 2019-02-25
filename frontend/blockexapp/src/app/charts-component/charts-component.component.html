@@ -3,8 +3,9 @@
     <span class="title"> BLOCKS AND DIFFICULTY </span>
     <span class="period-selector-blocks">
       <span class="period-title">Period: </span>
-      <select class="period-selector" [(ngModel)]="selectedLevel">
-        <option *ngFor="let c of levels" [ngValue]="c">{{c.name}}</option>
+      <select class="period-selector" (ngModelChange)="blocksSelectChange($event)"
+              [(ngModel)]="selectedPeriodBlocks">
+        <option *ngFor="let p of chartPeriods" [ngValue]="p">{{p.name}}</option>
       </select>
 
     </span>
@@ -26,8 +27,9 @@
     <span class="title"> FEE </span>
     <span class="period-selector-fee">
       <span class="period-title">Period: </span>
-      <select class="period-selector" [(ngModel)]="selectedLevel">
-        <option *ngFor="let c of levels" [ngValue]="c">{{c.name}}</option>
+      <select class="period-selector" (ngModelChange)="feeSelectChange($event)"
+              [(ngModel)]="selectedPeriodFee">
+        <option *ngFor="let p of chartPeriods" [ngValue]="p">{{p.name}}</option>
       </select>
 
     </span>

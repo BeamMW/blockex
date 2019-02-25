@@ -41,19 +41,16 @@ export class ChartsComponent implements OnInit {
     };
 
   isHashRateChecked : boolean = false;
-  levels:Array<Object> = [
-      {num: 0, name: "Day"},
-      {num: 1, name: "Week"},
-      {num: 2, name: "Month"},
-      {num: 3, name: "Year"},
-      {num: 4, name: "All time"}
-
-
+  chartPeriods = [
+      {num: 1, name: "Day"},
+      {num: 7, name: "Week"},
+      {num: 30, name: "Month"},
+      {num: 356, name: "Year"},
+      {num: 0, name: "All time"}
   ];
 
-  selectedLevel = this.levels[1];
-
-
+  selectedPeriodBlocks = this.chartPeriods[1];
+  selectedPeriodFee = this.chartPeriods[1];
 
   charts = [];
   chartOptions = {};
@@ -81,6 +78,7 @@ export class ChartsComponent implements OnInit {
   }
 
   setHashRateState(checked) {
+      this.isHashRateChecked = checked;
       if (checked) {
         this.charts[0].addSeries({
           name: 'Hashrate',
@@ -96,6 +94,40 @@ export class ChartsComponent implements OnInit {
       } else {
         this.charts[0].series[this.charts[0].series.length - 1].remove(true);
       }
+  }
+
+  blocksSelectChange(e) {
+    this.chartUpdate(e.num, this.charts[0], 'blocks')
+  }
+
+  feeSelectChange(e) {
+    this.chartUpdate(e.num, this.charts[1], 'fee')
+  }
+
+  chartUpdate(newRange, chart, type) {
+    this.dataService.loadBlocksRange(newRange).subscribe((data) => {
+      this.chartsData.range.length = 0;
+      this.chartsData.dates.length = 0;
+      this.chartsData.difficulty.length = 0;
+      this.chartsData.hashrate.length = 0;
+      this.chartsData.fee.length = 0;
+      this.chartsData.fixedLine.length = 0;
+      this.chartsData.averageBlocks.length = 0;
+
+      this.constructChartsData(data);
+
+      if(type == 'blocks') {
+        chart.series[0].setData( this.chartsData.range, true);
+        chart.series[1].setData(this.chartsData.difficulty, true);
+        chart.series[2].setData(this.chartsData.fixedLine, true);
+        chart.series[3].setData(this.chartsData.averageBlocks, true);
+        if(this.isHashRateChecked) {
+          chart.series[4].setData(this.chartsData.hashrate, true);
+        }
+      } else {
+        chart.series[0].setData( this.chartsData.fee, true);
+      }
+    });
   }
 
   constructChartsData(data) {
@@ -255,7 +287,6 @@ export class ChartsComponent implements OnInit {
         borderWidth: 0,
         shadow: false,
         formatter: function () {
-            console.log(this);
             let date = new Date(this.x);
             return '<div class="chart-tooltip-container">' +
               '<div class="tooltip-line-color" style="color:'+this.color+'">\u25CF</div>' +
@@ -450,7 +481,7 @@ export class ChartsComponent implements OnInit {
 
   ngOnInit() {
     this.chartLoading = true;
-    this.dataService.loadBlocksRange('day').subscribe((data) => {
+    this.dataService.loadBlocksRange(this.chartPeriods[1].num).subscribe((data) => {
       this.constructChartsData(data);
       this.initCharts();
       this.createChart(this.chartEl.nativeElement, this.chartOptions);

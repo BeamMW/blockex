@@ -30,8 +30,20 @@ class BlockViewSet(viewsets.ModelViewSet):
 
 @api_view(['GET'])
 def get_block_range(request):
-    range = request.GET['range']
-    graph_data = _redis.get("graph_data")
+    range = int(request.GET['range'])
+    graph_data = False
+
+    if range == 1:
+        graph_data = _redis.get("daily_graph_data")
+    if range == 7:
+        graph_data = _redis.get("weekly_graph_data")
+    if range == 30:
+        graph_data = _redis.get("monthly_graph_data")
+    if range == 356:
+        graph_data = _redis.get("yearly_graph_data")
+    if range == 0:
+        graph_data = _redis.get("all_graph_data")
+
     if graph_data:
         stream = io.BytesIO(graph_data)
         data = JSONParser().parse(stream)
@@ -43,12 +55,24 @@ def get_block_range(request):
             latest_block_height = int(latest_block.height)
             _redis.set('latest_block_height', latest_block_height)
 
-        from_height = int(latest_block_height) - 4320
+        if range > 0:
+            from_height = int(latest_block_height) - range * 1440
+        else:
+            from_height = 0
         to_height = int(latest_block_height)
 
         blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height)
         serializer = BlockHeaderSerializer(blocks, many=True)
-        _redis.set('graph_data', JSONRenderer().render(serializer.data))
+        if range == 1:
+            _redis.set('daily_graph_data', JSONRenderer().render(serializer.data))
+        if range == 7:
+            _redis.set('weekly_graph_data', JSONRenderer().render(serializer.data))
+        if range == 30:
+            _redis.set('monthly_graph_data', JSONRenderer().render(serializer.data))
+        if range == 356:
+            _redis.set('yearly_graph_data', JSONRenderer().render(serializer.data))
+        if range == 0:
+            _redis.set('all_graph_data', JSONRenderer().render(serializer.data))
 
         return Response(serializer.data, status=HTTP_200_OK)
 
