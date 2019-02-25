@@ -1,2 +1,35 @@
-<div #charts id="blocks-chart"></div>
-<div #feeChart id="fee-chart"></div>
+<div #charts id="blocks-chart">
+  <div class="blocks-chart-title" *ngIf="!chartLoading">
+    <span class="title"> BLOCKS AND DIFFICULTY </span>
+    <span class="period-selector-blocks">
+      <span class="period-title">Period: </span>
+      <select class="period-selector" [(ngModel)]="selectedLevel">
+        <option *ngFor="let c of levels" [ngValue]="c">{{c.name}}</option>
+      </select>
+
+    </span>
+    <span class="hash-rate-chart-switch">
+      <span class="switch-title">Hash rate</span>
+      <span class="hash-rate-switch">
+          <input type="checkbox" name="onoffswitch" class="hash-rate-switch-checkbox" id="my-hash-rate-switch"
+              (click)="setHashRateState($event.target.checked)" [checked]="isHashRateChecked">
+          <label class="hash-rate-switch-label" for="my-hash-rate-switch">
+              <span class="hash-rate-switch-inner"></span>
+              <span class="hash-rate-switch-ctrl"></span>
+          </label>
+      </span>
+    </span>
+  </div>
+</div>
+<div #feeChart id="fee-chart">
+  <div class="fee-chart-title" *ngIf="!chartLoading">
+    <span class="title"> FEE </span>
+    <span class="period-selector-fee">
+      <span class="period-title">Period: </span>
+      <select class="period-selector" [(ngModel)]="selectedLevel">
+        <option *ngFor="let c of levels" [ngValue]="c">{{c.name}}</option>
+      </select>
+
+    </span>
+  </div>
+</div>

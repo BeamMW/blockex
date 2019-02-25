@@ -1,13 +1,13 @@
 <mat-toolbar [class.header-toolbar-mainnet]=isMainnet
              [class.header-toolbar-testnet]=!isMainnet color="primary">
-    <img class="logo-title" src="assets/logo.svg" width=44 height=38 alt="">
-    <div class="logo-title-content" (click)="navigateToHomepage()">
-      <div class="logo-title-beam">BEAM</div>
-      <div class="logo-title-text">Block Explorer</div>
+    <div class="header-content">
+      <img class="logo-title" src="assets/logo.svg" width=48 height=42 alt="">
+      <div class="logo-title-content" (click)="navigateToHomepage()">
+        <div class="logo-title-beam">BEAM</div>
+        <div class="logo-title-text">Block Explorer</div>
+      </div>
+      <app-network-control></app-network-control>
+      <input autocomplete="off" placeholder="Search by height, hash, kernel ID..."
+             type="search" #searchInput (keyup.enter)="searchProcess(searchInput.value)" id="searchInput"/>
     </div>
-    <span style="flex: 1 1 auto;"></span>
-    <app-network-control></app-network-control>
-
-    <input autocomplete="off" placeholder="Search by height, hash, kernel id..."
-           type="search" #searchInput (keyup.enter)="searchProcess(searchInput.value)" id="searchInput"/>
 </mat-toolbar>

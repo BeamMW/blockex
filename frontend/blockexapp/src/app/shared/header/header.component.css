@@ -8,7 +8,8 @@
 }
 
 .logo-title {
-    margin-left: 140px;
+    margin-top: 35px;
+    float: left;
     cursor: pointer;
 }
 
@@ -29,7 +30,16 @@
 }
 
 .logo-title-content {
-  cursor: pointer;
+    margin-top: 40px;
+    float: left;
+    cursor: pointer;
+}
+
+.header-content {
+    width: 1180px;
+    height: 111px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .header-toolbar-mainnet {
@@ -73,7 +83,8 @@
 }
 
 #searchInput {
-    margin-right: 120px;
+    margin-top: 40px;
+    float: right;
     text-indent: 20px;
     border: 1px solid #ffffff;
     width: 300px;

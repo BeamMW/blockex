@@ -28,11 +28,36 @@ export class ChartsComponent implements OnInit {
 
   feeChart : any;
   chart : any;
+  chartLoading : boolean = false;
+
+  chartsData = {
+      range: [],
+      dates: [],
+      difficulty: [],
+      hashrate: [],
+      fee: [],
+      fixedLine: [],
+      averageBlocks: []
+    };
+
+  isHashRateChecked : boolean = false;
+  levels:Array<Object> = [
+      {num: 0, name: "Day"},
+      {num: 1, name: "Week"},
+      {num: 2, name: "Month"},
+      {num: 3, name: "Year"},
+      {num: 4, name: "All time"}
+
+
+  ];
+
+  selectedLevel = this.levels[1];
+
+
 
   charts = [];
   chartOptions = {};
   feeChartOptions = {};
-  chartsData : any = [];
 
   constructor(private changeDetectionRef: ChangeDetectorRef, private dataService: DataService, private router: Router) { }
 
@@ -55,17 +80,27 @@ export class ChartsComponent implements OnInit {
     this.charts.push(new Highcharts.Chart(opts));
   }
 
+  setHashRateState(checked) {
+      if (checked) {
+        this.charts[0].addSeries({
+          name: 'Hashrate',
+          showInLegend: false,
+          data: this.chartsData.hashrate,
+          marker: {
+            enabled: false
+          },
+          lineWidth: 1,
+          color: '#ff99ff',
+          yAxis: 1
+        });
+      } else {
+        this.charts[0].series[this.charts[0].series.length - 1].remove(true);
+      }
+  }
+
   constructChartsData(data) {
     let initialDate = new Date(data[0].timestamp);
     let avgDifficulty = 0;
-    let chartsData = {
-      range: [],
-      dates: [],
-      difficulty: [],
-      fee: [],
-      fixedLine: [],
-      averageBlocks: []
-    };
     let blocksCounter = 0, feeCounter = 0;
 
     data.map((item) => {
@@ -78,11 +113,13 @@ export class ChartsComponent implements OnInit {
         avgDifficulty += item.difficulty;
       } else {
         let timestampVal = + new Date(item.timestamp);
-        chartsData.dates.push(timestampVal);
-        chartsData.range.push([timestampVal, blocksCounter]);
-        chartsData.difficulty.push([timestampVal, avgDifficulty / blocksCounter]);
-        chartsData.fee.push([timestampVal, feeCounter]);
-        chartsData.fixedLine.push([timestampVal, chartsConsts.FIXED_BLOCKS_COORD]);
+        let difficulty = avgDifficulty / blocksCounter;
+        this.chartsData.dates.push(timestampVal);
+        this.chartsData.range.push([timestampVal, blocksCounter]);
+        this.chartsData.difficulty.push([timestampVal, difficulty]);
+        this.chartsData.hashrate.push([timestampVal, difficulty / 60]);
+        this.chartsData.fee.push([timestampVal, feeCounter]);
+        this.chartsData.fixedLine.push([timestampVal, chartsConsts.FIXED_BLOCKS_COORD]);
         feeCounter = item.fee;
         blocksCounter = 1;
         avgDifficulty = 0;
@@ -90,32 +127,16 @@ export class ChartsComponent implements OnInit {
       }
     });
 
-    let averageBlocks = data.length / chartsData.range.length;
-    chartsData.dates.map((item) => {
-      chartsData.averageBlocks.push([item, averageBlocks]);
+    let averageBlocks = data.length / this.chartsData.range.length;
+    this.chartsData.dates.map((item) => {
+      this.chartsData.averageBlocks.push([item, averageBlocks]);
     });
-
-    console.log(chartsData.averageBlocks);
-
-    return chartsData;
   }
 
-  initCharts(chartsData) {
+  initCharts() {
     this.chartOptions = {
       title: {
-        text: 'BLOCKS AND DIFFICULTY',
-        margin: 35,
-        x: -140,
-        style: {
-          'font-size': '12px',
-          'font-weight': '600',
-          'font-style': 'normal',
-          'font-stretch': 'normal',
-          'line-height': 'normal',
-          'letter-spacing': '0.3px',
-          'text-align': 'center',
-          'color': '#ffffff'
-        }
+        text: '',
       },
       credits: {
           enabled: false
@@ -206,9 +227,9 @@ export class ChartsComponent implements OnInit {
         }
       },
       legend: {
-        width:300,
-        itemWidth: 150,
-        itemMarginBottom:10,
+        width:380,
+        itemWidth: 190,
+        itemMarginBottom:12,
         itemStyle: {
           width: 140,
           'font-family': 'ProximaNova',
@@ -223,25 +244,28 @@ export class ChartsComponent implements OnInit {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        x: -60,
-        y: 0
-      },
-      plotOptions: {
-        series: {
-          point: {
-          }
-        }
+        x: 0,
+        y: 10
       },
       tooltip: {
+        followPointer: false,
         useHTML:true,
-        //backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        backgroundColor: 'rgb(80,67,89)',
+        borderRadius: 10,
         borderWidth: 0,
         shadow: false,
-
-        /*formatter: function () {
-            return 'The value for <b>' + this.x +
-                '</b> is <b>' + this.y + '</b>';
-        }*/
+        formatter: function () {
+            console.log(this);
+            let date = new Date(this.x);
+            return '<div class="chart-tooltip-container">' +
+              '<div class="tooltip-line-color" style="color:'+this.color+'">\u25CF</div>' +
+              '<div class="tooltip-title">' + this.series.name + '</div>' +
+              '<div class="tooltip-date">' + date.getDate() + ' ' +
+                  new Intl.DateTimeFormat('en-US', {month:"long"}).format(date) + ' ' +
+                  date.getFullYear() + ', ' + (date.getHours() < 10 ? '0' : '') + date.getHours()
+                  + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes()  + '</div>' +
+              '<div class="tooltip-value">' + this.y.toFixed(0) + '</div></div>';
+        }
       },
       series: [{
         marker: {
@@ -252,8 +276,8 @@ export class ChartsComponent implements OnInit {
           lineColor: null
         },
         name: 'Blocks per hour',
-        color: '#ff51ff',
-        data: chartsData.range
+        color: '#24c1ff',
+        data: this.chartsData.range
       }, {
         marker: {
           fillColor: 'rgba(255,255,255,0)',
@@ -263,8 +287,8 @@ export class ChartsComponent implements OnInit {
           lineColor: null
         },
         name: 'Average difficulty',
-        color: '#24c1ff',
-        data: chartsData.difficulty,
+        color: '#ff51ff',
+        data: this.chartsData.difficulty,
         yAxis: 1
       }, {
         marker: {
@@ -273,7 +297,7 @@ export class ChartsComponent implements OnInit {
         lineWidth: 1,
         name: 'Fixed 60 blocks',
         color: '#24c1ff',
-        data: chartsData.fixedLine
+        data: this.chartsData.fixedLine
       }, {
         marker: {
           enabled: false
@@ -281,10 +305,11 @@ export class ChartsComponent implements OnInit {
         lineWidth: 1,
         name: 'Average blocks',
         color: '#ff51ff',
-        data: chartsData.averageBlocks
+        data: this.chartsData.averageBlocks
       }],
       chart: {
-        height: 480,
+        width: 580,
+        height: 430,
         marginBottom: 100,
         backgroundColor: 'rgba(255,255,255,0)',
         style: {
@@ -295,19 +320,7 @@ export class ChartsComponent implements OnInit {
     };
     this.feeChartOptions = {
       title: {
-        text: 'FEE',
-        margin: 35,
-        x: -190,
-        style: {
-          'font-size': '12px',
-          'font-weight': '600',
-          'font-style': 'normal',
-          'font-stretch': 'normal',
-          'line-height': 'normal',
-          'letter-spacing': '0.3px',
-          'text-align': 'center',
-          'color': '#ffffff'
-        }
+        text: ''
       },
       credits: {
           enabled: false
@@ -384,14 +397,25 @@ export class ChartsComponent implements OnInit {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        x: -60,
-        y: 0
+        x: -40,
+        y: -15
       },
-      plotOptions: {
-        series: {
-          //pointStart: 2010,
-          point: {
-          }
+      tooltip: {
+        followPointer: false,
+        useHTML:true,
+        backgroundColor: 'rgb(80,67,89)',
+        borderRadius: 10,
+        borderWidth: 0,
+        shadow: false,
+        formatter: function () {
+            let date = new Date(this.x);
+            return '<div class="chart-tooltip-container">' +
+              '<div class="tooltip-line-color" style="color:'+this.color+'">\u25CF</div>' +
+              '<div class="tooltip-title">' + this.series.name + '</div>' +
+              '<div class="tooltip-date">' + date.getDate() + ' ' +
+              new Intl.DateTimeFormat('en-US', {month:"long"}).format(date) + ' ' +
+              date.getFullYear() + ', ' + date.getHours() + ':' + date.getMinutes() + '</div>' +
+              '<div class="tooltip-value">' + this.y.toLocaleString() + '</div></div>';
         }
       },
       series: [{
@@ -404,11 +428,12 @@ export class ChartsComponent implements OnInit {
         },
         name: 'Fee, Groth',
         color: '#00e2c2',
-        data: chartsData.fee,
+        data: this.chartsData.fee,
       }],
       chart: {
         float: 'left',
-        height: 480,
+        width: 580,
+        height: 430,
         marginBottom: 100,
         backgroundColor: 'rgba(255,255,255,0)',
         style: {
@@ -418,12 +443,16 @@ export class ChartsComponent implements OnInit {
         //styledMode: true
       }
     };
+
+    this.chartLoading = false;
+    this.chartsLoaded.emit(true);
   }
 
   ngOnInit() {
-    this.dataService.loadBlocksRange().subscribe((data) => {
-      let chartsData = this.constructChartsData(data);
-      this.initCharts(chartsData);
+    this.chartLoading = true;
+    this.dataService.loadBlocksRange('day').subscribe((data) => {
+      this.constructChartsData(data);
+      this.initCharts();
       this.createChart(this.chartEl.nativeElement, this.chartOptions);
       this.createChart(this.feeChartEl.nativeElement, this.feeChartOptions);
     });

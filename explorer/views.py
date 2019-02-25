@@ -30,6 +30,7 @@ class BlockViewSet(viewsets.ModelViewSet):
 
 @api_view(['GET'])
 def get_block_range(request):
+    range = request.GET['range']
     graph_data = _redis.get("graph_data")
     if graph_data:
         stream = io.BytesIO(graph_data)

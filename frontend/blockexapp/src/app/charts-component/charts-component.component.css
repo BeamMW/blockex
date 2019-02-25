@@ -1,4 +1,4 @@
-.chart-item {
+/*.chart-item {
     display: inline-block;
     width: 730px;
     height: 350px;
@@ -9,7 +9,7 @@
     display: inline-block;
     height: 600px;
     width: 1200px;
-}
+}*/
 
 .highcharts-credits {
     display: none;
@@ -33,14 +33,247 @@
 
 #blocks-chart {
     float: left;
-    max-width: 580px;
+}
+
+.blocks-chart-title {
+    margin-bottom: 30px;
+}
+
+.blocks-chart-title .title {
+    margin-left: 88px;
+    font-family: ProximaNova;
+    font-size: 12px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.fee-chart-title {
+    margin-bottom: 30px;
+}
+
+.fee-chart-title .title {
+    margin-left: 103px;
+    font-family: ProximaNova;
+    font-size: 12px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    text-align: center;
+    color: #ffffff;
 }
 
 #fee-chart {
-    margin-left: 38px;
-    float: left;
-    max-width: 560px;
+    float: right;
 }
+
+.period-title {
+    width: 74px;
+    height: 15px;
+    margin-left: 105px;
+    opacity: 0.7;
+    font-family: ProximaNova;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+}
+
+.period-selector {
+    border: none;
+    opacity: 0.7;
+    width: 55px;
+    font-family: ProximaNova;
+    font-size: 12px;
+    font-weight: bolder;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0);
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.period-selector option{
+    border: none;
+    opacity: 0.7;
+    font-family: ProximaNova;
+    font-size: 15px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+    background-color: rgb(80,67,89) !important;
+}
+
+.period-selector-fee {
+  float: right;
+}
+
+.switch-title {
+    width: 51px;
+    height: 15px;
+    margin-left: 27px;
+    opacity: 0.5;
+    font-family: ProximaNova;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+}
+
+.hash-rate-switch {
+    position: absolute;
+    width: 24px;
+    height: 15px;
+    margin-left: 6px;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select: none;
+}
+.hash-rate-switch-checkbox {
+    display: none;
+}
+.hash-rate-switch-label {
+    height: 12px;
+    margin-top: 3px;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 20px;
+    border: solid 1px rgba(250, 250, 250, .3);
+}
+.hash-rate-switch-inner {
+    display: block;
+    width: 200%;
+    margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.hash-rate-switch-inner:before, .hash-rate-switch-inner:after {
+    display: block;
+    float: left;
+    width: 50%;
+    height: 20px;
+    padding: 0;
+    line-height: 20px;
+    color: white;
+    box-sizing: border-box;
+}
+.hash-rate-switch-inner:before {
+    content: "";
+    padding-left: 5px;
+    background-color: rgba(255, 255, 255, 0);
+    color: #FFFFFF;
+}
+.hash-rate-switch-inner:after {
+    content: "";
+    padding-right: 5px;
+    background-color: rgba(255, 255, 255, 0);
+    color: #FFFFFF;
+    text-align: right;
+}
+.hash-rate-switch-ctrl {
+    width: 8px;
+    height: 8px;
+    margin: -1px;
+    background: #ffffff;
+    position: absolute;
+    top: 6px;
+    bottom: 0;
+    right: 12px;
+    border: 1px solid #FFFFFF;
+    border-radius: 20px;
+    transition: all 0.3s ease-in 0s;
+}
+.hash-rate-switch-checkbox:checked + .hash-rate-switch-label .hash-rate-switch-inner {
+    margin-left: 0;
+}
+.hash-rate-switch-checkbox:checked + .hash-rate-switch-label .hash-rate-switch-ctrl {
+    right: 3px;
+}
+
+:host ::ng-deep.chart-tooltip-container {
+    width: 162px;
+    height: 78px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+:host ::ng-deep.tooltip-line-color {
+    margin-left: 14px;
+    margin-top: 10px;
+    float: left;
+}
+
+:host ::ng-deep.tooltip-title {
+    margin-left: 8px;
+    margin-top: 10px;
+    float: left;
+    font-family: ProximaNova;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+}
+
+:host ::ng-deep.tooltip-date {
+    margin-left: 30px;
+    margin-top: 10px;
+    float: left;
+    font-family: ProximaNova;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+}
+
+:host ::ng-deep.tooltip-value {
+    margin-left: 30px;
+    margin-top: 10px;
+    float: left;
+    font-family: ProximaNova;
+    font-size: 20px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+}
+
+
+/*:host ::ng-deep.chart-tooltip-container {
+    width: 172px;
+    height: 98px;
+  border-radius: 10px;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  background-color: rgba(255, 255, 255, 0.2)
+}*/
 
 @media all and (max-width: 1599px) {
     .chart-item {
@@ -61,6 +294,12 @@
 
     .chart-item-full {
         width: 1000px;
+    }
+}
+
+@media all and (max-width: 1180px) {
+    #fee-chart {
+        float: left;
     }
 }
 

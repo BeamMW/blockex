@@ -62,7 +62,7 @@ export class BlockListComponent implements OnInit {
     return event;
   }
 
-  public onChartsLoaded(chartsStatus: boolean) {
+    public onChartsLoaded(chartsStatus: boolean) {
     if (chartsStatus){
         this.loading_charts = false;
     }

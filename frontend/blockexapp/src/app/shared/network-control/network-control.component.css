@@ -1,11 +1,14 @@
-.mat-select-panel{
-    margin-top: 40px;
-}
-.onoffswitch {
-    margin-right: 136px;
-    position: relative;
-    height: 31px;
+.network-control-elem {
+    margin: 40px auto auto;
+    left: 0;
+    right: 0;
+    position: absolute;
     width: 288px;
+    height: 31px;
+}
+
+.onoffswitch {
+    position: relative;
     -webkit-user-select:none;
     -moz-user-select:none;
     -ms-user-select: none;
@@ -42,7 +45,8 @@
 }
 .onoffswitch-inner:before {
     content: "MAINNET";
-    padding-left: 14px;
+    padding-left: 20px;
+    padding-top: 1px;
     background-color: rgba(255, 255, 255, 0);
     font-family: ProximaNova;
     font-size: 14px;
@@ -53,7 +57,8 @@
 }
 .onoffswitch-inner:after {
     content: "TESTNET";
-    padding-right: 14px;
+    padding-right: 20px;
+    padding-top: 1px;
     background-color: rgba(255, 255, 255, 0);
     font-family: ProximaNova;
     font-size: 14px;
@@ -84,14 +89,16 @@
     font-style: normal;
     letter-spacing: 7px;
     color: #311e46;
-    padding-left: 15px;
+    padding-left: 20px;
+    padding-top: 1px;
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
     margin-left: 0;
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: -2px;
-    width: 141px;
+    top: -1px;
+    width: 125px;
     height: 33px;
     border: none;
     border-radius: 15.5px;

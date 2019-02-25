@@ -1,8 +1,3 @@
-.canvas-chart {
-    width: 50%;
-    height: 700px;
-}
-
 .mat-table {
     width: 100%;
 }
@@ -43,6 +38,7 @@
 
 :host ::ng-deep.mat-header-row .mat-header-cell {
     font-weight: bolder !important;
+    color: #333333;
 }
 
 .blocks-table-row {
@@ -55,34 +51,32 @@
 }
 
 .blocks-table-paginator-mainnet {
-  padding-right: 95px;
-  background-color: rgba(0, 86, 131, 0.15);
+    padding-right: 95px;
+    background-color: rgba(0, 86, 131, 0.15);
 }
 
 .blocks-table-paginator-testnet {
-  padding-right: 95px;
-  background-color: rgba(76, 0, 131, 0.15);
+    padding-right: 95px;
+    background-color: rgba(76, 0, 131, 0.15);
 }
 
-.mat-paginator-page-size:last-child {
-  font-weight: bolder;
+:host ::ng-deep.mat-paginator-page-size div:last-of-type {
+    font-weight: bolder;
+    color: #333333;
 }
 
-.overview-container-mainnet {
-    min-height: 723px;
+.content-сontainer-mainnet {
     overflow: hidden;
     background-attachment: fixed;
     background-blend-mode: normal, multiply, multiply, multiply;
-    background-image:
-      linear-gradient(120deg, #032e49, #0073a6),
+    background-image: linear-gradient(120deg, #032e49, #0073a6),
       radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5)),
       linear-gradient(to left, rgba(255, 255, 255, 0.5), #d33b65),
       linear-gradient(297deg, #156fc3, rgba(255, 255, 255, 0.5)),
       radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0), rgba(21, 6, 40, 0.12));
 }
 
-.overview-container-testnet {
-    min-height: 723px;
+.content-container-testnet {
     overflow: hidden;
     background-attachment: fixed;
     background-blend-mode: normal, multiply, multiply, multiply;
@@ -93,17 +87,29 @@
       radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0), rgba(21, 6, 40, 0.12));
 }
 
+.overview-container {
+    height: 710px;
+    max-width: 1180px;
+    margin-right: auto;
+    margin-left: auto;
+    justify-content: space-between;
+}
+
+.block-cards-container {
+    margin-right: auto;
+    max-width: 1180px;
+    min-height: 180px;
+    margin-left: auto;
+}
+
 .chart-container {
-    margin-left: 125px;
-    margin-top: 20px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 10px;
     display: inline-table;
     width:100%;
     height:430px;
     padding:5px;
-}
-
-.block-cards-container {
-    margin-left: 135px;
 }
 
 .block-card {
@@ -149,7 +155,7 @@
 }
 
 .mat-table mat-row, mat-header-row, mat-footer-row {
-    padding-left: 120px;
+    padding-left: 9rem;
     padding-right: 45px;
 }
 
@@ -189,14 +195,6 @@
 
 :host ::ng-deep.mat-paginator .mat-paginator-container:last-child{
     font-family: ProximaNova;
-}
-
-@media all and (max-width: 1599px) {
-
-}
-
-@media all and (max-width: 1359px) {
-
 }
 
 @media(max-width: 600px) {
