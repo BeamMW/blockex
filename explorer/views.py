@@ -39,7 +39,7 @@ def get_block_range(request):
         graph_data = _redis.get("weekly_graph_data")
     if range == 30:
         graph_data = _redis.get("monthly_graph_data")
-    if range == 356:
+    if range == 365:
         graph_data = _redis.get("yearly_graph_data")
     if range == 0:
         graph_data = _redis.get("all_graph_data")
@@ -69,7 +69,7 @@ def get_block_range(request):
             _redis.set('weekly_graph_data', JSONRenderer().render(serializer.data))
         if range == 30:
             _redis.set('monthly_graph_data', JSONRenderer().render(serializer.data))
-        if range == 356:
+        if range == 365:
             _redis.set('yearly_graph_data', JSONRenderer().render(serializer.data))
         if range == 0:
             _redis.set('all_graph_data', JSONRenderer().render(serializer.data))

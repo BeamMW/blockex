@@ -45,7 +45,7 @@ export class ChartsComponent implements OnInit {
       {num: 1, name: "Day"},
       {num: 7, name: "Week"},
       {num: 30, name: "Month"},
-      {num: 356, name: "Year"},
+      {num: 365, name: "Year"},
       {num: 0, name: "All time"}
   ];
 
