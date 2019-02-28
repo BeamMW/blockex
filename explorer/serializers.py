@@ -1,15 +1,18 @@
 from .models import *
 from rest_framework import serializers
 
+
 class InputSerializer(serializers.ModelSerializer):
     class Meta:
         model = Input
         fields = ('commitment', 'maturity')
 
+
 class OutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = Output
         fields = ('commitment', 'maturity', 'coinbase')
+
 
 class KernelSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,7 +40,9 @@ class BlockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Block
-        fields = ('height','hash', 'chainwork','difficulty','subsidy','timestamp', 'fee', 'inputs', 'outputs', 'kernels')
+        fields = ('height', 'prev', 'hash', 'chainwork',
+                  'difficulty', 'subsidy', 'timestamp',
+                  'fee', 'inputs', 'outputs', 'kernels')
 
 
 class BlockHeaderSerializer(serializers.ModelSerializer):
