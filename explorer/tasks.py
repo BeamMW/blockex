@@ -123,28 +123,35 @@ def update_blockchain():
 
             last_height += 100
     else:
+        height_shift = current_height - DAILY_BLOCK_STEP
         r = requests.get(BEAM_NODE_API + '/blocks?height=' +
-                         str(current_height - DAILY_BLOCK_STEP) + '&n=' + str(DAILY_BLOCK_STEP))
+                         str(height_shift) + '&n=' + str(DAILY_BLOCK_STEP))
         blocks = r.json()
 
-        from_height = last_height - DAILY_BLOCK_STEP
-        existing_blocks = Block.objects.filter(height__gte=from_height, height__lt=last_height)
+        existing_blocks = Block.objects.filter(height__gte=height_shift, height__lt=last_height)
 
         is_fork_exist = False
-        for _block in blocks:
+        for idx, _block in enumerate(blocks):
+            if 'found' in _block and _block['found'] is False:
+                continue
+
             b = Block()
             b.from_json(_block)
 
             fork_counter = 0
+            blocks_shift = 0
 
             if not is_fork_exist:
-                for _blockItem in blocks:
-                    if str(_blockItem['height']) == str(b.height):
+                last_fork_height = 0
+                for idItem, _blockItem in enumerate(blocks):
+                    if idItem > idx and str(_blockItem['height']) == str(b.height):
                         fork_counter += 1
+                        last_fork_height = _blockItem['height']
 
-                blocks_shift = existing_blocks.filter(height=b.height)
+                blocks_shift = existing_blocks.filter(height=b.height).count()
 
-                if fork_counter > 1 or fork_counter > blocks_shift.count():
+                if (fork_counter > 1 and last_fork_height > last_height) \
+                        or (fork_counter > blocks_shift and blocks_shift > 0):
                     f = Forks_event_detection()
                     f.from_json(b.height)
                     f.save()
@@ -154,12 +161,11 @@ def update_blockchain():
                     Input.objects.filter(block_id=b.id).delete()
                     Output.objects.filter(block_id=b.id).delete()
 
-                    blocks_shift = existing_blocks.filter(height__gte=b.height, height__lt=last_height)
-                    blocks_shift.delete()
+                    remaining_blocks = existing_blocks.filter(height__gte=b.height, height__lt=last_height)
+                    remaining_blocks.delete()
 
-            if fork_counter == 0 or is_fork_exist:
-                if 'found' in _block and _block['found'] == False:
-                    continue
+            if blocks_shift == 0 or is_fork_exist:
+
                 try:
                     b.save()
                 except IntegrityError as e:
@@ -188,7 +194,6 @@ def update_blockchain():
                 b.fee = fee
                 b.save()
 
-                del _block
 
     _redis.set('beam_blockex_last_height', current_height)
     _redis.delete('graph_data')
