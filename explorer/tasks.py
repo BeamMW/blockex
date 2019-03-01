@@ -127,7 +127,8 @@ def update_blockchain():
         r = requests.get(BEAM_NODE_API + '/blocks?height=' +
                          str(height_shift) + '&n=' + str(DAILY_BLOCK_STEP))
         blocks = r.json()
-
+        last_height += 1
+        height_shift -= 1
         existing_blocks = Block.objects.filter(height__gte=height_shift, height__lt=last_height)
 
         is_fork_exist = False
@@ -157,11 +158,12 @@ def update_blockchain():
                     f.save()
                     is_fork_exist = True
 
-                    Kernel.objects.filter(block_id=b.id).delete()
-                    Input.objects.filter(block_id=b.id).delete()
-                    Output.objects.filter(block_id=b.id).delete()
+                    Kernel.objects.filter(block_id__gte=b.id, block_id__lt=b.id).delete()
+                    Input.objects.filter(block_id__gte=b.id, block_id__lt=b.id).delete()
+                    Output.objects.filter(block_id__gte=b.id, block_id__lt=b.id).delete()
 
-                    remaining_blocks = existing_blocks.filter(height__gte=b.height, height__lt=last_height)
+                    to_height = last_height + 1
+                    remaining_blocks = existing_blocks.filter(height__gte=b.height, height__lt=to_height)
                     remaining_blocks.delete()
 
             if blocks_shift == 0 or is_fork_exist:
