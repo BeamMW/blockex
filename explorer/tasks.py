@@ -140,33 +140,23 @@ def update_blockchain():
             b.from_json(_block)
 
             fork_counter = 0
-            blocks_shift = 0
 
             if not is_fork_exist:
-                last_fork_height = 0
                 for idItem, _blockItem in enumerate(blocks):
                     if idItem > idx and str(_blockItem['height']) == str(b.height):
                         fork_counter += 1
-                        last_fork_height = _blockItem['height']
 
-                blocks_shift = existing_blocks.filter(height=b.height).count()
-
-                if (fork_counter > 1 and last_fork_height > last_height) \
-                        or (fork_counter > blocks_shift and blocks_shift > 0):
+                if fork_counter > 0:
                     f = Forks_event_detection()
                     f.from_json(b.height)
                     f.save()
                     is_fork_exist = True
 
-                    Kernel.objects.filter(block_id__gte=b.id, block_id__lt=b.id).delete()
-                    Input.objects.filter(block_id__gte=b.id, block_id__lt=b.id).delete()
-                    Output.objects.filter(block_id__gte=b.id, block_id__lt=b.id).delete()
-
                     to_height = last_height + 1
                     remaining_blocks = existing_blocks.filter(height__gte=b.height, height__lt=to_height)
                     remaining_blocks.delete()
 
-            if blocks_shift == 0 or is_fork_exist:
+            if is_fork_exist:
 
                 try:
                     b.save()
@@ -195,7 +185,6 @@ def update_blockchain():
 
                 b.fee = fee
                 b.save()
-
 
     _redis.set('beam_blockex_last_height', current_height)
     _redis.delete('graph_data')
