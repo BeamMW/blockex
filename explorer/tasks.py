@@ -156,7 +156,8 @@ def update_blockchain():
                     remaining_blocks = existing_blocks.filter(height__gte=b.height, height__lt=to_height)
                     remaining_blocks.delete()
 
-            if is_fork_exist:
+            existing_block_count = existing_blocks.filter(height=b.height).count()
+            if existing_block_count == 0 or is_fork_exist:
 
                 try:
                     b.save()
