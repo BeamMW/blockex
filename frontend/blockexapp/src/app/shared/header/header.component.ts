@@ -33,7 +33,8 @@ export class HeaderComponent implements OnInit {
           );
         } else if (blockItem.hash !== undefined){
           this.router.navigate(
-            [routesConsts.BLOCK_DETAILS, blockItem.hash]
+            [routesConsts.BLOCK_DETAILS, blockItem.hash],
+            {queryParams: {searched_by: searchValue}}
           );
         }
       }, (error) => {

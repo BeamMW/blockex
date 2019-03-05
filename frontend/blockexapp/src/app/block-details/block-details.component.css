@@ -138,6 +138,9 @@ mat-table,
     display: none;
 }
 
+.searched-by {
+    background-color: #e4d9ed !important;
+}
 
 @media(max-width: 600px) {
   .mobile-label {

@@ -1,33 +1,46 @@
-<div #charts id="blocks-chart">
+<div id="blocks-chart">
   <div class="blocks-chart-title" *ngIf="!chartLoading">
-    <span class="title"> BLOCKS AND DIFFICULTY </span>
+    <div class="chart-type-selector">
+      <span class="type-selected" (click)="showTypesOptions($event)">
+        <span>{{selectedBlocksChartType.name}}</span>
+        <img src="../../assets/arrows/arrow-down-small.png"
+             srcset="../../assets/arrows/arrow-down-small@2x.png 2x,
+                     ../../assets/arrows/arrow-down-small@3x.png 3x"
+             class="arrow-down-small">
+      </span>
+      <div class="type-options" *ngIf="isChartTypesVisible">
+        <ul>
+          <li class="type-options-item" *ngFor="let p of blocksChartTypes" [class.selected]="p.isSelected"
+              (click)="blocksChartTypeChange(p)">
+            <span> {{p.name}} </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!--<span class="title">-->
+        <!--<select class="title-selector" -->
+              <!--[(ngModel)]="selectedBlocksChartType">-->
+            <!--<option *ngFor="let p of blocksChartTypes" [ngValue]="p">{{p.name}}</option>-->
+        <!--</select>-->
+    <!--</span>-->
     <span class="period-selector-blocks">
       <span class="period-title">Period: </span>
-      <select class="period-selector" (ngModelChange)="blocksSelectChange($event)"
+      <select class="period-selector" (ngModelChange)="blocksPeriodChange($event)"
               [(ngModel)]="selectedPeriodBlocks">
-        <option *ngFor="let p of chartPeriods" [ngValue]="p">{{p.name}}</option>
+          <option *ngFor="let p of chartPeriods" [ngValue]="p">{{p.name}}</option>
       </select>
 
     </span>
-    <span class="hash-rate-chart-switch">
-      <span class="switch-title">Hash rate</span>
-      <span class="hash-rate-switch">
-          <input type="checkbox" name="onoffswitch" class="hash-rate-switch-checkbox" id="my-hash-rate-switch"
-              (click)="setHashRateState($event.target.checked)" [checked]="isHashRateChecked">
-          <label class="hash-rate-switch-label" for="my-hash-rate-switch">
-              <span class="hash-rate-switch-inner"></span>
-              <span class="hash-rate-switch-ctrl"></span>
-          </label>
-      </span>
-    </span>
   </div>
+  <div class="blocks-chart-area" #charts></div>
 </div>
 <div #feeChart id="fee-chart">
   <div class="fee-chart-title" *ngIf="!chartLoading">
     <span class="title"> FEE </span>
     <span class="period-selector-fee">
       <span class="period-title">Period: </span>
-      <select class="period-selector" (ngModelChange)="feeSelectChange($event)"
+      <select class="period-selector" (ngModelChange)="feePeriodChange($event)"
               [(ngModel)]="selectedPeriodFee">
         <option *ngFor="let p of chartPeriods" [ngValue]="p">{{p.name}}</option>
       </select>

@@ -1,16 +1,18 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
-  ChangeDetectorRef,
-  ViewChild,
-  Input,
-  Output,
   EventEmitter,
-  OnInit} from '@angular/core';
-import { DataService } from '../services';
-import { Chart } from 'chart.js';
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
+import {DataService} from '../services';
+import {Chart} from 'chart.js';
 import {Router} from "@angular/router";
-import { chartsConsts } from '../consts';
+import {chartsConsts} from '../consts';
 
 import * as Highcharts from 'highcharts';
 
@@ -26,6 +28,10 @@ export class ChartsComponent implements OnInit {
   @ViewChild('charts') public chartEl: ElementRef;
   @ViewChild('feeChart') public feeChartEl: ElementRef;
 
+  @HostListener('document:click', ['$event']) clickout(event) {
+    this.isChartTypesVisible = false;
+  }
+
   feeChart : any;
   chart : any;
   chartLoading : boolean = false;
@@ -40,23 +46,40 @@ export class ChartsComponent implements OnInit {
       averageBlocks: []
     };
 
-  isHashRateChecked : boolean = false;
+  isChartTypesVisible : boolean = false;
   chartPeriods = [
-      {num: 1, name: "Day"},
-      {num: 7, name: "Week"},
-      {num: 30, name: "Month"},
-      {num: 365, name: "Year"},
-      {num: 0, name: "All time"}
+      {num: 1, name: "Day", approximateCoefficient: 1},
+      {num: 7, name: "Week", approximationCoefficient: 1},
+      {num: 30, name: "Month", approximateCoefficient: chartsConsts.COUNT_OF_HOURS},
+      {num: 365, name: "Year", approximateCoefficient: chartsConsts.COUNT_OF_DAYS * chartsConsts.COUNT_OF_HOURS},
+      {num: 0, name: "All time", approximateCoefficient: chartsConsts.COUNT_OF_DAYS * chartsConsts.COUNT_OF_HOURS}
+  ];
+
+  CHARTS = {
+      DIFFICULTY: {name: "Average difficulty"},
+      HASHRATE: {name: "Hashrate"},
+      BLOCKS: {name: "Blocks per hour"},
+      FIXED: {name: "Fixed 60 blocks"},
+      BLOCKS_AVERAGE: {name: "Average blocks"}
+  };
+
+  blocksChartTypes = [
+      {num: 1, name: "BLOCKS AND DIFFICULTY", tooltip: "Average difficulty", isSelected: true},
+      {num: 0, name: "BLOCKS AND HASH RATE", tooltip: "Hashrate", isSelected: false}
   ];
 
   selectedPeriodBlocks = this.chartPeriods[1];
   selectedPeriodFee = this.chartPeriods[1];
+  selectedBlocksChartType = this.blocksChartTypes[0];
 
   charts = [];
   chartOptions = {};
   feeChartOptions = {};
 
-  constructor(private changeDetectionRef: ChangeDetectorRef, private dataService: DataService, private router: Router) { }
+  constructor(
+    private changeDetectionRef: ChangeDetectorRef,
+    private dataService: DataService,
+    private router: Router) { }
 
   createChart(container, options?: Object) {
     let opts = !!options ? options : this.chartOptions;
@@ -77,33 +100,6 @@ export class ChartsComponent implements OnInit {
     this.charts.push(new Highcharts.Chart(opts));
   }
 
-  setHashRateState(checked) {
-      this.isHashRateChecked = checked;
-      if (checked) {
-        this.charts[0].addSeries({
-          name: 'Hashrate',
-          showInLegend: false,
-          data: this.chartsData.hashrate,
-          marker: {
-            enabled: false
-          },
-          lineWidth: 1,
-          color: '#ff99ff',
-          yAxis: 1
-        });
-      } else {
-        this.charts[0].series[this.charts[0].series.length - 1].remove(true);
-      }
-  }
-
-  blocksSelectChange(e) {
-    this.chartUpdate(e.num, this.charts[0], 'blocks')
-  }
-
-  feeSelectChange(e) {
-    this.chartUpdate(e.num, this.charts[1], 'fee')
-  }
-
   chartUpdate(newRange, chart, type) {
     this.dataService.loadBlocksRange(newRange).subscribe((data) => {
       this.chartsData.range.length = 0;
@@ -117,17 +113,84 @@ export class ChartsComponent implements OnInit {
       this.constructChartsData(data);
 
       if(type == 'blocks') {
-        chart.series[0].setData( this.chartsData.range, true);
-        chart.series[1].setData(this.chartsData.difficulty, true);
-        chart.series[2].setData(this.chartsData.fixedLine, true);
-        chart.series[3].setData(this.chartsData.averageBlocks, true);
-        if(this.isHashRateChecked) {
-          chart.series[4].setData(this.chartsData.hashrate, true);
+        chart.series.find(item => item.name == this.CHARTS.BLOCKS.name)
+          .setData( this.chartsData.range, true);
+        if(this.selectedBlocksChartType.num == this.blocksChartTypes[0].num) {
+          chart.series.find(item => item.name == this.CHARTS.DIFFICULTY.name)
+            .setData( this.chartsData.difficulty, true);
+        } else if (this.selectedBlocksChartType.num == this.blocksChartTypes[1].num) {
+          chart.series.find(item => item.name == this.CHARTS.HASHRATE.name)
+            .setData( this.chartsData.hashrate, true);
         }
+        chart.series.find(item => item.name == this.CHARTS.FIXED.name)
+          .setData( this.chartsData.fixedLine, true);
+        chart.series.find(item => item.name == this.CHARTS.BLOCKS_AVERAGE.name)
+          .setData( this.chartsData.averageBlocks, true);
       } else {
         chart.series[0].setData( this.chartsData.fee, true);
       }
     });
+  }
+
+  showTypesOptions(event) {
+    event.stopPropagation();
+    this.isChartTypesVisible = !this.isChartTypesVisible;
+  }
+
+  blocksChartTypeUpdate(type) {
+
+  }
+
+  blocksPeriodChange(e) {
+    this.chartUpdate(e.num, this.charts[0], 'blocks')
+  }
+
+  feePeriodChange(e) {
+    this.chartUpdate(e.num, this.charts[1], 'fee')
+  }
+
+  blocksChartTypeChange(selectedType) {
+    if(!selectedType.isSelected) {
+      selectedType.isSelected = true;
+      this.selectedBlocksChartType.isSelected = false;
+      this.selectedBlocksChartType = selectedType;
+
+      if (selectedType.num == this.blocksChartTypes[0].num) {
+        let unselectedType = this.charts[0].series.find(item => item.name == this.blocksChartTypes[1].tooltip);
+        unselectedType.remove(true);
+
+        this.charts[0].addSeries({
+          marker: {
+            fillColor: 'rgba(255,255,255,0)',
+            lineWidth: 2,
+            radius: 1,
+            symbol: 'circle',
+            lineColor: null
+          },
+          name: 'Average difficulty',
+          color: '#ff51ff',
+          data: this.chartsData.difficulty,
+          yAxis: 1
+        });
+      } else if (selectedType.num == this.blocksChartTypes[1].num) {
+        let unselectedType = this.charts[0].series.find(item => item.name == this.blocksChartTypes[0].tooltip);
+        unselectedType.remove(true);
+
+        this.charts[0].addSeries({
+          name: 'Hashrate',
+          data: this.chartsData.hashrate,
+          marker: {
+            fillColor: 'rgba(255,255,255,0)',
+            lineWidth: 2,
+            radius: 1,
+            symbol: 'circle',
+            lineColor: null
+          },
+          color: '#ff51ff',
+          yAxis: 1
+        });
+      }
+    }
   }
 
   constructChartsData(data) {
@@ -136,8 +199,9 @@ export class ChartsComponent implements OnInit {
     let blocksCounter = 0, feeCounter = 0;
 
     data.map((item) => {
-      let initialDateWithOffset = initialDate.getTime()
-        + chartsConsts.MINUTE * chartsConsts.COUNT_OF_MINUTES;
+      let initialDateWithOffset = this.selectedPeriodBlocks.approximateCoefficient > 1 ? initialDate.getTime()
+        + chartsConsts.MINUTE * chartsConsts.COUNT_OF_MINUTES * this.selectedPeriodBlocks.approximateCoefficient
+        : initialDate.getTime() + chartsConsts.MINUTE * chartsConsts.COUNT_OF_MINUTES;
 
       if (new Date(item.timestamp).getTime() <= initialDateWithOffset) {
         blocksCounter++;
@@ -147,10 +211,13 @@ export class ChartsComponent implements OnInit {
         let timestampVal = + new Date(item.timestamp);
         let difficulty = avgDifficulty / blocksCounter;
         this.chartsData.dates.push(timestampVal);
-        this.chartsData.range.push([timestampVal, blocksCounter]);
-        this.chartsData.difficulty.push([timestampVal, difficulty]);
+        this.chartsData.range.push([timestampVal, this.selectedPeriodBlocks.approximateCoefficient > 1
+          ? blocksCounter / this.selectedPeriodBlocks.approximateCoefficient : blocksCounter]);
+        this.chartsData.difficulty.push([timestampVal, this.selectedPeriodBlocks.approximateCoefficient > 1
+          ? difficulty / this.selectedPeriodBlocks.approximateCoefficient : difficulty]);
         this.chartsData.hashrate.push([timestampVal, difficulty / 60]);
-        this.chartsData.fee.push([timestampVal, feeCounter]);
+        this.chartsData.fee.push([timestampVal, this.selectedPeriodBlocks.approximateCoefficient > 1 ?
+          feeCounter / this.selectedPeriodBlocks.approximateCoefficient : feeCounter]);
         this.chartsData.fixedLine.push([timestampVal, chartsConsts.FIXED_BLOCKS_COORD]);
         feeCounter = item.fee;
         blocksCounter = 1;
@@ -159,7 +226,9 @@ export class ChartsComponent implements OnInit {
       }
     });
 
-    let averageBlocks = data.length / this.chartsData.range.length;
+    let averageBlocks = this.selectedPeriodBlocks.approximateCoefficient > 1
+      ? data.length / (this.chartsData.range.length * this.selectedPeriodBlocks.approximateCoefficient)
+      : data.length / (this.chartsData.range.length * this.selectedPeriodBlocks.approximateCoefficient);
     this.chartsData.dates.map((item) => {
       this.chartsData.averageBlocks.push([item, averageBlocks]);
     });

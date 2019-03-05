@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute} from '@angular/router';
 import { DataService } from '../services';
 import { Router} from '@angular/router';
 import { routesConsts } from "../consts";
@@ -16,6 +16,7 @@ export class BlockDetailsComponent implements OnInit {
   loading_block: boolean = false;
   notFound: boolean = false;
   isMainnet: boolean = false;
+  searchedBy = '';
 
   displayedColumns: any = {
     kernels: ['fee', 'excess', 'id'],
@@ -27,7 +28,11 @@ export class BlockDetailsComponent implements OnInit {
   constructor(
       private router: Router,
       private dataService: DataService,
-      private route: ActivatedRoute) { }
+      private route: ActivatedRoute) {
+    route.queryParams.subscribe(params => {
+      this.searchedBy = params.searched_by;
+    });
+  }
 
   backToExplorer() {
       this.router.navigate(
@@ -36,6 +41,7 @@ export class BlockDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.searchedBy = this.route.snapshot.queryParamMap.get('searched_by');
     this.isMainnet = environment.production;
     this.loading_block = true;
     this.block = {

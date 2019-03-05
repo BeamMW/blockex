@@ -36,11 +36,13 @@
 }
 
 .blocks-chart-title {
+    height: 20px;
+    padding-left: 55px;
+    padding-right: 50px;
     margin-bottom: 30px;
 }
 
 .blocks-chart-title .title {
-    margin-left: 88px;
     font-family: ProximaNova;
     font-size: 12px;
     font-weight: 600;
@@ -121,8 +123,28 @@
     background-color: rgb(80,67,89) !important;
 }
 
+.period-selector-blocks,
 .period-selector-fee {
   float: right;
+}
+
+.title-selector {
+    border: none;
+    opacity: 0.7;
+    width: 170px;
+    font-family: ProximaNova;
+    font-size: 12px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0);
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .switch-title {
@@ -274,6 +296,74 @@
   backdrop-filter: blur(2px);
   background-color: rgba(255, 255, 255, 0.2)
 }*/
+
+.blocks-chart-area {
+    z-index: 1;
+}
+
+.arrow-down-small {
+    width: 5px;
+    height: 3px;
+    object-fit: contain;
+    margin-left: 5px;
+    margin-bottom: 3px;
+}
+
+/* chart type selector */
+
+.chart-type-selector {
+    margin-top: 5px;
+    z-index: 10;
+    font-family: ProximaNova;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    text-align: center;
+    color: #ffffff;
+    float: left;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.chart-type-selector .type-selected {
+    cursor: pointer;
+}
+
+.chart-type-selector .type-options {
+    z-index: 10;
+    width: 176px;
+    height: 72px;
+    position: absolute;
+    border: none;
+    margin-top: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    opacity: 1;
+    background-color: rgb(80,67,89);
+}
+
+.chart-type-selector .type-options .selected {
+    color: #a479f8;
+}
+
+.chart-type-selector .type-options .type-options-item {
+    margin-top: 14px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.chart-type-selector .type-options ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* ------------------- */
 
 @media all and (max-width: 1599px) {
     .chart-item {
