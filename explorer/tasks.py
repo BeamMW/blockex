@@ -132,7 +132,7 @@ def update_blockchain():
         existing_blocks = Block.objects.filter(height__gte=height_shift, height__lt=last_height)
 
         is_fork_exist = False
-        for idx, _block in enumerate(blocks):
+        for idx, _block in enumerate(reversed(blocks)):
             if 'found' in _block and _block['found'] is False:
                 continue
 
@@ -140,12 +140,12 @@ def update_blockchain():
             b.from_json(_block)
 
             fork_counter = 0
+            is_block_not_exist = False
 
             if not is_fork_exist:
-                for idItem, _blockItem in enumerate(blocks):
+                for idItem, _blockItem in enumerate(reversed(blocks)):
                     if idItem > idx and str(_blockItem['height']) == str(b.height):
                         fork_counter += 1
-
                 if fork_counter > 0:
                     f = Forks_event_detection()
                     f.from_json(b.height)
@@ -153,11 +153,12 @@ def update_blockchain():
                     is_fork_exist = True
 
                     to_height = last_height + 1
-                    remaining_blocks = existing_blocks.filter(height__gte=b.height, height__lt=to_height)
+                    remaining_blocks = existing_blocks.filter(height__gte=str(b.height), height__lt=str(to_height))
                     remaining_blocks.delete()
+            else:
+                is_block_not_exist = existing_blocks.filter(height=b.height).count() == 0
 
-            existing_block_count = Block.objects.filter(height=b.height).count()
-            if existing_block_count == 0 or is_fork_exist:
+            if is_fork_exist or is_block_not_exist:
                 try:
                     b.save()
                 except IntegrityError as e:
