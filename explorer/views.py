@@ -142,109 +142,26 @@ def get_status(request):
 
     return Response(data, status=HTTP_200_OK)
 
-from celery.task.schedules import crontab
-from celery.decorators import periodic_task
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import IntegrityError
-
-import requests
-import json
-
-from datetime import datetime
-import pytz
-import redis
-
-from .models import *
-
-HEIGHT_STEP = 43800
-DAILY_BLOCK_STEP = 1440
-BEAM_NODE_API = 'http://localhost:8888'
 
 @api_view(['GET'])
 def get_major_block(request):
-    _redis = redis.Redis(host='localhost', port=6379, db=0)
-    last_height = _redis.get('beam_blockex_last_height')
+    access_key = 'E9B60D665A110DD4AAE1D36AF633FF25ED932CFED0413FF005C58A986BA7794A'
+    key = request.GET['key']
 
-    if not last_height:
-        try:
-            last_block = Block.objects.latest('height')
-            last_height = last_block.height if last_block else 1
-        except ObjectDoesNotExist as e:
-            last_height = 1
+    if key and key == access_key:
+        period = request.GET.get('period')
+        blocks = Block.objects.all()
+        if period:
+            created_at_to = datetime.now(tz=timezone.utc)
+            created_at_from = datetime.now(tz=timezone.utc) - timedelta(hours=int(period))
+            blocks = blocks.filter(created_at__gte=created_at_from, created_at__lt=created_at_to)
 
-    last_height = int(last_height)
-
-    # Get last blockchain height
-    r = requests.get(BEAM_NODE_API + '/status')
-
-    current_height = int(r.json()['height'])
-
-
-    height_shift = current_height - DAILY_BLOCK_STEP
-    r = requests.get(BEAM_NODE_API + '/blocks?height=' +
-                     str(height_shift) + '&n=' + str(DAILY_BLOCK_STEP))
-    blocks = r.json()
-    last_height += 1
-    height_shift -= 1
-    existing_blocks = Block.objects.filter(height__gte=height_shift, height__lt=last_height)
-
-    is_fork_exist = False
-    for idx, _block in enumerate(reversed(blocks)):
-        if 'found' in _block and _block['found'] is False:
-            continue
-
-        b = Block()
-        b.from_json(_block)
-
-        fork_counter = 0
-        is_block_not_exist = False
-
-        if not is_fork_exist:
-            for idItem, _blockItem in enumerate(reversed(blocks)):
-                if idItem > idx and str(_blockItem['height']) == str(b.height):
-                    fork_counter += 1
-            if fork_counter > 0:
-                f = Forks_event_detection()
-                f.from_json(b.height)
-                f.save()
-                is_fork_exist = True
-
-                to_height = last_height + 1
-                remaining_blocks = existing_blocks.filter(height__gte=str(b.height), height__lt=str(to_height))
-                remaining_blocks.delete()
-        else:
-            is_block_not_exist = existing_blocks.filter(height=b.height).count() == 0
-
-        if is_fork_exist or is_block_not_exist:
-            try:
-                b.save()
-            except IntegrityError as e:
-                b = Block.objects.get(height=b.height)
-                continue
-            fee = 0.0
-
-            for _input in _block['inputs']:
-                i = Input(block=b)
-                i.from_json(_input)
-                i.save()
-
-            for _output in _block['outputs']:
-                o = Output(block=b)
-                o.from_json(_output)
-                o.save()
-
-            for _kernel in _block['kernels']:
-                k = Kernel(block=b)
-                k.from_json(_kernel)
-
-                fee = fee + k.fee
-
-                k.save()
-
-            b.fee = fee
-            b.save()
-
-    return Response('ok', status=HTTP_200_OK)
+        block = blocks.annotate(summ=Count('outputs', distinct=True) + Count('inputs', distinct=True)
+                                     + Count('kernels', distinct=True)).latest('summ')
+        serializer = BlockSerializer(block)
+        return Response(serializer.data, status=HTTP_200_OK)
+    else:
+        return Response({'Incorrect access key'}, status=404)
 
 
 @api_view(['GET'])
