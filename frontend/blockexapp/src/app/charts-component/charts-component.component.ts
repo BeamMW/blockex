@@ -35,6 +35,7 @@ export class ChartsComponent implements OnInit {
   feeChart : any;
   chart : any;
   chartLoading : boolean = false;
+  request: any;
 
   chartsData = {
       range: [],
@@ -101,7 +102,7 @@ export class ChartsComponent implements OnInit {
   }
 
   chartUpdate(newRange, chart, type) {
-    this.dataService.loadBlocksRange(newRange).subscribe((data) => {
+    this.request = this.dataService.loadBlocksRange(newRange).subscribe((data) => {
       this.chartsData.range.length = 0;
       this.chartsData.dates.length = 0;
       this.chartsData.difficulty.length = 0;
@@ -142,10 +143,16 @@ export class ChartsComponent implements OnInit {
   }
 
   blocksPeriodChange(e) {
+    if (this.request) {
+      this.request.unsubscribe();
+    }
     this.chartUpdate(e.num, this.charts[0], 'blocks')
   }
 
   feePeriodChange(e) {
+    if (this.request) {
+      this.request.unsubscribe();
+    }
     this.chartUpdate(e.num, this.charts[1], 'fee')
   }
 
