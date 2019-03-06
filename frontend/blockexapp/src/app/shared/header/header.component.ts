@@ -12,10 +12,12 @@ import {environment} from "../../../environments/environment";
 export class HeaderComponent implements OnInit {
 
   isMainnet: boolean = false;
+  isMasternet: boolean = false;
 
   constructor(private dataService: DataService, private router: Router) {}
 
   ngOnInit() {
+    this.isMasternet = environment.masternet
     this.isMainnet = environment.production;
   }
 

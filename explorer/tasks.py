@@ -189,7 +189,11 @@ def update_blockchain():
                 b.save()
 
     _redis.set('beam_blockex_last_height', current_height)
-    _redis.delete('graph_data')
+    _redis.delete("daily_graph_data")
+    _redis.delete("weekly_graph_data")
+    _redis.delete("monthly_graph_data")
+    _redis.delete("yearly_graph_data")
+    _redis.delete("all_graph_data")
     _redis.delete('block_data')
     _redis.delete('coins_in_circulation_mined')
     _redis.delete('total_coins_in_circulation')

@@ -58,7 +58,7 @@ export class ChartsComponent implements OnInit {
 
   CHARTS = {
       DIFFICULTY: {name: "Average difficulty"},
-      HASHRATE: {name: "Hashrate"},
+      HASHRATE: {name: "Average hashrate"},
       BLOCKS: {name: "Blocks per hour"},
       FIXED: {name: "Fixed 60 blocks"},
       BLOCKS_AVERAGE: {name: "Average blocks"}
@@ -66,7 +66,7 @@ export class ChartsComponent implements OnInit {
 
   blocksChartTypes = [
       {num: 1, name: "BLOCKS AND DIFFICULTY", tooltip: "Average difficulty", isSelected: true},
-      {num: 0, name: "BLOCKS AND HASH RATE", tooltip: "Hashrate", isSelected: false}
+      {num: 0, name: "BLOCKS AND HASH RATE", tooltip: "Average hashrate", isSelected: false}
   ];
 
   selectedPeriodBlocks = this.chartPeriods[1];
@@ -143,14 +143,14 @@ export class ChartsComponent implements OnInit {
   }
 
   blocksPeriodChange(e) {
-    if (this.request) {
+    if (this.request !== undefined) {
       this.request.unsubscribe();
     }
     this.chartUpdate(e.num, this.charts[0], 'blocks')
   }
 
   feePeriodChange(e) {
-    if (this.request) {
+    if (this.request !== undefined) {
       this.request.unsubscribe();
     }
     this.chartUpdate(e.num, this.charts[1], 'fee')
@@ -184,7 +184,7 @@ export class ChartsComponent implements OnInit {
         unselectedType.remove(true);
 
         this.charts[0].addSeries({
-          name: 'Hashrate',
+          name: 'Average hashrate',
           data: this.chartsData.hashrate,
           marker: {
             fillColor: 'rgba(255,255,255,0)',
@@ -438,7 +438,7 @@ export class ChartsComponent implements OnInit {
         lineColor: '#ff51ff',
         gridLineColor: 'rgba(255, 255, 255, 0.1)',
         title: {
-          text: 'Fee, groth',
+          text: 'Transaction fee',
           margin: 34,
           style: {
             'font-size': '12px',
@@ -535,7 +535,7 @@ export class ChartsComponent implements OnInit {
           symbol: 'circle',
           lineColor: null
         },
-        name: 'Fee, Groth',
+        name: 'Transaction fee, groths',
         color: '#00e2c2',
         data: this.chartsData.fee,
       }],
