@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import { DataService } from '../services';
-import { Router} from '@angular/router';
+import { Router, NavigationEnd} from '@angular/router';
 import { routesConsts } from "../consts";
 import {environment} from "../../environments/environment";
 
@@ -11,6 +11,7 @@ import {environment} from "../../environments/environment";
   styleUrls: ['./block-details.component.css']
 })
 export class BlockDetailsComponent implements OnInit {
+  @ViewChild('kernel') public kernel: ElementRef;
 
   block: any;
   loading_block: boolean = false;
@@ -25,13 +26,18 @@ export class BlockDetailsComponent implements OnInit {
     block: ['name', 'value']
   };
 
-  constructor(
-      private router: Router,
-      private dataService: DataService,
-      private route: ActivatedRoute) {
-    route.queryParams.subscribe(params => {
-      this.searchedBy = params.searched_by;
-    });
+  constructor(private router: Router, private dataService: DataService, private route: ActivatedRoute) {
+    /*route.queryParams.subscribe(params => {
+      if (params.searched_by !== undefined) {
+        this.searchedBy = params.searched_by;
+      }
+
+      this.kernel.nativeElement.scrollIntoView({ behavior: 'smooth' })
+
+      if (this.kernel !== undefined) {
+        this.kernel.nativeElement.scrollIntoView({behavior: "smooth"});
+      }
+    });*/
   }
 
   backToExplorer() {
@@ -41,7 +47,26 @@ export class BlockDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.searchedBy = this.route.snapshot.queryParamMap.get('searched_by');
+    let searchedItem = this.route.snapshot.queryParamMap.get('searched_by');
+    if (searchedItem) {
+      this.searchedBy = searchedItem;
+    }
+/*
+    this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) {
+            const tree = this.router.parseUrl(this.router.url);
+            if (tree.queryParams["searched_by"]) {
+                const element = document.querySelector('#' + tree.queryParams["searched_by"]);
+                if (element) {
+                    setTimeout(() => {
+                        element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
+                    }, 500 );
+                }
+            }
+         }
+    });
+*/
+
     this.isMainnet = environment.production;
     this.loading_block = true;
     this.block = {
@@ -68,8 +93,19 @@ export class BlockDetailsComponent implements OnInit {
         this.block.inputs = blockItem.inputs;
         this.block.outputs = blockItem.outputs;
         this.block.kernels = blockItem.kernels;
+        this.loading_block = false;
+
+/*
+        setTimeout(() => {
+
+          let element =  document.querySelector('#' + this.searchedBy);
+
+          element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
+          //this.kernel.nativeElement.scrollIntoView({ behavior: 'smooth' })
+        }, 1000)
+*/
+
       });
-      this.loading_block = false;
     });
   }
 

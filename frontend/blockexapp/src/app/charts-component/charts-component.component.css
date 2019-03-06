@@ -37,7 +37,7 @@
 
 .blocks-chart-title {
     height: 20px;
-    padding-left: 55px;
+    padding-left: 81px;
     padding-right: 50px;
     margin-bottom: 30px;
 }
@@ -56,13 +56,14 @@
 
 .fee-chart-title {
     margin-bottom: 30px;
+    padding-right: 12px;
 }
 
 .fee-chart-title .title {
     margin-left: 103px;
     font-family: ProximaNova;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
@@ -240,8 +241,10 @@
 }
 
 :host ::ng-deep.tooltip-line-color {
-    margin-left: 14px;
-    margin-top: 10px;
+    margin-left: 2px;
+    margin-top: 14px;
+    height: 2px;
+    width: 20px;
     float: left;
 }
 
@@ -251,11 +254,11 @@
     float: left;
     font-family: ProximaNova;
     font-size: 12px;
-    font-weight: normal;
+    font-weight: 300;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.4px;
     color: #ffffff;
 }
 
@@ -265,11 +268,11 @@
     float: left;
     font-family: ProximaNova;
     font-size: 12px;
-    font-weight: normal;
+    font-weight: 300;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.4px;
     color: #ffffff;
 }
 
@@ -279,7 +282,7 @@
     float: left;
     font-family: ProximaNova;
     font-size: 20px;
-    font-weight: normal;
+    font-weight: 300;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
@@ -299,6 +302,10 @@
 
 .blocks-chart-area {
     z-index: 1;
+}
+
+.fee-chart-area {
+  margin-right: 9px;
 }
 
 .arrow-down-small {

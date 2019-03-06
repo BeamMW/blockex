@@ -97,7 +97,7 @@
           </div>
         </mat-expansion-panel>
 
-        <mat-expansion-panel class="expansion-data-panel">
+        <mat-expansion-panel class="expansion-data-panel" [expanded]="searchedBy.length > 0">
           <mat-expansion-panel-header class="expansion-data-header" [class.mainnet]=isMainnet
                              [class.testnet]=!isMainnet>
             <mat-panel-title class="expansion-data-title">
@@ -109,7 +109,7 @@
             <ng-container matColumnDef="fee">
               <mat-header-cell *matHeaderCellDef> Fee: </mat-header-cell>
               <mat-cell *matCellDef="let element" [class.searched-by]="element.kernel_id == searchedBy">
-                <span class="mobile-label">Fee:</span>
+                <span class="mobile-label" [attr.id]="element.kernel_id">Fee:</span>
                 <span class="fee-cell">{{element.fee}}</span>
               </mat-cell>
             </ng-container>

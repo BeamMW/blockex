@@ -18,12 +18,6 @@
       </div>
     </div>
 
-    <!--<span class="title">-->
-        <!--<select class="title-selector" -->
-              <!--[(ngModel)]="selectedBlocksChartType">-->
-            <!--<option *ngFor="let p of blocksChartTypes" [ngValue]="p">{{p.name}}</option>-->
-        <!--</select>-->
-    <!--</span>-->
     <span class="period-selector-blocks">
       <span class="period-title">Period: </span>
       <select class="period-selector" (ngModelChange)="blocksPeriodChange($event)"
@@ -35,7 +29,7 @@
   </div>
   <div class="blocks-chart-area" #charts></div>
 </div>
-<div #feeChart id="fee-chart">
+<div id="fee-chart">
   <div class="fee-chart-title" *ngIf="!chartLoading">
     <span class="title"> FEE </span>
     <span class="period-selector-fee">
@@ -47,4 +41,5 @@
 
     </span>
   </div>
+  <div #feeChart class="fee-chart-area"></div>
 </div>

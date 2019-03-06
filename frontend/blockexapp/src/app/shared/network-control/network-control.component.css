@@ -1,5 +1,5 @@
 .network-control-elem {
-    margin: 40px auto auto;
+    margin: 41px auto auto;
     left: 0;
     right: 0;
     position: absolute;
@@ -17,6 +17,7 @@
     display: none;
 }
 .onoffswitch-label {
+    height: 29px !important;
     display: block;
     overflow: hidden;
     cursor: pointer;
@@ -71,7 +72,7 @@
 
 .onoffswitch-switch {
     width: 145px;
-    height: 33px;
+    height: 31px;
     border-radius: 15.5px;
     border: none;
     box-shadow: 0 2px 7px 0 #00163a;
@@ -99,7 +100,7 @@
     right: -2px;
     top: -1px;
     width: 125px;
-    height: 33px;
+    height: 31px;
     border: none;
     border-radius: 15.5px;
     box-shadow: 0 2px 7px 0 #00163a;

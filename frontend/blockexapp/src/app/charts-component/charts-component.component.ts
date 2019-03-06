@@ -228,7 +228,7 @@ export class ChartsComponent implements OnInit {
 
     let averageBlocks = this.selectedPeriodBlocks.approximateCoefficient > 1
       ? data.length / (this.chartsData.range.length * this.selectedPeriodBlocks.approximateCoefficient)
-      : data.length / (this.chartsData.range.length * this.selectedPeriodBlocks.approximateCoefficient);
+      : data.length / (this.chartsData.range.length);
     this.chartsData.dates.map((item) => {
       this.chartsData.averageBlocks.push([item, averageBlocks]);
     });
@@ -248,10 +248,10 @@ export class ChartsComponent implements OnInit {
         gridLineColor: 'rgba(255, 255, 255, 0.1)',
         title: {
           text: 'Blocks per hour',
-          margin: 34,
+          margin: 24,
           style: {
             'font-size': '12px',
-            'font-weight': '600',
+            'font-weight': '500',
             'font-style': 'normal',
             'font-stretch': 'normal',
             'line-height': 'normal',
@@ -282,7 +282,7 @@ export class ChartsComponent implements OnInit {
           margin: 34,
           style: {
             'font-size': '12px',
-            'font-weight': '600',
+            'font-weight': '500',
             'font-style': 'normal',
             'font-stretch': 'normal',
             'line-height': 'normal',
@@ -358,7 +358,7 @@ export class ChartsComponent implements OnInit {
         formatter: function () {
             let date = new Date(this.x);
             return '<div class="chart-tooltip-container">' +
-              '<div class="tooltip-line-color" style="color:'+this.color+'">\u25CF</div>' +
+              '<div class="tooltip-line-color" style="background-color:'+this.color+'"></div>' +
               '<div class="tooltip-title">' + this.series.name + '</div>' +
               '<div class="tooltip-date">' + date.getDate() + ' ' +
                   new Intl.DateTimeFormat('en-US', {month:"long"}).format(date) + ' ' +
@@ -408,7 +408,7 @@ export class ChartsComponent implements OnInit {
         data: this.chartsData.averageBlocks
       }],
       chart: {
-        width: 580,
+        width: 595,
         height: 430,
         marginBottom: 100,
         backgroundColor: 'rgba(255,255,255,0)',
@@ -434,7 +434,7 @@ export class ChartsComponent implements OnInit {
           margin: 34,
           style: {
             'font-size': '12px',
-            'font-weight': '600',
+            'font-weight': '500',
             'font-style': 'normal',
             'font-stretch': 'normal',
             'line-height': 'normal',
@@ -510,7 +510,7 @@ export class ChartsComponent implements OnInit {
         formatter: function () {
             let date = new Date(this.x);
             return '<div class="chart-tooltip-container">' +
-              '<div class="tooltip-line-color" style="color:'+this.color+'">\u25CF</div>' +
+              '<div class="tooltip-line-color" style="background-color:'+this.color+'"></div>' +
               '<div class="tooltip-title">' + this.series.name + '</div>' +
               '<div class="tooltip-date">' + date.getDate() + ' ' +
               new Intl.DateTimeFormat('en-US', {month:"long"}).format(date) + ' ' +
@@ -532,7 +532,7 @@ export class ChartsComponent implements OnInit {
       }],
       chart: {
         float: 'left',
-        width: 580,
+        width: 595,
         height: 430,
         marginBottom: 100,
         backgroundColor: 'rgba(255,255,255,0)',
