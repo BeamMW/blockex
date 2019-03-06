@@ -18,6 +18,7 @@ export class BlockDetailsComponent implements OnInit {
   notFound: boolean = false;
   isMainnet: boolean = false;
   searchedBy = '';
+  kernelsExpanded: boolean = false;
 
   displayedColumns: any = {
     kernels: ['fee', 'excess', 'id'],
@@ -27,17 +28,21 @@ export class BlockDetailsComponent implements OnInit {
   };
 
   constructor(private router: Router, private dataService: DataService, private route: ActivatedRoute) {
-    /*route.queryParams.subscribe(params => {
+    route.queryParams.subscribe(params => {
       if (params.searched_by !== undefined) {
         this.searchedBy = params.searched_by;
+        setTimeout(() => {
+          this.searchedBy = '';
+        }, 5000);
+        this.kernelsExpanded = true;
       }
-
+/*
       this.kernel.nativeElement.scrollIntoView({ behavior: 'smooth' })
 
       if (this.kernel !== undefined) {
         this.kernel.nativeElement.scrollIntoView({behavior: "smooth"});
-      }
-    });*/
+      }*/
+    });
   }
 
   backToExplorer() {
@@ -50,6 +55,10 @@ export class BlockDetailsComponent implements OnInit {
     let searchedItem = this.route.snapshot.queryParamMap.get('searched_by');
     if (searchedItem) {
       this.searchedBy = searchedItem;
+      setTimeout(() => {
+        this.searchedBy = '';
+      }, 5000);
+      this.kernelsExpanded = true;
     }
 /*
     this.router.events.subscribe(event => {

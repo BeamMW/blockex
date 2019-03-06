@@ -359,6 +359,7 @@ export class ChartsComponent implements OnInit {
             let date = new Date(this.x);
             return '<div class="chart-tooltip-container">' +
               '<div class="tooltip-line-color" style="background-color:'+this.color+'"></div>' +
+              '<div class="tooltip-line-circle" style="background-color:'+this.color+'"></div>' +
               '<div class="tooltip-title">' + this.series.name + '</div>' +
               '<div class="tooltip-date">' + date.getDate() + ' ' +
                   new Intl.DateTimeFormat('en-US', {month:"long"}).format(date) + ' ' +
@@ -408,7 +409,7 @@ export class ChartsComponent implements OnInit {
         data: this.chartsData.averageBlocks
       }],
       chart: {
-        width: 595,
+        width: 535,
         height: 430,
         marginBottom: 100,
         backgroundColor: 'rgba(255,255,255,0)',
@@ -532,7 +533,7 @@ export class ChartsComponent implements OnInit {
       }],
       chart: {
         float: 'left',
-        width: 595,
+        width: 535,
         height: 430,
         marginBottom: 100,
         backgroundColor: 'rgba(255,255,255,0)',

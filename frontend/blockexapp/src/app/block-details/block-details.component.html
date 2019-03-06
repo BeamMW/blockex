@@ -97,7 +97,7 @@
           </div>
         </mat-expansion-panel>
 
-        <mat-expansion-panel class="expansion-data-panel" [expanded]="searchedBy.length > 0">
+        <mat-expansion-panel class="expansion-data-panel" [expanded]="kernelsExpanded">
           <mat-expansion-panel-header class="expansion-data-header" [class.mainnet]=isMainnet
                              [class.testnet]=!isMainnet>
             <mat-panel-title class="expansion-data-title">

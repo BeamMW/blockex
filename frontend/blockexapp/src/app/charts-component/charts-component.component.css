@@ -248,13 +248,23 @@
     float: left;
 }
 
+:host ::ng-deep.tooltip-line-circle {
+    height: 5px;
+    width: 5px;
+    top: 13px;
+    left: 9px;
+    position: absolute;
+    content: "";
+    border-radius: 5px;
+}
+
 :host ::ng-deep.tooltip-title {
     margin-left: 8px;
     margin-top: 10px;
     float: left;
     font-family: ProximaNova;
     font-size: 12px;
-    font-weight: 300;
+    font-weight: 100;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
@@ -268,7 +278,7 @@
     float: left;
     font-family: ProximaNova;
     font-size: 12px;
-    font-weight: 300;
+    font-weight: 100;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
