@@ -512,6 +512,7 @@ export class ChartsComponent implements OnInit {
             let date = new Date(this.x);
             return '<div class="chart-tooltip-container">' +
               '<div class="tooltip-line-color" style="background-color:'+this.color+'"></div>' +
+              '<div class="tooltip-line-circle" style="background-color:'+this.color+'"></div>' +
               '<div class="tooltip-title">' + this.series.name + '</div>' +
               '<div class="tooltip-date">' + date.getDate() + ' ' +
               new Intl.DateTimeFormat('en-US', {month:"long"}).format(date) + ' ' +
