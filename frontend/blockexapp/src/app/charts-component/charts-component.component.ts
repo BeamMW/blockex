@@ -36,6 +36,7 @@ export class ChartsComponent implements OnInit {
   chart : any;
   chartLoading : boolean = false;
   request: any;
+  tempChartData: any;
 
   chartsData = {
       range: [],
@@ -163,38 +164,38 @@ export class ChartsComponent implements OnInit {
       this.selectedBlocksChartType = selectedType;
 
       if (selectedType.num == this.blocksChartTypes[0].num) {
+        if (this.tempChartData !== undefined) {
+          this.chartsData.difficulty = this.tempChartData;
+        }
+        this.tempChartData = this.chartsData.hashrate.slice(0, this.chartsData.hashrate.length);
+        this.charts[0].series.find(item => {
+           return item.name == this.CHARTS.HASHRATE.name
+        }).setData( this.chartsData.difficulty, true);
+        this.charts[0].redraw();
+
         let unselectedType = this.charts[0].series.find(item => item.name == this.blocksChartTypes[1].tooltip);
-        unselectedType.remove(true);
-
-        this.charts[0].addSeries({
-          marker: {
-            fillColor: 'rgba(255,255,255,0)',
-            lineWidth: 2,
-            radius: 1,
-            symbol: 'circle',
-            lineColor: null
-          },
-          name: 'Average difficulty',
-          color: '#ff51ff',
-          data: this.chartsData.difficulty,
-          yAxis: 1
+        unselectedType.update( {name: this.CHARTS.DIFFICULTY.name});
+        this.charts[0].yAxis[1].update({
+            title:{
+                text: this.CHARTS.DIFFICULTY.name
+            }
         });
-      } else if (selectedType.num == this.blocksChartTypes[1].num) {
-        let unselectedType = this.charts[0].series.find(item => item.name == this.blocksChartTypes[0].tooltip);
-        unselectedType.remove(true);
+       } else if (selectedType.num == this.blocksChartTypes[1].num) {
+        if (this.tempChartData !== undefined) {
+          this.chartsData.hashrate = this.tempChartData;
+        }
+        this.tempChartData = this.chartsData.difficulty.slice(0, this.chartsData.difficulty.length);
+        this.charts[0].series.find(item => {
+          return item.name == this.CHARTS.DIFFICULTY.name
+        }).setData( this.chartsData.hashrate, true);
+        this.charts[0].redraw();
 
-        this.charts[0].addSeries({
-          name: 'Average hashrate',
-          data: this.chartsData.hashrate,
-          marker: {
-            fillColor: 'rgba(255,255,255,0)',
-            lineWidth: 2,
-            radius: 1,
-            symbol: 'circle',
-            lineColor: null
-          },
-          color: '#ff51ff',
-          yAxis: 1
+        let unselectedType = this.charts[0].series.find(item => item.name == this.blocksChartTypes[0].tooltip);
+        unselectedType.update( {name: this.CHARTS.HASHRATE.name});
+        this.charts[0].yAxis[1].update({
+            title:{
+                text: this.CHARTS.HASHRATE.name
+            }
         });
       }
     }
@@ -321,7 +322,11 @@ export class ChartsComponent implements OnInit {
         gridLineColor: 'rgba(255, 255, 255, 0.1)',
         gridLineWidth: 1,
         labels: {
-          format: '{value:%b-%e}',
+          formatter: function () {
+            let date = new Date(this.value);
+            return new Intl.DateTimeFormat('en-US', {month:"short"}).format(date)
+              + ' ' + date.getDate();
+          },
           style: {
             'opacity': '0.5',
             'font-size': '12px',
@@ -372,7 +377,7 @@ export class ChartsComponent implements OnInit {
                   new Intl.DateTimeFormat('en-US', {month:"long"}).format(date) + ' ' +
                   date.getFullYear() + ', ' + (date.getHours() < 10 ? '0' : '') + date.getHours()
                   + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes()  + '</div>' +
-              '<div class="tooltip-value">' + this.y.toFixed(0) + '</div></div>';
+              '<div class="tooltip-value">' + this.y.toLocaleString('en-US', {maximumFractionDigits: 0}) + '</div></div>';
         }
       },
       series: [{
@@ -419,6 +424,7 @@ export class ChartsComponent implements OnInit {
         width: 535,
         height: 430,
         marginBottom: 100,
+        ignoreHiddenSeries: false,
         backgroundColor: 'rgba(255,255,255,0)',
         style: {
           fontFamily: 'ProximaNova',
@@ -474,7 +480,11 @@ export class ChartsComponent implements OnInit {
         gridLineColor: 'rgba(255, 255, 255, 0.1)',
         gridLineWidth: 1,
         labels: {
-          format: '{value:%b-%e}',
+          formatter: function () {
+            let date = new Date(this.value);
+            return new Intl.DateTimeFormat('en-US', {month:"short"}).format(date)
+              + ' ' + date.getDate();
+          },
           style: {
             'opacity': '0.5',
             'font-size': '12px',
@@ -524,7 +534,7 @@ export class ChartsComponent implements OnInit {
               '<div class="tooltip-date">' + date.getDate() + ' ' +
               new Intl.DateTimeFormat('en-US', {month:"long"}).format(date) + ' ' +
               date.getFullYear() + ', ' + date.getHours() + ':' + date.getMinutes() + '</div>' +
-              '<div class="tooltip-value">' + this.y.toLocaleString() + '</div></div>';
+              '<div class="tooltip-value">' + this.y.toLocaleString('en-US', {maximumFractionDigits: 0}) + '</div></div>';
         }
       },
       series: [{
@@ -544,6 +554,7 @@ export class ChartsComponent implements OnInit {
         width: 535,
         height: 430,
         marginBottom: 100,
+        ignoreHiddenSeries: false,
         backgroundColor: 'rgba(255,255,255,0)',
         style: {
           fontFamily: 'ProximaNova',
