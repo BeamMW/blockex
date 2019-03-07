@@ -18,6 +18,8 @@ export class BlockDetailsComponent implements OnInit {
   notFound: boolean = false;
   isMainnet: boolean = false;
   searchedBy = '';
+  isFadein = true;
+
   kernelsExpanded: boolean = false;
 
   displayedColumns: any = {
@@ -31,17 +33,21 @@ export class BlockDetailsComponent implements OnInit {
     route.queryParams.subscribe(params => {
       if (params.searched_by !== undefined) {
         this.searchedBy = params.searched_by;
+        this.isFadein = true;
         setTimeout(() => {
-          this.searchedBy = '';
+          this.isFadein = false;
         }, 5000);
         this.kernelsExpanded = true;
       }
-/*
-      this.kernel.nativeElement.scrollIntoView({ behavior: 'smooth' })
-
-      if (this.kernel !== undefined) {
-        this.kernel.nativeElement.scrollIntoView({behavior: "smooth"});
-      }*/
+      setTimeout(() => {
+          let element = null;
+          if(this.searchedBy.length > 0) {
+            element = document.querySelector("[id='"+this.searchedBy+"']");
+          }
+          if (element) {
+            element.scrollIntoView({behavior: 'smooth'});
+          }
+        }, 300)
     });
   }
 
@@ -54,27 +60,13 @@ export class BlockDetailsComponent implements OnInit {
   ngOnInit() {
     let searchedItem = this.route.snapshot.queryParamMap.get('searched_by');
     if (searchedItem) {
+      this.isFadein = true;
       this.searchedBy = searchedItem;
       setTimeout(() => {
-        this.searchedBy = '';
+        this.isFadein = false;
       }, 5000);
       this.kernelsExpanded = true;
     }
-/*
-    this.router.events.subscribe(event => {
-        if (event instanceof NavigationEnd) {
-            const tree = this.router.parseUrl(this.router.url);
-            if (tree.queryParams["searched_by"]) {
-                const element = document.querySelector('#' + tree.queryParams["searched_by"]);
-                if (element) {
-                    setTimeout(() => {
-                        element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
-                    }, 500 );
-                }
-            }
-         }
-    });
-*/
 
     this.isMainnet = environment.production;
     this.loading_block = true;
@@ -104,16 +96,16 @@ export class BlockDetailsComponent implements OnInit {
         this.block.kernels = blockItem.kernels;
         this.loading_block = false;
 
-/*
+
         setTimeout(() => {
-
-          let element =  document.querySelector('#' + this.searchedBy);
-
-          element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
-          //this.kernel.nativeElement.scrollIntoView({ behavior: 'smooth' })
-        }, 1000)
-*/
-
+          let element = null;
+          if(this.searchedBy.length > 0) {
+            element = document.querySelector("[id='"+this.searchedBy+"']");
+          }
+          if (element) {
+            element.scrollIntoView({behavior: 'smooth'});
+          }
+        }, 300)
       });
     });
   }
