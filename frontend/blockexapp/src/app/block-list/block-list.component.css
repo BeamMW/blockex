@@ -235,7 +235,7 @@
 
 
 @media(max-width: 600px) {
-  .mobile-label {
+ /* .mobile-label {
       width: 80px;
       display: inline-block;
       font-weight: bold;
@@ -266,5 +266,5 @@
 
   .actions-cell {
       display: none;
-  }
+  }*/
 }

@@ -8,6 +8,6 @@
       </div>
       <app-network-control *ngIf="!isMasternet"></app-network-control>
       <input autocomplete="off" placeholder="Search by height, hash, kernel ID..."
-             type="search" #searchInput (keyup.enter)="searchProcess(searchInput.value)" id="searchInput"/>
+             type="search" #searchInput (keyup.enter)="searchProcess(searchInput)" id="searchInput"/>
     </div>
 </mat-toolbar>

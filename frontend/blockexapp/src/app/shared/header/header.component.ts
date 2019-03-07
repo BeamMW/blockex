@@ -27,7 +27,9 @@ export class HeaderComponent implements OnInit {
       );
   }
 
-  searchProcess(searchValue) {
+  searchProcess(input) {
+      let searchValue = input.value;
+      input.value = '';
       this.dataService.searchBlock(searchValue).subscribe((blockItem) => {
         if (blockItem.found !== undefined && !blockItem.found) {
           this.router.navigate(

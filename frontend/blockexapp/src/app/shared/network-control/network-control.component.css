@@ -106,3 +106,9 @@
     box-shadow: 0 2px 7px 0 #00163a;
     background-image: linear-gradient(282deg, #8e54ff, #a479f8);
 }
+
+@media(max-width: 600px) {
+  .network-control-elem {
+      margin: 41px 0 0 395px;
+  }
+}
