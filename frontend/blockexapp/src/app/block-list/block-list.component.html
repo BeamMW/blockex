@@ -107,11 +107,14 @@
 <!-- Top blocks section-->
 <div *ngIf="!loading_status">
   <!--[pageSizeOptions]="pageSizeOptions"-->
-  <mat-paginator [class.blocks-table-paginator-mainnet]=isMainnet
-                 [class.blocks-table-paginator-testnet]=!isMainnet
-                 [pageSize]="20" [pageIndex]="page" [length]="count"
-                 (page)="pageEvent = loadBlocks($event)" showFirstLastButtons></mat-paginator>
-  <div class="table-container" *ngIf="!loading_blocks">
+    <div [class.paginator-wrapper-mainnet]=isMainnet
+         [class.paginator-wrapper-testnet]=!isMainnet>
+        <mat-paginator [class.blocks-table-paginator-mainnet]=isMainnet
+                   [class.blocks-table-paginator-testnet]=!isMainnet
+                   [pageSize]="20" [pageIndex]="page" [length]="count"
+                   (page)="pageEvent = loadBlocks($event)" showFirstLastButtons></mat-paginator>
+    </div>
+    <div class="table-container" *ngIf="!loading_blocks">
     <mat-table [dataSource]="dataSource" class="blocks-table mat-elevation-z8">
       <!-- Height Column -->
       <ng-container matColumnDef="height">

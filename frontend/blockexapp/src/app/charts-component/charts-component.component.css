@@ -243,7 +243,7 @@
 :host ::ng-deep.tooltip-line-color {
     margin-left: 2px;
     margin-top: 14px;
-    height: 2px;
+    position: absolute;
     width: 20px;
     float: left;
 }
@@ -251,16 +251,16 @@
 :host ::ng-deep.tooltip-line-circle {
     height: 5px;
     width: 5px;
-    top: 13px;
-    left: 9px;
+    top: 19px;
+    left: 11px;
     position: absolute;
     content: "";
     border-radius: 5px;
 }
 
 :host ::ng-deep.tooltip-title {
-    margin-left: 8px;
-    margin-top: 10px;
+    margin-left: 30px;
+    margin-top: 15px;
     float: left;
     font-family: ProximaNova;
     font-size: 12px;
@@ -329,7 +329,7 @@
 /* chart type selector */
 
 .chart-type-selector {
-    margin-top: 5px;
+    margin-top: 4px;
     z-index: 10;
     font-family: ProximaNova;
     font-size: 12px;

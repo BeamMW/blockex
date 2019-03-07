@@ -18,28 +18,26 @@
       </div>
     </div>
 
-    <span class="period-selector-blocks">
-      <span class="period-title">Period: </span>
-      <select class="period-selector" (ngModelChange)="blocksPeriodChange($event)"
-              [(ngModel)]="selectedPeriodBlocks">
-          <option *ngFor="let p of chartPeriods" [ngValue]="p">{{p.name}}</option>
-      </select>
-
-    </span>
+    <!--<span class="period-selector-blocks">-->
+      <!--<span class="period-title">Period: </span>-->
+      <!--<select class="period-selector" (ngModelChange)="blocksPeriodChange($event)"-->
+              <!--[(ngModel)]="selectedPeriodBlocks">-->
+          <!--<option *ngFor="let p of chartPeriods" [ngValue]="p">{{p.name}}</option>-->
+      <!--</select>-->
+    <!--</span>-->
   </div>
   <div class="blocks-chart-area" #charts></div>
 </div>
 <div id="fee-chart">
   <div class="fee-chart-title" *ngIf="!chartLoading">
     <span class="title"> TRANSACTION FEE </span>
-    <span class="period-selector-fee">
-      <span class="period-title">Period: </span>
-      <select class="period-selector" (ngModelChange)="feePeriodChange($event)"
-              [(ngModel)]="selectedPeriodFee">
-        <option *ngFor="let p of chartPeriods" [ngValue]="p">{{p.name}}</option>
-      </select>
-
-    </span>
+    <!--<span class="period-selector-fee">-->
+      <!--<span class="period-title">Period: </span>-->
+      <!--<select class="period-selector" (ngModelChange)="feePeriodChange($event)"-->
+              <!--[(ngModel)]="selectedPeriodFee">-->
+        <!--<option *ngFor="let p of chartPeriods" [ngValue]="p">{{p.name}}</option>-->
+      <!--</select>-->
+    <!--</span>-->
   </div>
   <div #feeChart class="fee-chart-area"></div>
 </div>

@@ -56,7 +56,7 @@ def get_block_range(request):
             _redis.set('latest_block_height', latest_block_height)
 
         if range > 0:
-            from_height = int(latest_block_height) - range * 1440
+            from_height = int(latest_block_height) - 4 * 1440
         else:
             from_height = 0
         to_height = int(latest_block_height)

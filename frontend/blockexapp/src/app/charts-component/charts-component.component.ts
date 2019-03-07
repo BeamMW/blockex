@@ -59,7 +59,7 @@ export class ChartsComponent implements OnInit {
 
   CHARTS = {
       DIFFICULTY: {name: "Average difficulty"},
-      HASHRATE: {name: "Average hashrate"},
+      HASHRATE: {name: "Average hash rate"},
       BLOCKS: {name: "Blocks per hour"},
       FIXED: {name: "Fixed 60 blocks"},
       BLOCKS_AVERAGE: {name: "Average blocks"}
@@ -67,7 +67,7 @@ export class ChartsComponent implements OnInit {
 
   blocksChartTypes = [
       {num: 1, name: "BLOCKS AND DIFFICULTY", tooltip: "Average difficulty", isSelected: true},
-      {num: 0, name: "BLOCKS AND HASH RATE", tooltip: "Average hashrate", isSelected: false}
+      {num: 0, name: "BLOCKS AND HASH RATE", tooltip: "Average hash rate", isSelected: false}
   ];
 
   selectedPeriodBlocks = this.chartPeriods[1];
@@ -370,7 +370,7 @@ export class ChartsComponent implements OnInit {
         formatter: function () {
             let date = new Date(this.x);
             return '<div class="chart-tooltip-container">' +
-              '<div class="tooltip-line-color" style="background-color:'+this.color+'"></div>' +
+              '<span class="tooltip-line-color" style="color:'+this.color+';">\u2015\u2015</span>' +
               '<div class="tooltip-line-circle" style="background-color:'+this.color+'"></div>' +
               '<div class="tooltip-title">' + this.series.name + '</div>' +
               '<div class="tooltip-date">' + date.getDate() + ' ' +
@@ -386,7 +386,7 @@ export class ChartsComponent implements OnInit {
           lineWidth: 2,
           radius: 1,
           symbol: 'circle',
-          lineColor: null
+          lineColor: '#24c1ff'
         },
         name: 'Blocks per hour',
         color: '#24c1ff',
@@ -397,7 +397,7 @@ export class ChartsComponent implements OnInit {
           lineWidth: 2,
           radius: 1,
           symbol: 'circle',
-          lineColor: null
+          lineColor: '#ff51ff'
         },
         name: 'Average difficulty',
         color: '#ff51ff',
@@ -405,6 +405,7 @@ export class ChartsComponent implements OnInit {
         yAxis: 1
       }, {
         marker: {
+          symbol: 'circle',
           enabled: false
         },
         lineWidth: 1,
@@ -413,6 +414,7 @@ export class ChartsComponent implements OnInit {
         data: this.chartsData.fixedLine
       }, {
         marker: {
+          symbol: 'circle',
           enabled: false
         },
         lineWidth: 1,
@@ -515,7 +517,7 @@ export class ChartsComponent implements OnInit {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        x: -40,
+        x: -10,
         y: -15
       },
       tooltip: {
@@ -528,7 +530,7 @@ export class ChartsComponent implements OnInit {
         formatter: function () {
             let date = new Date(this.x);
             return '<div class="chart-tooltip-container">' +
-              '<div class="tooltip-line-color" style="background-color:'+this.color+'"></div>' +
+              '<span class="tooltip-line-color" style="color:'+this.color+';">\u2015\u2015</span>' +
               '<div class="tooltip-line-circle" style="background-color:'+this.color+'"></div>' +
               '<div class="tooltip-title">' + this.series.name + '</div>' +
               '<div class="tooltip-date">' + date.getDate() + ' ' +

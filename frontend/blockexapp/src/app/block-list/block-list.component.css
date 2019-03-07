@@ -50,14 +50,23 @@
     background-color: rgb(251,251,251);
 }
 
+.paginator-wrapper-testnet {
+    background-color: rgba(76, 0, 131, 0.15);
+}
+
+.paginator-wrapper-mainnet {
+    background-color: rgba(76, 0, 131, 0.15);
+}
+
 .blocks-table-paginator-mainnet {
     padding-right: 95px;
     background-color: rgba(0, 86, 131, 0.15);
 }
 
 .blocks-table-paginator-testnet {
-    padding-right: 95px;
-    background-color: rgba(76, 0, 131, 0.15);
+    max-width: 1223px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0);
 }
 
 :host ::ng-deep.mat-paginator-page-size div:last-of-type {
@@ -155,8 +164,8 @@
 }
 
 .mat-table mat-row, mat-header-row, mat-footer-row {
-    padding-left: 9rem;
-    padding-right: 45px;
+    padding-left: 160px;
+    padding-right: 120px;
 }
 
 .height-cell,
@@ -196,6 +205,34 @@
 :host ::ng-deep.mat-paginator .mat-paginator-container:last-child{
     font-family: ProximaNova;
 }
+
+@media(max-width: 1440px) {
+  .mat-table mat-row, mat-header-row, mat-footer-row {
+      padding-left: 115px;
+      padding-right: 75px;
+  }
+}
+
+@media(max-width: 1330px) {
+  .mat-table mat-row, mat-header-row, mat-footer-row {
+      padding-left: 60px;
+      padding-right: 15px;
+  }
+}
+
+@media(max-width: 1220px) {
+  .mat-table mat-row, mat-header-row, mat-footer-row {
+      min-width: 1220px;
+  }
+}
+
+@media(max-width: 1150px) {
+  .mat-table mat-row, mat-header-row, mat-footer-row {
+      padding-left: 0;
+      padding-right: 0;
+  }
+}
+
 
 @media(max-width: 600px) {
   .mobile-label {
