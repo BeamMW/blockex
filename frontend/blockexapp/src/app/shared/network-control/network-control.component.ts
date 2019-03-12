@@ -12,6 +12,7 @@ export class NetworkControlComponent implements OnInit {
   placeholder: string;
   status: boolean = false;
   visible: boolean = false;
+  isChecked: boolean = !environment.production;
   switchText: string = environment.production ? routesConsts.MAINNET_TITLE.toUpperCase()
     : routesConsts.TESTNET_TITLE.toUpperCase();
   isMainnet: boolean = false;

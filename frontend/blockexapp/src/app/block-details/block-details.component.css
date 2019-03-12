@@ -92,6 +92,12 @@ mat-table,
     letter-spacing: normal;
 }
 
+.kernels-table {
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+}
+
 .inputs-table-header,
 .outputs-table-header,
 .kernels-table-header {
@@ -113,7 +119,7 @@ mat-table,
 }
 
 .mat-column-fee {
-    max-width: 40px;
+    min-width: 40px;
 }
 
 .mat-column-excess {
@@ -138,7 +144,13 @@ mat-table,
     display: none;
 }
 
-.searched-by {
+.searched-by-mainnet,
+.mainnet {
+    background-color: #d9e6ed !important;
+}
+
+.searched-by-testnet,
+.testnet {
     background-color: #e4d9ed !important;
 }
 

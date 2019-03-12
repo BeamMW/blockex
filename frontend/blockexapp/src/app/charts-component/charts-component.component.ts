@@ -13,6 +13,7 @@ import {DataService} from '../services';
 import {Chart} from 'chart.js';
 import {Router} from "@angular/router";
 import {chartsConsts} from '../consts';
+import {environment} from "../../environments/environment";
 
 import * as Highcharts from 'highcharts';
 
@@ -32,6 +33,7 @@ export class ChartsComponent implements OnInit {
     this.isChartTypesVisible = false;
   }
 
+  isMainnet = environment.production;
   feeChart : any;
   chart : any;
   chartLoading : boolean = false;
@@ -363,7 +365,7 @@ export class ChartsComponent implements OnInit {
       tooltip: {
         followPointer: false,
         useHTML:true,
-        backgroundColor: 'rgb(80,67,89)',
+        backgroundColor: this.isMainnet ? 'rgb(54,85,107)' : 'rgb(80,67,89)',
         borderRadius: 10,
         borderWidth: 0,
         shadow: false,
@@ -523,7 +525,7 @@ export class ChartsComponent implements OnInit {
       tooltip: {
         followPointer: false,
         useHTML:true,
-        backgroundColor: 'rgb(80,67,89)',
+        backgroundColor: this.isMainnet ? 'rgb(54,85,107)' : 'rgb(80,67,89)',
         borderRadius: 10,
         borderWidth: 0,
         shadow: false,

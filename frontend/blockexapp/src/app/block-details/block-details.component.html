@@ -108,7 +108,9 @@
           <mat-table class="kernels-table" #table [dataSource]="block.kernels">
             <ng-container matColumnDef="fee">
               <mat-header-cell *matHeaderCellDef> Fee: </mat-header-cell>
-              <mat-cell *matCellDef="let element" [class.searched-by]="element.kernel_id == searchedBy && isFadein">
+              <mat-cell *matCellDef="let element"
+                        [class.searched-by-mainnet]="isMainnet &&element.kernel_id == searchedBy && isFadein"
+                        [class.searched-by-testnet]="!isMainnet &&element.kernel_id == searchedBy && isFadein">
                 <span class="mobile-label">Fee:</span>
                 <span class="fee-cell" [attr.id]="element.kernel_id">{{element.fee}}</span>
               </mat-cell>
@@ -116,7 +118,9 @@
 
             <ng-container matColumnDef="excess">
               <mat-header-cell *matHeaderCellDef> Excess: </mat-header-cell>
-              <mat-cell *matCellDef="let element" [class.searched-by]="element.kernel_id == searchedBy && isFadein">
+              <mat-cell *matCellDef="let element"
+                        [class.searched-by-mainnet]="isMainnet &&element.kernel_id == searchedBy && isFadein"
+                        [class.searched-by-testnet]="!isMainnet &&element.kernel_id == searchedBy && isFadein">
                 <span class="mobile-label">Excess:</span>
                 <span class="excess-cell">{{element.excess}}</span>
               </mat-cell>
@@ -124,7 +128,9 @@
 
             <ng-container matColumnDef="id">
               <mat-header-cell *matHeaderCellDef> ID: </mat-header-cell>
-              <mat-cell *matCellDef="let element" [class.searched-by]="element.kernel_id == searchedBy && isFadein">
+              <mat-cell *matCellDef="let element"
+                        [class.searched-by-mainnet]="isMainnet &&element.kernel_id == searchedBy && isFadein"
+                        [class.searched-by-testnet]="!isMainnet &&element.kernel_id == searchedBy && isFadein">
                 <span class="mobile-label">Id:</span>
                 <span class="kernel-id-cell">{{element.kernel_id}}</span>
               </mat-cell>

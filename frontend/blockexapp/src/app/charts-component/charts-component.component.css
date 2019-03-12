@@ -361,11 +361,22 @@
     box-sizing: border-box;
     border-radius: 10px;
     opacity: 1;
-    background-color: rgb(80,67,89);
 }
 
-.chart-type-selector .type-options .selected {
-    color: #a479f8;
+.mainnet {
+  background-color: rgb(54,85,107);
+}
+
+.testnet {
+  background-color: rgb(80,67,89);
+}
+
+.selected-mainnet {
+  color: rgb(41,158,207);
+}
+
+.selected-testnet {
+  color: #a479f8;
 }
 
 .chart-type-selector .type-options .type-options-item {

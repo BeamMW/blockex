@@ -78,7 +78,7 @@ export class BlockDetailsComponent implements OnInit {
       kernels: []
     };
     this.route.params.subscribe( (params) => {
-      this.dataService.loadBlock(params.hash).subscribe((blockItem) => {
+        this.dataService.loadBlock(params.hash).subscribe((blockItem) => {
         this.block.header = 'Block ' + blockItem.height;
         this.block.data = [
           {name: 'FEE:', value: blockItem.fee, additional: blockItem.fee !== 0 ? 'Groth' : ''},

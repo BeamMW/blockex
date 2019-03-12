@@ -8,9 +8,12 @@
                      ../../assets/arrows/arrow-down-small@3x.png 3x"
              class="arrow-down-small">
       </span>
-      <div class="type-options" *ngIf="isChartTypesVisible">
+      <div class="type-options" [class.mainnet]="isMainnet"
+              [class.testnet]="!isMainnet" *ngIf="isChartTypesVisible">
         <ul>
-          <li class="type-options-item" *ngFor="let p of blocksChartTypes" [class.selected]="p.isSelected"
+          <li class="type-options-item" *ngFor="let p of blocksChartTypes"
+              [class.selected-mainnet]="p.isSelected && isMainnet"
+              [class.selected-testnet]="p.isSelected && !isMainnet"
               (click)="blocksChartTypeChange(p)">
             <span> {{p.name}} </span>
           </li>

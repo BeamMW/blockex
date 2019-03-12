@@ -80,7 +80,7 @@
     display: block;
     margin: 0.5px;
     position: absolute;
-    top: 0;
+    top: -1px;
     bottom: 0;
     right: 130px;
     transition: all 0.3s ease-in 0s;

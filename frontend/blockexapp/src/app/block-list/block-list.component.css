@@ -55,12 +55,12 @@
 }
 
 .paginator-wrapper-mainnet {
-    background-color: rgba(76, 0, 131, 0.15);
+    background-color: rgba(0, 86, 131, 0.15);
 }
 
 .blocks-table-paginator-mainnet {
     padding-right: 95px;
-    background-color: rgba(0, 86, 131, 0.15);
+    background-color: rgba(255, 255, 255, 0);
 }
 
 .blocks-table-paginator-testnet {
