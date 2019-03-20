@@ -17,6 +17,8 @@ import {environment} from "../../environments/environment";
 
 import * as Highcharts from 'highcharts';
 
+const LOG_MIN_VALUE = 0.0001;
+
 @Component({
   selector: 'app-charts-component',
   templateUrl: './charts-component.component.html',
@@ -204,6 +206,7 @@ export class ChartsComponent implements OnInit {
   }
 
   constructChartsData(data) {
+    data.sort((a,b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
     let initialDate = new Date(data[0].timestamp);
     let avgDifficulty = 0;
     let blocksCounter = 0, feeCounter = 0;
@@ -213,11 +216,12 @@ export class ChartsComponent implements OnInit {
         + chartsConsts.MINUTE * chartsConsts.COUNT_OF_MINUTES * this.selectedPeriodBlocks.approximateCoefficient
         : initialDate.getTime() + chartsConsts.MINUTE * chartsConsts.COUNT_OF_MINUTES;
 
-      if (new Date(item.timestamp).getTime() <= initialDateWithOffset) {
-        blocksCounter++;
-        feeCounter += item.fee;
-        avgDifficulty += item.difficulty;
-      } else {
+      blocksCounter++;
+      feeCounter += item.fee;
+      avgDifficulty += item.difficulty;
+
+      console.log(new Date(item.timestamp).toLocaleString());
+      if (new Date(item.timestamp).getTime() > initialDateWithOffset) {
         let timestampVal = + new Date(item.timestamp);
         let difficulty = avgDifficulty / blocksCounter;
         this.chartsData.dates.push(timestampVal);
@@ -226,11 +230,12 @@ export class ChartsComponent implements OnInit {
         this.chartsData.difficulty.push([timestampVal, this.selectedPeriodBlocks.approximateCoefficient > 1
           ? difficulty / this.selectedPeriodBlocks.approximateCoefficient : difficulty]);
         this.chartsData.hashrate.push([timestampVal, difficulty / 60]);
+        feeCounter = feeCounter === 0 ? LOG_MIN_VALUE : feeCounter;
         this.chartsData.fee.push([timestampVal, this.selectedPeriodBlocks.approximateCoefficient > 1 ?
           feeCounter / this.selectedPeriodBlocks.approximateCoefficient : feeCounter]);
         this.chartsData.fixedLine.push([timestampVal, chartsConsts.FIXED_BLOCKS_COORD]);
         feeCounter = item.fee;
-        blocksCounter = 1;
+        blocksCounter = 0;
         avgDifficulty = 0;
         initialDate = new Date(item.timestamp);
       }
@@ -445,6 +450,8 @@ export class ChartsComponent implements OnInit {
         },
       yAxis: {
         lineWidth: 0,
+        type: 'logarithmic',
+        min: LOG_MIN_VALUE,
         lineColor: '#ff51ff',
         gridLineColor: 'rgba(255, 255, 255, 0.1)',
         title: {
