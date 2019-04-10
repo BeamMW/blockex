@@ -17,7 +17,7 @@ import {environment} from "../../environments/environment";
 
 import * as Highcharts from 'highcharts';
 
-const LOG_MIN_VALUE = 0.0001;
+const LOG_MIN_VALUE = 0.001;
 
 @Component({
   selector: 'app-charts-component',
@@ -468,6 +468,28 @@ export class ChartsComponent implements OnInit {
           }
         },
         labels: {
+          formatter: function() {
+              if(this.value == LOG_MIN_VALUE || this.isFirst) {
+                return 0;
+              }
+
+              if (this.value >= 1000) {
+                  let suffixes = ["", "k", "m", "b","t"];
+                  let suffixNum = Math.floor( (""+this.value).length/3 );
+                  let shortValue;
+                  for (let precision = 2; precision >= 1; precision--) {
+                      shortValue = parseFloat( (suffixNum != 0 ? (this.value / Math.pow(1000,suffixNum) ) : this.value).toPrecision(precision));
+                      var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g,'');
+                      if (dotLessShortValue.length <= 2) { break; }
+                  }
+                  if (shortValue % 1 != 0) {
+                    shortValue = shortValue.toFixed(1);
+                  }
+                  this.value = shortValue+suffixes[suffixNum];
+              }
+
+              return this.value;
+          },
           style: {
             'opacity': '0.5',
             'font-size': '12px',

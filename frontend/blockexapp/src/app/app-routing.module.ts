@@ -10,7 +10,6 @@ const routes: Routes = [
   {path: '', component: BlockListComponent, pathMatch: 'full' },
   { path: 'block/:hash', component: BlockDetailsComponent },
   { path: 'block-not-found', component: BlockNotFoundComponent },
-  { path: 'blocks', redirectTo: '', component: BlockListComponent },
   { path: 'charts/:height', component: BlockChartsComponent }
 ];
 
