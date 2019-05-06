@@ -14,7 +14,7 @@ class Status(models.Model):
 
 
 class Block(models.Model):
-    height = models.IntegerField(db_index=True)
+    height = models.IntegerField(unique=True, db_index=True)
     hash = models.CharField(blank=False, null=False, max_length=128, db_index=True)
     chainwork = models.CharField(blank=True, null=True, max_length=128)
     difficulty = models.FloatField(null=True, blank=True)

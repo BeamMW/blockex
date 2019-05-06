@@ -9,6 +9,7 @@ import { BlockChartsComponent } from './block-charts/block-charts.component'
 const routes: Routes = [
   {path: '', component: BlockListComponent, pathMatch: 'full' },
   { path: 'block/:hash', component: BlockDetailsComponent },
+  { path: 'block', component: BlockDetailsComponent },
   { path: 'block-not-found', component: BlockNotFoundComponent },
   { path: 'charts/:height', component: BlockChartsComponent }
 ];

@@ -79,114 +79,61 @@ def update_blockchain():
 
     # Retrieve missing blocks in 100 block pages
 
-    if (current_height - last_height > DAILY_BLOCK_STEP) :
-        while (last_height < current_height + 100) :
-            r = requests.get(BEAM_NODE_API + '/blocks?height=' + str(last_height) + '&n=100')
-            blocks = r.json()
-
-            for _block in blocks:
-
-                if 'found' in _block and _block['found'] == False:
-                    continue
-
-                b = Block()
-                b.from_json(_block)
-
-                fee = 0.0
-
-                try:
-                    b.save()
-                except IntegrityError as e:
-                    b = Block.objects.get(height = b.height)
-                    continue
-
-                for _input in _block['inputs']:
-                    i = Input(block = b)
-                    i.from_json(_input)
-                    i.save()
-
-                for _output in _block['outputs']:
-                    o = Output(block=b)
-                    o.from_json(_output)
-                    o.save()
-
-                for _kernel in _block['kernels']:
-                    k = Kernel(block=b)
-                    k.from_json(_kernel)
-
-                    fee = fee + k.fee
-
-                    k.save()
-
-                b.fee = fee
-                b.save()
-
-            last_height += 100
-    else:
-        height_shift = current_height - DAILY_BLOCK_STEP
-        r = requests.get(BEAM_NODE_API + '/blocks?height=' +
-                         str(height_shift) + '&n=' + str(DAILY_BLOCK_STEP))
+    while (last_height < current_height + 200):
+        r = requests.get(BEAM_NODE_API + '/blocks?height=' + str(last_height) + '&n=100')
         blocks = r.json()
-        last_height += 1
-        height_shift -= 1
-        existing_blocks = Block.objects.filter(height__gte=height_shift, height__lt=last_height)
+        _inputs = []
+        _outputs = []
+        _kernels = []
 
-        is_fork_exist = False
-        for idx, _block in enumerate(reversed(blocks)):
-            if 'found' in _block and _block['found'] is False:
+        for _block in blocks:
+
+            if 'found' in _block and _block['found'] == False:
                 continue
 
             b = Block()
             b.from_json(_block)
 
-            fork_counter = 0
-            is_block_exist = False
+            fee = 0.0
 
-            if not is_fork_exist:
-                for idItem, _blockItem in enumerate(reversed(blocks)):
-                    if idItem > idx and str(_blockItem['height']) == str(b.height):
-                        fork_counter += 1
-                if fork_counter > 0:
-                    f = Forks_event_detection()
-                    f.from_json(b.height)
-                    f.save()
-                    is_fork_exist = True
-
-                    to_height = last_height + 1
-                    remaining_blocks = existing_blocks.filter(height__gte=str(b.height), height__lt=str(to_height))
-                    remaining_blocks.delete()
-
-            if not is_fork_exist:
-                is_block_exist = Block.objects.filter(height=b.height).count() > 0
-
-            if is_fork_exist or not is_block_exist:
-                try:
-                    b.save()
-                except IntegrityError as e:
-                    b = Block.objects.get(height = b.height)
-                    continue
-                fee = 0.0
-
-                for _input in _block['inputs']:
-                    i = Input(block=b)
-                    i.from_json(_input)
-                    i.save()
-
-                for _output in _block['outputs']:
-                    o = Output(block=b)
-                    o.from_json(_output)
-                    o.save()
-
-                for _kernel in _block['kernels']:
-                    k = Kernel(block=b)
-                    k.from_json(_kernel)
-
-                    fee = fee + k.fee
-
-                    k.save()
-
-                b.fee = fee
+            try:
                 b.save()
+            except IntegrityError as e:
+                b = Block.objects.get(height = b.height)
+                continue
+
+            for _input in _block['inputs']:
+                i = Input()
+                i.from_json(_input)
+                i.block = b
+                _inputs.append(i)
+
+            for _output in _block['outputs']:
+                o = Output()
+                o.from_json(_output)
+                o.block = b
+                _outputs.append(o)
+
+            for _kernel in _block['kernels']:
+                k = Kernel()
+                k.from_json(_kernel)
+
+                fee = fee + k.fee
+
+                k.block = b
+                _kernels.append(k)
+
+            b.fee = fee
+            b.save()
+
+        last_height += 100
+
+        if len(_inputs) > 0:
+            Input.objects.bulk_create(_inputs)
+        if len(_outputs) > 0:
+            Output.objects.bulk_create(_outputs)
+        if len(_kernels) > 0:
+            Kernel.objects.bulk_create(_kernels)
 
     _redis.set('beam_blockex_last_height', current_height)
     _redis.delete("daily_graph_data")
