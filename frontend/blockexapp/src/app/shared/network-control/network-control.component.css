@@ -49,7 +49,6 @@
     padding-left: 20px;
     padding-top: 1px;
     background-color: rgba(255, 255, 255, 0);
-    font-family: ProximaNova;
     font-size: 14px;
     font-weight: 600;
     font-style: normal;
@@ -61,7 +60,6 @@
     padding-right: 20px;
     padding-top: 1px;
     background-color: rgba(255, 255, 255, 0);
-    font-family: ProximaNova;
     font-size: 14px;
     font-weight: 600;
     font-style: normal;
@@ -84,7 +82,6 @@
     bottom: 0;
     right: 130px;
     transition: all 0.3s ease-in 0s;
-    font-family: ProximaNova;
     font-size: 14px;
     font-weight: 600;
     font-style: normal;
@@ -109,6 +106,11 @@
 
 @media(max-width: 600px) {
   .network-control-elem {
-      margin: 41px 0 0 395px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: unset;
+      left: unset;
+      right: unset;
+      position: unset;
   }
 }

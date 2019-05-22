@@ -1,0 +1,418 @@
+/*.chart-item {
+    display: inline-block;
+    width: 730px;
+    height: 350px;
+    margin-left: 50px;
+}
+
+.chart-item-full {
+    display: inline-block;
+    height: 600px;
+    width: 1200px;
+}*/
+
+.highcharts-credits {
+    display: none;
+}
+
+/*:host ::ng-deep.highcharts-tooltip>span {
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    background-color: rgba(255, 255, 255, 0.2);
+    height:300px;
+    width:300px;
+    font-family: ProximaNova;
+    font-size: 20px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+}*/
+
+#blocks-chart {
+    float: left;
+}
+
+.blocks-chart-title {
+    height: 20px;
+    padding-left: 81px;
+    padding-right: 50px;
+    margin-bottom: 30px;
+}
+
+.blocks-chart-title .title {
+    font-size: 12px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.fee-chart-title {
+    margin-bottom: 30px;
+    padding-right: 12px;
+}
+
+.fee-chart-title .title {
+    margin-left: 103px;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    text-align: center;
+    color: #ffffff;
+}
+
+#fee-chart {
+    float: right;
+}
+
+.period-title {
+    width: 74px;
+    height: 15px;
+    margin-left: 105px;
+    opacity: 0.7;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+}
+
+.period-selector {
+    border: none;
+    opacity: 0.7;
+    width: 65px;
+    font-size: 12px;
+    font-weight: bolder;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0);
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.period-selector option{
+    border: none;
+    opacity: 0.7;
+    font-size: 15px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+    background-color: rgb(80,67,89) !important;
+}
+
+.period-selector-blocks,
+.period-selector-fee {
+  float: right;
+}
+
+.title-selector {
+    border: none;
+    opacity: 0.7;
+    width: 170px;
+    font-size: 12px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0);
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.switch-title {
+    width: 51px;
+    height: 15px;
+    margin-left: 27px;
+    opacity: 0.5;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+}
+
+.hash-rate-switch {
+    position: absolute;
+    width: 24px;
+    height: 15px;
+    margin-left: 6px;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select: none;
+}
+.hash-rate-switch-checkbox {
+    display: none;
+}
+.hash-rate-switch-label {
+    height: 12px;
+    margin-top: 3px;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 20px;
+    border: solid 1px rgba(250, 250, 250, .3);
+}
+.hash-rate-switch-inner {
+    display: block;
+    width: 200%;
+    margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.hash-rate-switch-inner:before, .hash-rate-switch-inner:after {
+    display: block;
+    float: left;
+    width: 50%;
+    height: 20px;
+    padding: 0;
+    line-height: 20px;
+    color: white;
+    box-sizing: border-box;
+}
+.hash-rate-switch-inner:before {
+    content: "";
+    padding-left: 5px;
+    background-color: rgba(255, 255, 255, 0);
+    color: #FFFFFF;
+}
+.hash-rate-switch-inner:after {
+    content: "";
+    padding-right: 5px;
+    background-color: rgba(255, 255, 255, 0);
+    color: #FFFFFF;
+    text-align: right;
+}
+.hash-rate-switch-ctrl {
+    width: 8px;
+    height: 8px;
+    margin: -1px;
+    background: #ffffff;
+    position: absolute;
+    top: 6px;
+    bottom: 0;
+    right: 12px;
+    border: 1px solid #FFFFFF;
+    border-radius: 20px;
+    transition: all 0.3s ease-in 0s;
+}
+.hash-rate-switch-checkbox:checked + .hash-rate-switch-label .hash-rate-switch-inner {
+    margin-left: 0;
+}
+.hash-rate-switch-checkbox:checked + .hash-rate-switch-label .hash-rate-switch-ctrl {
+    right: 3px;
+}
+
+:host ::ng-deep.chart-tooltip-container {
+    width: 162px;
+    height: 78px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+:host ::ng-deep.tooltip-line-color {
+    margin-left: 2px;
+    margin-top: 14px;
+    position: absolute;
+    width: 20px;
+    float: left;
+}
+
+:host ::ng-deep.tooltip-line-circle {
+    height: 5px;
+    width: 5px;
+    top: 19px;
+    left: 11px;
+    position: absolute;
+    content: "";
+    border-radius: 5px;
+}
+
+:host ::ng-deep.tooltip-title {
+    margin-left: 30px;
+    margin-top: 15px;
+    float: left;
+    font-size: 12px;
+    font-weight: 100;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.4px;
+    color: #ffffff;
+}
+
+:host ::ng-deep.tooltip-date {
+    margin-left: 30px;
+    margin-top: 10px;
+    float: left;
+    font-size: 12px;
+    font-weight: 100;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.4px;
+    color: #ffffff;
+}
+
+:host ::ng-deep.tooltip-value {
+    margin-left: 30px;
+    margin-top: 10px;
+    float: left;
+    font-size: 20px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+}
+
+
+/*:host ::ng-deep.chart-tooltip-container {
+    width: 172px;
+    height: 98px;
+  border-radius: 10px;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  background-color: rgba(255, 255, 255, 0.2)
+}*/
+
+.blocks-chart-area {
+    z-index: 1;
+}
+
+.fee-chart-area {
+  margin-right: 9px;
+}
+
+.arrow-down-small {
+    width: 5px;
+    height: 3px;
+    object-fit: contain;
+    margin-left: 5px;
+    margin-bottom: 3px;
+}
+
+/* chart type selector */
+
+.chart-type-selector {
+    margin-top: 4px;
+    z-index: 10;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    text-align: center;
+    color: #ffffff;
+    float: left;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.chart-type-selector .type-selected {
+    cursor: pointer;
+}
+
+.chart-type-selector .type-options {
+    z-index: 10;
+    width: 176px;
+    height: 72px;
+    position: absolute;
+    border: none;
+    margin-top: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    opacity: 1;
+}
+
+.mainnet {
+  background-color: rgb(54,85,107);
+}
+
+.testnet {
+  background-color: rgb(80,67,89);
+}
+
+.selected-mainnet {
+  color: rgb(41,158,207);
+}
+
+.selected-testnet {
+  color: #a479f8;
+}
+
+.chart-type-selector .type-options .type-options-item {
+    margin-top: 14px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.chart-type-selector .type-options ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* ------------------- */
+
+@media all and (max-width: 1599px) {
+    .chart-item {
+        width: 650px;
+        margin-left: 5px;
+    }
+
+    .chart-item-full {
+        width: 1000px;
+    }
+}
+
+@media all and (max-width: 1359px) {
+    .chart-item {
+        width: 580px;
+        margin-left: 5px;
+    }
+
+    .chart-item-full {
+        width: 1000px;
+    }
+}
+
+@media all and (max-width: 1180px) {
+    #fee-chart {
+        float: left;
+    }
+}
+
+
+@media all and (max-width: 600px) {
+  .chart-item {
+      width: 350px;
+  }
+}

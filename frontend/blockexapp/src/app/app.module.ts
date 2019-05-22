@@ -24,11 +24,15 @@ import {
   MatFormFieldModule,
   MatPaginatorModule
 } from '@angular/material';
-import { BlockDetailsComponent } from './block-details/block-details.component';
-import { AppRoutingModule } from './/app-routing.module';
-import { BlockListComponent } from './block-list/block-list.component';
-import { BlockChartsComponent } from './block-charts/block-charts.component';
-import { ChartsComponent } from './charts-component/charts-component.component';
+import { BlockDetailsComponentDesktop } from './block-details/block-details.component.desktop';
+import { BlockDetailsComponentMobile } from "./block-details/block-details.component.mobile";
+import { AppRoutingModule } from './app-routing.module';
+import { BlockListComponentDesktop } from './block-list/block-list.component.desktop';
+import { BlockListComponentMobile } from  './block-list/block-list.component.mobile';
+import { BlockChartsComponentDesktop } from './block-charts/block-charts.component.desktop';
+import { BlockChartsComponentMobile } from './block-charts/block-charts.component.mobile';
+import { ChartsComponentDesktop } from './charts-component/charts-component.component.desktop';
+import { ChartsComponentMobile } from './charts-component/charts-component.component.mobile';
 import { BlockNotFoundComponent } from './block-details/block-not-found/block-not-found.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
@@ -37,11 +41,21 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
   declarations: [
     AppComponent,
     TimeAgoPipe,
-    BlockDetailsComponent,
-    BlockListComponent,
-    BlockChartsComponent,
-    ChartsComponent,
-    BlockNotFoundComponent
+    BlockDetailsComponentDesktop,
+    BlockDetailsComponentMobile,
+    BlockListComponentDesktop,
+    BlockListComponentMobile,
+    BlockChartsComponentDesktop,
+    BlockChartsComponentMobile,
+    ChartsComponentDesktop,
+    ChartsComponentMobile,
+    BlockNotFoundComponent,
+  ],
+  entryComponents: [
+    BlockListComponentMobile,
+    BlockChartsComponentMobile,
+    ChartsComponentMobile,
+    BlockDetailsComponentMobile,
   ],
   imports: [
     BrowserModule,

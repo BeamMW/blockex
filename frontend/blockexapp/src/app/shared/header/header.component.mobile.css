@@ -1,0 +1,128 @@
+.header-toolbar {
+    height: 135px;
+    padding: 0;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+
+.header-content {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 20px auto 50px;
+    grid-template-rows: 60px 60px 60px;
+}
+
+.search-button{
+    margin-right: 5px;
+}
+
+.header-content-logo {
+    margin-top: 15px;
+    float: left;
+    cursor: pointer;
+}
+
+.logo-title-content {
+    margin-top: 20px;
+    float: left;
+    cursor: pointer;
+}
+
+.logo-title-beam {
+    color: #25c1ff;
+    font-weight: bolder;
+    text-shadow: 1px 0 #25c1ff;
+    letter-spacing: 12px;
+    font-size: 17px;
+    margin-top: -10px;
+    height: 22px;
+    margin-left: 24px;
+}
+
+.logo-title-text{
+    font-size: 16px;
+    margin-left: 24px;
+    height: 20px;
+    position: absolute;
+    top: 32px;
+}
+
+.header-search-input {
+    width: 300px;
+    height: 31px;
+    opacity: 0.3;
+    border-radius: 20px;
+}
+
+.search-header-input {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    float: right;
+    text-indent: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    width: 300px;
+    height: 31px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: normal;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.search-header-input.search-display {
+    grid-row-start: 3;
+    grid-column-start: 2;
+}
+
+.search-header-input.search-hidden {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    grid-row-start: 2;
+    grid-column-start: 2;
+}
+
+.search-header-input:focus{
+    outline: none;
+}
+
+.search-header-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: normal;
+}
+
+table {
+    width: 100%;
+}
+
+.search-form-field {
+    width: 100%;
+    padding: 5px;
+}
+
+.header-title {
+    grid-row-start: 1;
+    grid-column-start: 2;
+}
+
+.search-control {
+    cursor: pointer;
+    grid-row-start: 1;
+    grid-column-start: 3;
+    margin-top: 20px;
+}
+
+app-network-control.search-display {
+    margin-top: 40px;
+    grid-row-start: 2;
+    grid-column-start: 2;
+}
+
+app-network-control.search-hidden {
+    margin-top: 10px;
+    grid-row-start: 3;
+    grid-column-start: 2;
+}

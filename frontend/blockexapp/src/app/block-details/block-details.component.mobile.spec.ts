@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChartsComponent } from './charts-component.component';
+import { BlockDetailsComponentMobile } from './block-details.component.mobile';
 
-describe('ChartsComponent', () => {
-  let component: ChartsComponent;
-  let fixture: ComponentFixture<ChartsComponent>;
+describe('BlockDetailsComponentMobile', () => {
+  let component: BlockDetailsComponentMobile;
+  let fixture: ComponentFixture<BlockDetailsComponentMobile>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChartsComponent ]
+      declarations: [ BlockDetailsComponentMobile ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ChartsComponent);
+    fixture = TestBed.createComponent(BlockDetailsComponentMobile);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BlockListComponent } from './block-list.component';
+import { HeaderComponentMobile } from './header.component.mobile';
 
-describe('BlockListComponent', () => {
-  let component: BlockListComponent;
-  let fixture: ComponentFixture<BlockListComponent>;
+describe('HeaderComponentMobile', () => {
+  let component: HeaderComponentMobile;
+  let fixture: ComponentFixture<HeaderComponentMobile>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BlockListComponent ]
+      declarations: [ HeaderComponentMobile ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BlockListComponent);
+    fixture = TestBed.createComponent(HeaderComponentMobile);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

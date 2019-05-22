@@ -1,8 +1,3 @@
-mat-table,
-.expansion-data-title{
-    font-family: ProximaNova;
-}
-
 .mat-column-block-header{
     font-size: 20px;
     font-weight: bold;
@@ -15,16 +10,10 @@ mat-table,
 
 .mat-column-name{
     font-weight: bold;
-    max-width: 145px;
 }
 
 .details-card-container{
     box-shadow: none;
-    max-width: 1290px;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-left: 130px;
-    margin-right: 105px;
 }
 
 .mat-header-row,
@@ -114,20 +103,13 @@ mat-table,
     margin-top: 50px;
 }
 
-.mat-column-commitment{
-    min-width: 720px;
-}
-
 .mat-column-fee {
     min-width: 40px;
 }
 
+.mat-column-id,
 .mat-column-excess {
-    min-width: 510px;
-}
-
-.mat-column-id {
-    min-width: 500px;
+    white-space: normal;
 }
 
 .table-container {
@@ -140,10 +122,6 @@ mat-table,
     overflow: auto;
 }
 
-.mobile-label {
-    display: none;
-}
-
 .searched-by-mainnet,
 .mainnet {
     background-color: #d9e6ed !important;
@@ -154,40 +132,75 @@ mat-table,
     background-color: #e4d9ed !important;
 }
 
-@media(max-width: 600px) {
-  .mobile-label {
-      width: 95px;
-      display: inline-block;
-      font-weight: bold;
-  }
-
-  .mat-header-row {
-     display: none;
-  }
-
-  .mat-row {
-      flex-direction: column;
-      align-items: start;
-      padding: 8px 10px;
-      max-height: 370px;
-  }
-
-  .mat-column-fee {
-      max-width: 200px;
-  }
-
-  .commitment-cell,
-  .kernel-id-cell,
-  .excess-cell {
-      max-width: 190px;
-  }
-
-  .value-table-cell {
-      max-width: 250px;
-  }
-
-  mat-cell:first-of-type {
-      padding-left: 0;
-  }
+.mobile-label {
+    width: 120px;
+    display: inline-block;
+    font-weight: bold;
 }
+
+.desktop-label {
+    max-width: 220px;
+}
+
+.mat-header-row {
+   display: none;
+}
+
+.mat-row {
+    flex-direction: column;
+    align-items: start;
+    padding: 8px 10px;
+    min-height: 0;
+}
+
+.mat-column-fee {
+    max-width: 200px;
+}
+
+.commitment-cell,
+.kernel-id-cell,
+.excess-cell {
+    max-width: 190px;
+}
+
+.value-table-cell {
+    max-width: 250px;
+}
+
+mat-cell {
+  padding-bottom: 5px;
+}
+
+mat-cell:first-of-type {
+    padding-left: 0;
+}
+
+app-header-mobile {
+    background-attachment: fixed;
+    height: 135px;
+    background-blend-mode:  normal, multiply, multiply, multiply;
+    padding: 0;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+app-header-mobile.mainnet {
+    background-image:
+        linear-gradient(120deg, #032e49, #0073a6),
+        radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5)),
+        linear-gradient(to left, rgba(255, 255, 255, 0.5), #d33b65),
+        linear-gradient(297deg, #156fc3, rgba(255, 255, 255, 0.5)),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0), rgba(21, 6, 40, 0.12));
+}
+
+app-header-mobile.testnet {
+    background-image:
+        linear-gradient(120deg, #1e172c, #4a2c7c),
+        radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5)),
+        linear-gradient(to left, rgba(255, 255, 255, 0.5), #d33b65),
+        linear-gradient(297deg, #156fc3, rgba(255, 255, 255, 0.5)),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0), rgba(21, 6, 40, 0.12));
+}
+
 

@@ -1,16 +1,17 @@
 <!--<mat-progress-bar mode="indeterminate" *ngIf="loading_block"></mat-progress-bar>-->
+<app-header-mobile [class.mainnet]="isMainnet" [class.testnet]="!isMainnet"></app-header-mobile>
 <section *ngIf="!loading_block">
   <mat-card class="details-card-container">
     <span class="mobile-label mat-column-block-header">{{block.header}}</span>
     <mat-card-content>
       <mat-table #table [dataSource]="block.data">
-        <ng-container class="main-table-name" matColumnDef="name">
-          <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
-        </ng-container>
 
-        <ng-container matColumnDef="value">
-          <mat-cell class="main-table-value" *matCellDef="let element">
-            <span class="value-table-cell">{{element.value}} {{element.additional}}</span>
+        <ng-container class="main-table-name" matColumnDef="name">
+          <mat-cell class="hash-cell" *matCellDef="let element">
+            <span class="mobile-label">{{element.name}}</span>
+            <span class="desktop-label">
+              {{element.value}} {{element.additional}}
+            </span>
           </mat-cell>
         </ng-container>
 
@@ -131,7 +132,7 @@
               <mat-cell *matCellDef="let element"
                         [class.searched-by-mainnet]="isMainnet &&element.kernel_id == searchedBy && isFadein"
                         [class.searched-by-testnet]="!isMainnet &&element.kernel_id == searchedBy && isFadein">
-                <span class="mobile-label">Id:</span>
+                <span class="mobile-label">ID:</span>
                 <span class="kernel-id-cell">{{element.kernel_id}}</span>
               </mat-cell>
             </ng-container>

@@ -20,11 +20,11 @@ import * as Highcharts from 'highcharts';
 const LOG_MIN_VALUE = 0.001;
 
 @Component({
-  selector: 'app-charts-component',
-  templateUrl: './charts-component.component.html',
-  styleUrls: ['./charts-component.component.css']
+  selector: 'app-charts-component-mobile',
+  templateUrl: './charts-component.component.mobile.html',
+  styleUrls: ['./charts-component.component.mobile.css']
 })
-export class ChartsComponent implements OnInit {
+export class ChartsComponentMobile implements OnInit {
   @Input() height: any;
   @Input() fullSize: boolean;
   @Output() chartsLoaded = new EventEmitter<boolean>();
@@ -34,6 +34,8 @@ export class ChartsComponent implements OnInit {
   @HostListener('document:click', ['$event']) clickout(event) {
     this.isChartTypesVisible = false;
   }
+
+  secondAxis : string = "Average difficulty";
 
   isMainnet = environment.production;
   feeChart : any;
@@ -179,11 +181,7 @@ export class ChartsComponent implements OnInit {
 
         let unselectedType = this.charts[0].series.find(item => item.name == this.blocksChartTypes[1].tooltip);
         unselectedType.update( {name: this.CHARTS.DIFFICULTY.name});
-        this.charts[0].yAxis[1].update({
-            title:{
-                text: this.CHARTS.DIFFICULTY.name
-            }
-        });
+        this.secondAxis = this.CHARTS.DIFFICULTY.name;
        } else if (selectedType.num == this.blocksChartTypes[1].num) {
         if (this.tempChartData !== undefined) {
           this.chartsData.hashrate = this.tempChartData;
@@ -196,11 +194,7 @@ export class ChartsComponent implements OnInit {
 
         let unselectedType = this.charts[0].series.find(item => item.name == this.blocksChartTypes[0].tooltip);
         unselectedType.update( {name: this.CHARTS.HASHRATE.name});
-        this.charts[0].yAxis[1].update({
-            title:{
-                text: this.CHARTS.HASHRATE.name
-            }
-        });
+        this.secondAxis = this.CHARTS.HASHRATE.name;
       }
     }
   }
@@ -220,7 +214,6 @@ export class ChartsComponent implements OnInit {
       feeCounter += item.fee;
       avgDifficulty += item.difficulty;
 
-      console.log(new Date(item.timestamp).toLocaleString());
       if (new Date(item.timestamp).getTime() > initialDateWithOffset) {
         let timestampVal = + new Date(item.timestamp);
         let difficulty = avgDifficulty / blocksCounter;
@@ -262,7 +255,7 @@ export class ChartsComponent implements OnInit {
         lineColor: '#ff51ff',
         gridLineColor: 'rgba(255, 255, 255, 0.1)',
         title: {
-          text: 'Blocks per hour',
+          text: '',
           margin: 24,
           style: {
             'font-size': '12px',
@@ -293,7 +286,7 @@ export class ChartsComponent implements OnInit {
         opposite: true,
         title: {
           rotation: 270,
-          text: 'Average difficulty',
+          text: '',
           margin: 34,
           style: {
             'font-size': '12px',
@@ -347,8 +340,8 @@ export class ChartsComponent implements OnInit {
         }
       },
       legend: {
-        width:380,
-        itemWidth: 190,
+        width:300,
+        itemWidth: 150,
         itemMarginBottom:12,
         itemStyle: {
           width: 140,
@@ -430,8 +423,8 @@ export class ChartsComponent implements OnInit {
         data: this.chartsData.averageBlocks
       }],
       chart: {
-        width: 535,
-        height: 430,
+        width: window.innerWidth * 0.95,
+        height: 320,
         marginBottom: 100,
         ignoreHiddenSeries: false,
         backgroundColor: 'rgba(255,255,255,0)',
@@ -455,7 +448,7 @@ export class ChartsComponent implements OnInit {
         lineColor: '#ff51ff',
         gridLineColor: 'rgba(255, 255, 255, 0.1)',
         title: {
-          text: 'Transaction fee',
+          text: '',
           margin: 34,
           style: {
             'font-size': '12px',
@@ -474,20 +467,21 @@ export class ChartsComponent implements OnInit {
               }
 
               if (this.value >= 1000) {
-                  let suffixes = ["", "k", "m", "b","t"];
+                  let suffixes = ["", "", "M", "M"];
                   let suffixNum = Math.floor( (""+this.value).length/3 );
                   let shortValue;
                   for (let precision = 2; precision >= 1; precision--) {
-                      shortValue = parseFloat( (suffixNum != 0 ? (this.value / Math.pow(1000,suffixNum) ) : this.value).toPrecision(precision));
+                      shortValue = parseFloat( (suffixNum != 0
+                        ? (this.value / Math.pow(1000,suffixNum) )
+                        : this.value).toPrecision(precision));
                       var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g,'');
                       if (dotLessShortValue.length <= 2) { break; }
                   }
                   if (shortValue % 1 != 0) {
                     shortValue = shortValue.toFixed(1);
                   }
-                  this.value = shortValue+suffixes[suffixNum];
+                  this.value = (suffixNum == 1 || suffixNum == 3 ? shortValue*1000 : shortValue)+suffixes[suffixNum];
               }
-
               return this.value;
           },
           style: {
@@ -548,7 +542,7 @@ export class ChartsComponent implements OnInit {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        x: -10,
+        x: 0,
         y: -15
       },
       tooltip: {
@@ -584,8 +578,8 @@ export class ChartsComponent implements OnInit {
       }],
       chart: {
         float: 'left',
-        width: 535,
-        height: 430,
+        width: window.innerWidth * 0.95,
+        height: 320,
         marginBottom: 100,
         ignoreHiddenSeries: false,
         backgroundColor: 'rgba(255,255,255,0)',

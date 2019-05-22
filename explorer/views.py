@@ -47,7 +47,7 @@ def get_block_range(request):
     if graph_data:
         stream = io.BytesIO(graph_data)
         data = JSONParser().parse(stream)
-        return Response(data, status=HTTP_200_OK)
+
     else:
         latest_block_height = _redis.get('latest_block_height')
         if not latest_block_height:
@@ -63,6 +63,7 @@ def get_block_range(request):
 
         blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height)
         serializer = BlockHeaderSerializer(blocks, many=True)
+        data = serializer.data
         if range == 1:
             _redis.set('daily_graph_data', JSONRenderer().render(serializer.data))
         if range == 7:
@@ -74,7 +75,7 @@ def get_block_range(request):
         if range == 0:
             _redis.set('all_graph_data', JSONRenderer().render(serializer.data))
 
-        return Response(serializer.data, status=HTTP_200_OK)
+    return Response(data, status=HTTP_200_OK)
 
 
 @api_view(['GET'])

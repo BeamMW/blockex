@@ -31,19 +31,18 @@
     color: #ffffff;
 }*/
 
-#blocks-chart {
-    float: left;
+.fee-chart-area,
+.blocks-chart-area {
+    padding-left: 8px;
 }
 
 .blocks-chart-title {
     height: 20px;
-    padding-left: 81px;
-    padding-right: 50px;
-    margin-bottom: 30px;
+    width: 165px;
+    margin: 30px auto 30px auto;
 }
 
 .blocks-chart-title .title {
-    font-family: ProximaNova;
     font-size: 12px;
     font-weight: 600;
     font-style: normal;
@@ -55,13 +54,12 @@
 }
 
 .fee-chart-title {
-    margin-bottom: 30px;
     padding-right: 12px;
+    width: 115px;
+    margin: 30px auto 30px auto;
 }
 
 .fee-chart-title .title {
-    margin-left: 103px;
-    font-family: ProximaNova;
     font-size: 12px;
     font-weight: 500;
     font-style: normal;
@@ -72,16 +70,11 @@
     color: #ffffff;
 }
 
-#fee-chart {
-    float: right;
-}
-
 .period-title {
     width: 74px;
     height: 15px;
     margin-left: 105px;
     opacity: 0.7;
-    font-family: ProximaNova;
     font-size: 12px;
     font-weight: normal;
     font-style: normal;
@@ -95,7 +88,6 @@
     border: none;
     opacity: 0.7;
     width: 65px;
-    font-family: ProximaNova;
     font-size: 12px;
     font-weight: bolder;
     font-style: normal;
@@ -113,7 +105,6 @@
 .period-selector option{
     border: none;
     opacity: 0.7;
-    font-family: ProximaNova;
     font-size: 15px;
     font-weight: normal;
     font-style: normal;
@@ -133,7 +124,6 @@
     border: none;
     opacity: 0.7;
     width: 170px;
-    font-family: ProximaNova;
     font-size: 12px;
     font-weight: 600;
     font-style: normal;
@@ -153,7 +143,6 @@
     height: 15px;
     margin-left: 27px;
     opacity: 0.5;
-    font-family: ProximaNova;
     font-size: 12px;
     font-weight: normal;
     font-style: normal;
@@ -262,7 +251,6 @@
     margin-left: 30px;
     margin-top: 15px;
     float: left;
-    font-family: ProximaNova;
     font-size: 12px;
     font-weight: 100;
     font-style: normal;
@@ -276,7 +264,6 @@
     margin-left: 30px;
     margin-top: 10px;
     float: left;
-    font-family: ProximaNova;
     font-size: 12px;
     font-weight: 100;
     font-style: normal;
@@ -290,7 +277,6 @@
     margin-left: 30px;
     margin-top: 10px;
     float: left;
-    font-family: ProximaNova;
     font-size: 20px;
     font-weight: 300;
     font-style: normal;
@@ -300,7 +286,6 @@
     color: #ffffff;
 }
 
-
 /*:host ::ng-deep.chart-tooltip-container {
     width: 172px;
     height: 98px;
@@ -309,14 +294,6 @@
   backdrop-filter: blur(2px);
   background-color: rgba(255, 255, 255, 0.2)
 }*/
-
-.blocks-chart-area {
-    z-index: 1;
-}
-
-.fee-chart-area {
-  margin-right: 9px;
-}
 
 .arrow-down-small {
     width: 5px;
@@ -331,7 +308,6 @@
 .chart-type-selector {
     margin-top: 4px;
     z-index: 10;
-    font-family: ProximaNova;
     font-size: 12px;
     font-weight: 500;
     font-style: normal;
@@ -391,39 +367,24 @@
     padding: 0;
 }
 
-/* ------------------- */
-
-@media all and (max-width: 1599px) {
-    .chart-item {
-        width: 650px;
-        margin-left: 5px;
-    }
-
-    .chart-item-full {
-        width: 1000px;
-    }
+.axis-titles {
+    display: grid;
+    grid-template-columns: 16px repeat(3, auto) 16px;
+    font-size: 14px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+    margin-bottom: 10px;
 }
 
-@media all and (max-width: 1359px) {
-    .chart-item {
-        width: 580px;
-        margin-left: 5px;
-    }
-
-    .chart-item-full {
-        width: 1000px;
-    }
+.first-axis-title {
+    grid-column-start: 2;
 }
 
-@media all and (max-width: 1180px) {
-    #fee-chart {
-        float: left;
-    }
-}
-
-
-@media all and (max-width: 600px) {
-  .chart-item {
-      width: 350px;
-  }
+.second-axis-title {
+    grid-column-start: 4;
+    justify-self: end;
 }

@@ -3,11 +3,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { routesConsts } from "../consts";
 
 @Component({
-  selector: 'app-block-charts',
-  templateUrl: './block-charts.component.html',
-  styleUrls: ['./block-charts.component.css']
+  selector: 'app-block-charts-mobile',
+  templateUrl: './block-charts.component.mobile.html',
+  styleUrls: ['./block-charts.component.mobile.css']
 })
-export class BlockChartsComponent implements OnInit {
+export class BlockChartsComponentMobile implements OnInit {
   loading_status: boolean = false;
   height: any;
 

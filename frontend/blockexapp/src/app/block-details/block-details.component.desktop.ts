@@ -6,11 +6,11 @@ import { routesConsts } from "../consts";
 import {environment} from "../../environments/environment";
 
 @Component({
-  selector: 'app-block-details',
-  templateUrl: './block-details.component.html',
-  styleUrls: ['./block-details.component.css']
+  selector: 'app-block-details-desktop',
+  templateUrl: './block-details.component.desktop.html',
+  styleUrls: ['./block-details.component.desktop.css']
 })
-export class BlockDetailsComponent implements OnInit {
+export class BlockDetailsComponentDesktop implements OnInit {
   @ViewChild('kernel') public kernel: ElementRef;
 
   block: any;

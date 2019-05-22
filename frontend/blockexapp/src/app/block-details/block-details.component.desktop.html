@@ -1,0 +1,151 @@
+<!--<mat-progress-bar mode="indeterminate" *ngIf="loading_block"></mat-progress-bar>-->
+<header>
+  <app-header-desktop></app-header-desktop>
+</header>
+<section *ngIf="!loading_block">
+  <mat-card class="details-card-container">
+    <span class="mobile-label mat-column-block-header">{{block.header}}</span>
+    <mat-card-content>
+      <mat-table #table [dataSource]="block.data">
+        <ng-container class="main-table-name" matColumnDef="name">
+          <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="value">
+          <mat-cell class="main-table-value" *matCellDef="let element">
+            <span class="value-table-cell">{{element.value}} {{element.additional}}</span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="block-header">
+          <mat-header-cell *matHeaderCellDef style="font-size: 18px">
+            {{block.header}}
+          </mat-header-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="['block-header']"></mat-header-row>
+        <mat-row class="main-table-row" *matRowDef="let row; columns: displayedColumns.block;"></mat-row>
+      </mat-table>
+
+      <div class="expansion-data-rows">
+        <mat-expansion-panel class="expansion-data-panel">
+          <mat-expansion-panel-header class="expansion-data-header" [class.mainnet]=isMainnet
+                             [class.testnet]=!isMainnet>
+            <mat-panel-title class="expansion-data-title">
+              INPUTS: {{block.inputs.length}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="table-container">
+            <mat-table class="inputs-table" #table [dataSource]="block.inputs">
+              <ng-container matColumnDef="commitment">
+                <mat-header-cell *matHeaderCellDef> Commitment: </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="mobile-label">Commitment:</span>
+                  <span class="commitment-cell">{{element.commitment}}</span>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="maturity">
+                <mat-header-cell *matHeaderCellDef> Maturity: </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="mobile-label">Maturity:</span>
+                  {{element.maturity}}
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row class="inputs-table-header" *matHeaderRowDef="displayedColumns.inputs"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns.inputs;"></mat-row>
+            </mat-table>
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="expansion-data-panel">
+          <mat-expansion-panel-header class="expansion-data-header" [class.mainnet]=isMainnet
+                             [class.testnet]=!isMainnet>
+            <mat-panel-title class="expansion-data-title">
+              OUTPUTS: {{block.outputs.length}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="table-container">
+            <mat-table class="outputs-table" #table [dataSource]="block.outputs">
+              <ng-container matColumnDef="commitment">
+                <mat-header-cell *matHeaderCellDef> Commitment: </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="mobile-label">Commitment:</span>
+                  <span class="commitment-cell"> {{element.commitment}} </span>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="maturity">
+                <mat-header-cell *matHeaderCellDef> Maturity: </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="mobile-label">Maturity:</span>
+                  {{element.maturity}}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="coinbase">
+                <mat-header-cell *matHeaderCellDef> Coinbase: </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="mobile-label">Coinbase:</span>
+                  {{element.coinbase}}
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row class="outputs-table-header" *matHeaderRowDef="displayedColumns.outputs"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns.outputs;"></mat-row>
+            </mat-table>
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="expansion-data-panel" [expanded]="kernelsExpanded">
+          <mat-expansion-panel-header class="expansion-data-header" [class.mainnet]=isMainnet
+                             [class.testnet]=!isMainnet>
+            <mat-panel-title class="expansion-data-title">
+              KERNELS: {{block.kernels.length}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-table class="kernels-table" #table [dataSource]="block.kernels">
+            <ng-container matColumnDef="fee">
+              <mat-header-cell *matHeaderCellDef> Fee: </mat-header-cell>
+              <mat-cell *matCellDef="let element"
+                        [class.searched-by-mainnet]="isMainnet &&element.kernel_id == searchedBy && isFadein"
+                        [class.searched-by-testnet]="!isMainnet &&element.kernel_id == searchedBy && isFadein">
+                <span class="mobile-label">Fee:</span>
+                <span class="fee-cell" [attr.id]="element.kernel_id">{{element.fee}}</span>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="excess">
+              <mat-header-cell *matHeaderCellDef> Excess: </mat-header-cell>
+              <mat-cell *matCellDef="let element"
+                        [class.searched-by-mainnet]="isMainnet &&element.kernel_id == searchedBy && isFadein"
+                        [class.searched-by-testnet]="!isMainnet &&element.kernel_id == searchedBy && isFadein">
+                <span class="mobile-label">Excess:</span>
+                <span class="excess-cell">{{element.excess}}</span>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef> ID: </mat-header-cell>
+              <mat-cell *matCellDef="let element"
+                        [class.searched-by-mainnet]="isMainnet &&element.kernel_id == searchedBy && isFadein"
+                        [class.searched-by-testnet]="!isMainnet &&element.kernel_id == searchedBy && isFadein">
+                <span class="mobile-label">Id:</span>
+                <span class="kernel-id-cell">{{element.kernel_id}}</span>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row class="kernels-table-header" *matHeaderRowDef="displayedColumns.kernels"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns.kernels;"></mat-row>
+          </mat-table>
+        </mat-expansion-panel>
+      </div>
+
+      <!--<button mat-raised-button color="primary" class="details-button-back" (click)="backToExplorer()">Back</button>-->
+    </mat-card-content>
+  </mat-card>
+</section>

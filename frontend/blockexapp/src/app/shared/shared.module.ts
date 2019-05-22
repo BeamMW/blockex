@@ -7,7 +7,9 @@ import {
   MatToolbarModule,
   MatInputModule,
 } from '@angular/material';
-import { HeaderComponent } from './header/header.component';
+import { HeaderComponentDesktop } from './header/header.component.desktop';
+import { HeaderComponentMobile } from "./header/header.component.mobile";
+
 @NgModule({
   imports: [
     CommonModule,
@@ -17,11 +19,16 @@ import { HeaderComponent } from './header/header.component';
   ],
   declarations: [
     NetworkControlComponent,
-    HeaderComponent
+    HeaderComponentDesktop,
+    HeaderComponentMobile
+  ],
+  entryComponents: [
+    HeaderComponentMobile
   ],
   exports: [
     NetworkControlComponent,
-    HeaderComponent
+    HeaderComponentDesktop,
+    HeaderComponentMobile,
   ]
 })
 export class SharedModule { }

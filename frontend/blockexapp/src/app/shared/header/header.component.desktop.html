@@ -1,7 +1,7 @@
-<mat-toolbar [class.header-toolbar-mainnet]=isMainnet
-             [class.header-toolbar-testnet]=!isMainnet color="primary">
+<mat-toolbar class="header-toolbar" [class.mainnet]=isMainnet
+             [class.testnet]=!isMainnet color="primary">
     <div class="header-content">
-      <img class="logo-title" src="assets/logo.svg" width=48 height=42 alt="">
+      <img class="header-content-logo" src="assets/logo.svg" width=48 height=42 alt="">
       <div class="logo-title-content" (click)="navigateToHomepage()">
         <div class="logo-title-beam">BEAM</div>
         <div class="logo-title-text">Block Explorer</div>

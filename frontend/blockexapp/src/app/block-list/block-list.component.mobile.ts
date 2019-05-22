@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../services';
-import { ChartsComponent } from '../charts-component/charts-component.component';
+import { ChartsComponentDesktop } from '../charts-component/charts-component.component.desktop';
 import { blockListConsts, routesConsts } from '../consts';
 
 import {MatPaginator, MatTableDataSource} from '@angular/material';
@@ -10,12 +10,12 @@ import {environment} from "../../environments/environment";
 
 
 @Component({
-  selector: 'app-block-list',
-  templateUrl: './block-list.component.html',
-  styleUrls: ['./block-list.component.css'],
+  selector: 'app-block-list-mobile',
+  templateUrl: './block-list.component.mobile.html',
+  styleUrls: ['./block-list.component.mobile.css'],
 })
-export class BlockListComponent implements OnInit {
-  @ViewChild(ChartsComponent) child: ChartsComponent;
+export class BlockListComponentMobile implements OnInit {
+  @ViewChild(ChartsComponentDesktop) child: ChartsComponentDesktop;
 
   isMainnet: boolean = false;
   status : any; // basically latest block and some data

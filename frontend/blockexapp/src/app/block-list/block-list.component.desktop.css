@@ -4,7 +4,6 @@
 
 .blocks-table {
     box-shadow: none;
-    font-family: ProximaNova;
     font-size: 12px;
     font-weight: normal;
     font-style: normal;
@@ -15,7 +14,6 @@
 }
 
 .blocks-table-header-mainnet {
-    font-family: ProximaNova;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
@@ -26,7 +24,6 @@
 }
 
 .blocks-table-header-testnet {
-    font-family: ProximaNova;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
@@ -136,7 +133,6 @@
     margin-top: 14px !important;
     margin-bottom: 0;
     opacity: 0.5;
-    font-family: ProximaNova;
     font-size: 12px;
     font-weight: 600;
     font-style: normal;
@@ -148,7 +144,6 @@
 
 .block-card-content-title {
     margin-top: 6px !important;
-    font-family: ProximaNova;
     margin-left: 14px;
     font-size: 18px;
     font-weight: normal;
@@ -234,11 +229,19 @@
 }
 
 
-@media(max-width: 600px) {
- /* .mobile-label {
+@media(max-width: 769px) {
+  .mat-table mat-row, mat-header-row, mat-footer-row {
+      min-width: 0;
+  }
+
+  .mobile-label {
       width: 80px;
       display: inline-block;
       font-weight: bold;
+  }
+
+  .desktop-label {
+      max-width: 200px;
   }
 
   .mat-header-row {
@@ -266,5 +269,5 @@
 
   .actions-cell {
       display: none;
-  }*/
+  }
 }

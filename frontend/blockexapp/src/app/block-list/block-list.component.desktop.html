@@ -1,13 +1,14 @@
 <!--<mat-progress-bar mode="indeterminate" *ngIf="loading_status || loading_blocks || loading_charts"></mat-progress-bar>-->
+<app-header-desktop></app-header-desktop>
 <!-- Some charts -->
 <div [class.content-сontainer-mainnet]=isMainnet [class.content-container-testnet]=!isMainnet *ngIf="!loading_status">
   <div class="overview-container">
     <div class="chart-container">
       <div class="chart">
-        <app-charts-component (chartsLoaded)="onChartsLoaded($event)"
+        <app-charts-component-desktop (chartsLoaded)="onChartsLoaded($event)"
                               [height]="status.height"
                               [fullSize]="false"
-                              (click)="showCharts()"></app-charts-component>
+                              (click)="showCharts()"></app-charts-component-desktop>
       </div>
     </div>
     <div class="block-cards-container">
