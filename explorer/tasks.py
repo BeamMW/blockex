@@ -145,6 +145,8 @@ def update_blockchain():
 
 @periodic_task(run_every=(crontab(hour="*/1")), name="update_charts", ignore_result=True)
 def update_charts():
+    _redis = redis.Redis(host='localhost', port=6379, db=0)
+
     _redis.delete("daily_graph_data")
     _redis.delete("weekly_graph_data")
     _redis.delete("monthly_graph_data")
