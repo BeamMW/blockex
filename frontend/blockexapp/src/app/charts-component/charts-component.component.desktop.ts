@@ -212,7 +212,7 @@ export class ChartsComponentDesktop implements OnInit {
       this.chartsData.range.push([dateValue, item.blocks_count]);
       this.chartsData.difficulty.push([dateValue, item.difficulty]);
       this.chartsData.hashrate.push([dateValue, item.hashrate]);
-      this.chartsData.fee.push([dateValue, item.fee]);
+      this.chartsData.fee.push([dateValue, item.fee === 0 ? LOG_MIN_VALUE : item.fee]);
       this.chartsData.fixedLine.push([dateValue, item.fixed]);
       this.chartsData.averageBlocks.push([dateValue, data.avg_blocks]);
     });
