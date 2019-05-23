@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Avg
 from django.core.exceptions import ObjectDoesNotExist
 import json
 
@@ -27,7 +27,8 @@ class BlockViewSet(viewsets.ModelViewSet):
     queryset = Block.objects.all().order_by('-height')
     serializer_class = BlockSerializer
 
-
+from dateutil import parser
+import numpy as np
 @api_view(['GET'])
 def get_block_range(request):
     range = int(request.GET['range'])
@@ -46,8 +47,7 @@ def get_block_range(request):
 
     if graph_data:
         stream = io.BytesIO(graph_data)
-        data = JSONParser().parse(stream)
-
+        result = JSONParser().parse(stream)
     else:
         latest_block_height = _redis.get('latest_block_height')
         if not latest_block_height:
@@ -59,23 +59,56 @@ def get_block_range(request):
             from_height = int(latest_block_height) - 4 * 1440
         else:
             from_height = 0
-        to_height = int(latest_block_height)
+        to_height = int(latest_block_height) + 1
 
-        blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height)
-        serializer = BlockHeaderSerializer(blocks, many=True)
-        data = serializer.data
+        blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height).order_by('height')
+
+        hour_offset = timedelta(hours=int(1))
+        start_date = parser.parse(BlockHeaderSerializer(blocks.first()).data['timestamp'])
+        end_date = parser.parse(BlockHeaderSerializer(blocks.last()).data['timestamp'])
+        date_with_offset = start_date + hour_offset
+
+        result = {
+            'items': [],
+            'avg_blocks': 0
+        }
+
+        while start_date < end_date:
+            offset_blocks = blocks.filter(timestamp__gte=start_date, timestamp__lt=date_with_offset)
+
+            avg_diff = offset_blocks.aggregate(Avg('difficulty'))['difficulty__avg']
+            fee = offset_blocks.aggregate(Sum('fee'))['fee__sum']
+            fixed = 60
+            hashrate = avg_diff / 60
+            date = BlockHeaderSerializer(offset_blocks.last()).data['timestamp']
+            blocks_count = offset_blocks.count()
+
+            result['items'].append({
+                'fee': fee,
+                'difficulty': avg_diff,
+                'fixed': fixed,
+                'hashrate': hashrate,
+                'date': date,
+                'blocks_count': blocks_count
+            })
+
+            start_date = date_with_offset
+            date_with_offset += hour_offset
+
+        result['avg_blocks'] = blocks.count() / len(result['items'])
+
         if range == 1:
-            _redis.set('daily_graph_data', JSONRenderer().render(serializer.data))
+            _redis.set('daily_graph_data', JSONRenderer().render(result))
         if range == 7:
-            _redis.set('weekly_graph_data', JSONRenderer().render(serializer.data))
+            _redis.set('weekly_graph_data', JSONRenderer().render(result))
         if range == 30:
-            _redis.set('monthly_graph_data', JSONRenderer().render(serializer.data))
+            _redis.set('monthly_graph_data', JSONRenderer().render(result))
         if range == 365:
-            _redis.set('yearly_graph_data', JSONRenderer().render(serializer.data))
+            _redis.set('yearly_graph_data', JSONRenderer().render(result))
         if range == 0:
-            _redis.set('all_graph_data', JSONRenderer().render(serializer.data))
+            _redis.set('all_graph_data', JSONRenderer().render(result))
 
-    return Response(data, status=HTTP_200_OK)
+    return Response(result, status=HTTP_200_OK)
 
 
 @api_view(['GET'])
