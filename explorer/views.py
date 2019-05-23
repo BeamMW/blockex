@@ -16,19 +16,19 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from datetime import datetime, timedelta
 from django.utils import timezone
-import redis
-import io
+from dateutil import parser
 from rest_framework.parsers import JSONParser
 
-_redis = redis.Redis(host='localhost', port=6379, db=0)
+import redis
+import io
 
+_redis = redis.Redis(host='localhost', port=6379, db=0)
 
 class BlockViewSet(viewsets.ModelViewSet):
     queryset = Block.objects.all().order_by('-height')
     serializer_class = BlockSerializer
 
-from dateutil import parser
-import numpy as np
+
 @api_view(['GET'])
 def get_block_range(request):
     range = int(request.GET['range'])

@@ -136,13 +136,17 @@ def update_blockchain():
             Kernel.objects.bulk_create(_kernels)
 
     _redis.set('beam_blockex_last_height', current_height)
-    _redis.delete("daily_graph_data")
-    _redis.delete("weekly_graph_data")
-    _redis.delete("monthly_graph_data")
-    _redis.delete("yearly_graph_data")
-    _redis.delete("all_graph_data")
     _redis.delete('block_data')
     _redis.delete('coins_in_circulation_mined')
     _redis.delete('total_coins_in_circulation')
     _redis.delete('latest_block')
     _redis.delete('latest_block_height')
+
+
+@periodic_task(run_every=(crontab(hour="*/1")), name="update_charts", ignore_result=True)
+def update_charts():
+    _redis.delete("daily_graph_data")
+    _redis.delete("weekly_graph_data")
+    _redis.delete("monthly_graph_data")
+    _redis.delete("yearly_graph_data")
+    _redis.delete("all_graph_data")
