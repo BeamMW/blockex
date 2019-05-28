@@ -1,7 +1,9 @@
 <!--<mat-progress-bar mode="indeterminate" *ngIf="loading_status || loading_blocks || loading_charts"></mat-progress-bar>-->
-<app-header-desktop></app-header-desktop>
 <!-- Some charts -->
-<div [class.content-сontainer-mainnet]=isMainnet [class.content-container-testnet]=!isMainnet *ngIf="!loading_status">
+<div [class.content-сontainer-mainnet]=isMainnet
+     [class.content-container-testnet]=!isMainnet
+     *ngIf="!loading_status">
+  <app-header-desktop></app-header-desktop>
   <div class="overview-container">
     <div class="chart-container">
       <div class="chart">
@@ -108,14 +110,14 @@
 <!-- Top blocks section-->
 <div *ngIf="!loading_status">
   <!--[pageSizeOptions]="pageSizeOptions"-->
-    <div [class.paginator-wrapper-mainnet]=isMainnet
-         [class.paginator-wrapper-testnet]=!isMainnet>
-        <mat-paginator [class.blocks-table-paginator-mainnet]=isMainnet
-                   [class.blocks-table-paginator-testnet]=!isMainnet
-                   [pageSize]="20" [pageIndex]="page" [length]="count"
-                   (page)="pageEvent = loadBlocks($event)" showFirstLastButtons></mat-paginator>
-    </div>
-    <div class="table-container" *ngIf="!loading_blocks">
+  <div [class.paginator-wrapper-mainnet]=isMainnet
+       [class.paginator-wrapper-testnet]=!isMainnet>
+      <mat-paginator [class.blocks-table-paginator-mainnet]=isMainnet
+                 [class.blocks-table-paginator-testnet]=!isMainnet
+                 [pageSize]="20" [pageIndex]="page" [length]="count"
+                 (page)="pageEvent = loadBlocks($event)" showFirstLastButtons></mat-paginator>
+  </div>
+  <div class="table-container">
     <mat-table [dataSource]="dataSource" class="blocks-table mat-elevation-z8">
       <!-- Height Column -->
       <ng-container matColumnDef="height">
@@ -182,11 +184,20 @@
           </span>
         </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="fees">
+        <mat-header-cell *matHeaderCellDef> FEES: </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="mobile-label"> FEES:</span>
+          <span class="desktop-label">
+            {{element.fee}}
+          </span>
+        </mat-cell>
+      </ng-container>
       <mat-header-row [class.blocks-table-header-mainnet]=isMainnet
                       [class.blocks-table-header-testnet]=!isMainnet
                       *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row class="blocks-table-row" (click)="showBlockDetails(row)"
-               *matRowDef="let row; columns: displayedColumns;"></mat-row>
+             *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
   </div>
 </div>

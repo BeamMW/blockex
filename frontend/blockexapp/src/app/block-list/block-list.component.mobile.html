@@ -108,14 +108,14 @@
 <!-- Top blocks section-->
 <div *ngIf="!loading_status">
   <!--[pageSizeOptions]="pageSizeOptions"-->
-    <div [class.paginator-wrapper-mainnet]=isMainnet
-         [class.paginator-wrapper-testnet]=!isMainnet>
-        <mat-paginator [class.blocks-table-paginator-mainnet]=isMainnet
-                   [class.blocks-table-paginator-testnet]=!isMainnet
-                   [pageSize]="20" [pageIndex]="page" [length]="count"
-                   (page)="pageEvent = loadBlocks($event)" showFirstLastButtons></mat-paginator>
-    </div>
-    <div class="table-container" *ngIf="!loading_blocks">
+  <div [class.paginator-wrapper-mainnet]=isMainnet
+       [class.paginator-wrapper-testnet]=!isMainnet>
+      <mat-paginator [class.blocks-table-paginator-mainnet]=isMainnet
+                 [class.blocks-table-paginator-testnet]=!isMainnet
+                 [pageSize]="20" [pageIndex]="page" [length]="count"
+                 (page)="pageEvent = loadBlocks($event)" showFirstLastButtons></mat-paginator>
+  </div>
+  <div class="table-container" >
     <mat-table [dataSource]="dataSource" class="blocks-table mat-elevation-z8">
       <!-- Height Column -->
       <ng-container matColumnDef="height">
@@ -179,6 +179,15 @@
           <span class="mobile-label">#KERNELS:</span>
           <span class="desktop-label">
             {{element.kernels.length}}
+          </span>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="fees">
+        <mat-header-cell *matHeaderCellDef> FEES: </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="mobile-label"> FEES:</span>
+          <span class="desktop-label">
+            {{element.fee}}
           </span>
         </mat-cell>
       </ng-container>

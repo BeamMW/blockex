@@ -12,7 +12,7 @@
     width: 100%;
     display: grid;
     grid-template-columns: 20px auto 50px;
-    grid-template-rows: 60px 60px 60px;
+    grid-template-rows: 15px repeat(3, 60px);
 }
 
 .search-button{
@@ -20,13 +20,12 @@
 }
 
 .header-content-logo {
-    margin-top: 15px;
     float: left;
     cursor: pointer;
 }
 
 .logo-title-content {
-    margin-top: 20px;
+    margin-top: 5px;
     float: left;
     cursor: pointer;
 }
@@ -47,7 +46,6 @@
     margin-left: 24px;
     height: 20px;
     position: absolute;
-    top: 32px;
 }
 
 .header-search-input {
@@ -73,7 +71,7 @@
 }
 
 .search-header-input.search-display {
-    grid-row-start: 3;
+    grid-row-start: 4;
     grid-column-start: 2;
 }
 
@@ -81,7 +79,7 @@
     margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
-    grid-row-start: 2;
+    grid-row-start: 3;
     grid-column-start: 2;
 }
 
@@ -104,25 +102,24 @@ table {
 }
 
 .header-title {
-    grid-row-start: 1;
+    grid-row-start: 2;
     grid-column-start: 2;
 }
 
 .search-control {
     cursor: pointer;
-    grid-row-start: 1;
+    grid-row-start: 2;
     grid-column-start: 3;
-    margin-top: 20px;
+    margin-top: 5px;
 }
 
 app-network-control.search-display {
-    margin-top: 40px;
-    grid-row-start: 2;
+    margin-top: 20px;
+    grid-row-start: 3;
     grid-column-start: 2;
 }
 
 app-network-control.search-hidden {
-    margin-top: 10px;
-    grid-row-start: 3;
+    grid-row-start: 4;
     grid-column-start: 2;
 }

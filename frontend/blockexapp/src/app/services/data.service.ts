@@ -9,6 +9,8 @@ import { Status, Block } from '../models';
 })
 export class DataService {
 
+  //API_BASE = 'https://staging-explorer.beam.mw';
+
   API_BASE = environment.apiBaseUrl ;
 
   constructor(private http: HttpClient) { 

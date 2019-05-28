@@ -7,6 +7,7 @@ import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {PageEvent} from '@angular/material';
 import { Router} from '@angular/router';
 import {environment} from "../../environments/environment";
+import {error} from "selenium-webdriver";
 
 
 @Component({
@@ -25,6 +26,8 @@ export class BlockListComponentDesktop implements OnInit {
   blocks : any;
   dataSource : any;
   updatesCounter : number = 0;
+  loadedWithError : boolean = false;
+  isEnvUpdating : boolean = false;
 
   count : number;
   page : number = 0;
@@ -35,7 +38,7 @@ export class BlockListComponentDesktop implements OnInit {
   prev : string;
 
   displayedColumns : string[] = ['height', 'hash', 'age',
-      'difficulty', 'inputs', 'outputs', 'kernels'];
+      'difficulty', 'inputs', 'outputs', 'kernels', 'fees'];
 
   loading_status : boolean = false;
   loading_blocks : boolean = false;
@@ -84,11 +87,14 @@ export class BlockListComponentDesktop implements OnInit {
     this.isMainnet = environment.production;
     this.loading_status = true;
     this.loading_charts = true;
+    this.isEnvUpdating = environment.updating;
 
     this.dataService.loadStatus().subscribe((status) => {
       this.status = status;
       this.lastHeight = status.height;
       this.loading_status = false;
+    }, (error) => {
+      this.loadedWithError = true;
     });
 
     this.loadBlocks(null);

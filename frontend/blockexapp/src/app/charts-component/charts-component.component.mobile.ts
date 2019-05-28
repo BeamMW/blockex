@@ -395,7 +395,7 @@ export class ChartsComponentMobile implements OnInit {
       chart: {
         animation: false,
         width: window.innerWidth * 0.95,
-        height: 320,
+        height: 420,
         marginBottom: 100,
         ignoreHiddenSeries: false,
         backgroundColor: 'rgba(255,255,255,0)',
@@ -551,7 +551,7 @@ export class ChartsComponentMobile implements OnInit {
         animation: false,
         float: 'left',
         width: window.innerWidth * 0.95,
-        height: 320,
+        height: 420,
         marginBottom: 100,
         ignoreHiddenSeries: false,
         backgroundColor: 'rgba(255,255,255,0)',

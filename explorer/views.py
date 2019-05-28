@@ -66,15 +66,15 @@ def get_block_range(request):
         hour_offset = timedelta(hours=int(1))
         start_date = parser.parse(BlockHeaderSerializer(blocks.first()).data['timestamp'])
         end_date = parser.parse(BlockHeaderSerializer(blocks.last()).data['timestamp'])
-        date_with_offset = start_date + hour_offset
+        date_with_offset = end_date - hour_offset
 
         result = {
             'items': [],
             'avg_blocks': 0
         }
 
-        while start_date < end_date:
-            offset_blocks = blocks.filter(timestamp__gte=start_date, timestamp__lt=date_with_offset)
+        while end_date > start_date:
+            offset_blocks = blocks.filter(timestamp__gte=date_with_offset, timestamp__lt=end_date)
 
             avg_diff = offset_blocks.aggregate(Avg('difficulty'))['difficulty__avg']
             fee = offset_blocks.aggregate(Sum('fee'))['fee__sum']
@@ -83,7 +83,7 @@ def get_block_range(request):
             date = BlockHeaderSerializer(offset_blocks.last()).data['timestamp']
             blocks_count = offset_blocks.count()
 
-            result['items'].append({
+            result['items'].insert(0, {
                 'fee': fee,
                 'difficulty': avg_diff,
                 'fixed': fixed,
@@ -92,10 +92,11 @@ def get_block_range(request):
                 'blocks_count': blocks_count
             })
 
-            start_date = date_with_offset
-            date_with_offset += hour_offset
+            end_date = date_with_offset
+            date_with_offset -= hour_offset
 
         result['avg_blocks'] = blocks.count() / len(result['items'])
+        result['items'].pop(0)
 
         if range == 1:
             _redis.set('daily_graph_data', JSONRenderer().render(result))

@@ -23,8 +23,11 @@ export class BlockListComponentMobile implements OnInit {
   //pageSizeOptions: number[] = [20, 50, 100];
 
   blocks : any;
-  dataSource : any;
+  dataSource = new MatTableDataSource();
   updatesCounter : number = 0;
+
+  loadedWithError : boolean = false;
+  isEnvUpdating : boolean = false;
 
   count : number;
   page : number = 0;
@@ -35,7 +38,7 @@ export class BlockListComponentMobile implements OnInit {
   prev : string;
 
   displayedColumns : string[] = ['height', 'hash', 'age',
-      'difficulty', 'inputs', 'outputs', 'kernels'];
+      'difficulty', 'inputs', 'outputs', 'kernels', 'fees'];
 
   loading_status : boolean = false;
   loading_blocks : boolean = false;
@@ -52,7 +55,7 @@ export class BlockListComponentMobile implements OnInit {
       this.loading_blocks = false;
 
       this.blocks = data['results'];
-      this.dataSource = new MatTableDataSource(this.blocks);
+      this.dataSource.data = this.blocks;
 
       this.count = data['count'];
       this.prev = data['prev'];
@@ -84,11 +87,14 @@ export class BlockListComponentMobile implements OnInit {
     this.isMainnet = environment.production;
     this.loading_status = true;
     this.loading_charts = true;
+    this.isEnvUpdating = environment.updating;
 
     this.dataService.loadStatus().subscribe((status) => {
       this.status = status;
       this.lastHeight = status.height;
       this.loading_status = false;
+    }, (error) => {
+      this.loadedWithError = true;
     });
 
     this.loadBlocks(null);

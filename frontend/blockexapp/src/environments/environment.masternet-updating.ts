@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
   masternet: true,
-  updating: false,
+  updating: true,
   apiBaseUrl: "https://masternet-explorer.beam.mw"
 };

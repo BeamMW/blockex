@@ -1,6 +1,6 @@
 export const environment = {
-  production: true,
+  production: false,
   masternet: false,
-  updating: false,
+  updating: true,
   apiBaseUrl: "https://staging-explorer.beam.mw"
 };
