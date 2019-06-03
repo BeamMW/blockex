@@ -13,14 +13,8 @@ export class HeaderComponentMobile implements OnInit {
 
   isMainnet: boolean = false;
   isMasternet: boolean = false;
-
-  searchControls = {
-    searchElem: "../../../assets/iconSearch.png",
-    searchDeclineElem: "../../../assets/iconDeclineSearch.png"
-  };
-  isSearchInputVisible = false;
-
-  activeSearchControl = this.searchControls.searchElem;
+  isSearchInputVisible: boolean = false;
+  activeSearchControl: boolean = false;
 
   constructor(private dataService: DataService, private router: Router) {}
 
@@ -31,8 +25,7 @@ export class HeaderComponentMobile implements OnInit {
 
   searchClicked() {
     this.isSearchInputVisible = !this.isSearchInputVisible;
-    this.activeSearchControl = this.activeSearchControl == this.searchControls.searchElem ?
-      this.searchControls.searchDeclineElem : this.searchControls.searchElem;
+    this.activeSearchControl = !this.activeSearchControl;
   }
 
   navigateToHomepage(){

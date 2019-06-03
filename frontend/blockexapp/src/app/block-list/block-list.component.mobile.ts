@@ -38,7 +38,7 @@ export class BlockListComponentMobile implements OnInit {
   prev : string;
 
   displayedColumns : string[] = ['height', 'hash', 'age',
-      'difficulty', 'inputs', 'outputs', 'kernels', 'fees'];
+      'difficulty', 'kernels', 'inputs', 'outputs', 'fees'];
 
   loading_status : boolean = false;
   loading_blocks : boolean = false;
