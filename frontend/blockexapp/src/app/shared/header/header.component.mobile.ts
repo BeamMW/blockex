@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { DataService } from '../../services';
 import { routesConsts } from '../../consts';
 import {Router} from "@angular/router";
@@ -11,6 +11,7 @@ import {environment} from "../../../environments/environment";
 })
 export class HeaderComponentMobile implements OnInit {
 
+  @Input() isHomepage: any = false;
   isMainnet: boolean = false;
   isMasternet: boolean = false;
   isSearchInputVisible: boolean = false;

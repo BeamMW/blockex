@@ -1,8 +1,14 @@
-<mat-toolbar class="header-toolbar" [class.search-display]=isSearchInputVisible
-        [class.search-hidden]=!isSearchInputVisible [class.mainnet]=isMainnet
-             [class.testnet]=!isMainnet color="primary">
-    <div class="header-content"  [class.search-display]=isSearchInputVisible
-        [class.search-hidden]=!isSearchInputVisible>
+<mat-toolbar class="header-toolbar"
+             [class.search-display]=isSearchInputVisible&&isHomepage
+             [class.search-hidden]=!isSearchInputVisible&&isHomepage
+             [class.search-display-details]=isSearchInputVisible&&!isHomepage
+             [class.search-hidden-details]=!isSearchInputVisible&&!isHomepage color="primary">
+    <div class="header-content"
+        [class.search-display]=isSearchInputVisible&&isHomepage
+        [class.search-hidden]=!isSearchInputVisible&&isHomepage
+        [class.search-display-details]=isSearchInputVisible&&!isHomepage
+        [class.search-hidden-details]=!isSearchInputVisible&&!isHomepage
+        >
       <div class="header-title">
         <img class="header-content-logo" src="assets/logo.svg" width=48 height=42 alt="">
         <div class="logo-title-content" (click)="navigateToHomepage()">
@@ -18,12 +24,15 @@
         [class.search-display]=isSearchInputVisible
         [class.search-hidden]=!isSearchInputVisible
         *ngIf="!isMasternet"></app-network-control>
-      <div [class.search-display]=isSearchInputVisible
-           [class.search-hidden]=!isSearchInputVisible
-            class="search-input-container">
-        <input [class.search-display]=isSearchInputVisible
-               [class.search-hidden]=!isSearchInputVisible
-               autocomplete="off" class="search-header-input"
+      <div class="search-input-container"
+           [class.search-display]=isSearchInputVisible&&isHomepage
+           [class.search-hidden]=!isSearchInputVisible&&isHomepage
+           [class.search-display-details]=isSearchInputVisible&&!isHomepage
+           [class.search-hidden-details]=!isSearchInputVisible&&!isHomepage>
+        <input class="search-header-input"
+               [class.search-display]=isSearchInputVisible&&isHomepage
+               [class.search-display-details]=isSearchInputVisible&&!isHomepage
+               autocomplete="off"
                placeholder="Search by height, hash, kernel ID"
                onfocus="this.placeholder = ''"
                onblur="this.placeholder = 'Search by height, hash, kernel ID'"
