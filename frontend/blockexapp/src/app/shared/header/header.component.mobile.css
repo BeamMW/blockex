@@ -5,11 +5,11 @@
 }
 
 .header-toolbar.search-display {
-    height: 185px;
+    height: 180px;
 }
 
 .header-toolbar.search-hidden {
-    height: 110px;
+    height: 130px;
 }
 
 .header-content {
