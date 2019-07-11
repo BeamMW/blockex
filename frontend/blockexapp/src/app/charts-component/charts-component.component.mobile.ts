@@ -350,6 +350,11 @@ export class ChartsComponentMobile implements OnInit {
               '<div class="tooltip-value">' + this.y.toLocaleString('en-US', {maximumFractionDigits: 0}) + '</div></div>';
         }
       },
+      plotOptions: {
+            series: {
+                animation: false
+            }
+        },
       series: [{
         marker: {
           fillColor: 'rgba(255,255,255,0)',
@@ -415,7 +420,6 @@ export class ChartsComponentMobile implements OnInit {
       yAxis: {
         lineWidth: 0,
         type: 'logarithmic',
-        min: LOG_MIN_VALUE,
         lineColor: '#ff51ff',
         gridLineColor: 'rgba(255, 255, 255, 0.1)',
         title: {
@@ -516,6 +520,11 @@ export class ChartsComponentMobile implements OnInit {
         x: 0,
         y: -15
       },
+      plotOptions: {
+            series: {
+                animation: false
+            }
+        },
       tooltip: {
         followPointer: false,
         useHTML:true,

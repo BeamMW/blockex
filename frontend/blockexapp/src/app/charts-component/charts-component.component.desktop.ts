@@ -420,7 +420,6 @@ export class ChartsComponentDesktop implements OnInit {
       yAxis: {
         lineWidth: 0,
         type: 'logarithmic',
-        min: LOG_MIN_VALUE,
         lineColor: '#ff51ff',
         gridLineColor: 'rgba(255, 255, 255, 0.1)',
         title: {

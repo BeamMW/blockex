@@ -172,25 +172,39 @@ table {
 }
 
 .search-control.search {
-    background: url("../../../assets/iconSearch.png") no-repeat center bottom;
+    background-image: url("../../../assets/iconSearchCopy2@3x.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .search-control.decline {
-    background: url("../../../assets/iconDeclineSearch.png") no-repeat center bottom;
+    background-image: url("../../../assets/iconSearchCopy4@3x.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 app-network-control.search-display {
     margin-top: 10px;
-    grid-row-start: 3;
-    grid-column-start: 2;
-    grid-row-end: 3;
-    grid-column-end: 2;
+    grid-row-start: 4;
+    grid-column-start: 1;
+    grid-row-end: 4;
+    grid-column-end: 4;
 }
 
 app-network-control.search-hidden {
     margin-top: 10px;
     grid-row-start: 4;
-    grid-column-start: 2;
+    grid-column-start: 1;
     grid-row-end: 4;
-    grid-column-end: 2;
+    grid-column-end: 4;
+}
+
+
+@media(max-width: 350px) {
+  .header-content {
+    display: grid;
+    grid-template-columns: 10px auto 50px;
+  }
 }

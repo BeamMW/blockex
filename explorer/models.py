@@ -42,9 +42,6 @@ class Input(models.Model):
     commitment = models.CharField(null=False, blank=False, max_length=256)
     maturity = models.IntegerField()
 
-    class Meta:
-        unique_together = ('block', 'commitment',)
-
     def from_json(self, _json):
         self.commitment = _json['commitment']
         self.maturity = _json['maturity']
@@ -56,9 +53,6 @@ class Output(models.Model):
     coinbase = models.BooleanField()
     maturity = models.IntegerField()
     incubation = models.IntegerField()
-
-    class Meta:
-        unique_together = ('block', 'commitment',)
 
     def from_json(self, _json):
         self.commitment = _json['commitment']

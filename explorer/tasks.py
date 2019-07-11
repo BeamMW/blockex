@@ -79,7 +79,7 @@ def update_blockchain():
 
     # Retrieve missing blocks in 100 block pages
 
-    while (last_height < current_height + 200):
+    while (last_height < current_height + 100):
         r = requests.get(BEAM_NODE_API + '/blocks?height=' + str(last_height) + '&n=100')
         blocks = r.json()
         _inputs = []
@@ -88,7 +88,7 @@ def update_blockchain():
 
         for _block in blocks:
 
-            if 'found' in _block and _block['found'] == False:
+            if 'found' in _block and _block['found'] is False:
                 continue
 
             b = Block()
@@ -99,7 +99,7 @@ def update_blockchain():
             try:
                 b.save()
             except IntegrityError as e:
-                b = Block.objects.get(height = b.height)
+                b = Block.objects.get(height=b.height)
                 continue
 
             for _input in _block['inputs']:

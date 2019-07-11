@@ -21,7 +21,7 @@
     display: block;
     overflow: hidden;
     cursor: pointer;
-    border: 1px solid rgb(150,141,158);
+    border: 1px solid rgba(255,255,255,.3);
     border-radius: 20px;
 }
 .onoffswitch-inner {
@@ -64,12 +64,12 @@
     font-weight: 600;
     font-style: normal;
     letter-spacing: 7px;
-    color: rgb(150,141,158);
+    color: rgba(255,255,255,.3);
     text-align: right;
 }
 
 .onoffswitch-switch {
-    width: 145px;
+    width: 129px;
     height: 31px;
     border-radius: 15.5px;
     border: none;
@@ -80,7 +80,7 @@
     position: absolute;
     top: -1px;
     bottom: 0;
-    right: 130px;
+    right: 142px;
     transition: all 0.3s ease-in 0s;
     font-size: 14px;
     font-weight: 600;
@@ -112,5 +112,16 @@
       left: unset;
       right: unset;
       position: unset;
+  }
+}
+
+@media(max-width: 350px) {
+  .network-control-elem {
+      width: 275px;
+  }
+
+  .onoffswitch-switch {
+    width: 118px;
+    right: 138px;
   }
 }
