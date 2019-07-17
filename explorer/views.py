@@ -75,22 +75,33 @@ def get_block_range(request):
 
         while end_date > start_date:
             offset_blocks = blocks.filter(timestamp__gte=date_with_offset, timestamp__lt=end_date)
-
-            avg_diff = offset_blocks.aggregate(Avg('difficulty'))['difficulty__avg']
-            fee = offset_blocks.aggregate(Sum('fee'))['fee__sum']
-            fixed = 60
-            hashrate = avg_diff / 60
-            date = BlockHeaderSerializer(offset_blocks.last()).data['timestamp']
             blocks_count = offset_blocks.count()
 
-            result['items'].insert(0, {
-                'fee': fee,
-                'difficulty': avg_diff,
-                'fixed': fixed,
-                'hashrate': hashrate,
-                'date': date,
-                'blocks_count': blocks_count
-            })
+            fixed = 60
+            if blocks_count is not 0:
+                avg_diff = offset_blocks.aggregate(Avg('difficulty'))['difficulty__avg']
+                fee = offset_blocks.aggregate(Sum('fee'))['fee__sum']
+
+                hashrate = avg_diff / 60
+                date = BlockHeaderSerializer(offset_blocks.last()).data['timestamp']
+
+                result['items'].insert(0, {
+                    'fee': fee,
+                    'difficulty': avg_diff,
+                    'fixed': fixed,
+                    'hashrate': hashrate,
+                    'date': date,
+                    'blocks_count': blocks_count
+                })
+            else:
+                result['items'].insert(0, {
+                    'fee': 0,
+                    'difficulty': 0,
+                    'fixed': fixed,
+                    'hashrate': 0,
+                    'date': date_with_offset,
+                    'blocks_count': blocks_count
+                })
 
             end_date = date_with_offset
             date_with_offset -= hour_offset
