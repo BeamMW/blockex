@@ -46,8 +46,13 @@ class BlockSerializer(serializers.ModelSerializer):
 
 
 class BlockHeaderSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Block
-        fields = ('height','hash', 'chainwork','difficulty','subsidy','timestamp', 'fee')
+        fields = ('height', 'hash', 'chainwork', 'difficulty', 'subsidy', 'timestamp', 'fee')
+
+
+class ForkDetectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Forks_event_detection
+        fields = ('height',)
 

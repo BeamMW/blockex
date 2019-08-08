@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^next_treasury_emission_coin_amount/$', get_next_treasury_emission_coin_amount),
     url(r'^total_emission/$', get_total_emission),
     url(r'^block_by_kernel/$', get_block_by_kernel),
+    url(r'^get_detected_forks/$', get_detected_forks),
     url(r'^', include(router.urls)),
 ]

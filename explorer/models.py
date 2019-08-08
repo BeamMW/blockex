@@ -78,7 +78,7 @@ class Kernel(models.Model):
 
 
 class Forks_event_detection(models.Model):
-    height = models.CharField(blank=False, null=False, max_length=128, db_index=True)
+    height = models.IntegerField()
 
-    def from_json(self, _json):
-        self.height = _json
+    def from_json(self, height):
+        self.height = height

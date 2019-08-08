@@ -129,6 +129,7 @@ def get_block(request):
     serializer = BlockSerializer(b)
     return Response(serializer.data, status=HTTP_200_OK)
 
+import requests
 
 @api_view(['GET'])
 def search(request):
@@ -286,3 +287,11 @@ def get_block_by_kernel(request):
             return Response({'Incorrect kernel id'}, status=404)
     else:
         return Response({'Incorrect kernel id'}, status=404)
+
+
+@api_view(['GET'])
+def get_detected_forks(request):
+    fd = Forks_event_detection.objects.all()
+    serializer = ForkDetectionSerializer(fd, many=True)
+
+    return Response({'fork_heights': serializer.data}, status=HTTP_200_OK)

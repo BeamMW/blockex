@@ -13,8 +13,9 @@ import redis
 from .models import *
 
 HEIGHT_STEP = 43800
-DAILY_BLOCK_STEP = 1440
 BEAM_NODE_API = 'http://localhost:8888'
+BLOCKS_PER_DAY = 1440
+BLOCKS_STEP = 100
 
 @periodic_task(run_every=(crontab(minute='*/1')), name="update_blockchain", ignore_result=True)
 def update_blockchain():
@@ -27,7 +28,7 @@ def update_blockchain():
         try:
             last_block = Block.objects.latest('height')
             last_height = last_block.height if last_block else 1
-        except ObjectDoesNotExist as e:
+        except ObjectDoesNotExist:
             last_height = 1
 
     last_height = int(last_height)
@@ -79,17 +80,61 @@ def update_blockchain():
 
     # Retrieve missing blocks in 100 block pages
 
-    while (last_height < current_height + 100):
-        r = requests.get(BEAM_NODE_API + '/blocks?height=' + str(last_height) + '&n=100')
+    while (last_height < current_height + BLOCKS_STEP):
+        height_dif = current_height - last_height
+        
+        blocks_to_check = False
+        n = BLOCKS_STEP
+        from_height = last_height
+        if height_dif < BLOCKS_STEP:
+            n = BLOCKS_PER_DAY
+            from_height = last_height - BLOCKS_PER_DAY
+            blocks_to_check = Block.objects.filter(height__gte=str(from_height), height__lt=str(last_height))
+
+        r = requests.get(BEAM_NODE_API + '/blocks?height=' + str(from_height) + '&n=' + str(n))
+        
         blocks = r.json()
         _inputs = []
         _outputs = []
         _kernels = []
-
+        new_values = False
+        fork_detected = False
+        
         for _block in blocks:
 
             if 'found' in _block and _block['found'] is False:
                 continue
+
+            if not fork_detected and not new_values and blocks_to_check:
+                try:
+                    check_value = blocks_to_check.get(height=_block['height'])
+                    if check_value.get('hash') != _block['hash']:
+                        # Fork detected
+                        fork_detected = True
+                        fd = Forks_event_detection()
+                        fd.from_json(_block['height'])
+                        fd.save()
+
+                        Input.objects.filter(block_id=check_value.get('height')).delete()
+                        Output.objects.filter(block_id=check_value.get('height')).delete()
+                        Kernel.objects.filter(block_id=check_value.get('height')).delete()
+
+                        check_value.delete()
+
+                except ObjectDoesNotExist:
+                    new_values = True
+
+            if fork_detected and not new_values and blocks_to_check:
+                try:
+                    check_value = blocks_to_check.get(height=_block['height'])
+
+                    Input.objects.filter(block_id=check_value.get('height')).delete()
+                    Output.objects.filter(block_id=check_value.get('height')).delete()
+                    Kernel.objects.filter(block_id=check_value.get('height')).delete()
+
+                    check_value.delete()
+                except ObjectDoesNotExist:
+                    new_values = True
 
             b = Block()
             b.from_json(_block)
@@ -98,7 +143,7 @@ def update_blockchain():
 
             try:
                 b.save()
-            except IntegrityError as e:
+            except IntegrityError:
                 b = Block.objects.get(height=b.height)
                 continue
 
