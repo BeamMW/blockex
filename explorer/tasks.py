@@ -108,16 +108,16 @@ def update_blockchain():
             if not fork_detected and not new_values and blocks_to_check:
                 try:
                     check_value = blocks_to_check.get(height=_block['height'])
-                    if check_value.get('hash') != _block['hash']:
+                    if check_value.hash != _block['hash']:
                         # Fork detected
                         fork_detected = True
                         fd = Forks_event_detection()
                         fd.from_json(_block['height'])
                         fd.save()
 
-                        Input.objects.filter(block_id=check_value.get('height')).delete()
-                        Output.objects.filter(block_id=check_value.get('height')).delete()
-                        Kernel.objects.filter(block_id=check_value.get('height')).delete()
+                        Input.objects.filter(block_id=check_value.id).delete()
+                        Output.objects.filter(block_id=check_value.id).delete()
+                        Kernel.objects.filter(block_id=check_value.id).delete()
 
                         check_value.delete()
 
@@ -128,9 +128,9 @@ def update_blockchain():
                 try:
                     check_value = blocks_to_check.get(height=_block['height'])
 
-                    Input.objects.filter(block_id=check_value.get('height')).delete()
-                    Output.objects.filter(block_id=check_value.get('height')).delete()
-                    Kernel.objects.filter(block_id=check_value.get('height')).delete()
+                    Input.objects.filter(block_id=check_value.id).delete()
+                    Output.objects.filter(block_id=check_value.id).delete()
+                    Kernel.objects.filter(block_id=check_value.id).delete()
 
                     check_value.delete()
                 except ObjectDoesNotExist:
