@@ -16,6 +16,9 @@ HEIGHT_STEP = 43800
 BEAM_NODE_API = 'http://localhost:8888'
 BLOCKS_PER_DAY = 1440
 BLOCKS_STEP = 100
+MONTHS_IN_YEAR = 12
+FIRST_YEAR_VALUE = 20
+REST_YEARS_VALUE = 10
 
 @periodic_task(run_every=(crontab(minute='*/1')), name="update_blockchain", ignore_result=True)
 def update_blockchain():
@@ -59,12 +62,11 @@ def update_blockchain():
 
     coins_in_circulation_treasury = _redis.get('coins_in_circulation_treasury')
     if (not coins_in_circulation_treasury) or (current_height_step_amount > last_height_step_amount):
-
-        if current_height_step_amount > 12:
-            coins_in_circulation_treasury = 12 * 20 * HEIGHT_STEP + \
-                                            (current_height_step_amount - 12) * 10 * HEIGHT_STEP
+        if current_height_step_amount >= MONTHS_IN_YEAR:
+            coins_in_circulation_treasury = MONTHS_IN_YEAR * FIRST_YEAR_VALUE * HEIGHT_STEP + \
+                                            (current_height_step_amount - MONTHS_IN_YEAR) * REST_YEARS_VALUE * HEIGHT_STEP
         else:
-            coins_in_circulation_treasury = current_height_step_amount * 20 * HEIGHT_STEP
+            coins_in_circulation_treasury = current_height_step_amount * FIRST_YEAR_VALUE * HEIGHT_STEP
         _redis.set('coins_in_circulation_treasury', coins_in_circulation_treasury)
 
     # Next treasury emission coin amount
@@ -72,10 +74,10 @@ def update_blockchain():
     next_treasury_coin_amount = _redis.get('next_treasury_coin_amount')
     if (not next_treasury_coin_amount) or (current_height_step_amount > last_height_step_amount):
 
-        if current_height_step_amount > 12:
-            next_treasury_coin_amount = 10 * HEIGHT_STEP
+        if current_height_step_amount >= MONTHS_IN_YEAR:
+            next_treasury_coin_amount = REST_YEARS_VALUE * HEIGHT_STEP
         else:
-            next_treasury_coin_amount = 20 * HEIGHT_STEP
+            next_treasury_coin_amount = FIRST_YEAR_VALUE * HEIGHT_STEP
         _redis.set('next_treasury_coin_amount', next_treasury_coin_amount)
 
     # Retrieve missing blocks in 100 block pages
@@ -86,7 +88,7 @@ def update_blockchain():
         blocks_to_check = False
         n = BLOCKS_STEP
         from_height = last_height
-        if height_dif < BLOCKS_STEP:
+        if height_dif < BLOCKS_STEP and current_height > BLOCKS_PER_DAY:
             n = BLOCKS_PER_DAY
             from_height = last_height - BLOCKS_PER_DAY
             blocks_to_check = Block.objects.filter(height__gte=str(from_height), height__lt=str(last_height))
