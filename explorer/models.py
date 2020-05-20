@@ -39,38 +39,38 @@ class Block(models.Model):
 
 class Input(models.Model):
     block = models.ForeignKey(Block, related_name='inputs', on_delete=models.CASCADE)
-    commitment = models.CharField(null=False, blank=False, max_length=256)
-    maturity = models.IntegerField()
+    commitment = models.CharField(null=False, blank=False, max_length=128)
+    extra = models.CharField(null=False, blank=False, max_length=128)
+    height = models.IntegerField()
 
     def from_json(self, _json):
         self.commitment = _json['commitment']
-        self.maturity = _json['maturity']
+        self.height = _json['height']
+        self.extra = _json['extra']
 
 
 class Output(models.Model):
     block = models.ForeignKey(Block, related_name='outputs', on_delete=models.CASCADE)
-    commitment = models.CharField(null=False, blank=False, max_length=256)
-    coinbase = models.BooleanField()
+    commitment = models.CharField(null=False, blank=False, max_length=128)
+    extra = models.CharField(null=False, blank=False, max_length=128)
     maturity = models.IntegerField()
-    incubation = models.IntegerField()
 
     def from_json(self, _json):
         self.commitment = _json['commitment']
         self.maturity = _json['maturity']
-        self.incubation = _json['incubation']
-        self.coinbase = 'coinbase' in _json and _json['coinbase']
+        self.extra = _json['extra']
 
 
 class Kernel(models.Model):
     block = models.ForeignKey(Block, related_name='kernels', on_delete=models.CASCADE)
     fee = models.FloatField()
+    extra = models.CharField(null=False, blank=False, max_length=128)
     kernel_id = models.CharField(null=False, blank=False, max_length=128)
-    excess = models.CharField(null=False, blank=False, max_length=128)
     minHeight = models.IntegerField()
     maxHeight = models.CharField(null=False, blank=False, max_length=128)
 
     def from_json(self, _json):
-        self.excess = _json['excess']
+        self.extra = _json['extra']
         self.fee = _json['fee']
         self.kernel_id = _json['id']
         self.minHeight = _json['minHeight']

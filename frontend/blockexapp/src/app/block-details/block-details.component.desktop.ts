@@ -23,9 +23,9 @@ export class BlockDetailsComponentDesktop implements OnInit {
   kernelsExpanded: boolean = false;
 
   displayedColumns: any = {
-    kernels: ['fee', 'excess', 'id'],
-    inputs: ['commitment', 'maturity'],
-    outputs: ['commitment', 'maturity', 'coinbase'],
+    kernels: ['fee', 'id', 'extra'],
+    inputs: ['height', 'commitment', 'extra'],
+    outputs: ['commitment', 'maturity', 'extra'],
     block: ['name', 'value']
   };
 

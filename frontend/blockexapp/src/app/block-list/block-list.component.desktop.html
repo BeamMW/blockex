@@ -158,8 +158,8 @@
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="kernels">
-        <mat-header-cell *matHeaderCellDef> #KERNELS: </mat-header-cell>
-        <mat-cell *matCellDef="let element">
+        <mat-header-cell class="kernel-cell-header" *matHeaderCellDef> #KERNELS: </mat-header-cell>
+        <mat-cell class="kernel-cell" *matCellDef="let element">
           <span class="mobile-label"># kernels:</span>
           <span class="desktop-label">
             {{element.kernels.length}}

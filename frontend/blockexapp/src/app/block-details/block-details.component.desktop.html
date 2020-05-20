@@ -38,6 +38,14 @@
 
           <div class="table-container">
             <mat-table class="inputs-table" #table [dataSource]="block.inputs">
+              <ng-container matColumnDef="height">
+                <mat-header-cell *matHeaderCellDef> Height: </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="mobile-label">Height:</span>
+                  {{element.height}}
+                </mat-cell>
+              </ng-container>
+
               <ng-container matColumnDef="commitment">
                 <mat-header-cell *matHeaderCellDef> Commitment: </mat-header-cell>
                 <mat-cell *matCellDef="let element">
@@ -46,11 +54,11 @@
                 </mat-cell>
               </ng-container>
 
-              <ng-container matColumnDef="maturity">
-                <mat-header-cell *matHeaderCellDef> Maturity: </mat-header-cell>
+              <ng-container matColumnDef="extra">
+                <mat-header-cell *matHeaderCellDef> Extra: </mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                  <span class="mobile-label">Maturity:</span>
-                  {{element.maturity}}
+                  <span class="mobile-label">Extra:</span>
+                  {{element.extra}}
                 </mat-cell>
               </ng-container>
 
@@ -86,11 +94,11 @@
                 </mat-cell>
               </ng-container>
 
-              <ng-container matColumnDef="coinbase">
-                <mat-header-cell *matHeaderCellDef> Coinbase: </mat-header-cell>
+              <ng-container matColumnDef="extra">
+                <mat-header-cell *matHeaderCellDef> Extra: </mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                  <span class="mobile-label">Coinbase:</span>
-                  {{element.coinbase}}
+                  <span class="mobile-label">Extra:</span>
+                  {{element.extra}}
                 </mat-cell>
               </ng-container>
 
@@ -119,13 +127,13 @@
               </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="excess">
-              <mat-header-cell *matHeaderCellDef> Excess: </mat-header-cell>
+            <ng-container matColumnDef="extra">
+              <mat-header-cell *matHeaderCellDef> Extra: </mat-header-cell>
               <mat-cell *matCellDef="let element"
                         [class.searched-by-mainnet]="isMainnet &&element.kernel_id == searchedBy && isFadein"
                         [class.searched-by-testnet]="!isMainnet &&element.kernel_id == searchedBy && isFadein">
-                <span class="mobile-label">Excess:</span>
-                <span class="excess-cell">{{element.excess}}</span>
+                <span class="mobile-label">Extra:</span>
+                <span class="excess-cell">{{element.extra}}</span>
               </mat-cell>
             </ng-container>
 
