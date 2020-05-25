@@ -53,11 +53,9 @@ class Output(models.Model):
     block = models.ForeignKey(Block, related_name='outputs', on_delete=models.CASCADE)
     commitment = models.CharField(null=False, blank=False, max_length=128)
     extra = models.CharField(null=False, blank=False, max_length=128)
-    maturity = models.IntegerField()
 
     def from_json(self, _json):
         self.commitment = _json['commitment']
-        self.maturity = _json['maturity']
         self.extra = _json['extra']
 
 

@@ -11,13 +11,13 @@ class InputSerializer(serializers.ModelSerializer):
 class OutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = Output
-        fields = ('commitment', 'maturity', 'extra')
+        fields = ('commitment', 'extra')
 
 
 class KernelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kernel
-        fields = ('fee', 'extra', 'minHeight', 'maxHeight')
+        fields = ('fee', 'kernel_id', 'extra', 'minHeight', 'maxHeight')
 
 
 class BlockSerializer(serializers.ModelSerializer):
