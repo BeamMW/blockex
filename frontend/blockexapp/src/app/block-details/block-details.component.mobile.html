@@ -84,14 +84,6 @@
                 </mat-cell>
               </ng-container>
 
-              <ng-container matColumnDef="maturity">
-                <mat-header-cell *matHeaderCellDef> Maturity: </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <span class="mobile-label">Maturity:</span>
-                  {{element.maturity}}
-                </mat-cell>
-              </ng-container>
-
               <ng-container matColumnDef="extra">
                 <mat-header-cell *matHeaderCellDef> Extra: </mat-header-cell>
                 <mat-cell *matCellDef="let element">
@@ -118,18 +110,18 @@
             <ng-container matColumnDef="fee">
               <mat-header-cell *matHeaderCellDef> Fee: </mat-header-cell>
               <mat-cell *matCellDef="let element"
-                        [class.searched-by-mainnet]="isMainnet &&element.id == searchedBy && isFadein"
-                        [class.searched-by-testnet]="!isMainnet &&element.id == searchedBy && isFadein">
+                        [class.searched-by-mainnet]="isMainnet &&element.kernel_id == searchedBy && isFadein"
+                        [class.searched-by-testnet]="!isMainnet &&element.kernel_id == searchedBy && isFadein">
                 <span class="mobile-label">Fee:</span>
-                <span class="fee-cell" [attr.id]="element.id">{{element.fee}}</span>
+                <span class="fee-cell" [attr.id]="element.kernel_id">{{element.fee}}</span>
               </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="extra">
               <mat-header-cell *matHeaderCellDef> Extra: </mat-header-cell>
               <mat-cell *matCellDef="let element"
-                        [class.searched-by-mainnet]="isMainnet &&element.id == searchedBy && isFadein"
-                        [class.searched-by-testnet]="!isMainnet &&element.id == searchedBy && isFadein">
+                        [class.searched-by-mainnet]="isMainnet &&element.kernel_id == searchedBy && isFadein"
+                        [class.searched-by-testnet]="!isMainnet &&element.kernel_id == searchedBy && isFadein">
                 <span class="mobile-label">Extra:</span>
                 <span class="excess-cell">{{element.extra}}</span>
               </mat-cell>
@@ -138,10 +130,10 @@
             <ng-container matColumnDef="id">
               <mat-header-cell *matHeaderCellDef> ID: </mat-header-cell>
               <mat-cell *matCellDef="let element"
-                        [class.searched-by-mainnet]="isMainnet &&element.id == searchedBy && isFadein"
-                        [class.searched-by-testnet]="!isMainnet &&element.id == searchedBy && isFadein">
+                        [class.searched-by-mainnet]="isMainnet &&element.kernel_id == searchedBy && isFadein"
+                        [class.searched-by-testnet]="!isMainnet &&element.kernel_id == searchedBy && isFadein">
                 <span class="mobile-label">ID:</span>
-                <span class="kernel-id-cell">{{element.id}}</span>
+                <span class="kernel-id-cell">{{element.kernel_id}}</span>
               </mat-cell>
             </ng-container>
 

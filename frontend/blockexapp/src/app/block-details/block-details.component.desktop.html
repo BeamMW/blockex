@@ -86,14 +86,6 @@
                 </mat-cell>
               </ng-container>
 
-              <ng-container matColumnDef="maturity">
-                <mat-header-cell *matHeaderCellDef> Maturity: </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <span class="mobile-label">Maturity:</span>
-                  {{element.maturity}}
-                </mat-cell>
-              </ng-container>
-
               <ng-container matColumnDef="extra">
                 <mat-header-cell *matHeaderCellDef> Extra: </mat-header-cell>
                 <mat-cell *matCellDef="let element">
@@ -138,12 +130,12 @@
             </ng-container>
 
             <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef> ID: </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef> Id: </mat-header-cell>
               <mat-cell *matCellDef="let element"
                         [class.searched-by-mainnet]="isMainnet &&element.kernel_id == searchedBy && isFadein"
                         [class.searched-by-testnet]="!isMainnet &&element.kernel_id == searchedBy && isFadein">
                 <span class="mobile-label">Id:</span>
-                <span class="kernel-id-cell">{{element.id}}</span>
+                <span class="kernel-id-cell">{{element.kernel_id}}</span>
               </mat-cell>
             </ng-container>
 
