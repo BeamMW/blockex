@@ -80,3 +80,16 @@ class Forks_event_detection(models.Model):
 
     def from_json(self, height):
         self.height = height
+
+class Bot_users(models.Model):
+    external_id = models.PositiveIntegerField(
+        unique=True,
+    )
+
+class Rollback_reports(models.Model):
+    height_from = models.PositiveIntegerField()
+    height_to = models.PositiveIntegerField()
+
+    def from_json(self, _json):
+        self.height_from = _json['from']
+        self.height_to = _json['to']

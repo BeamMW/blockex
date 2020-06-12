@@ -9,15 +9,15 @@ import { Status, Block } from '../models';
 })
 export class DataService {
 
-API_BASE = 'https://52.52.220.76';
+// API_BASE = 'https://52.52.220.76';
 
-//  API_BASE = environment.apiBaseUrl ;
+ API_BASE = environment.apiBaseUrl;
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
   }
 
   loadStatus() {
-  	return this.http.get<Status>(this.API_BASE + '/explorer/status/');
+    return this.http.get<Status>(this.API_BASE + '/explorer/status/');
   }
 
   loadBlock(hash) {

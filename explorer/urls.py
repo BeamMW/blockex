@@ -1,11 +1,12 @@
 from django.conf.urls import url, include
 from rest_framework import routers
 from .views import *
-
+from django.views.decorators.csrf import csrf_exempt
 router = routers.DefaultRouter()
 router.register(r'blocks', BlockViewSet)
 
-
+from django.urls import path
+from .views import BotView
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
@@ -23,5 +24,6 @@ urlpatterns = [
     url(r'^total_emission/$', get_total_emission),
     url(r'^block_by_kernel/$', get_block_by_kernel),
     url(r'^get_detected_forks/$', get_detected_forks),
+    path('webhooks/bot/', csrf_exempt(BotView.as_view())),
     url(r'^', include(router.urls)),
 ]

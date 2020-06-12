@@ -54,5 +54,10 @@ class BlockHeaderSerializer(serializers.ModelSerializer):
 class ForkDetectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Forks_event_detection
-        fields = ('height',)
+        fields = "__all__"
+
+class BotUsersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bot_users
+        fields = "__all__"
 
