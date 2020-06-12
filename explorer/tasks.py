@@ -41,13 +41,16 @@ def send_message(message, chat_id):
 
 @periodic_task(run_every=(crontab(minute='*/1')), name="bot_check", ignore_result=True)
 def bot_check():
+    r = requests.get(BEAM_NODE_API + '/status')
+    current_height = r.json()['height']
+    last_block = r.json()
+
     _redis = redis.Redis(host='localhost', port=6379, db=0)
     # delay check
     users = Bot_users.objects.all()
-    last_block = Block.objects.all().order_by('height')[Block.objects.count()-1]
 
     millisec_last = last_block.timestamp.timestamp() * 1000
-    date_now = int(round(time.time() * 1000)) + 10800000
+    date_now = int(round(time.time() * 1000))
 
     millisec_dif = date_now - millisec_last
     if millisec_dif >= 360000:
@@ -56,10 +59,11 @@ def bot_check():
         minutes=(millisec_dif/(1000*60))%60
         minutes = int(minutes)
 
-        if _redis.get('delay_alert') == 'sended':
+        if _redis.get('delay_alert') != 'sended':
             for user in users:
                 send_message(bytes.decode(b'\xE2\x9D\x97', 'utf8')+
-                    'Block delay alert! '+str(minutes)+' min '+str(seconds)+' sec ', user.external_id)
+                    'Block delay alert! '+str(minutes)+' min '+str(seconds)+
+                    ' sec. Last block height: '+current_height, user.external_id)
             _redis.set('delay_alert', 'sended')
     else: 
         _redis.delete('delay_alert')
