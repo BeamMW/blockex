@@ -8,6 +8,7 @@ import json
 import pytz
 import redis
 import os
+import time
 
 from .models import *
 from datetime import datetime
@@ -43,26 +44,20 @@ def bot_check():
     # delay check
     users = Bot_users.objects.all()
     last_block = Block.objects.all().order_by('height')[Block.objects.count()-1]
-    prelast_block = Block.objects.all().order_by('height')[Block.objects.count()-2]
 
     millisec_last = last_block.timestamp.timestamp() * 1000
-    millisec_prelast = prelast_block.timestamp.timestamp() * 1000
+    date_now = int(round(time.time() * 1000)) + 10800000
 
-    millisec_dif = millisec_last - millisec_prelast
-    if millisec_dif >= 180000:
+    millisec_dif = millisec_last - date_now
+    if millisec_dif >= 360000:
         seconds=(millisec_dif/1000)%60
         seconds = int(seconds)
         minutes=(millisec_dif/(1000*60))%60
         minutes = int(minutes)
-        print(millisec_dif / 1000)
 
         for user in users:
             send_message(bytes.decode(b'\xE2\x9D\x97', 'utf8')+
-                'Block delay alert! Between '+
-                str(last_block.height)+
-                ' and '+
-                str(prelast_block.height)+
-                ' heights is: '+str(minutes)+' min '+str(seconds)+' sec ', user.external_id)
+                'Block delay alert! '+str(minutes)+' min '+str(seconds)+' sec ', user.external_id)
     # rollback check
     rollback_heights = Forks_event_detection.objects.all().order_by('height')
     if rollback_heights.count() > 0:
@@ -71,25 +66,19 @@ def bot_check():
         r_first_height = 0
         for num, r_height in enumerate(rollback_heights):
             if num != 0:
-                print(num, '---', r_height.height, r_tmp_height.height)
                 height_dif = r_height.height - r_tmp_height.height
                 if height_dif == 1:
                     if counter == 0:
-                        print('counter is 0, first height reset')
                         r_first_height = r_tmp_height.height
 
                     counter += 1
-                    print('counter is: ', counter)
                 
                 if height_dif > 1 or num == (rollback_heights.count() - 1):
                     if counter >= 5:
-                        print('rollback detected!')
                         for user in users:
                             try:
                                 last_block = Rollback_reports.objects.get(height_from=r_first_height, height_to=r_height.height)
-                                print('rollback exist!')
                             except ObjectDoesNotExist:
-                                print('rollback saved!')
                                 reports = Rollback_reports()
                                 reports.from_json({'from': r_first_height, 'to': r_height.height})
                                 reports.save()
