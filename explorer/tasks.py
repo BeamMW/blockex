@@ -41,6 +41,7 @@ def send_message(message, chat_id):
 
 @periodic_task(run_every=(crontab(minute='*/1')), name="bot_check", ignore_result=True)
 def bot_check():
+    _redis = redis.Redis(host='localhost', port=6379, db=0)
     # delay check
     users = Bot_users.objects.all()
     last_block = Block.objects.all().order_by('height')[Block.objects.count()-1]
@@ -48,16 +49,20 @@ def bot_check():
     millisec_last = last_block.timestamp.timestamp() * 1000
     date_now = int(round(time.time() * 1000)) + 10800000
 
-    millisec_dif = millisec_last - date_now
+    millisec_dif = date_now - millisec_last
     if millisec_dif >= 360000:
         seconds=(millisec_dif/1000)%60
         seconds = int(seconds)
         minutes=(millisec_dif/(1000*60))%60
         minutes = int(minutes)
 
-        for user in users:
-            send_message(bytes.decode(b'\xE2\x9D\x97', 'utf8')+
-                'Block delay alert! '+str(minutes)+' min '+str(seconds)+' sec ', user.external_id)
+        if _redis.get('delay_alert') == 'sended':
+            for user in users:
+                send_message(bytes.decode(b'\xE2\x9D\x97', 'utf8')+
+                    'Block delay alert! '+str(minutes)+' min '+str(seconds)+' sec ', user.external_id)
+            _redis.set('delay_alert', 'sended')
+    else: 
+        _redis.delete('delay_alert')
     # rollback check
     rollback_heights = Forks_event_detection.objects.all().order_by('height')
     if rollback_heights.count() > 0:
