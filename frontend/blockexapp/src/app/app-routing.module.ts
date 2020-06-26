@@ -2,13 +2,16 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, Router, RouterModule, Routes } from '@angular/router';
 import { ApplicationStateService } from './services';
 
-import { BlockDetailsComponentDesktop } from './block-details/block-details.component.desktop'
-import { BlockDetailsComponentMobile } from "./block-details/block-details.component.mobile";
-import { BlockNotFoundComponent } from './block-details/block-not-found/block-not-found.component'
-import { BlockListComponentDesktop } from './block-list/block-list.component.desktop'
-import { BlockListComponentMobile } from './block-list/block-list.component.mobile'
-import { BlockChartsComponentDesktop } from './block-charts/block-charts.component.desktop'
-import { BlockChartsComponentMobile } from './block-charts/block-charts.component.mobile'
+import { BlockDetailsComponentDesktop } from './block-details/block-details.component.desktop';
+import { BlockDetailsComponentMobile } from './block-details/block-details.component.mobile';
+import { BlockNotFoundComponent } from './block-details/block-not-found/block-not-found.component';
+import { BlockListComponentDesktop } from './block-list/block-list.component.desktop';
+import { BlockListComponentMobile } from './block-list/block-list.component.mobile';
+import { BlockChartsComponentDesktop } from './block-charts/block-charts.component.desktop';
+import { BlockChartsComponentMobile } from './block-charts/block-charts.component.mobile';
+import { AssetsListComponent } from './assets-list/assets-list.component';
+import { AssetCreateComponent } from './asset-create/asset-create.component';
+import { AssetDetailsComponent } from './asset-details/asset-details.component';
 
 const desktop_routes: Routes = [
   {path: '', component: BlockListComponentDesktop, pathMatch: 'full' },
@@ -16,6 +19,9 @@ const desktop_routes: Routes = [
   { path: 'block', component: BlockDetailsComponentDesktop },
   { path: 'block-not-found', component: BlockNotFoundComponent },
   { path: 'charts/:height', component: BlockChartsComponentDesktop },
+  { path: 'assets', component: AssetsListComponent },
+  { path: 'asset-details', component: AssetDetailsComponent },
+  { path: 'asset-create', component: AssetCreateComponent },
   { path: '**', redirectTo: '' }
 ];
 
@@ -43,7 +49,8 @@ export class AppRoutingModule {
   }
 
   /**
-   * this function inject new routes for the given module instead the current routes. the operation happens on the given current routes object so after
+   * this function inject new routes for the given module instead the current routes.
+   * the operation happens on the given current routes object so after
    * this method a call to reset routes on router should be called with the the current routes object.
    * @param currentRoutes
    * @param routesToInject

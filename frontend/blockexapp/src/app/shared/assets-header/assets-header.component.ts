@@ -5,11 +5,11 @@ import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 @Component({
-  selector: 'app-header-desktop',
-  templateUrl: './header.component.desktop.html',
-  styleUrls: ['./header.component.desktop.css']
+  selector: 'app-assets-header',
+  templateUrl: './assets-header.component.html',
+  styleUrls: ['./assets-header.component.css']
 })
-export class HeaderComponentDesktop implements OnInit {
+export class AssetsHeaderComponent implements OnInit {
 
   isMainnet: boolean = false;
   isMasternet: boolean = false;
@@ -37,9 +37,5 @@ export class HeaderComponentDesktop implements OnInit {
       }, (error) => {
           this.router.navigate([routesConsts.BLOCK_NOT_FOUND]);
       });
-  }
-
-  confAssetsClicked() {
-    this.router.navigate([routesConsts.CONFIDENTIAL_ASSETS_LIST]);
   }
 }

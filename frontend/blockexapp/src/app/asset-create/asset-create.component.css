@@ -1,0 +1,158 @@
+.create-content {
+    width: 1180px;
+    display: flex;
+    flex-direction: column;
+    margin: 40px auto auto;
+}
+
+.create-header {
+    font-size: 20px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+.create-main {
+    display: flex;
+    align-items: flex-start;
+    align-content: flex-start;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.create-data {
+    width: 580px;
+    display: flex;
+    flex-direction: column;
+}
+
+.mandatory-data {
+    display: flex;
+    flex-direction: column;
+}
+
+.optional-data {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+.optional-title,
+.mandatory-title {
+    height: 55px;
+    padding-left: 16px;
+    background-color: #d9e6ed;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #333333;
+}
+
+.mandatory-values {
+    display: flex;
+    flex-direction: column;
+}
+
+.mand-values-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.mand-title {
+    width: 190px;
+    font-size: 12px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #333333;
+}
+
+.mand-input {
+    border: none;
+    width: 375px;
+    height: 30px;
+    padding-left: 12px;
+    border-radius: 5px;
+    background-color: rgba(239, 239, 240, 0.2);
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+.mand-input:focus {
+    padding-left: 12px;
+    outline-width: 0;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+.create-command-area {
+    width: 580px;
+    margin-left: 40px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    background-color: rgba(239, 239, 240, 0.35);
+    padding: 20px;
+}
+
+.command-title {
+    font-size: 12px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #333333;
+}
+
+.command-field {
+    word-wrap: break-word;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.5px;
+    color: #333333;
+}
+
+.command-copy {
+    margin: 20px auto 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #05e2c2;
+    width: 50px;
+}
+

@@ -1,0 +1,56 @@
+<div class="assets">
+  <app-assets-header></app-assets-header>
+  <div class="assets-content">
+    <div class="assets-content-header">
+      <div class="header-title">Confidential assets</div>
+      <div class="header-create-asset-button" (click)="createAssetClicked()">
+        <img src="../../assets/icon-create-asset.svg" width="14px" height="13px"/>
+        <span class="create-asset-text">Create asset</span>
+      </div>
+    </div>
+    <div [class.paginator-wrapper-mainnet]=isMainnet
+       [class.paginator-wrapper-testnet]=!isMainnet>
+      <mat-paginator [class.blocks-table-paginator-mainnet]=isMainnet
+                 [class.blocks-table-paginator-testnet]=!isMainnet
+                 [pageSize]="20" [pageIndex]="page" [length]="count"
+                 (page)="pageEvent = loadBlocks($event)" showFirstLastButtons></mat-paginator>
+    </div>
+    <div class="table-container">
+      <mat-table [dataSource]="dataSource" class="blocks-table mat-elevation-z8">
+        <ng-container matColumnDef="coin">
+          <mat-header-cell class="coin-cell-header" *matHeaderCellDef> COIN: </mat-header-cell>
+          <mat-cell class="coin-cell" *matCellDef="let element">
+            <img [src]="element.logo_url" width="22px" height="22px">
+            <span class="short-label" (click)="coinClicked(element)">
+              {{element.short_name}}
+            </span>
+            <span class="coin-label" (click)="coinClicked(element)">
+              {{element.coin}}
+            </span>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <mat-header-cell class="description-cell-header" *matHeaderCellDef> DESCRIPTION: </mat-header-cell>
+          <mat-cell class="description-cell" *matCellDef="let element">
+            <span class="description-label">
+              {{element.description}}
+            </span>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="website">
+          <mat-header-cell class="website-cell-header" *matHeaderCellDef> WEBSITE: </mat-header-cell>
+          <mat-cell class="website-cell" *matCellDef="let element">
+            <span class="website-label" (click)="websiteClicked(element.website_url)">
+              {{element.website}}
+            </span>
+          </mat-cell>
+        </ng-container>
+       
+        <mat-header-row [class.blocks-table-header-mainnet]=isMainnet
+                        [class.blocks-table-header-testnet]=!isMainnet
+                        *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row class="blocks-table-row" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,193 @@
+.assets-content {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.assets-content-header {
+    display: flex;
+    flex-direction: row;
+    height: 95px;
+    width: 1180px;
+    margin: 0 auto;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-title {
+    font-size: 20px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+.header-create-asset-button {
+    width: 161px;
+    height: 31px;
+    border-radius: 15.5px;
+    background-color: #05e2c2;
+    font-size: 14px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #042e5a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.mat-table {
+    width: 100%;
+}
+
+.blocks-table {
+    box-shadow: none;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+.blocks-table-header-mainnet {
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #333333;
+    background-color: rgba(0, 86, 131, 0.15);
+    border: 0;
+}
+
+.blocks-table-header-testnet {
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #333333;
+    background-color: rgba(76, 0, 131, 0.15);
+    border: 0;
+}
+
+:host ::ng-deep.mat-header-row .mat-header-cell {
+    font-weight: bolder !important;
+    color: #333333;
+}
+
+.blocks-table-row {
+    border: 0;
+}
+
+.mat-row:nth-child(odd){
+    background-color: rgb(251,251,251);
+}
+
+.paginator-wrapper-testnet {
+    background-color: rgba(76, 0, 131, 0.15);
+}
+
+.paginator-wrapper-mainnet {
+    background-color: rgba(0, 86, 131, 0.15);
+}
+
+.blocks-table-paginator-mainnet {
+    padding-right: 95px;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.blocks-table-paginator-testnet {
+    max-width: 1223px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+:host ::ng-deep.mat-paginator-page-size div:last-of-type {
+    font-weight: bolder;
+    color: #333333;
+}
+
+.mat-table mat-row, mat-header-row, mat-footer-row {
+    padding-left: 160px;
+    padding-right: 160px;
+}
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.mat-table {
+    overflow: auto;
+}
+
+:host ::ng-deep.mat-paginator .mat-paginator-container:last-child{
+    font-family: ProximaNova;
+}
+
+.coin-cell-header,
+.coin-cell {
+    min-width: 320px;
+}
+
+.short-label {
+    width: 82px;
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+    cursor: pointer;
+}
+
+.coin-label {
+    opacity: 0.7;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+    cursor: pointer;
+}
+
+.description-cell-header,
+.description-cell {
+    min-width: 645px;
+}
+
+.description-label {
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+.website-cell-header,
+.website-cell {
+    max-width: 100px;
+}
+
+.website-label {
+    cursor: pointer;
+}
+
+.create-asset-text {
+    margin-left: 9px;
+}

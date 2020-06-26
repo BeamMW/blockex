@@ -1,0 +1,44 @@
+<div class="details">
+  <app-assets-header></app-assets-header>
+  <div class="details-content">
+    <div class="details-top">
+      <img [src]="assetData.logo_url" width="22px" height="22px">
+      <span class="short-label">
+        {{assetData.short_name}}
+      </span>
+      <span class="coin-label">
+        {{assetData.coin}}
+      </span>
+    </div>
+    <div class="details-description">
+      <div class="descr-title">Short assest description</div>
+      <div class="descr-content">{{assetData.description}}</div>
+    </div>
+    <div class="details-data">
+      <div class="details-data-row">
+        <div class="data-title">UNIT NAME:</div>
+        <div class="data-value">{{assetData.unit_name}}</div>
+      </div>
+      <div class="details-data-row">
+        <div class="data-title">SMALLEST UNIT NAME:</div>
+        <div class="data-value">{{assetData.smallest_unit_name}}</div>
+      </div>
+      <div class="details-data-row">
+        <div class="data-title">RATIO:</div>
+        <div class="data-value">{{assetData.ratio}}</div>
+      </div>
+      <div class="details-data-row">
+        <div class="data-title">WEBSITE:</div>
+        <div class="data-value">{{assetData.website}}</div>
+      </div>
+      <div class="details-data-row">
+        <div class="data-title">DESCRIPTION PAPER:</div>
+        <div class="data-value">{{assetData.descr_paper}}</div>
+      </div>
+      <div class="details-data-row">
+        <div class="data-title">LOGO:</div>
+        <img [src]="assetData.coin_logo_url" width="36px" height="36px">
+      </div>
+    </div>
+  </div>
+</div>
