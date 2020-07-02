@@ -58,7 +58,7 @@ export class BlockListComponentDesktop implements OnInit {
       this.count = data['count'];
       this.prev = data['prev'];
       this.next = data['next'];
-     });
+    });
 
     return event;
   }

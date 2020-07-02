@@ -2,17 +2,17 @@
   <app-assets-header></app-assets-header>
   <div class="details-content">
     <div class="details-top">
-      <img [src]="assetData.logo_url" width="22px" height="22px">
+      <img [src]="assetData.logo_url" onerror="this.onerror=null; this.style.display='none'" width="22px" height="22px">
       <span class="short-label">
-        {{assetData.short_name}}
+        {{assetData.asset_code}}
       </span>
       <span class="coin-label">
-        {{assetData.coin}}
+        {{assetData.unit_name}}
       </span>
     </div>
-    <div class="details-description">
+    <div class="details-description" *ngIf="assetData.full_desc.length > 0">
       <div class="descr-title">Short assest description</div>
-      <div class="descr-content">{{assetData.description}}</div>
+      <div class="descr-content">{{assetData.full_desc}}</div>
     </div>
     <div class="details-data">
       <div class="details-data-row">
@@ -29,15 +29,15 @@
       </div>
       <div class="details-data-row">
         <div class="data-title">WEBSITE:</div>
-        <div class="data-value">{{assetData.website}}</div>
+        <div class="data-value">{{assetData.site_url}}</div>
       </div>
       <div class="details-data-row">
         <div class="data-title">DESCRIPTION PAPER:</div>
-        <div class="data-value">{{assetData.descr_paper}}</div>
+        <div class="data-value">{{assetData.pdf_url}}</div>
       </div>
       <div class="details-data-row">
         <div class="data-title">LOGO:</div>
-        <img [src]="assetData.coin_logo_url" width="36px" height="36px">
+        <img [src]="assetData.favicon_url" onerror="this.onerror=null; this.style.display='none'" width="36px" height="36px">
       </div>
     </div>
   </div>

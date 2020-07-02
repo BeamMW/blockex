@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^total_emission/$', get_total_emission),
     url(r'^block_by_kernel/$', get_block_by_kernel),
     url(r'^get_detected_forks/$', get_detected_forks),
+    url(r'^get_assets_list/$', get_assets_list),
     path('webhooks/bot/', csrf_exempt(BotView.as_view())),
     url(r'^', include(router.urls)),
 ]

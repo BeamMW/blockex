@@ -43,6 +43,10 @@
     cursor: pointer;
 }
 
+.header-create-asset-button:hover {
+    background-color: #05f7d3;
+}
+
 .mat-table {
     width: 100%;
 }
@@ -169,7 +173,10 @@
     min-width: 645px;
 }
 
-.description-label {
+.description-label,
+.lock-height-label,
+.id-label,
+.value-label {
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;

@@ -66,7 +66,7 @@ def send_solo_height_report(value):
         reports.from_json({'from': value, 'to': value})
         reports.save()
 
-@periodic_task(run_every=(crontab(minute='*/1')), name="bot_check", ignore_result=True)
+# @periodic_task(run_every=(crontab(minute='*/1')), name="bot_check", ignore_result=True)
 def bot_check():
     r = requests.get(BEAM_NODE_API + '/status')
     current_height = r.json()['height']

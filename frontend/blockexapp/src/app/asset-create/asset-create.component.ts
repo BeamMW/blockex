@@ -52,7 +52,7 @@ export class AssetCreateComponent implements OnInit {
       descPaper: '',
       favicon: '',
       logo: ''
-    }
+    };
   }
 
   ngOnInit() {

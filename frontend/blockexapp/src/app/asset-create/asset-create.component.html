@@ -82,19 +82,18 @@
           <ng-container *ngIf="params.assetCode.length > 0">SN={{params.assetCode}};</ng-container>
           <ng-container *ngIf="params.assetUnitName.length > 0">UN={{params.assetUnitName}};</ng-container>
           <ng-container *ngIf="params.smallestUnitName.length > 0">NTHUN={{params.smallestUnitName}};</ng-container>
-          <ng-container *ngIf="params.ratio.length > 0">SMALLEST_TO_REGULAR_RATIO={{params.ratio}};</ng-container>
-          <ng-container *ngIf="params.shortDescr.length > 0">OPT_SHORT_DESCRIPTION={{params.shortDescr}};</ng-container>
-          <ng-container *ngIf="params.longDescr.length > 0">OPT_LONG_DESCRIPTION={{params.longDescr}};</ng-container>
-          <ng-container *ngIf="params.website.length > 0">OPT_WEBSITE_URL={{params.website}};</ng-container>
+          <ng-container *ngIf="params.ratio.length > 0">NTH_RATIO={{params.ratio}};</ng-container>
+          <ng-container *ngIf="params.shortDescr.length > 0">OPT_SHORT_DESC={{params.shortDescr}};</ng-container>
+          <ng-container *ngIf="params.longDescr.length > 0">OPT_LONG_DESC={{params.longDescr}};</ng-container>
+          <ng-container *ngIf="params.website.length > 0">OPT_SITE_URL={{params.website}};</ng-container>
           <ng-container *ngIf="params.descPaper.length > 0">OPT_PDF_URL={{params.descPaper}};</ng-container>
-          <ng-container *ngIf="params.favicon.length > 0">OPT_FAVICON_ICO_URL={{params.favicon}};</ng-container>
-          <ng-container *ngIf="params.logo.length > 0">OPT_LOGO_SVG={{params.logo}};</ng-container>
-          " --fee 100 --enable_assets
+          <ng-container *ngIf="params.favicon.length > 0">OPT_FAVICON_URL={{params.favicon}};</ng-container>
+          <ng-container *ngIf="params.logo.length > 0">OPT_LOGO_URL={{params.logo}};</ng-container>" --fee 100 --enable_assets
         </div>
-        <div class="command-copy" *ngIf="notEmpty" >
+        <!-- <div class="command-copy" *ngIf="notEmpty" >
           <img src="../../assets/icon-copy.svg" width="15px" height="17px"/>
           <span>Copy</span>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

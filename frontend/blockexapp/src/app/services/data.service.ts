@@ -2,16 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
-import { Status, Block } from '../models';
+import { Status, Block, Asset } from '../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-
-// API_BASE = 'https://52.52.220.76';
-
- API_BASE = environment.apiBaseUrl;
+  API_BASE = environment.apiBaseUrl;
 
   constructor(private http: HttpClient) {
   }
@@ -34,5 +31,9 @@ export class DataService {
 
   loadBlocksRange(range) {
       return this.http.get<Block[]>(this.API_BASE + '/explorer/range/' + '?range=' + range);
+  }
+
+  loadAssetsList() {
+    return this.http.get<{assets: Asset[]}>(this.API_BASE + '/explorer/get_assets_list/');
   }
 }
