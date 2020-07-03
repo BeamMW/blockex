@@ -20,7 +20,7 @@ const desktop_routes: Routes = [
   { path: 'block-not-found', component: BlockNotFoundComponent },
   { path: 'charts/:height', component: BlockChartsComponentDesktop },
   { path: 'assets', component: AssetsListComponent },
-  { path: 'asset-details', component: AssetDetailsComponent },
+  { path: 'asset-details/:id', component: AssetDetailsComponent },
   { path: 'asset-create', component: AssetCreateComponent },
   { path: '**', redirectTo: '' }
 ];

@@ -72,12 +72,16 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+.details-data-row.descr {
+    align-items: flex-start;
 }
 
 .data-title {
-    width: 155px;
-    font-size: 12px;
+    width: 230px;
+    font-size: 14px;
     font-weight: 600;
     font-stretch: normal;
     font-style: normal;
@@ -87,6 +91,20 @@
 }
 
 .data-value {
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+    max-width: 920px;
+    word-wrap: break-word;
+}
+
+.not-available {
+    font-family: "ProximaNovaIt", sans-serif;
+    opacity: 0.7;
     font-size: 12px;
     font-weight: normal;
     font-stretch: normal;

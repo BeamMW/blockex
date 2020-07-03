@@ -5,7 +5,7 @@
       <div class="header-title">Confidential assets</div>
       <div class="header-create-asset-button" (click)="createAssetClicked()">
         <img src="../../assets/icon-create-asset.svg" width="14px" height="13px"/>
-        <span class="create-asset-text">Create asset</span>
+        <span class="create-asset-text">Create asset helper</span>
       </div>
     </div>
     <div [class.paginator-wrapper-mainnet]=isMainnet
@@ -20,11 +20,12 @@
         <ng-container matColumnDef="coin">
           <mat-header-cell class="coin-cell-header" *matHeaderCellDef> COIN: </mat-header-cell>
           <mat-cell class="coin-cell" *matCellDef="let element">
-            <img [src]="element.logo_url" onerror="this.onerror=null; this.style.display='none'" width="22px" height="22px">
-            <span class="short-label" (click)="coinClicked(element)">
+            <img [src]="element.logo_url" class="asset-icon" 
+              onerror="this.onerror=null; this.style.display='none'" width="22px" height="22px">
+            <span class="short-label">
               {{element.asset_code}}
             </span>
-            <span class="coin-label" (click)="coinClicked(element)">
+            <span class="coin-label">
               {{element.unit_name}}
             </span>
           </mat-cell>
@@ -57,14 +58,14 @@
           <mat-header-cell class="description-cell-header" *matHeaderCellDef> DESCRIPTION: </mat-header-cell>
           <mat-cell class="description-cell" *matCellDef="let element">
             <span class="description-label">
-              {{element.full_desc}}
+              {{element.short_desc}}
             </span>
           </mat-cell>
         </ng-container>
         <ng-container matColumnDef="website">
           <mat-header-cell class="website-cell-header" *matHeaderCellDef> WEBSITE: </mat-header-cell>
           <mat-cell class="website-cell" *matCellDef="let element">
-            <span class="website-label" (click)="websiteClicked(element.site_url)">
+            <span class="website-label" (click)="websiteClicked($event, element.site_url)">
               {{element.site_url}}
             </span>
           </mat-cell>
@@ -73,7 +74,7 @@
         <mat-header-row [class.blocks-table-header-mainnet]=isMainnet
                         [class.blocks-table-header-testnet]=!isMainnet
                         *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row class="blocks-table-row" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-row class="blocks-table-row" (click)="coinClicked(row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
     </div>
   </div>

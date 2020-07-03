@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { routesConsts } from '../consts';
+import { DataService } from '../services';
 
 @Component({
   selector: 'app-asset-details',
@@ -8,36 +9,30 @@ import { routesConsts } from '../consts';
   styleUrls: ['./asset-details.component.css']
 })
 export class AssetDetailsComponent implements OnInit {
-
   assetData: any;
-  constructor(private router: Router) {
-    try {
-      const navigation = this.router.getCurrentNavigation();
-      const state = navigation.extras.state as {
-        logo_url: string,
-        short_name: string,
-        unit_name: string,
-        coin: string,
-        description: string,
-        website: string,
-        website_url: string,
-        smallest_unit_name: string,
-        descr_paper: string,
-        descr_paper_url: string,
-        ratio: number,
-        coin_logo_url: string
-      };
-      this.assetData = state;
+  assetLoaded = false;
+  constructor(private router: Router, private route: ActivatedRoute, private dataService: DataService) {
+  }
 
-      if (state.logo_url === undefined) {
-        this.router.navigate([routesConsts.CONFIDENTIAL_ASSETS_LIST]);
-      }
-    } catch (e) {
-      this.router.navigate([routesConsts.CONFIDENTIAL_ASSETS_LIST]);
-    }
+  getAssetItem (id) {
+    this.assetData = this.dataService.assetsList.find((item) => {
+      return item.id === parseInt(id, 10);
+    });
+
+    this.assetLoaded = !!this.assetData;
   }
 
   ngOnInit() {
+    this.route.params.subscribe((params) => {
+      if (params.id !== undefined && this.dataService.assetsList.length > 0) {
+        this.getAssetItem(params.id);
+      } else if (params.id !== undefined && this.dataService.assetsList.length === 0) {
+        this.dataService.getAssetsList().subscribe((data) => {
+          this.dataService.loadAssets(data);
+          this.getAssetItem(params.id);
+        });
+      }
+    });
   }
 
 }

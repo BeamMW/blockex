@@ -26,16 +26,34 @@ export class AssetsHeaderComponent implements OnInit {
   }
 
   searchProcess(input) {
-      const searchValue = input.value;
-      input.value = '';
-      this.dataService.searchBlock(searchValue).subscribe((blockItem) => {
-        if (blockItem.found !== undefined && !blockItem.found) {
-          this.router.navigate([routesConsts.BLOCK_NOT_FOUND]);
-        } else if (blockItem.hash !== undefined){
-          this.router.navigate([routesConsts.BLOCK_DETAILS, blockItem.hash], {queryParams: {searched_by: searchValue}});
-        }
-      }, (error) => {
-          this.router.navigate([routesConsts.BLOCK_NOT_FOUND]);
+      this.dataService.getAssetsList().subscribe((data) => {
+        this.dataService.loadAssets(data);
       });
+      const searchValue = input.value.toLowerCase();
+      input.value = '';
+
+      const assetNameSearch = this.dataService.assetsList.find((item) => {
+        return item.asset_name.toLowerCase().includes(searchValue);
+      });
+
+      if (assetNameSearch === undefined) {
+        const descriptionSearch = this.dataService.assetsList.find((item) => {
+          return item.full_desc.toLowerCase().includes(searchValue);
+        });
+
+        if (descriptionSearch === undefined) {
+          const ratioSearch = this.dataService.assetsList.find((item) => {
+            return item.ratio.toLowerCase().includes(searchValue);
+          });
+
+          if (ratioSearch !== undefined) {
+            this.router.navigate([routesConsts.CONFIDENTIAL_ASSET_DETAILS, ratioSearch.id]);
+          }
+        } else {
+          this.router.navigate([routesConsts.CONFIDENTIAL_ASSET_DETAILS, descriptionSearch.id]);
+        }
+      } else {
+        this.router.navigate([routesConsts.CONFIDENTIAL_ASSET_DETAILS, assetNameSearch.id]);
+      }
   }
 }

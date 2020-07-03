@@ -64,7 +64,7 @@ export class BlockListComponentDesktop implements OnInit {
   }
 
     public onChartsLoaded(chartsStatus: boolean) {
-    if (chartsStatus){
+    if (chartsStatus) {
         this.loading_charts = false;
     }
   }

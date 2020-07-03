@@ -1,13 +1,18 @@
 <div class="create">
   <app-assets-header></app-assets-header>
   <div class="create-content">
-    <div class="create-header">Create asset</div>
+    <div class="create-header">Create asset helper</div>
     <div class="create-main">
       <form class="create-form" [formGroup]="createForm" autocomplete="off" novalidate (ngSubmit)="submit()">
         <div class="create-data">
           <div class="mandatory-data">
             <div class="mandatory-title">MANDATORY PROPERTIES</div>
             <div class="mandatory-values">
+              <div class="mand-values-row">
+                <div class="mand-title">METADATA SCHEMA VERSION:</div>
+                <input class="mand-input" type="text" name="shemaVer" formControlName="shemaVer"
+                      (input)="schemaVerChanged(createForm.get('shemaVer'))"/>
+              </div>
               <div class="mand-values-row">
                 <div class="mand-title">ASSET NAME:</div>
                 <input class="mand-input" type="text" name="assetName" formControlName="assetName"
@@ -30,23 +35,35 @@
               </div>
               <div class="mand-values-row">
                 <div class="mand-title">RATIO:</div>
-                <input class="mand-input" type="text" name="ratio" formControlName="ratio"
+                <input class="mand-input" type="text" placeholder="100000000" name="ratio" formControlName="ratio"
                       (input)="ratioChanged(createForm.get('ratio'))"/>
               </div>
             </div>
           </div>
           <div class="optional-data">
-            <div class="optional-title">OPTIONAL PROPERTIES</div>
-            <div class="mandatory-values">
+            <div class="optional-title" (click)="optionalExpClicked()">
+              <img src="../../assets/arrow-icon.svg" class="optional-icon" [class.expanded]="expanded"
+                width="9px" height="5px"/>
+              <span class="optional-text">OPTIONAL PROPERTIES</span>
+            </div>
+            <div class="mandatory-values" *ngIf="expanded">
               <div class="mand-values-row">
                 <div class="mand-title">SHORT DESCRIPTION:</div>
                 <input class="mand-input" type="text" name="shortDescr" formControlName="shortDescr"
                       (input)="shortDescrChanged(createForm.get('shortDescr'))"/>
               </div>
-              <div class="mand-values-row">
+              <div class="error"
+                *ngIf="createForm.controls['shortDescr'].hasError('maxlength')">
+                Maximum of 128 characters
+              </div>
+              <div class="mand-values-row textarea">
                 <div class="mand-title">LONG DESCRIPTION:</div>
-                <input class="mand-input" type="text" name="longDescr" formControlName="longDescr"
-                      (input)="longDescrChanged(createForm.get('longDescr'))"/>
+                <textarea class="mand-input description-area" name="longDescr" formControlName="longDescr"
+                      (input)="longDescrChanged(createForm.get('longDescr'))"></textarea>
+              </div>
+              <div class="error"
+                *ngIf="createForm.controls['longDescr'].hasError('maxlength')">
+                Maximum of 1024 characters
               </div>
               <div class="mand-values-row">
                 <div class="mand-title">WEBSITE:</div>
@@ -75,26 +92,22 @@
 
       <div class="create-command-area">
         <div class="command-title">REGISTRATION COMMAND:</div>
-        <div class="command-field" *ngIf="notEmpty" #command>
-          ./beam-wallet asset_reg --pass 1 -n 127.0.0.1:10000 --asset_meta 
-          "STD:
-          <ng-container *ngIf="params.assetName.length > 0">N={{params.assetName}};</ng-container>
-          <ng-container *ngIf="params.assetCode.length > 0">SN={{params.assetCode}};</ng-container>
-          <ng-container *ngIf="params.assetUnitName.length > 0">UN={{params.assetUnitName}};</ng-container>
-          <ng-container *ngIf="params.smallestUnitName.length > 0">NTHUN={{params.smallestUnitName}};</ng-container>
-          <ng-container *ngIf="params.ratio.length > 0">NTH_RATIO={{params.ratio}};</ng-container>
-          <ng-container *ngIf="params.shortDescr.length > 0">OPT_SHORT_DESC={{params.shortDescr}};</ng-container>
-          <ng-container *ngIf="params.longDescr.length > 0">OPT_LONG_DESC={{params.longDescr}};</ng-container>
-          <ng-container *ngIf="params.website.length > 0">OPT_SITE_URL={{params.website}};</ng-container>
-          <ng-container *ngIf="params.descPaper.length > 0">OPT_PDF_URL={{params.descPaper}};</ng-container>
-          <ng-container *ngIf="params.favicon.length > 0">OPT_FAVICON_URL={{params.favicon}};</ng-container>
-          <ng-container *ngIf="params.logo.length > 0">OPT_LOGO_URL={{params.logo}};</ng-container>" --fee 100 --enable_assets
-        </div>
-        <!-- <div class="command-copy" *ngIf="notEmpty" >
-          <img src="../../assets/icon-copy.svg" width="15px" height="17px"/>
+        <div class="command-supply" *ngIf="!notEmpty">Supply assets parameters</div>
+        <div class="command-field" *ngIf="notEmpty">{{assetCommand}}</div>
+        <div class="command-copy" *ngIf="notEmpty" (click)="copyMessage()">
+          <img src="../../assets/icon-copy.svg" class="icon-copy" width="15px" height="17px"/>
           <span>Copy</span>
-        </div> -->
+        </div>
+        <div class="command-paste" *ngIf="notEmpty">
+          Paste this command in command line
+        </div>
       </div>
+    </div>
+  </div>
+  <div class="create-separator"></div>
+  <div class="create-see-more">To see more info please check 
+    <div class="asset-descr-link" (click)="openDescriptorClicked()">
+      Asset Descriptor
     </div>
   </div>
 </div>

@@ -11,6 +11,6 @@
              onfocus="this.placeholder = ''"
              onblur="this.placeholder = 'Search by asset, description, ratio'"
              onfocusout="this.placeholder = 'Search by asset, description, ratio'"
-             type="search" #searchInput id="searchInput"/>
+             type="search" #searchInput (keyup.enter)="searchProcess(searchInput)" id="searchInput"/>
     </div>
 </mat-toolbar>

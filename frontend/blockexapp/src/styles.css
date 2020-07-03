@@ -7,6 +7,11 @@
   src: url("./assets/fonts/proximanova-regular.otf");
 }
 
+@font-face {
+  font-family: "ProximaNovaIt";
+  src: url("./assets/fonts/ProximaNova-RegularIt.ttf");
+}
+
 body {
     margin: 0;
 }

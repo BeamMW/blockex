@@ -306,7 +306,11 @@ def get_detected_forks(request):
 
 @api_view(['GET'])
 def get_assets_list(request):
-    last_height = 78950 #_redis.get('beam_blockex_last_height')
+    height = request.GET['height']
+    if height:
+        last_height = height
+    else:
+        last_height = _redis.get('beam_blockex_last_height')
     last_block_req = requests.get(BEAM_NODE_API + '/blocks?height=' + str(last_height) + '&n=1')
     block = last_block_req.json()
     return Response({'assets': block[0]['assets']}, status=HTTP_200_OK)

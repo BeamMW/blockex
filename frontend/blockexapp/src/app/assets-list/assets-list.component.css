@@ -25,7 +25,7 @@
 }
 
 .header-create-asset-button {
-    width: 161px;
+    width: 207px;
     height: 31px;
     border-radius: 15.5px;
     background-color: #05e2c2;
@@ -91,8 +91,16 @@
     border: 0;
 }
 
+.mat-row {
+    cursor: pointer;
+}
+
 .mat-row:nth-child(odd){
     background-color: rgb(251,251,251);
+}
+
+.mat-row:hover {
+    background-color: #d9fbf6;
 }
 
 .paginator-wrapper-testnet {
@@ -140,12 +148,20 @@
 
 .coin-cell-header,
 .coin-cell {
-    min-width: 320px;
+    min-width: 210px;
+}
+
+.id-cell-header,
+.id-cell {
+    max-width: 45px;
+}
+
+.asset-icon {
+    margin-right: 10px;
 }
 
 .short-label {
     width: 82px;
-    margin-left: 10px;
     font-size: 14px;
     font-weight: 600;
     font-stretch: normal;
@@ -153,7 +169,6 @@
     line-height: normal;
     letter-spacing: normal;
     color: #333333;
-    cursor: pointer;
 }
 
 .coin-label {
@@ -165,12 +180,11 @@
     line-height: normal;
     letter-spacing: normal;
     color: #333333;
-    cursor: pointer;
 }
 
 .description-cell-header,
 .description-cell {
-    min-width: 645px;
+    min-width: 545px;
 }
 
 .description-label,
@@ -184,6 +198,12 @@
     line-height: normal;
     letter-spacing: normal;
     color: #333333;
+}
+
+.description-label {
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
 }
 
 .website-cell-header,
