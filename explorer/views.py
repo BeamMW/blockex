@@ -306,7 +306,7 @@ def get_detected_forks(request):
 
 @api_view(['GET'])
 def get_assets_list(request):
-    height = request.GET['height']
+    height = request.GET.get('height')
     if height:
         last_height = height
     else:
