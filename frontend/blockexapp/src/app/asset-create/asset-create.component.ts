@@ -137,7 +137,7 @@ export class AssetCreateComponent implements OnInit {
       (this.params.descPaper.length > 0 ? 'OPT_PDF_URL=' + this.params.descPaper + ';' : '') +
       (this.params.favicon.length > 0 ? 'OPT_FAVICON_URL=' + this.params.favicon + ';' : '') +
       (this.params.logo.length > 0 ? 'OPT_LOGO_URL=' + this.params.logo + ';' : '') +
-      ' --fee 100 --enable_assets';
+      '" --fee 100 --enable_assets';
 
     this.notEmpty = this.params.assetName.length > 0 ||
     this.params.schemaVer.length > 0 ||

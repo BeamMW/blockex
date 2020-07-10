@@ -311,7 +311,8 @@ def get_assets_list(request):
         last_height = height
     else:
         last_height = _redis.get('beam_blockex_last_height')
-    last_block_req = requests.get(BEAM_NODE_API + '/blocks?height=' + str(last_height) + '&n=1')
+
+    last_block_req = requests.get(BEAM_NODE_API + '/blocks?height=' + str(int(last_height)) + '&n=1')
     block = last_block_req.json()
     return Response({'assets': block[0]['assets']}, status=HTTP_200_OK)
 
