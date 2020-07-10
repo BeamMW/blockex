@@ -26,6 +26,7 @@ import io
 import os
 
 TELEGRAM_URL = "https://api.telegram.org/bot"
+BEAM_NODE_API = 'http://localhost:8888'
 
 from django.http import JsonResponse
 from django.views import View
@@ -301,6 +302,19 @@ def get_detected_forks(request):
     serializer = ForkDetectionSerializer(fd, many=True)
 
     return Response({'fork_heights': serializer.data}, status=HTTP_200_OK)
+
+
+@api_view(['GET'])
+def get_assets_list(request):
+    height = request.GET.get('height')
+    if height:
+        last_height = height
+    else:
+        last_height = _redis.get('beam_blockex_last_height')
+
+    last_block_req = requests.get(BEAM_NODE_API + '/blocks?height=' + str(int(last_height)) + '&n=1')
+    block = last_block_req.json()
+    return Response({'assets': block[0]['assets']}, status=HTTP_200_OK)
 
 class BotView(View):
     def post(self, request, *args, **kwargs):

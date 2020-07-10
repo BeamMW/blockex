@@ -6,13 +6,11 @@
         <div class="logo-title-beam">BEAM</div>
         <div class="logo-title-text">Block Explorer</div>
       </div>
-      <app-network-control *ngIf="!isMasternet"></app-network-control>
       <input autocomplete="off" class="search-header-input"
-             placeholder="Search by height, hash, kernel ID"
+             placeholder="Search by asset, description, ratio"
              onfocus="this.placeholder = ''"
-             onblur="this.placeholder = 'Search by height, hash, kernel ID'"
-             onfocusout="this.placeholder = 'Search by height, hash, kernel ID'"
+             onblur="this.placeholder = 'Search by asset, description, ratio'"
+             onfocusout="this.placeholder = 'Search by asset, description, ratio'"
              type="search" #searchInput (keyup.enter)="searchProcess(searchInput)" id="searchInput"/>
-      <div class="header-assets-button" (click)="confAssetsClicked()">Confidential assets</div>
     </div>
 </mat-toolbar>

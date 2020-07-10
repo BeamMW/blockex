@@ -133,10 +133,6 @@ table {
     cursor: pointer;
 }
 
-.header-assets-button:hover {
-    background-color: #05f7d3;
-}
-
 @media(max-width: 769px) {
   .header-content-logo {
       margin-left: 20px;

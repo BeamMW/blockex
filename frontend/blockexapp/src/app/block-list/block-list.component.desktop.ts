@@ -1,14 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../services';
 import { ChartsComponentDesktop } from '../charts-component/charts-component.component.desktop';
-import { blockListConsts, routesConsts } from '../consts';
+import { routesConsts } from '../consts';
 
-import {MatPaginator, MatTableDataSource} from '@angular/material';
-import {PageEvent} from '@angular/material';
-import { Router} from '@angular/router';
-import {environment} from "../../environments/environment";
-import {error} from "selenium-webdriver";
-
+import { MatTableDataSource } from '@angular/material';
+import { PageEvent } from '@angular/material';
+import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-block-list-desktop',
@@ -23,26 +21,26 @@ export class BlockListComponentDesktop implements OnInit {
   lastHeight : number;
   //pageSizeOptions: number[] = [20, 50, 100];
 
-  blocks : any;
-  dataSource : any;
-  updatesCounter : number = 0;
-  loadedWithError : boolean = false;
-  isEnvUpdating : boolean = false;
+  blocks: any;
+  dataSource: any;
+  updatesCounter: number = 0;
+  loadedWithError: boolean = false;
+  isEnvUpdating: boolean = false;
 
-  count : number;
-  page : number = 0;
+  count: number;
+  page: number = 0;
 
   pageEvent: PageEvent;
 
-  next : string;
-  prev : string;
+  next: string;
+  prev: string;
 
-  displayedColumns : string[] = ['height', 'hash', 'age',
+  displayedColumns: string[] = ['height', 'hash', 'age',
       'difficulty', 'kernels', 'inputs', 'outputs', 'fees'];
 
-  loading_status : boolean = false;
-  loading_blocks : boolean = false;
-  loading_charts : boolean = false;
+  loading_status: boolean = false;
+  loading_blocks: boolean = false;
+  loading_charts: boolean = false;
 
   constructor(private dataService: DataService, private router: Router) {}
 
@@ -60,13 +58,13 @@ export class BlockListComponentDesktop implements OnInit {
       this.count = data['count'];
       this.prev = data['prev'];
       this.next = data['next'];
-     });
+    });
 
     return event;
   }
 
     public onChartsLoaded(chartsStatus: boolean) {
-    if (chartsStatus){
+    if (chartsStatus) {
         this.loading_charts = false;
     }
   }

@@ -1,0 +1,256 @@
+.create-content {
+    width: 1180px;
+    display: flex;
+    flex-direction: column;
+    margin: 40px auto auto;
+}
+
+.create-header {
+    font-size: 20px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+.create-main {
+    display: flex;
+    align-items: flex-start;
+    align-content: flex-start;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.create-data {
+    width: 580px;
+    display: flex;
+    flex-direction: column;
+}
+
+.mandatory-data {
+    display: flex;
+    flex-direction: column;
+}
+
+.optional-data {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+.optional-title,
+.mandatory-title {
+    height: 55px;
+    padding-left: 16px;
+    background-color: #d9e6ed;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #333333;
+}
+
+.optional-title {
+    cursor: pointer;
+}
+
+.mandatory-values {
+    display: flex;
+    flex-direction: column;
+}
+
+.mand-values-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.mand-values-row.textarea {
+    align-items: flex-start;
+}
+
+.mand-title {
+    width: 190px;
+    font-size: 12px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #333333;
+}
+
+.mand-input {
+    border: none;
+    width: 375px;
+    height: 30px;
+    padding-left: 12px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.05);
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+.mand-input:focus {
+    padding-left: 12px;
+    outline-width: 0;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+.create-command-area {
+    width: 580px;
+    margin-left: 40px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    background-color: rgba(217, 230, 237, 0.35);
+    padding: 20px;
+}
+
+.command-title {
+    font-size: 12px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #333333;
+}
+
+.command-field {
+    word-wrap: break-word;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.5px;
+    color: #333333;
+}
+
+.command-copy {
+    margin: 20px auto 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 15.5px;
+    background-color: #05e2c2;
+    width: 118px;
+    height: 31px;
+    font-size: 14px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #042e5a;
+}
+
+.icon-copy {
+    margin-right: 10px;
+}
+
+.command-copy:hover {
+    background-color: #05f7d3;
+}
+
+.description-area {
+    height: 122px;
+    resize:none;
+    padding-top: 8px;
+}
+
+.create-separator {
+    height: 2px;
+    width: 1180px;
+    margin: 0 auto 20px auto;
+    background-color: #e4e4e4;
+}
+
+.create-see-more {
+    font-size: 14px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+    width: 1180px;
+    display: flex;
+    margin: 0 auto 50px auto;
+}
+
+.asset-descr-link {
+    color: #08d0b3;
+    margin-left: 5px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.command-supply {
+    margin-top: 20px;
+    display: flex;
+    font-family: "ProximaNovaIt", sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #333333;
+}
+
+.optional-text {
+    margin-left: 15px;
+}
+
+.optional-icon.expanded {
+    transform: rotate(180deg);
+}
+
+.command-paste {
+    font-family: "ProximaNovaIt", sans-serif;
+    opacity: 0.7;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    align-self: center;
+    color: #333333;
+    margin: 10px auto 0 auto;
+}
+
+.error {
+    font-family: "ProximaNovaIt", sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ff5e5e;
+    margin-left: 190px;
+}

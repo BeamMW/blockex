@@ -8,7 +8,8 @@ import {
   MatInputModule,
 } from '@angular/material';
 import { HeaderComponentDesktop } from './header/header.component.desktop';
-import { HeaderComponentMobile } from "./header/header.component.mobile";
+import { HeaderComponentMobile } from './header/header.component.mobile';
+import { AssetsHeaderComponent } from './assets-header/assets-header.component';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { HeaderComponentMobile } from "./header/header.component.mobile";
   declarations: [
     NetworkControlComponent,
     HeaderComponentDesktop,
-    HeaderComponentMobile
+    HeaderComponentMobile,
+    AssetsHeaderComponent
   ],
   entryComponents: [
     HeaderComponentMobile
@@ -29,6 +31,7 @@ import { HeaderComponentMobile } from "./header/header.component.mobile";
     NetworkControlComponent,
     HeaderComponentDesktop,
     HeaderComponentMobile,
+    AssetsHeaderComponent
   ]
 })
 export class SharedModule { }
