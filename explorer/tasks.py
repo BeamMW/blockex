@@ -39,34 +39,8 @@ def send_message(message, chat_id):
         f"{TELEGRAM_URL}{load_token()}/sendMessage", data=data
     )
 
-def send_multi_height_report(from_value, to_value):
-    users = Bot_users.objects.all()
-    if not Rollback_reports.objects.filter(height_from=from_value, height_to=to_value).exists():
-        for user in users:
-            send_message(bytes.decode(b'\xE2\x9D\x97', 'utf8')+
-                'Rollback alert! Detected from '+
-                str(from_value)+
-                ' to '+
-                str(to_value)+
-                ' heights. Rollback depth='+
-                str(to_value-from_value+1), user.external_id)
-        reports = Rollback_reports()
-        reports.from_json({'from': from_value, 'to': to_value})
-        reports.save()
 
-def send_solo_height_report(value):
-    users = Bot_users.objects.all()
-    if not Rollback_reports.objects.filter(height_from=value, height_to=value).exists():
-        for user in users:
-            send_message(bytes.decode(b'\xE2\x9D\x97', 'utf8')+
-                'Rollback alert! Detected on '+
-                str(value)+
-                ' height. Rollback depth=1', user.external_id)
-        reports = Rollback_reports()
-        reports.from_json({'from': value, 'to': value})
-        reports.save()
-
-# @periodic_task(run_every=(crontab(minute='*/1')), name="bot_check", ignore_result=True)
+@periodic_task(run_every=(crontab(minute='*/1')), name="bot_check", ignore_result=True)
 def bot_check():
     r = requests.get(BEAM_NODE_API + '/status')
     current_height = r.json()['height']
@@ -79,7 +53,7 @@ def bot_check():
     date_now = int(round(time.time() * 1000))
 
     millisec_dif = date_now - millisec_last
-    if millisec_dif >= 300000:
+    if millisec_dif >= 600000:
         seconds=(millisec_dif/1000)%60
         seconds = int(seconds)
         minutes=(millisec_dif/(1000*60))%60
@@ -94,44 +68,6 @@ def bot_check():
     else: 
         _redis.delete('delay_alert')
         
-    rollback_heights = Forks_event_detection.objects.all().order_by('height')
-    if rollback_heights.count() > 0:
-        r_tmp_height = rollback_heights[0]
-        counter = 0
-        index = 0
-        r_first_height = 0
-        for r_height in rollback_heights:
-            if index != 0:
-                height_dif = r_height.height - r_tmp_height.height
-                is_end_of_rollbacks = index == (rollback_heights.count() - 1)
-                
-                if height_dif > 1 and not is_end_of_rollbacks:
-                    if counter > 0:
-                        send_multi_height_report(r_first_height, r_tmp_height.height)
-                        r_first_height = r_height.height
-                    elif counter == 0:
-                        send_solo_height_report(r_tmp_height.height)
-                        r_first_height = r_height.height
-                    counter = 0
-                elif height_dif > 1 and is_end_of_rollbacks:
-                    if counter > 0:
-                        send_multi_height_report(r_first_height, r_tmp_height.height)
-                        send_solo_height_report(r_height.height)
-                    elif counter == 0:
-                        send_solo_height_report(r_tmp_height.height)
-                        send_solo_height_report(r_height.height)
-                elif height_dif == 1 and is_end_of_rollbacks:
-                    if counter == 0:
-                        send_solo_height_report(r_tmp_height.height)
-                        send_solo_height_report(r_height.height)
-                    elif counter > 0:
-                        send_multi_height_report(r_first_height, r_height.height)
-                elif height_dif == 1 and not is_end_of_rollbacks:
-                    if counter == 0:
-                        r_first_height = r_tmp_height.height
-                    counter += 1
-                r_tmp_height = r_height
-            index += 1
  
 @periodic_task(run_every=(crontab(minute='*/1')), name="update_blockchain", ignore_result=True)
 def update_blockchain():
