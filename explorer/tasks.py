@@ -2,6 +2,11 @@ from celery.task.schedules import crontab
 from celery.decorators import periodic_task
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
+from django.db.models import Sum, Avg
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
 from .serializers import *
 import requests
 import json
@@ -9,9 +14,11 @@ import pytz
 import redis
 import os
 import time
+import io
 
 from .models import *
-from datetime import datetime
+from datetime import datetime, timedelta
+
 HEIGHT_STEP = 43800
 BEAM_NODE_API = 'http://localhost:8888'
 BLOCKS_PER_DAY = 1440
@@ -21,6 +28,7 @@ FIRST_YEAR_VALUE = 20
 REST_YEARS_VALUE = 10
 
 TELEGRAM_URL = "https://api.telegram.org/bot"
+_redis = redis.Redis(host='localhost', port=6379, db=0)
 
 def load_token():
     settings_dir = os.path.dirname(__file__)
@@ -28,6 +36,7 @@ def load_token():
     with open(os.path.join(proj_root)+'/token.json') as token_file:
         data = json.load(token_file)
     return data['token']
+
 
 def send_message(message, chat_id):
     data = {
@@ -40,13 +49,53 @@ def send_message(message, chat_id):
     )
 
 
+def send_multi_height_report(from_value, to_value):
+    diff = to_value - from_value
+    if diff > 5:
+        users = Bot_users.objects.all()
+        if not Rollback_reports.objects.filter(height_from=from_value, height_to=to_value).exists():
+            for user in users:
+                send_message(bytes.decode(b'\xE2\x9D\x97', 'utf8')+
+                    'Rollback alert! Detected from '+
+                    str(from_value)+
+                    ' to '+
+                    str(to_value)+
+                    ' heights. Rollback depth='+
+                    str(to_value-from_value+1), user.external_id)
+            reports = Rollback_reports()
+            reports.from_json({'from': from_value, 'to': to_value})
+            reports.save()
+
+
+def update_status():
+    b = Block.objects.latest('height')
+    serializer = BlockHeaderSerializer(b)
+    data = serializer.data
+    subsidy_data = Block.objects.all().aggregate(Sum('subsidy'))
+
+    coins_in_circulation_mined = int(subsidy_data['subsidy__sum']) * 10**-8
+    _redis.set('coins_in_circulation_mined', coins_in_circulation_mined)
+    data['coins_in_circulation_mined'] = coins_in_circulation_mined
+
+    coins_in_circulation_treasury = _redis.get('coins_in_circulation_treasury')
+    data['coins_in_circulation_treasury'] = coins_in_circulation_treasury
+    
+    data['total_coins_in_circulation'] = float(coins_in_circulation_mined) + float(coins_in_circulation_treasury)
+    _redis.set('total_coins_in_circulation', data['total_coins_in_circulation'])
+    data['next_treasury_emission_block_height'] = _redis.get('next_treasury_emission_height')
+    data['next_treasury_emission_coin_amount'] = _redis.get('next_treasury_coin_amount')
+    data['total_emission'] = _redis.get('total_coins_emission')
+
+    _redis.set('status', JSONRenderer().render(data))
+    return data
+
+
 @periodic_task(run_every=(crontab(minute='*/1')), name="bot_check", ignore_result=True)
 def bot_check():
     r = requests.get(BEAM_NODE_API + '/status')
     current_height = r.json()['height']
     last_block = r.json()
 
-    _redis = redis.Redis(host='localhost', port=6379, db=0)
     users = Bot_users.objects.all()
 
     millisec_last = last_block['timestamp'] * 1000
@@ -63,17 +112,46 @@ def bot_check():
             for user in users:
                 send_message(bytes.decode(b'\xE2\x9D\x97', 'utf8')+
                     'Block delay alert! '+str(minutes)+' min '+str(seconds)+
-                    ' sec. Last block height: '+current_height, user.external_id)
+                    ' sec. Last block height: '+str(current_height), user.external_id)
             _redis.set('delay_alert', 'sended')
     else: 
         _redis.delete('delay_alert')
         
+    rollback_heights = Forks_event_detection.objects.all().order_by('height')
+    if rollback_heights.count() > 0:
+        r_tmp_height = rollback_heights[0]
+        counter = 0
+        index = 0
+        r_first_height = 0
+        for r_height in rollback_heights:
+            if index != 0:
+                height_dif = r_height.height - r_tmp_height.height
+                is_end_of_rollbacks = index == (rollback_heights.count() - 1)
+                
+                if height_dif > 1 and not is_end_of_rollbacks:
+                    if counter > 0:
+                        send_multi_height_report(r_first_height, r_tmp_height.height)
+                        r_first_height = r_height.height
+                    elif counter == 0:
+                        r_first_height = r_height.height
+                    counter = 0
+                elif height_dif > 1 and is_end_of_rollbacks:
+                    if counter > 0:
+                        send_multi_height_report(r_first_height, r_tmp_height.height)
+                elif height_dif == 1 and is_end_of_rollbacks:
+                    if counter > 0:
+                        send_multi_height_report(r_first_height, r_height.height)
+                elif height_dif == 1 and not is_end_of_rollbacks:
+                    if counter == 0:
+                        r_first_height = r_tmp_height.height
+                    counter += 1
+                r_tmp_height = r_height
+            index += 1
  
+
 @periodic_task(run_every=(crontab(minute='*/1')), name="update_blockchain", ignore_result=True)
 def update_blockchain():
-
     # # Find last seen height
-    _redis = redis.Redis(host='localhost', port=6379, db=0)
     last_height = _redis.get('beam_blockex_last_height')
 
     if not last_height:
@@ -232,19 +310,84 @@ def update_blockchain():
             Kernel.objects.bulk_create(_kernels)
 
     _redis.set('beam_blockex_last_height', current_height)
-    _redis.delete('block_data')
-    _redis.delete('coins_in_circulation_mined')
-    _redis.delete('total_coins_in_circulation')
-    _redis.delete('latest_block')
-    _redis.delete('latest_block_height')
 
 
-@periodic_task(run_every=(crontab(hour="*/1")), name="update_charts", ignore_result=True)
+@periodic_task(run_every=(crontab(minute=0, hour="*/1")), name="update_charts", ignore_result=True)
 def update_charts():
     _redis = redis.Redis(host='localhost', port=6379, db=0)
 
-    _redis.delete("daily_graph_data")
-    _redis.delete("weekly_graph_data")
-    _redis.delete("monthly_graph_data")
-    _redis.delete("yearly_graph_data")
-    _redis.delete("all_graph_data")
+    latest_block = Block.objects.latest('height')
+    latest_block_height = int(latest_block.height)
+    from_height = int(latest_block_height) - 4 * 1440
+    to_height = int(latest_block_height) + 1
+
+    blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height).order_by('height')
+
+    hour_offset = timedelta(hours=int(1))
+    start_date = blocks.first().timestamp
+    end_date = blocks.last().timestamp
+
+    date_with_offset = end_date - hour_offset
+
+    result = {
+        'items': [],
+        'avg_blocks': 0
+    }
+
+    while end_date > start_date:
+        offset_blocks = blocks.filter(timestamp__gte=date_with_offset, timestamp__lt=end_date)
+        blocks_count = offset_blocks.count()
+
+        if blocks_count is not 0:
+            avg_diff = offset_blocks.aggregate(Avg('difficulty'))['difficulty__avg']
+            hashrate = avg_diff / 60
+
+            result['items'].insert(0, {
+                'fee': offset_blocks.aggregate(Sum('fee'))['fee__sum'],
+                'difficulty': avg_diff,
+                'hashrate': hashrate,
+                'date': offset_blocks.last().timestamp,
+                'blocks_count': blocks_count
+            })
+        else:
+            result['items'].insert(0, {
+                'fee': 0,
+                'difficulty': 0,
+                'hashrate': 0,
+                'date': date_with_offset,
+                'blocks_count': blocks_count
+            })
+
+        end_date = date_with_offset
+        date_with_offset -= hour_offset
+
+    result['avg_blocks'] = blocks.count() / len(result['items'])
+    result['items'].pop(0)
+
+    _redis.set('graph_data', JSONRenderer().render(result))
+
+
+from celery import shared_task
+
+@shared_task(name='update_notification')
+def update_notification():
+    status_data = update_status()
+
+    graph_data = _redis.get("graph_data")
+    stream = io.BytesIO(graph_data)
+    graph_result = JSONParser().parse(stream)
+
+    channel_layer = get_channel_layer()
+
+    async_to_sync(channel_layer.group_send)(
+        'notifications',
+        {
+            'type': 'notify_event',
+            'data': {
+                'graph': graph_result,
+                'status': status_data
+            },
+        }
+    )
+
+    return True
