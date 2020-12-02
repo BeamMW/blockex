@@ -50,7 +50,7 @@ def get_status(request):
     status_data = _redis.get("status")
     stream = io.BytesIO(status_data)
     result = JSONParser().parse(stream)
-    return Response(data, status=HTTP_200_OK)
+    return Response(result, status=HTTP_200_OK)
 
 
 @api_view(['GET'])
