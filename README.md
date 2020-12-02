@@ -20,9 +20,9 @@ TODO: Add instructions
 
 `sudo apt-get install nginx python3-pip ufw python3-venv redis==2.10.6`
 
-## Start beam-exlplorer node (testnet 3)
+## Start beam-explorer node (mainnet)
 
-`./explorer-node --peer=52.76.251.61:8100`
+`./explorer-node --peer=eu-nodes.mainnet.beam.mw:8100`
 
 ## Pull lastest blockchain explorer code from git
 
