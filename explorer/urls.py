@@ -2,11 +2,12 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from .views import *
 from django.views.decorators.csrf import csrf_exempt
-router = routers.DefaultRouter()
-router.register(r'blocks', BlockViewSet)
 
 from django.urls import path
 from .views import BotView
+
+router = routers.DefaultRouter()
+router.register(r'blocks', BlockViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [

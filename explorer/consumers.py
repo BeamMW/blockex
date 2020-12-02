@@ -1,0 +1,57 @@
+# chat/consumers.py
+import json
+from channels.generic.websocket import WebsocketConsumer
+# from channels.consumer import SyncConsumer
+from asgiref.sync import async_to_sync
+
+from rest_framework.parsers import JSONParser
+import io
+import redis
+_redis = redis.Redis(host='localhost', port=6379, db=0)
+
+class ChatConsumer(WebsocketConsumer):
+
+    room_group_name = 'notifications'
+
+    def connect(self):
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_group_name,
+            self.channel_name
+        )
+        self.accept()
+
+    def disconnect(self, close_code):
+        async_to_sync(self.channel_layer.group_discard)(
+           self.room_group_name,
+            self.channel_name
+        )
+
+    def receive(self, text_data):
+       
+        text_data_json = json.loads(text_data)
+        message = text_data_json["message"]
+
+        graph_data = _redis.get("graph_data")
+        graph_stream = io.BytesIO(graph_data)
+        graph_result = JSONParser().parse(graph_stream)
+
+        status_data = _redis.get("status")
+        status_stream = io.BytesIO(status_data)
+        status_result = JSONParser().parse(status_stream)
+
+        if message == "init":
+            self.send(text_data=json.dumps({'init':{
+                'graph': graph_result,
+                'status': status_result
+            }}))
+
+        pass
+
+    def notify_event(self, event):
+        data = event['data']
+
+        self.send(text_data=json.dumps({
+            'data': data
+        }))
+
+        print('NOTIFIED')

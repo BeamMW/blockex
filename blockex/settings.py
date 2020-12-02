@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from celery.schedules import crontab
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'explorer',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -109,6 +111,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# CHANNELS
+ASGI_APPLICATION = "explorer.asgi.application"
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer"
+#     }
+# }
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
 # CELERY STUFF
 BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
@@ -116,7 +135,13 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Africa/Nairobi'
-
+CELERYBEAT_SCHEDULE  = {
+    'automatic_update_notification': {
+        'task': 'update_notification',
+        'schedule': crontab(minute='*/1'),
+        'args': None
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
