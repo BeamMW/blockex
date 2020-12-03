@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # CHANNELS
-ASGI_APPLICATION = "explorer.asgi.application"
+ASGI_APPLICATION = "blockex.routing.application"
 # CHANNEL_LAYERS = {
 #     "default": {
 #         "BACKEND": "channels.layers.InMemoryChannelLayer"
@@ -138,6 +138,21 @@ CELERY_TIMEZONE = 'Africa/Nairobi'
 CELERYBEAT_SCHEDULE  = {
     'automatic_update_notification': {
         'task': 'update_notification',
+        'schedule': crontab(minute='*/1'),
+        'args': None
+    },
+    'automatic_bot_check': {
+        'task': 'bot_check',
+        'schedule': crontab(minute='*/1'),
+        'args': None
+    },
+    'automatic_update_blockchain': {
+        'task': 'update_blockchain',
+        'schedule': crontab(minute='*/1'),
+        'args': None
+    },
+    'automatic_update_charts': {
+        'task': 'update_charts',
         'schedule': crontab(minute='*/1'),
         'args': None
     }

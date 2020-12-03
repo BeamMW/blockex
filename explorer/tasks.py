@@ -1,5 +1,5 @@
-from celery.task.schedules import crontab
-from celery.decorators import periodic_task
+from celery import shared_task
+from celery.schedules import crontab
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models import Sum, Avg
@@ -90,7 +90,7 @@ def update_status():
     return data
 
 
-@periodic_task(run_every=(crontab(minute='*/1')), name="bot_check", ignore_result=True)
+@shared_task(name="bot_check")
 def bot_check():
     r = requests.get(BEAM_NODE_API + '/status')
     current_height = r.json()['height']
@@ -149,7 +149,7 @@ def bot_check():
             index += 1
  
 
-@periodic_task(run_every=(crontab(minute='*/1')), name="update_blockchain", ignore_result=True)
+@shared_task(name="update_blockchain")
 def update_blockchain():
     # # Find last seen height
     last_height = _redis.get('beam_blockex_last_height')
@@ -312,7 +312,7 @@ def update_blockchain():
     _redis.set('beam_blockex_last_height', current_height)
 
 
-@periodic_task(run_every=(crontab(minute=0, hour="*/1")), name="update_charts", ignore_result=True)
+@shared_task(name="update_charts")
 def update_charts():
     _redis = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -366,8 +366,6 @@ def update_charts():
 
     _redis.set('graph_data', JSONRenderer().render(result))
 
-
-from celery import shared_task
 
 @shared_task(name='update_notification')
 def update_notification():
