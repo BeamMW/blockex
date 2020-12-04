@@ -6,3 +6,6 @@ frontend/blockexapp/.firebase/hosting.ZGlzdC9ibG9ja2V4YXBw.cache
 db.sqlite3
 .idea/
 .vscode/settings.json
+celerybeat-schedule.bak
+celerybeat-schedule.dat
+celerybeat-schedule.dir

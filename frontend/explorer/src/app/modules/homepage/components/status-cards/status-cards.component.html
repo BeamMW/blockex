@@ -1,0 +1,93 @@
+<div class="cards" *ngIf="statusData$ | async as data">
+    <div class="cards__left">
+        <div class="cards__left__top">
+            <div class="card">
+                <div class="card__left-part">
+                    <div class="card__left-part__upper">
+                        <div class="card-header">BLOCKCHAIN HEIGHT</div>
+                        <div class="card-content">{{data.height | number:'.'}}</div>
+                    </div>
+                    <div class="card__left-part__lower">
+                        <div class="card-header">HASHRATE</div>
+                        <div class="card-content">{{data.difficulty / 60 | number:'.'}} Sol/s</div>
+                    </div>
+                </div>
+                <div class="card__right-part">
+                    <div class="card__left-part__upper">
+                        <div class="card-header">LATEST BLOCK</div>
+                        <div class="card-content">{{data.timestamp | date:'medium'}}</div>
+                    </div>
+                    <div class="card__left-part__lower">
+                        <div class="card-header">LATEST BLOCK DIFFICULTY</div>
+                        <div class="card-content">{{data.difficulty | number:'.'}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cards__left__bottom">
+            <div class="card">
+                <div class="card__left-part">
+                    <div class="card__left-part__upper">
+                        <div class="card-header">TOTAL COINS IN CIRCULATION</div>
+                        <div class="card-content">{{data.total_coins_in_circulation | number:'.'}} BEAM</div>
+                    </div>
+                </div>
+                <div class="card__right-part">
+                    <div class="card__left-part__upper">
+                        <div class="card-header">COINS IN CIRCULATION (mined)</div>
+                        <div class="card-content">{{data.coins_in_circulation_mined | number:'.'}} BEAM</div>
+                    </div>
+                    <div class="card__left-part__lower">
+                        <div class="card-header">COINS IN CIRCULATION (treasury)</div>
+                        <div class="card-content">{{data.coins_in_circulation_treasury | number:'.' }} BEAM</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cards__right">
+        <div class="cards__right__top">
+            <div class="card">
+                <div class="card__left-part">
+                    <div class="card__left-part__upper">
+                        <div class="card-header">TOTAL EMISSION</div>
+                        <div class="card-content">{{data.total_emission | number:'.'}} BEAM</div>
+                    </div>
+                </div>
+                <div class="card__right-part">
+                    <div class="card__left-part__upper">
+                        <div class="card-header">NEXT TREASURY EMISSION</div>
+                        <div class="card-content">{{data.next_treasury_emission_coin_amount | number:'.'}} BEAM</div>
+                    </div>
+                    <div class="card__left-part__lower">
+                        <div class="card-header">NEXT TREASURY EMISSION (block height)</div>
+                        <div class="card-content">{{data.next_treasury_emission_block_height | number:'.' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cards__right__bottom">
+            <div class="card">
+                <div class="card__left-part">
+                    <div class="card__left-part__upper">
+                        <div class="card-header">TOTAL OFFERS AMOUNT</div>
+                        <div class="card-content">{{data.swap_totals.beams_offered | number:'.'}} BEAM</div>
+                    </div>
+                    <div class="card__left-part__lower">
+                        <div class="card-header">ACTIVE SWAP OFFERS</div>
+                        <div class="card-content">{{data.swap_totals.total_swaps_count / 60 | number:'.'}}</div>
+                    </div>
+                </div>
+                <div class="card__right-part" *ngIf="mostOffering.length > 0">
+                    <div class="card-header">MOST OFFERING</div>
+                    <div class="card-offering">
+                        <div class="card-offering__item" *ngFor="let item of mostOffering">
+                            <span class="card-offering__item__title">{{item.title}}:</span>
+                            <span class="card-offering__item__value">{{item.value}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+/* You can add global styles to this file, and also import other style files */
+
+html {
+      &,
+      body {
+          width: 100%;
+          position: relative;
+      }
+  
+      body {
+          background-color: #fff;
+          margin: 0 auto;
+          //noinspection CssUnknownProperty
+          overflow-anchor: none;
+      }
+}
+
+@font-face {
+    font-family: "ProximaNova";
+    src: url("./assets/fonts/proximanova-regular.otf");
+}
+
+@font-face {
+    font-family: "ProximaNovaIt";
+    src: url("./assets/fonts/ProximaNova-RegularIt.ttf");
+}
+
+* {
+    font-family: 'ProximaNova', sans-serif;
+}

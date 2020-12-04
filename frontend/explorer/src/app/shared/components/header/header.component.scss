@@ -1,0 +1,39 @@
+@import 'ui-mixins';
+
+.header {
+    display: flex;
+    width: 100%;
+    height: 111px;
+    
+    &__content {
+        @include top-background-color();
+        padding: 0 140px;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        &__assets-button {
+            @include text-color();
+            width: 179px;
+            height: 31px;
+            border-radius: 15.5px;
+            background-color: #05e2c2;
+            font-size: 14px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            letter-spacing: normal;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        &__assets-button:hover {
+            background-color: #05f7d3;    
+        }
+    }
+}

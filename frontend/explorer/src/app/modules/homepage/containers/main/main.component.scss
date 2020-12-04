@@ -1,0 +1,19 @@
+@import 'ui-mixins';
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    &__overview {
+        @include top-background-color();
+        display: flex;
+        padding: 0 140px;
+        height: 1321px;
+    }
+
+    &__table-area {
+        display: flex;
+        height: 150px; // remove
+    }
+}

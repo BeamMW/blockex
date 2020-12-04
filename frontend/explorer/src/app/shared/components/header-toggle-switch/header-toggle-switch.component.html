@@ -1,0 +1,14 @@
+<div class="switch">
+    <div #mainnet class="switch__mainnet" (click)="switcherClicked('mainnet')" >MAINNET</div>
+    <div #testnet class="switch__testnet" (click)="switcherClicked('testnet')">TESTNET</div>
+    <div #beamx class="switch__beamx" (click)="switcherClicked('beamx')">BEAM X</div>
+    <div #selector class="selector"
+        [ngStyle]="{'left': selectedValue == 'mainnet' ? -2 + 'px' : 
+            selectedValue == 'testnet' ? mainnet.clientWidth + 'px' : 
+            mainnet.clientWidth + testnet.clientWidth + 1 + 'px',
+            'width': selectedValue == 'mainnet' ? mainnet.clientWidth + 'px' : 
+            selectedValue == 'testnet' ? testnet.clientWidth + 'px' : 
+            beamx.clientWidth + 'px'}">
+        {{selectedValue}}
+    </div>
+</div>
