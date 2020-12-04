@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnDestroy, ViewEncapsulation, AfterViewInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { WebsocketService } from '../../../../modules/websocket';
+import { DataService } from '../../../../services/data/data.service';
 import { WS } from '../../../../websocket.events';
 
 export interface IStatus {
@@ -39,7 +40,7 @@ export class StatusCardsComponent implements AfterViewInit {
   public statusData$: Observable<IStatus>;
   public mostOffering: MostOfferingItem[];
 
-  constructor(private wsService: WebsocketService) {
+  constructor(private wsService: WebsocketService, private dataService: DataService) {
     this.wsService.status.subscribe((isConnected) => {
       if (isConnected) {
         this.wsService.send(WS.INIT.INIT_STATUS);
@@ -61,6 +62,11 @@ export class StatusCardsComponent implements AfterViewInit {
         return b.value - a.value;
       });
       this.mostOffering = topOffersSelector.slice(0, 3);
+    });
+
+
+    this.dataService.loadBlocks(1).subscribe((data) => {
+      console.log(data);
     });
   }
 }

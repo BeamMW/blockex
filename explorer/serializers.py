@@ -20,6 +20,27 @@ class KernelSerializer(serializers.ModelSerializer):
         fields = ('block_id', 'fee', 'kernel_id', 'extra', 'minHeight', 'maxHeight')
 
 
+class BlockPaginatorSerializer(serializers.ModelSerializer):
+    inputs = serializers.SerializerMethodField()
+    outputs = serializers.SerializerMethodField()
+    kernels = serializers.SerializerMethodField()
+
+    def get_inputs(self, obj):
+        return obj.inputs.count()
+
+    def get_outputs(self, obj):
+        return obj.outputs.count()
+
+    def get_kernels(self, obj):
+        return obj.kernels.count()
+
+    class Meta:
+        model = Block
+        fields = ('height', 'hash',
+                  'difficulty', 'timestamp',
+                  'fee', 'inputs', 'outputs', 'kernels')
+
+
 class BlockSerializer(serializers.ModelSerializer):
 
     inputs = serializers.SerializerMethodField()

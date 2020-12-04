@@ -34,7 +34,7 @@ _redis = redis.Redis(host='localhost', port=6379, db=0)
 
 class BlockViewSet(viewsets.ModelViewSet):
     queryset = Block.objects.all().order_by('-height')
-    serializer_class = BlockSerializer
+    serializer_class = BlockPaginatorSerializer
 
 
 @api_view(['GET'])

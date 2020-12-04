@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { HomepageModule } from './modules/homepage/homepage.module';
 import { WebsocketModule } from './modules/websocket';
+import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -19,7 +20,8 @@ import { environment } from '../environments/environment';
     HomepageModule,
     WebsocketModule.config({
       url: environment.wsEndpoint
-  })
+    }),
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
