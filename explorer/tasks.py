@@ -86,6 +86,10 @@ def update_status():
     data['next_treasury_emission_coin_amount'] = _redis.get('next_treasury_coin_amount')
     data['total_emission'] = _redis.get('total_coins_emission')
 
+    swap_request = requests.get(BEAM_NODE_API + '/swap_totals')
+    swap_totals = swap_request.json()
+    data['swap_totals'] = swap_totals
+
     _redis.set('status', JSONRenderer().render(data))
     return data
 
@@ -371,9 +375,9 @@ def update_charts():
 def update_notification():
     status_data = update_status()
 
-    graph_data = _redis.get("graph_data")
-    stream = io.BytesIO(graph_data)
-    graph_result = JSONParser().parse(stream)
+    # graph_data = _redis.get("graph_data")
+    # stream = io.BytesIO(graph_data)
+    # graph_result = JSONParser().parse(stream)
 
     channel_layer = get_channel_layer()
 
@@ -381,10 +385,10 @@ def update_notification():
         'notifications',
         {
             'type': 'notify_event',
-            'data': {
-                'graph': graph_result,
-                'status': status_data
-            },
+            'data': json.dumps({
+                'event':'update-status',
+                'data': status_data
+            }),
         }
     )
 

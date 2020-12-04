@@ -27,31 +27,26 @@ class ChatConsumer(WebsocketConsumer):
         )
 
     def receive(self, text_data):
-       
-        text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
+        text_data_json = json.loads(json.loads(text_data))
+        event = text_data_json["event"]
+        
+        if event == "init-status":
+            status_data = _redis.get("status")
+            status_stream = io.BytesIO(status_data)
+            status_result = JSONParser().parse(status_stream)
 
-        graph_data = _redis.get("graph_data")
-        graph_stream = io.BytesIO(graph_data)
-        graph_result = JSONParser().parse(graph_stream)
+            self.send(text_data=json.dumps({
+                'event':'init-status',
+                'data': status_result
+            }))
 
-        status_data = _redis.get("status")
-        status_stream = io.BytesIO(status_data)
-        status_result = JSONParser().parse(status_stream)
 
-        if message == "init":
-            self.send(text_data=json.dumps({'init':{
-                'graph': graph_result,
-                'status': status_result
-            }}))
-
+        # graph_data = _redis.get("graph_data")
+        # graph_stream = io.BytesIO(graph_data)
+        # graph_result = JSONParser().parse(graph_stream)
         pass
 
     def notify_event(self, event):
         data = event['data']
 
-        self.send(text_data=json.dumps({
-            'data': data
-        }))
-
-        print('NOTIFIED')
+        self.send(text_data=data)
