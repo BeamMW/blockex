@@ -28,7 +28,7 @@ FIRST_YEAR_VALUE = 20
 REST_YEARS_VALUE = 10
 
 TELEGRAM_URL = "https://api.telegram.org/bot"
-_redis = redis.Redis(host='localhost', port=6379, db=0)
+_redis = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 
 def load_token():
     settings_dir = os.path.dirname(__file__)
@@ -74,7 +74,7 @@ def update_status():
     data = {
         "difficulty": last_block.difficulty,
         "height": last_block.height,
-        "timestamp": last_block.timestamp,
+        "timestamp": last_block.timestamp
     }
 
     coins_in_circulation_mined = int(subsidy_data['subsidy__sum']) * 10**-8
@@ -94,7 +94,7 @@ def update_status():
     swap_totals = swap_request.json()
     data['swap_totals'] = swap_totals
 
-    _redis.set('status', JSONRenderer().render(data))
+    _redis.set('status', json.dumps(data, default=str))
     return data
 
 
@@ -322,8 +322,6 @@ def update_blockchain():
 
 @shared_task(name="update_charts")
 def update_charts():
-    _redis = redis.Redis(host='localhost', port=6379, db=0)
-
     latest_block = Block.objects.latest('height')
     latest_block_height = int(latest_block.height)
     from_height = int(latest_block_height) - 4 * 1440
@@ -372,18 +370,26 @@ def update_charts():
     result['avg_blocks'] = blocks.count() / len(result['items'])
     result['items'].pop(0)
 
-    _redis.set('graph_data', JSONRenderer().render(result))
+    _redis.set('graph_data', json.dumps(result, default=str))
 
 
 @shared_task(name='update_notification')
 def update_notification():
+    channel_layer = get_channel_layer()
     status_data = update_status()
 
-    # graph_data = _redis.get("graph_data")
-    # stream = io.BytesIO(graph_data)
-    # graph_result = JSONParser().parse(stream)
+    graph_data = _redis.get("graph_data")
 
-    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        'notifications',
+        {
+            'type': 'notify_event',
+            'data': json.dumps({
+                'event':'update-graph',
+                'data': graph_data
+            }, default=str),
+        }
+    )
 
     async_to_sync(channel_layer.group_send)(
         'notifications',
@@ -392,7 +398,7 @@ def update_notification():
             'data': json.dumps({
                 'event':'update-status',
                 'data': status_data
-            }),
+            }, default=str),
         }
     )
 

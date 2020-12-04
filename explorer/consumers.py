@@ -31,13 +31,19 @@ class ChatConsumer(WebsocketConsumer):
         event = text_data_json["event"]
         
         if event == "init-status":
-            status_data = _redis.get("status")
-            status_stream = io.BytesIO(status_data)
-            status_result = JSONParser().parse(status_stream)
+            status_data = json.loads(_redis.get("status"))
 
             self.send(text_data=json.dumps({
                 'event':'init-status',
-                'data': status_result
+                'data': status_data
+            }))
+
+        if event == "init-graphs":
+            graphs_data = json.loads(_redis.get("graph_data"))
+
+            self.send(text_data=json.dumps({
+                'event':'init-graphs',
+                'data': graphs_data
             }))
 
 
