@@ -68,10 +68,14 @@ def send_multi_height_report(from_value, to_value):
 
 
 def update_status():
-    b = Block.objects.latest('height')
-    serializer = BlockHeaderSerializer(b)
-    data = serializer.data
+    last_block = Block.objects.latest('height')
     subsidy_data = Block.objects.all().aggregate(Sum('subsidy'))
+
+    data = {
+        "difficulty": last_block.difficulty,
+        "height": last_block.height,
+        "timestamp": last_block.timestamp,
+    }
 
     coins_in_circulation_mined = int(subsidy_data['subsidy__sum']) * 10**-8
     _redis.set('coins_in_circulation_mined', coins_in_circulation_mined)
