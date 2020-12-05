@@ -8,6 +8,7 @@
     &__overview {
         @include top-background-color();
         display: flex;
+        flex-direction: column;
         padding: 0 140px;
         height: 1321px;
     }

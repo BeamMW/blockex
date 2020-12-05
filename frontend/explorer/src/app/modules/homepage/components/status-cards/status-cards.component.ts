@@ -66,7 +66,7 @@ export class StatusCardsComponent implements AfterViewInit {
 
 
     this.dataService.loadBlocks(1).subscribe((data) => {
-      console.log(data);
+      
     });
   }
 }

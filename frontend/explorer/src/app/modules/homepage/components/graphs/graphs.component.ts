@@ -3,6 +3,8 @@ import { WebsocketService } from '../../../../modules/websocket';
 import { WS } from '../../../../websocket.events';
 import { Observable } from 'rxjs';
 
+import { Chart } from 'angular-highcharts';
+
 export interface IGraphs {
   data: string;
 }
@@ -13,7 +15,7 @@ export interface IGraphs {
   styleUrls: ['./graphs.component.scss']
 })
 export class GraphsComponent implements OnInit {
-  public statusData$: Observable<IGraphs>;
+  public graphsData$: Observable<IGraphs>;
 
   constructor(private wsService: WebsocketService) {
     this.wsService.status.subscribe((isConnected) => {
@@ -21,7 +23,31 @@ export class GraphsComponent implements OnInit {
         this.wsService.send(WS.INIT.INIT_GRAPHS);
       }
     });
-    this.statusData$ = this.wsService.on<IGraphs>(WS.INIT.INIT_GRAPHS, WS.UPDATE.UPDATE_STATUS);
+    this.graphsData$ = this.wsService.on<IGraphs>(WS.INIT.INIT_GRAPHS, WS.UPDATE.UPDATE_STATUS);
+  }
+
+  chart = new Chart({
+    chart: {
+      type: 'line'
+    },
+    title: {
+      text: 'Linechart'
+    },
+    credits: {
+      enabled: false
+    },
+    series: [
+      {
+        name: 'Line 1',
+        type: 'line',
+        data: [1, 2, 3, 5, 6, 2, 1, 77]
+      }
+    ]
+  });
+
+  // add point to chart serie
+  add() {
+    this.chart.addPoint(Math.floor(Math.random() * 10));
   }
 
   ngOnInit(): void {

@@ -329,7 +329,7 @@ def update_charts():
 
     blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height).order_by('height')
 
-    hour_offset = timedelta(hours=int(1))
+    hour_offset = timedelta(hours=int(2))
     start_date = blocks.first().timestamp
     end_date = blocks.last().timestamp
 
@@ -344,25 +344,23 @@ def update_charts():
         offset_blocks = blocks.filter(timestamp__gte=date_with_offset, timestamp__lt=end_date)
         blocks_count = offset_blocks.count()
 
+        fee = 0
+        diff = 0
+        hashrate = 0
+        date = date_with_offset
         if blocks_count is not 0:
-            avg_diff = offset_blocks.aggregate(Avg('difficulty'))['difficulty__avg']
-            hashrate = avg_diff / 60
-
-            result['items'].insert(0, {
-                'fee': offset_blocks.aggregate(Sum('fee'))['fee__sum'],
-                'difficulty': avg_diff,
-                'hashrate': hashrate,
-                'date': offset_blocks.last().timestamp,
-                'blocks_count': blocks_count
-            })
-        else:
-            result['items'].insert(0, {
-                'fee': 0,
-                'difficulty': 0,
-                'hashrate': 0,
-                'date': date_with_offset,
-                'blocks_count': blocks_count
-            })
+            diff = offset_blocks.aggregate(Avg('difficulty'))['difficulty__avg']
+            hashrate = diff / 60
+            fee = offset_blocks.aggregate(Sum('fee'))['fee__sum']
+            date = offset_blocks.last().timestamp
+        
+        result['items'].insert(0, {
+            'fee': fee,
+            'difficulty': diff,
+            'hashrate': hashrate,
+            'date': date,
+            'blocks_count': blocks_count
+        })
 
         end_date = date_with_offset
         date_with_offset -= hour_offset
@@ -378,7 +376,7 @@ def update_notification():
     channel_layer = get_channel_layer()
     status_data = update_status()
 
-    graph_data = _redis.get("graph_data")
+    graph_data = json.loads(_redis.get("graph_data"))
 
     async_to_sync(channel_layer.group_send)(
         'notifications',
