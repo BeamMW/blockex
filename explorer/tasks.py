@@ -98,7 +98,7 @@ def update_status():
     return data
 
 
-@shared_task(name="bot_check")
+@shared_task(name="bot_check", ignore_result=True)
 def bot_check():
     r = requests.get(BEAM_NODE_API + '/status')
     current_height = r.json()['height']
@@ -155,9 +155,10 @@ def bot_check():
                     counter += 1
                 r_tmp_height = r_height
             index += 1
+    return True
  
 
-@shared_task(name="update_blockchain")
+@shared_task(name="update_blockchain", ignore_result=True)
 def update_blockchain():
     # # Find last seen height
     last_height = _redis.get('beam_blockex_last_height')
@@ -318,9 +319,10 @@ def update_blockchain():
             Kernel.objects.bulk_create(_kernels)
 
     _redis.set('beam_blockex_last_height', current_height)
+    return True
 
 
-@shared_task(name="update_charts")
+@shared_task(name="update_charts", ignore_result=True)
 def update_charts():
     latest_block = Block.objects.latest('height')
     latest_block_height = int(latest_block.height)
@@ -369,9 +371,9 @@ def update_charts():
     result['items'].pop(0)
 
     _redis.set('graph_data', json.dumps(result, default=str))
+    return True
 
-
-@shared_task(name='update_notification')
+@shared_task(name='update_notification', ignore_result=True)
 def update_notification():
     channel_layer = get_channel_layer()
     status_data = update_status()
