@@ -5,6 +5,6 @@ export const WS = {
     },
     UPDATE: {
         UPDATE_STATUS: 'update-status',
-        UPDATE_GRAPHS: 'update-graphs'
+        UPDATE_GRAPHS: 'update-graph'
     }
 };

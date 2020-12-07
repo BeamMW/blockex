@@ -16,3 +16,19 @@
 @mixin text-color {
     color: #311e46;
 }
+
+@mixin point-fill {
+    fill: #271727;
+}
+
+@mixin selector-selected-color {
+    color: #a479f8;
+}
+
+@mixin selector-bg-color {
+    background-color: rgb(80,67,89);
+}
+
+@mixin tooltip-background {
+    fill:rgb(80, 67, 89);
+}

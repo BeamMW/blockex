@@ -1,3 +1,23 @@
-<div class="container">
-    <div [chart]="chart"></div>
+<div class="graphs" *ngIf="graphsLoaded">
+    <div class="graphs__block">
+        <div class="chart-type-selector">
+            <span class="type-selected" (click)="showTypesOptions($event)">
+              <span>{{selectedBlocksChartType.name}}</span>
+              <img src="../../../../../assets/modules/homepage/components/graphs/arrow-down-small.svg" class="arrow-down-small">
+            </span>
+            <div class="type-options" *ngIf="isChartTypesVisible">
+              <ul>
+                <li class="type-options-item" *ngFor="let p of blockCharts"
+                    [class.selected]="p.isSelected"
+                    (click)="blocksChartTypeChange(p)">
+                  <span> {{p.name}} </span>
+                </li>
+              </ul>
+            </div>
+        </div>
+        <div class="graphs__block__elem" [chart]="graphs.blocks"></div>
+    </div>
+    <div class="graphs__fee">
+        <div class="graphs__fee__elem" [chart]="graphs.fee"></div>
+    </div>
 </div>

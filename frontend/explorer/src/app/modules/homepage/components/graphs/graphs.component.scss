@@ -1,0 +1,270 @@
+@import './../../../../../../node_modules/highcharts/css/highcharts.scss';
+@import 'ui-mixins';
+
+.graphs {
+    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &__block {
+        display: flex;
+        flex-direction: column;
+
+        &__elem {
+            margin-top: 30px;
+        }
+    }
+
+    &__fee {
+        display: flex;
+        flex-direction: column;
+
+        &__elem {
+            margin-top: 42px;
+        }
+    }
+}
+
+.highcharts-background {
+    fill: rgba(255, 255, 255, 0);
+}
+
+.highcharts-xaxis-grid .highcharts-grid-line {
+	stroke-width: 1px;
+	stroke: rgba(255, 255, 255, 0.1);
+}
+
+.highcharts-yaxis-grid .highcharts-grid-line {
+	stroke-width: 1px;
+	stroke: rgba(255, 255, 255, 0.1);
+}
+
+.highcharts-xaxis .highcharts-axis-line {
+	stroke-width: 0px;
+}
+
+.highcharts-yaxis .highcharts-grid-line {
+	stroke-width: 0px;
+}
+
+.graphs__block .highcharts-color-1 {
+    @include point-fill();
+    stroke: #ff51ff;
+}
+
+.graphs__block .highcharts-color-2 {
+    @include point-fill();
+    stroke: #24c1ff;
+}
+
+.graphs__block .highcharts-color-3 {
+    @include point-fill();
+    stroke: #ff51ff;
+}
+
+.graphs__block .highcharts-color-0 {
+    @include point-fill();
+    stroke: #24c1ff;
+}
+
+.graphs__fee .highcharts-color-0 {
+    @include point-fill();
+    stroke: #00e2c2;
+}
+
+.highcharts-axis-labels {
+
+}
+
+.highcharts-axis-title {
+    font-size: 12px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    fill: #ffffff;
+}
+
+.highcharts-axis-labels {
+    opacity: 0.5;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    fill: #ffffff;
+}
+
+.highcharts-legend-item > text {
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.5px;
+    fill: #ffffff;
+}
+
+
+.highcharts-tooltip-box {
+    @include tooltip-background();
+    stroke-width: 0;
+    stroke-linecap: round;
+}
+
+.tooltip-line-color {
+    margin-left: 2px;
+    margin-top: 14px;
+    position: absolute;
+    width: 20px;
+    float: left;
+}
+
+.highcharts-tooltip-0.highcharts-color-1 .tooltip-line-circle{
+    background-color: #ff51ff;
+}
+
+.highcharts-tooltip-0.highcharts-color-1 .tooltip-line-color{
+    color: #ff51ff;
+}
+
+.highcharts-tooltip-0.highcharts-color-0 .tooltip-line-circle{
+    background-color: #24c1ff;
+}
+
+.highcharts-tooltip-0.highcharts-color-0 .tooltip-line-color{
+    color: #24c1ff;
+}
+
+.highcharts-tooltip-0.highcharts-color-2 .tooltip-line-circle{
+    background-color: #24c1ff;
+}
+
+.highcharts-tooltip-0.highcharts-color-2 .tooltip-line-color{
+    color: #24c1ff;
+}
+
+.highcharts-tooltip-0.highcharts-color-3 .tooltip-line-circle{
+    background-color: #ff51ff;
+}
+
+.highcharts-tooltip-0.highcharts-color-3 .tooltip-line-color{
+    color: #ff51ff;
+}
+
+
+.highcharts-tooltip-1.highcharts-color-0 .tooltip-line-circle{
+    background-color: #00e2c2;
+}
+
+.highcharts-tooltip-1.highcharts-color-0 .tooltip-line-color{
+    color: #00e2c2;
+}
+
+.tooltip-line-circle {
+    height: 5px;
+    width: 5px;
+    top: 19px;
+    left: 11px;
+    position: absolute;
+    content: "";
+    border-radius: 5px;
+}
+
+.tooltip-title {
+    margin-left: 30px;
+    margin-top: 15px;
+    float: left;
+    font-size: 12px;
+    font-weight: 100;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.4px;
+    color: #ffffff;
+}
+
+.tooltip-date {
+    margin-left: 30px;
+    margin-top: 10px;
+    float: left;
+    font-size: 12px;
+    font-weight: 100;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.4px;
+    color: #ffffff;
+}
+
+.tooltip-value {
+    margin-left: 30px;
+    margin-top: 10px;
+    float: left;
+    font-size: 20px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+}
+
+.selected {
+    @include selector-selected-color();
+}
+
+.chart-type-selector {
+    display: flex;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    text-align: center;
+    color: #ffffff;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.chart-type-selector .type-selected {
+    cursor: pointer;
+    display: flex;
+    margin-left: 80px;
+}
+
+.chart-type-selector .type-options {
+    @include selector-bg-color();
+    margin-left: 64px;
+    z-index: 10;
+    width: 176px;
+    height: 72px;
+    position: absolute;
+    border: none;
+    margin-top: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    opacity: 1;
+}
+
+.chart-type-selector .type-options .type-options-item {
+    margin-top: 14px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.chart-type-selector .type-options ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.arrow-down-small {
+    margin-left: 5px;
+}
