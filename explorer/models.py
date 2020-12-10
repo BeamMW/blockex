@@ -107,7 +107,6 @@ class Max_privacy_withdraw(models.Model):
 
 class Swap_stats(models.Model):
     btc = models.CharField(null=False, blank=False, max_length=16)
-    bch = models.CharField(null=False, blank=False, max_length=16)
     dash = models.CharField(null=False, blank=False, max_length=16)
     doge = models.CharField(null=False, blank=False, max_length=16)
     ltc = models.CharField(null=False, blank=False, max_length=16)
@@ -116,7 +115,6 @@ class Swap_stats(models.Model):
 
     def from_json(self, _json):
         self.btc = _json['btc']
-        self.bch = _json['bch']
         self.dash = _json['dash']
         self.doge = _json['doge']
         self.ltc = _json['ltc']
