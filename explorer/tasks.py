@@ -378,8 +378,7 @@ def update_charts():
             'difficulty': diff,
             'hashrate': hashrate,
             'date': date,
-            'blocks_count': blocks_count,
-            'lelantus': lelantus_res
+            'blocks_count': blocks_count
         })
 
         end_date = date_with_offset
@@ -387,6 +386,8 @@ def update_charts():
 
     result['avg_blocks'] = (blocks.count() / len(result['items'])) / 2
     result['items'].pop(0)
+
+    result['lelantus'] = lelantus_res
 
     _redis.set('graph_data', json.dumps(result, default=str))
     return True
