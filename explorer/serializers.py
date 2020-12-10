@@ -61,7 +61,7 @@ class BlockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Block
-        fields = ('height', 'prev', 'hash', 'chainwork', 'rate_btc', 'rate_usd'
+        fields = ('height', 'prev', 'hash', 'chainwork', 'rate_btc', 'rate_usd',
                   'difficulty', 'subsidy', 'timestamp',
                   'fee', 'inputs', 'outputs', 'kernels')
 
@@ -77,8 +77,15 @@ class ForkDetectionSerializer(serializers.ModelSerializer):
         model = Forks_event_detection
         fields = "__all__"
 
+
 class BotUsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bot_users
         fields = "__all__"
+
+
+class MaxPrivacyWithdrawSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Max_privacy_withdraw
+        fields = ('value', 'created_at')
 

@@ -17,6 +17,9 @@ export class TableComponent implements OnInit, OnDestroy {
     AS_OFFERS: 'ATOMIC SWAP OFFERS',
   };
 
+  public displayedOffersColumns: string[] = [
+    'coins', 'amount-send', 'amount-rec', 'created', 'expired', 'tr-id'
+  ]
   public displayedColumns: string[] = ['height', 'hash', 'age',
     'difficulty', 'kernels', 'inputs', 'outputs', 'fees'];
   public dataSource = ELEMENT_DATA;
@@ -25,7 +28,9 @@ export class TableComponent implements OnInit, OnDestroy {
   public blocksCount: number;
   public blocksPage: number;
   public blocksData: any;
-  public loadingBlocks = false;
+  public offersCount: number;
+  public offersPage: number;
+  public offersData: any;
   private subscriber: any;
 
   constructor(
@@ -48,14 +53,55 @@ export class TableComponent implements OnInit, OnDestroy {
     );
   }
 
-  public loadBlocks(event?: PageEvent){
-    this.loadingBlocks = true;
+  loadBlocks(event?: PageEvent){
     this.blocksPage = event ? event.pageIndex : 0;
 
     this.dataService.loadBlocks(this.blocksPage).subscribe((data) => {
-      this.loadingBlocks = false;
       this.blocksData = new MatTableDataSource(data['results']);
       this.blocksCount = data['count'];
+    });
+
+    return event;
+  }
+
+  loadOffers(event?: PageEvent){
+    this.offersPage = event ? event.pageIndex : 0;
+
+    this.dataService.loadOffers(this.offersPage).subscribe((data) => {
+      const asd = [{
+        beam_amount: "3",
+        height_expired: 253126,
+        min_height: 252406,
+        status: 0,
+        status_string: "pending",
+        swap_amount: "3",
+        swap_currency: "BCH",
+        time_created: "2020.11.06 18:31:54",
+        txId: "1b726d0adffe45c993b801c8bb46184e"
+      },{
+        beam_amount: "3",
+        height_expired: 253126,
+        min_height: 252406,
+        status: 0,
+        status_string: "pending",
+        swap_amount: "3",
+        swap_currency: "BCH",
+        time_created: "2020.11.06 18:31:54",
+        txId: "1b726d0adffe45c993b801c8bb46184e"
+      },{
+        beam_amount: "3",
+        height_expired: 253126,
+        min_height: 252406,
+        status: 0,
+        status_string: "pending",
+        swap_amount: "3",
+        swap_currency: "BCH",
+        time_created: "2020.11.06 18:31:54",
+        txId: "1b726d0adffe45c993b801c8bb46184e"
+      }]
+      this.offersData = new MatTableDataSource(asd);
+      this.offersCount = 100;
+      //this.offersCount = data['count'];
     });
 
     return event;
@@ -74,12 +120,14 @@ export class TableComponent implements OnInit, OnDestroy {
   selectorItemBlocksClicked(): void {
     if (this.selectorActiveTitle !== this.selectorTitles.BLOCKS) {
       this.selectorActiveTitle = this.selectorTitles.BLOCKS;
+      this.loadBlocks(null);
     }
   }
 
   selectorItemASOClicked(): void {
     if (this.selectorActiveTitle !== this.selectorTitles.AS_OFFERS) {
       this.selectorActiveTitle = this.selectorTitles.AS_OFFERS;
+      this.loadOffers(null);
     }
   }
 }

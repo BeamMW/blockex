@@ -331,6 +331,23 @@ def update_charts():
 
     blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height).order_by('height')
 
+    date_now = int(round(time.time() * 1000))
+    date_from = date_now - timedelta(days=int(4))
+    lelantus_data = Max_privacy_withdraw.objects.filter(created_at__gte=date_from, created_at__lt=date_now)
+
+    counter = 0
+    lelantus_res = []
+    lelantus_sum = 0
+    for data in lelantus_data:
+        if (counter == 12):
+            lelantus_avg = lelantus_sum / 12
+            lelantus_res.insert(0, [lelantus_avg, data.created_at])
+            lelantus_sum = 0
+            counter = 0
+
+        lelantus_sum += float(data.value)
+        counter += 1
+
     hour_offset = timedelta(hours=int(2))
     start_date = blocks.first().timestamp
     end_date = blocks.last().timestamp
@@ -361,7 +378,8 @@ def update_charts():
             'difficulty': diff,
             'hashrate': hashrate,
             'date': date,
-            'blocks_count': blocks_count
+            'blocks_count': blocks_count,
+            'lelantus': lelantus_res
         })
 
         end_date = date_with_offset
@@ -372,6 +390,7 @@ def update_charts():
 
     _redis.set('graph_data', json.dumps(result, default=str))
     return True
+
 
 @shared_task(name='update_notification', ignore_result=True)
 def update_notification():
@@ -401,5 +420,17 @@ def update_notification():
             }, default=str),
         }
     )
+
+    return True
+
+
+@shared_task(name='update_lelantus', ignore_result=True)
+def update_lelantus():
+    status_data = requests.get(BEAM_NODE_API + '/status')
+    lelantus_data = status_data.json()['shielded_possible_ready_in_hours']
+    
+    privacy_model = Max_privacy_withdraw()
+    privacy_model.from_json({'value': lelantus_data['shielded_possible_ready_in_hours']})
+    privacy_model.save()
 
     return True

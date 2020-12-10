@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Subject } from 'rxjs';
 
-import { Block, Asset } from '../../models';
+import { Block, Asset, Offer } from '../../models';
 
 const SEPARATOR = ';';
 const enum PARAMS {
@@ -35,6 +35,14 @@ export class DataService {
 
   loadBlocks(page = 1): any {
     return this.http.get<Block[]>(this.API_BASE + '/explorer/blocks/' + '?page=' + (page + 1));
+  }
+
+  loadOffers(page = 1): any {
+    return this.http.get<Offer[]>(this.API_BASE + '/explorer/get_swap_offers/?page=' + (page + 1));
+  }
+
+  searchBlock(query) {
+    return this.http.get<any>(this.API_BASE + '/explorer/search/' + '?q=' + query);
   }
 
   getAssetsList(height = null) {

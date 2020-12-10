@@ -8,11 +8,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-
+  public isAssets = this.router.url.split('/')[1] === 'assets';
   constructor(private router: Router) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   assetsClicked(): void {
     this.router.navigate([routesConsts.CONFIDENTIAL_ASSETS_LIST]);

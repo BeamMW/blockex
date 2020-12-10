@@ -1,6 +1,6 @@
 <input autocomplete="off" class="search-header-input"
-             placeholder="Search by height, hash, kernel ID"
-             onfocus="this.placeholder = ''"
-             onblur="this.placeholder = 'Search by height, hash, kernel ID'"
-             onfocusout="this.placeholder = 'Search by height, hash, kernel ID'"
-             type="search" #searchInput (keyup.enter)="searchProcess(searchInput)" id="searchInput"/>
+            placeholder="{{placeholderVal}}"
+            onfocus="this.placeholder = ''"
+            (blur)="onEventMethod($event.target)"
+            (focusout)="onEventMethod($event.target)"
+            type="search" #searchInput (keyup.enter)="searchProcess(searchInput)" id="searchInput"/>

@@ -31,9 +31,6 @@
         align-items: center;
         justify-content: space-between;
     }
-
-    &__content {
-    }
 }
 
 .table-selector {
@@ -70,11 +67,15 @@
     }
 }
 
+.offers-table-row,
 .mat-header-row,
 .blocks-table-row {
     padding: 0 145px;
 }
 
+.offers-table-row {
+    border: 0;
+}
 
 .swap-promt {
     font-size: 14px;
@@ -143,4 +144,12 @@
 .diff-cell,
 .diff-cell-header {
     min-width: 105px;
+}
+
+.offers-table-row:nth-child(odd){
+    background-color: rgb(251,251,251);
+}
+
+.coins-cell {
+    font-weight: bolder !important;
 }

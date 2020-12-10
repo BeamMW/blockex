@@ -16,86 +16,154 @@
                     *ngIf="selectorActiveTitle === selectorTitles.AS_OFFERS"></div>
             </div>
         </div>
-        <div class="swap-promt">Download Beam Wallet from 
+        <div class="swap-promt" *ngIf="selectorActiveTitle === selectorTitles.AS_OFFERS">
+            Download Beam Wallet from 
             <span class="swap-promt__link" (click)="downloadsClicked()">beam.mw</span> 
             and swap
         </div>
     </div>
     <div class="table-container__content">
-        <div class="paginator-wrapper">
-            <mat-paginator class="paginator" [pageSize]="20" [pageIndex]="blocksPage" [length]="blocksCount"
-                (page)="loadBlocks($event)" showFirstLastButtons></mat-paginator>
-        </div>
-        <mat-table [dataSource]="blocksData" *ngIf="selectorActiveTitle === selectorTitles.BLOCKS" class="blocks-table">
-            <!-- Position Column -->
-            <ng-container matColumnDef="height">
-                <mat-header-cell class="height-cell-header" *matHeaderCellDef> HEIGHT: </mat-header-cell>
-                <mat-cell class="height-cell" *matCellDef="let element">
-                  <span class="desktop-label">
-                    {{element.height}}
-                  </span>
-                </mat-cell>
-              </ng-container>
-              <!-- Hash Column -->
-              <ng-container matColumnDef="hash">
-                <mat-header-cell class="hash-cell-header" *matHeaderCellDef> HASH: </mat-header-cell>
-                <mat-cell class="hash-cell" *matCellDef="let element">
-                  <span class="desktop-label">
-                    {{element.hash}}
-                  </span>
-                </mat-cell>
-              </ng-container>
-              <ng-container matColumnDef="age">
-                <mat-header-cell class="age-cell-header" *matHeaderCellDef> AGE: </mat-header-cell>
-                <mat-cell class="age-cell" *matCellDef="let element">
-                  <span class="desktop-label">
-                    {{element.timestamp | date:'medium'}}
-                  </span>
-                </mat-cell>
-              </ng-container>
-              <ng-container matColumnDef="difficulty">
-                <mat-header-cell class="diff-cell-header" *matHeaderCellDef> DIFFICULTY: </mat-header-cell>
-                <mat-cell class="diff-cell" *matCellDef="let element">
-                  <span class="desktop-label">
-                    {{element.difficulty | number:'.'}}
-                  </span>
-                </mat-cell>
-              </ng-container>
-              <ng-container matColumnDef="kernels">
-                <mat-header-cell class="kernel-cell-header" *matHeaderCellDef> #KERNELS: </mat-header-cell>
-                <mat-cell class="kernel-cell" *matCellDef="let element">
-                  <span class="desktop-label">
-                    {{element.kernels}}
-                  </span>
-                </mat-cell>
-              </ng-container>
-              <ng-container matColumnDef="inputs">
-                <mat-header-cell *matHeaderCellDef> #INPUTS: </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <span class="desktop-label">
-                    {{element.inputs}}
-                  </span>
-                </mat-cell>
-              </ng-container>
-              <ng-container matColumnDef="outputs">
-                <mat-header-cell *matHeaderCellDef> #OUTPUTS: </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <span class="desktop-label">
-                    {{element.outputs}}
-                  </span>
-                </mat-cell>
-              </ng-container>
-              <ng-container matColumnDef="fees">
-                <mat-header-cell *matHeaderCellDef> FEES: </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <span class="desktop-label">
-                    {{element.fee}}
-                  </span>
-                </mat-cell>
-              </ng-container>
-              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-              <mat-row class="blocks-table-row" (click)="showBlockDetails(row)"
-                     *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </mat-table>
+        <ng-container *ngIf="selectorActiveTitle === selectorTitles.BLOCKS">
+            <div class="paginator-wrapper">
+                <mat-paginator class="paginator" [pageSize]="20" [pageIndex]="blocksPage" [length]="blocksCount"
+                    (page)="loadBlocks($event)" showFirstLastButtons></mat-paginator>
+            </div>
+            <mat-table [dataSource]="blocksData"class="blocks-table">
+                <!-- Position Column -->
+                <ng-container matColumnDef="height">
+                    <mat-header-cell class="height-cell-header" *matHeaderCellDef> HEIGHT: </mat-header-cell>
+                    <mat-cell class="height-cell" *matCellDef="let element">
+                        <span class="desktop-label">
+                            {{element.height}}
+                        </span>
+                    </mat-cell>
+                </ng-container>
+                <!-- Hash Column -->
+                <ng-container matColumnDef="hash">
+                    <mat-header-cell class="hash-cell-header" *matHeaderCellDef> HASH: </mat-header-cell>
+                    <mat-cell class="hash-cell" *matCellDef="let element">
+                        <span class="desktop-label">
+                            {{element.hash}}
+                        </span>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="age">
+                    <mat-header-cell class="age-cell-header" *matHeaderCellDef> AGE: </mat-header-cell>
+                    <mat-cell class="age-cell" *matCellDef="let element">
+                        <span class="desktop-label">
+                            {{element.timestamp | date:'medium'}}
+                        </span>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="difficulty">
+                    <mat-header-cell class="diff-cell-header" *matHeaderCellDef> DIFFICULTY: </mat-header-cell>
+                    <mat-cell class="diff-cell" *matCellDef="let element">
+                        <span class="desktop-label">
+                            {{element.difficulty | number:'.'}}
+                        </span>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="kernels">
+                    <mat-header-cell class="kernel-cell-header" *matHeaderCellDef> #KERNELS: </mat-header-cell>
+                    <mat-cell class="kernel-cell" *matCellDef="let element">
+                        <span class="desktop-label">
+                            {{element.kernels}}
+                        </span>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="inputs">
+                    <mat-header-cell *matHeaderCellDef> #INPUTS: </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <span class="desktop-label">
+                            {{element.inputs}}
+                        </span>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="outputs">
+                    <mat-header-cell *matHeaderCellDef> #OUTPUTS: </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <span class="desktop-label">
+                            {{element.outputs}}
+                        </span>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="fees">
+                    <mat-header-cell *matHeaderCellDef> FEES: </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <span class="desktop-label">
+                            {{element.fee}}
+                        </span>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row class="blocks-table-row" (click)="showBlockDetails(row)"
+                    *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+        </ng-container>
+
+        <ng-container *ngIf="selectorActiveTitle === selectorTitles.AS_OFFERS">
+            <div class="paginator-wrapper">
+                <mat-paginator class="paginator" [pageSize]="20" [pageIndex]="offersPage" [length]="offersCount"
+                    (page)="loadOffers($event)" showFirstLastButtons></mat-paginator>
+            </div>
+            <mat-table [dataSource]="offersData" class="offers-table">
+                <ng-container matColumnDef="coins">
+                    <mat-header-cell class="coins-cell-header" *matHeaderCellDef> COINS: </mat-header-cell>
+                    <mat-cell class="coins-cell" *matCellDef="let element">
+                        <span class="desktop-label">
+                           BEAM/{{element.swap_currency}} 
+                        </span>
+                    </mat-cell>
+                </ng-container>
+    
+                <ng-container matColumnDef="amount-send">
+                    <mat-header-cell class="amount-send-cell-header" *matHeaderCellDef> AMOUNT (send): </mat-header-cell>
+                    <mat-cell class="amount-send-cell" *matCellDef="let element">
+                        <span class="desktop-label">
+                            {{element.beam_amount}} BEAM
+                        </span>
+                    </mat-cell>
+                </ng-container>
+    
+                <ng-container matColumnDef="amount-rec">
+                    <mat-header-cell class="amount-rec-cell-header" *matHeaderCellDef> AMOUNT (receive): </mat-header-cell>
+                    <mat-cell class="amount-rec-cell" *matCellDef="let element">
+                        <span class="desktop-label">
+                            {{element.swap_amount+' '+element.swap_currency}}
+                        </span>
+                    </mat-cell>
+                </ng-container>
+                
+                <ng-container matColumnDef="created">
+                    <mat-header-cell class="created-cell-header" *matHeaderCellDef> CREATED: </mat-header-cell>
+                    <mat-cell class="created-cell" *matCellDef="let element">
+                        <span class="desktop-label">
+                            {{element.time_created | date:'medium'}}
+                        </span>
+                    </mat-cell>
+                </ng-container>
+    
+                <ng-container matColumnDef="expired">
+                    <mat-header-cell class="expired-cell-header" *matHeaderCellDef> EXPIRED (approx.): </mat-header-cell>
+                    <mat-cell class="expired-cell" *matCellDef="let element">
+                        <span class="desktop-label">
+                            {{element.height_expired}}
+                        </span>
+                    </mat-cell>
+                </ng-container>
+    
+                <ng-container matColumnDef="tr-id">
+                    <mat-header-cell class="tr-id-cell-header" *matHeaderCellDef> TRANSACTION ID: </mat-header-cell>
+                    <mat-cell class="tr-id-cell" *matCellDef="let element">
+                        <span class="desktop-label">
+                            {{element.txId}}
+                        </span>
+                    </mat-cell>
+                </ng-container>
+                  
+                <mat-header-row *matHeaderRowDef="displayedOffersColumns"></mat-header-row>
+                <mat-row class="offers-table-row" *matRowDef="let row; columns: displayedOffersColumns;"></mat-row>
+            </mat-table>
+        </ng-container>
     </div>
 </div>

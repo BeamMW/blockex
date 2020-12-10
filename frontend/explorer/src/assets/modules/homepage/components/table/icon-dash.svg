@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+    <defs>
+        <radialGradient id="8jhjxax8ha" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <stop offset="0%" stop-color="#006BAD"/>
+            <stop offset="100%" stop-color="#103051"/>
+        </radialGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g>
+            <g>
+                <g transform="translate(-773 -157) translate(90 147) translate(683 10)">
+                    <circle cx="12" cy="12" r="9.682" stroke="#002D55" stroke-width="3"/>
+                    <g transform="translate(2 2)">
+                        <circle cx="10" cy="10" r="9.182" fill="url(#8jhjxax8ha)" stroke="#008DE4" stroke-width="2"/>
+                        <g fill="#FFF" fill-rule="nonzero">
+                            <path d="M6.588.013H2.929l-.303 1.695 3.302.004c1.626 0 2.106.59 2.092 1.57-.007.5-.225 1.35-.319 1.626-.25.734-.765 1.57-2.695 1.568l-3.21-.002-.304 1.697h3.651c1.288 0 1.834-.15 2.415-.417C8.844 7.157 9.61 5.89 9.917 4.233c.456-2.466-.112-4.22-3.33-4.22" transform="translate(4.91 5.91)"/>
+                            <path d="M1.35 3.24c-.959 0-1.096.625-1.186 1.003-.119.493-.158.694-.158.694h3.746c.96 0 1.096-.624 1.186-1.002.12-.493.159-.695.159-.695H1.351z" transform="translate(4.91 5.91)"/>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

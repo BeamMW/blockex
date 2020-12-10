@@ -155,6 +155,11 @@ CELERYBEAT_SCHEDULE  = {
         'task': 'update_charts',
         'schedule': crontab(minute='*/1'),
         'args': None
+    },
+    'automatic_update_lelantus': {
+        'task': 'update_lelantus',
+        'schedule': crontab(minute='*/10'),
+        'args': None
     }
 }
 
