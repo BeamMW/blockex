@@ -331,8 +331,9 @@ def update_charts():
 
     blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height).order_by('height')
 
-    date_now = datetime.fromtimestamp(round(time.time()))
-    date_from = datetime.fromtimestamp(date_now - 345600)
+    timestamp_now = round(time.time())
+    date_now = datetime.fromtimestamp(timestamp_now)
+    date_from = datetime.fromtimestamp(timestamp_now - 345600)
 
     lelantus_data = Max_privacy_withdraw.objects.filter(created_at__gte=date_from, created_at__lt=date_now)
 
