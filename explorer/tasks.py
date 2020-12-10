@@ -437,8 +437,16 @@ def update_lelantus():
     privacy_model.save()
 
     swaps_data = requests.get(BEAM_NODE_API + '/swap_totals')
+    swaps_stats = swaps_data.json()
     swaps_model = Swap_stats()
-    swaps_model.from_json(swaps_model)
+    swaps_model.from_json({
+        'btc': swaps_stats.bitcoin_offered,
+        'bch': swaps_stats.bicoin_cash_offered,
+        'dash': swaps_stats.dash_offered,
+        'doge': swaps_stats.dogecoin_offered,
+        'ltc': swaps_stats.litecoin_offered,
+        'qtum': swaps_stats.qtum_offered
+    })
     swaps_model.save()
 
     return True
