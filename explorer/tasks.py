@@ -436,4 +436,9 @@ def update_lelantus():
     privacy_model.from_json({'value': lelantus_data})
     privacy_model.save()
 
+    swaps_data = requests.get(BEAM_NODE_API + '/swap_totals')
+    swaps_model = Swap_stats()
+    swaps_model.from_json(swaps_model)
+    swaps_model.save()
+
     return True
