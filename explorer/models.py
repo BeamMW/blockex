@@ -100,3 +100,6 @@ class Rollback_reports(models.Model):
 class Max_privacy_withdraw(models.Model):
     value = models.CharField(null=False, blank=False, max_length=16)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def from_json(self, _json):
+        self.value = _json['value']
