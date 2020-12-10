@@ -61,7 +61,7 @@ class BlockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Block
-        fields = ('height', 'prev', 'hash', 'chainwork',
+        fields = ('height', 'prev', 'hash', 'chainwork', 'rate_btc', 'rate_usd'
                   'difficulty', 'subsidy', 'timestamp',
                   'fee', 'inputs', 'outputs', 'kernels')
 

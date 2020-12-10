@@ -1,0 +1,94 @@
+<div class="details">
+  <div class="details-content" *ngIf="assetLoaded">
+    <div class="details-top">
+      <img [src]="assetData.favicon_url" onerror="this.onerror=null; this.style.display='none'" width="22px" height="22px">
+      <span class="short-label">
+        {{assetData.asset_code}}
+      </span>
+      <span class="coin-label">
+        {{assetData.unit_name}}
+      </span>
+    </div>
+    <div class="details-data">
+      <div class="details-data-row">
+        <div class="data-title">METADATA SCHEMA VERSION:</div>
+        <div class="data-value">
+          <ng-container *ngIf="assetData.schema_version.length > 0">
+            {{assetData.schema_version}}
+          </ng-container>
+          <div *ngIf="assetData.schema_version.length === 0" class="not-available">
+            not available
+          </div>
+        </div>
+      </div>
+      <div class="details-data-row">
+        <div class="data-title">ASSET NAME:</div>
+        <div class="data-value">{{assetData.asset_name}}</div>
+      </div>
+      <div class="details-data-row">
+        <div class="data-title">SHORT NAME / ASSET CODE:</div>
+        <div class="data-value">{{assetData.asset_code}}</div>
+      </div>
+      <div class="details-data-row">
+        <div class="data-title">ASSET UNIT NAME:</div>
+        <div class="data-value">{{assetData.unit_name}}</div>
+      </div>
+      <div class="details-data-row">
+        <div class="data-title">SMALLEST UNIT NAME:</div>
+        <div class="data-value">{{assetData.smallest_unit_name}}</div>
+      </div>
+      <div class="details-data-row">
+        <div class="data-title">RATIO:</div>
+        <div class="data-value">{{assetData.ratio}}</div>
+      </div>
+      <div class="details-data-row descr">
+        <div class="data-title">SHORT DESCRIPTION:</div>
+        <div class="data-value">
+          <ng-container *ngIf="assetData.short_desc.length > 0">
+            {{assetData.short_desc}}
+          </ng-container>
+          <div *ngIf="assetData.short_desc.length === 0" class="not-available">
+            not available
+          </div>
+        </div>
+      </div>
+      <div class="details-data-row descr">
+        <div class="data-title">LONG DESCRIPTION:</div>
+        <div class="data-value">
+          <ng-container *ngIf="assetData.full_desc.length > 0">
+            {{assetData.full_desc}}
+          </ng-container>
+          <div *ngIf="assetData.full_desc.length === 0" class="not-available">
+            not available
+          </div>
+        </div>
+      </div>
+      <div class="details-data-row">
+        <div class="data-title">WEBSITE:</div>
+        <div class="data-value">
+          <ng-container *ngIf="assetData.site_url.length > 0">
+            {{assetData.site_url}}
+          </ng-container>
+          <div *ngIf="assetData.site_url.length === 0" class="not-available">
+            not available
+          </div>
+        </div>
+      </div>
+      <div class="details-data-row">
+        <div class="data-title">WEBSITE:</div>
+        <div class="data-value">
+          <ng-container *ngIf="assetData.pdf_url.length > 0">
+            {{assetData.pdf_url}}
+          </ng-container>
+          <div *ngIf="assetData.pdf_url.length === 0" class="not-available">
+            not available
+          </div>
+        </div>
+      </div>
+      <div class="details-data-row">
+        <div class="data-title">LOGO:</div>
+        <img [src]="assetData.logo_url" onerror="this.onerror=null; this.style.display='none'" width="36px" height="36px">
+      </div>
+    </div>
+  </div>
+</div>

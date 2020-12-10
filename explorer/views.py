@@ -191,6 +191,12 @@ def get_assets_list(request):
     block = last_block_req.json()
     return Response({'assets': block[0]['assets']}, status=HTTP_200_OK)
 
+@api_view(['GET'])
+def get_swap_offers(request):
+    offers = requests.get(BEAM_NODE_API + '/swap_offers')
+    data = offers.json()
+    return Response({'offers': data}, status=HTTP_200_OK)
+
 class BotView(View):
     def post(self, request, *args, **kwargs):
         t_data = json.loads(request.body)

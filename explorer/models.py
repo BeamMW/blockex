@@ -21,7 +21,8 @@ class Block(models.Model):
     subsidy = models.IntegerField(null=True, blank=True)
     fee = models.FloatField(null=True, blank=True)
     prev = models.CharField(blank=False, null=False, max_length=128)
-
+    rate_btc = models.CharField(blank=True, null=True, max_length=32)
+    rate_usd = models.CharField(blank=True, null=True, max_length=32)
     timestamp = models.DateTimeField()
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -34,6 +35,8 @@ class Block(models.Model):
         self.chainwork = _json['chainwork']
         self.difficulty = _json['difficulty']
         self.subsidy = _json['subsidy']
+        self.rate_usd = _json['rate_usd']
+        self.rate_btc = _json['rate_btc']
         self.timestamp = datetime.datetime.utcfromtimestamp(_json['timestamp']).replace(tzinfo=pytz.utc)
 
 

@@ -4,18 +4,22 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 import { HomepageRoutingModule } from './homepage-routing.module';
 import { MainComponent, BlockDetailsComponent } from './containers';
-import { GraphsComponent, StatusCardsComponent} from './components';
+import { GraphsComponent, StatusCardsComponent, TableComponent} from './components';
 
 import { ChartModule, HIGHCHARTS_MODULES } from 'angular-highcharts';
 import * as more from 'highcharts/highcharts-more.src';
 import * as exporting from 'highcharts/modules/exporting.src';
+
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
     MainComponent,
     BlockDetailsComponent,
     StatusCardsComponent,
-    GraphsComponent
+    GraphsComponent,
+    TableComponent
   ],
   providers: [
     { provide: HIGHCHARTS_MODULES, useFactory: () => [ more, exporting ] }
@@ -24,7 +28,9 @@ import * as exporting from 'highcharts/modules/exporting.src';
     SharedModule,
     CommonModule,
     HomepageRoutingModule,
-    ChartModule
+    ChartModule,
+    MatPaginatorModule,
+    MatTableModule
   ]
 })
 export class HomepageModule { }

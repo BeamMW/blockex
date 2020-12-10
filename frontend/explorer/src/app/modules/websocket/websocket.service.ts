@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy, Inject } from '@angular/core';
-import { Observable, SubscriptionLike, Subject, Observer, interval } from 'rxjs';
+import { Observable, SubscriptionLike, Subject, BehaviorSubject, Observer, interval } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { WebSocketSubject, WebSocketSubjectConfig } from 'rxjs/webSocket';
 
@@ -27,12 +27,12 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
     private reconnectAttempts: number;
     private isConnected: boolean;
 
-
     public status: Observable<boolean>;
+    public publicStatus: BehaviorSubject<boolean>;
 
     constructor(@Inject(config) private wsConfig: WebSocketConfig) {
         this.wsMessages$ = new Subject<IWsMessage<any>>();
-
+        this.publicStatus = new BehaviorSubject(false);
         this.reconnectInterval = wsConfig.reconnectInterval || 5000; // pause between connections
         this.reconnectAttempts = wsConfig.reconnectAttempts || 10; // number of connection attempts
 
@@ -61,6 +61,7 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
         this.statusSub = this.status
             .subscribe((isConnected) => {
                 this.isConnected = isConnected;
+                this.publicStatus.next(isConnected);
 
                 if (!this.reconnection$ && typeof(isConnected) === 'boolean' && !isConnected) {
                     this.reconnect();

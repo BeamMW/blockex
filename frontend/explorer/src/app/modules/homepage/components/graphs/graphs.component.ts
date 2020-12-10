@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewEncapsulation, HostListener } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewEncapsulation, HostListener, OnDestroy } from '@angular/core';
 import { WebsocketService } from '../../../../modules/websocket';
 import { WS } from '../../../../websocket.events';
 import { Observable } from 'rxjs';
@@ -25,9 +25,8 @@ const DAY_TICK = 24 * 60 * 60 * 1000;
   styleUrls: ['./graphs.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class GraphsComponent implements OnInit {
-
-
+export class GraphsComponent implements OnInit, OnDestroy {
+  private subscriber: any;
   public graphsData$: Observable<IGraphs>;
   public graphsLoaded = false;
   public graphs = {
@@ -55,7 +54,7 @@ export class GraphsComponent implements OnInit {
   }
 
   constructor(private wsService: WebsocketService) {
-    this.wsService.status.subscribe((isConnected) => {
+    this.wsService.publicStatus.subscribe((isConnected) => {
       if (isConnected) {
         this.wsService.send(WS.INIT.INIT_GRAPHS);
       }
@@ -83,7 +82,7 @@ export class GraphsComponent implements OnInit {
   };
 
   feeYAxisFormatter = function() {
-    if(this.value === LOG_MIN_VALUE || this.isFirst) {
+    if (this.value === LOG_MIN_VALUE || this.isFirst) {
       return '0';
     }
 
@@ -315,18 +314,25 @@ export class GraphsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.graphsData$.subscribe((data) => {
+    this.subscriber = this.graphsData$.subscribe((data) => {
       const graphsConstructed = this.constructGraphsData(data);
       if (this.graphsLoaded) {
-        this.graphs.blocks.options.series[0].data = graphsConstructed.blocks;
-        this.graphs.blocks.options.series[1].data = graphsConstructed.difficulty;
-        this.graphs.blocks.options.series[2].data = graphsConstructed.fixed;
-        this.graphs.blocks.options.series[3].data = graphsConstructed.averageBlocks;
+        this.graphs.blocks.ref$.subscribe((blockChart) => {
+          blockChart.series[0].setData(graphsConstructed.blocks);
+          blockChart.series[1].setData(graphsConstructed.difficulty);
+          blockChart.series[2].setData(graphsConstructed.fixed);
+          blockChart.series[3].setData(graphsConstructed.averageBlocks);
+        });
       } else {
         this.graphsInit(graphsConstructed);
         this.graphsLoaded = true;
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.graphsLoaded = false;
+    this.subscriber.unsubscribe();
   }
 
   showTypesOptions(event): void {
@@ -335,7 +341,7 @@ export class GraphsComponent implements OnInit {
   }
 
   blocksChartTypeChange(selectedType): void {
-    if(!selectedType.isSelected) {
+    if (!selectedType.isSelected) {
       selectedType.isSelected = true;
       this.selectedBlocksChartType.isSelected = false;
       this.selectedBlocksChartType = selectedType;

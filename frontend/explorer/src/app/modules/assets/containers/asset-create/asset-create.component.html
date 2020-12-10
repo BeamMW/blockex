@@ -1,0 +1,112 @@
+<div class="create">
+  <div class="create-content">
+    <div class="create-header">Create asset helper</div>
+    <div class="create-main">
+      <form class="create-form" [formGroup]="createForm" autocomplete="off" novalidate>
+        <div class="create-data">
+          <div class="mandatory-data">
+            <div class="mandatory-title">MANDATORY PROPERTIES</div>
+            <div class="mandatory-values">
+              <div class="mand-values-row">
+                <div class="mand-title">METADATA SCHEMA VERSION:</div>
+                <input class="mand-input" type="text" name="shemaVer" formControlName="shemaVer"
+                      (input)="schemaVerChanged(createForm.get('shemaVer'))"/>
+              </div>
+              <div class="mand-values-row">
+                <div class="mand-title">ASSET NAME:</div>
+                <input class="mand-input" type="text" name="assetName" formControlName="assetName"
+                      (input)="assetNameChanged(createForm.get('assetName'))"/>
+              </div>
+              <div class="mand-values-row">
+                <div class="mand-title">SHORT NAME / ASSET CODE:</div>
+                <input class="mand-input" type="text" name="assetCode" formControlName="assetCode"
+                      (input)="assetCodeChanged(createForm.get('assetCode'))"/>
+              </div>
+              <div class="mand-values-row">
+                <div class="mand-title">ASSET UNIT NAME:</div>
+                <input class="mand-input" type="text" name="assetUnitName" formControlName="assetUnitName"
+                      (input)="assetUnitNameChanged(createForm.get('assetUnitName'))"/>
+              </div>
+              <div class="mand-values-row">
+                <div class="mand-title">SMALLEST UNIT NAME:</div>
+                <input class="mand-input" type="text" name="smallestUnitName" formControlName="smallestUnitName"
+                      (input)="smallestUnitNameChanged(createForm.get('smallestUnitName'))"/>
+              </div>
+              <div class="mand-values-row">
+                <div class="mand-title">RATIO:</div>
+                <input class="mand-input" type="text" placeholder="100000000" name="ratio" formControlName="ratio"
+                      (input)="ratioChanged(createForm.get('ratio'))"/>
+              </div>
+            </div>
+          </div>
+          <div class="optional-data">
+            <div class="optional-title" (click)="optionalExpClicked()">
+              <img src="../../assets/arrow-icon.svg" class="optional-icon" [class.expanded]="expanded"
+                width="9px" height="5px"/>
+              <span class="optional-text">OPTIONAL PROPERTIES</span>
+            </div>
+            <div class="mandatory-values" *ngIf="expanded">
+              <div class="mand-values-row">
+                <div class="mand-title">SHORT DESCRIPTION:</div>
+                <input class="mand-input" type="text" name="shortDescr" formControlName="shortDescr"
+                      (input)="shortDescrChanged(createForm.get('shortDescr'))"/>
+              </div>
+              <div class="error"
+                *ngIf="createForm.controls['shortDescr'].hasError('maxlength')">
+                Maximum of 128 characters
+              </div>
+              <div class="mand-values-row textarea">
+                <div class="mand-title">LONG DESCRIPTION:</div>
+                <textarea class="mand-input description-area" name="longDescr" formControlName="longDescr"
+                      (input)="longDescrChanged(createForm.get('longDescr'))"></textarea>
+              </div>
+              <div class="error"
+                *ngIf="createForm.controls['longDescr'].hasError('maxlength')">
+                Maximum of 1024 characters
+              </div>
+              <div class="mand-values-row">
+                <div class="mand-title">WEBSITE:</div>
+                <input class="mand-input" type="text" name="website" formControlName="website"
+                      (input)="websiteChanged(createForm.get('website'))"/>
+              </div>
+              <div class="mand-values-row">
+                <div class="mand-title">DESCRIPTION PAPER:</div>
+                <input class="mand-input" type="text" name="descPaper" formControlName="descPaper"
+                      (input)="descPaperChanged(createForm.get('descPaper'))"/>
+              </div>
+              <div class="mand-values-row">
+                <div class="mand-title">FAVICON:</div>
+                <input class="mand-input" type="text" name="favicon" formControlName="favicon"
+                      (input)="faviconChanged(createForm.get('favicon'))"/>
+              </div>
+              <div class="mand-values-row">
+                <div class="mand-title">LOGO:</div>
+                <input class="mand-input" type="text" name="logo" formControlName="logo"
+                      (input)="logoChanged(createForm.get('logo'))"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="create-command-area">
+        <div class="command-title">REGISTRATION COMMAND:</div>
+        <div class="command-supply" *ngIf="!notEmpty">Supply assets parameters</div>
+        <div class="command-field" *ngIf="notEmpty">{{assetCommand}}</div>
+        <div class="command-copy" *ngIf="notEmpty" (click)="copyMessage()">
+          <img src="../../assets/icon-copy.svg" class="icon-copy" width="15px" height="17px"/>
+          <span>Copy</span>
+        </div>
+        <div class="command-paste" *ngIf="notEmpty">
+          Paste this command in command line
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="create-separator"></div>
+  <div class="create-see-more">To see more info please check 
+    <div class="asset-descr-link" (click)="openDescriptorClicked()">
+      Asset Descriptor
+    </div>
+  </div>
+</div>

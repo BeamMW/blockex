@@ -32,3 +32,7 @@
 @mixin tooltip-background {
     fill: rgb(54, 85, 107);
 }
+
+@mixin paginator-wrapper-background {
+    background-color: rgba(0, 86, 131, 0.15);
+}

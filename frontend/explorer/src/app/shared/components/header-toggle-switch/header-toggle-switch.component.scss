@@ -3,7 +3,6 @@
 .switch{
     margin: auto;
     font-size: 1em;
-    font-family: sintony;
     height: 31px;
     line-height: 2em;
     border-radius: 0.3em;
@@ -22,9 +21,9 @@
     position: relative;
     display: block;
     float: left;
-    -webkit-transition: 300ms ease-out;
-    -moz-transition: 300ms ease-out;
-    transition: 300ms ease-out;
+    -webkit-transition: 300ms ease-in;
+    -moz-transition: 300ms ease-in;
+    transition: 300ms ease-in;
     padding: 0 1em;
     opacity: 0.5;
     font-family: ProximaNova;
@@ -53,4 +52,10 @@
     text-indent: 7px;
     text-align: center;
     text-transform: uppercase;
+    cursor: default;
+}
+
+.without-switch {
+    width: 395px;
+    height: 31px;
 }

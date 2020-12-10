@@ -1,0 +1,101 @@
+<div class="table-container">
+    <div class="table-container__header">
+        <div class="table-selector">
+            <div class="table-selector__item" (click)="selectorItemBlocksClicked()">
+                <div class="table-selector__item__title" 
+                    [class.active]="selectorActiveTitle === selectorTitles.BLOCKS">
+                    {{selectorTitles.BLOCKS}}</div>
+                <div class="table-selector__item__bottom-line"
+                    *ngIf="selectorActiveTitle === selectorTitles.BLOCKS"></div>
+            </div>
+            <div class="table-selector__item" (click)="selectorItemASOClicked()">
+                <div class="table-selector__item__title" 
+                    [class.active]="selectorActiveTitle === selectorTitles.AS_OFFERS">
+                    {{selectorTitles.AS_OFFERS}}</div>
+                <div class="table-selector__item__bottom-line"
+                    *ngIf="selectorActiveTitle === selectorTitles.AS_OFFERS"></div>
+            </div>
+        </div>
+        <div class="swap-promt">Download Beam Wallet from 
+            <span class="swap-promt__link" (click)="downloadsClicked()">beam.mw</span> 
+            and swap
+        </div>
+    </div>
+    <div class="table-container__content">
+        <div class="paginator-wrapper">
+            <mat-paginator class="paginator" [pageSize]="20" [pageIndex]="blocksPage" [length]="blocksCount"
+                (page)="loadBlocks($event)" showFirstLastButtons></mat-paginator>
+        </div>
+        <mat-table [dataSource]="blocksData" *ngIf="selectorActiveTitle === selectorTitles.BLOCKS" class="blocks-table">
+            <!-- Position Column -->
+            <ng-container matColumnDef="height">
+                <mat-header-cell class="height-cell-header" *matHeaderCellDef> HEIGHT: </mat-header-cell>
+                <mat-cell class="height-cell" *matCellDef="let element">
+                  <span class="desktop-label">
+                    {{element.height}}
+                  </span>
+                </mat-cell>
+              </ng-container>
+              <!-- Hash Column -->
+              <ng-container matColumnDef="hash">
+                <mat-header-cell class="hash-cell-header" *matHeaderCellDef> HASH: </mat-header-cell>
+                <mat-cell class="hash-cell" *matCellDef="let element">
+                  <span class="desktop-label">
+                    {{element.hash}}
+                  </span>
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="age">
+                <mat-header-cell class="age-cell-header" *matHeaderCellDef> AGE: </mat-header-cell>
+                <mat-cell class="age-cell" *matCellDef="let element">
+                  <span class="desktop-label">
+                    {{element.timestamp | date:'medium'}}
+                  </span>
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="difficulty">
+                <mat-header-cell class="diff-cell-header" *matHeaderCellDef> DIFFICULTY: </mat-header-cell>
+                <mat-cell class="diff-cell" *matCellDef="let element">
+                  <span class="desktop-label">
+                    {{element.difficulty | number:'.'}}
+                  </span>
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="kernels">
+                <mat-header-cell class="kernel-cell-header" *matHeaderCellDef> #KERNELS: </mat-header-cell>
+                <mat-cell class="kernel-cell" *matCellDef="let element">
+                  <span class="desktop-label">
+                    {{element.kernels}}
+                  </span>
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="inputs">
+                <mat-header-cell *matHeaderCellDef> #INPUTS: </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="desktop-label">
+                    {{element.inputs}}
+                  </span>
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="outputs">
+                <mat-header-cell *matHeaderCellDef> #OUTPUTS: </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="desktop-label">
+                    {{element.outputs}}
+                  </span>
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="fees">
+                <mat-header-cell *matHeaderCellDef> FEES: </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span class="desktop-label">
+                    {{element.fee}}
+                  </span>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row class="blocks-table-row" (click)="showBlockDetails(row)"
+                     *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+    </div>
+</div>

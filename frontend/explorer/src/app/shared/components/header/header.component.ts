@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { routesConsts } from '../../../consts';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -7,13 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
 
-  assetsClicked = () => {
-    console.log('assets clicked');
+  assetsClicked(): void {
+    this.router.navigate([routesConsts.CONFIDENTIAL_ASSETS_LIST]);
   }
-
 }

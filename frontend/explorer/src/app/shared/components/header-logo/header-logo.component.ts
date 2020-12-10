@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { routesConsts } from '../../../consts';
 
 @Component({
   selector: 'app-header-logo',
@@ -7,13 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderLogoComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
 
-  navigateToHomepage() {
-    
+  navigateToHomepage(): void {
+    this.router.navigate([routesConsts.HOME]);
   }
 
 }

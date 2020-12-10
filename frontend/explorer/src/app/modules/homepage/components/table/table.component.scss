@@ -1,0 +1,146 @@
+@import 'ui-mixins';
+
+:host {
+    width: 100%;
+}
+
+.paginator-wrapper,
+.mat-header-row {
+    @include paginator-wrapper-background();
+}
+
+.paginator {
+    background-color: rgba(255, 255, 255, 0);
+    padding: 0 140px;
+}
+
+:host ::ng-deep.mat-paginator-page-size div:last-of-type {
+    font-weight: bolder;
+    color: #333333;
+}
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+        height: 100px;
+        padding: 0 140px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__content {
+    }
+}
+
+.table-selector {
+    display: flex;
+    flex-direction: row;
+    margin-top: 8px;
+
+    &__item {
+        cursor: pointer;
+        margin-right: 18px;
+
+        &__title {
+            padding: 0 16px;
+            opacity: 0.5;
+            font-size: 16px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: 0.4px;
+            color: #333333;
+        }
+
+        &__title.active {
+            opacity: 1;
+        }
+
+        &__bottom-line {
+            margin-top: 8px;
+            height: 2px;
+            box-shadow: 0 0 5px 0 rgba(0, 246, 210, 0.7);
+            background-color: #00f6d2;
+        }
+    }
+}
+
+.mat-header-row,
+.blocks-table-row {
+    padding: 0 145px;
+}
+
+
+.swap-promt {
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.35px;
+    color: #333333;
+
+    &__link {
+        color: #00d3ff;
+        cursor: pointer;
+    }
+}
+
+.blocks-table {
+    box-shadow: none;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+.blocks-table-row {
+    cursor: pointer;
+    border: 0;
+}
+
+.mat-header-row {
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #333333;
+    border: 0;
+}
+
+.mat-header-row .mat-header-cell {
+    font-weight: bolder !important;
+    color: #333333;
+}
+
+.mat-row:nth-child(odd){
+    background-color: rgb(251,251,251);
+}
+
+.height-cell,
+.height-cell-header {
+    max-width: 75px;
+}
+
+.hash-cell,
+.hash-cell-header {
+    min-width: 535px;
+}
+
+.age-cell,
+.age-cell-header {
+    min-width: 190px;
+}
+
+.diff-cell,
+.diff-cell-header {
+    min-width: 105px;
+}

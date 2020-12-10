@@ -344,7 +344,7 @@ def update_charts():
 
     while end_date > start_date:
         offset_blocks = blocks.filter(timestamp__gte=date_with_offset, timestamp__lt=end_date)
-        blocks_count = offset_blocks.count()
+        blocks_count = offset_blocks.count() / 2
 
         fee = 0
         diff = 0
@@ -367,7 +367,7 @@ def update_charts():
         end_date = date_with_offset
         date_with_offset -= hour_offset
 
-    result['avg_blocks'] = blocks.count() / (len(result['items'] * 2))
+    result['avg_blocks'] = (blocks.count() / len(result['items'])) / 2
     result['items'].pop(0)
 
     _redis.set('graph_data', json.dumps(result, default=str))

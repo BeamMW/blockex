@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, ViewEncapsulation, OnInit } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { WebsocketService } from '../../../../modules/websocket';
-import { DataService } from '../../../../services/data/data.service';
 import { WS } from '../../../../websocket.events';
+import { DataService } from '../../../../services/data/data.service';
 
 export interface IStatus {
   height: number;
@@ -36,12 +36,19 @@ export interface MostOfferingItem {
   templateUrl: './status-cards.component.html',
   styleUrls: ['./status-cards.component.scss']
 })
-export class StatusCardsComponent implements AfterViewInit {
+export class StatusCardsComponent implements OnInit, OnDestroy {
   public statusData$: Observable<IStatus>;
   public mostOffering: MostOfferingItem[];
+  private lastHeight: number;
+  private subWs: any;
+  private subStatus: any;
 
-  constructor(private wsService: WebsocketService, private dataService: DataService) {
-    this.wsService.status.subscribe((isConnected) => {
+  constructor(
+    private wsService: WebsocketService,
+    private dataService: DataService
+  ) {
+
+    this.subWs = this.wsService.publicStatus.subscribe((isConnected) => {
       if (isConnected) {
         this.wsService.send(WS.INIT.INIT_STATUS);
       }
@@ -49,8 +56,8 @@ export class StatusCardsComponent implements AfterViewInit {
     this.statusData$ = this.wsService.on<IStatus>(WS.INIT.INIT_STATUS, WS.UPDATE.UPDATE_STATUS);
   }
 
-  ngAfterViewInit(): void {
-    this.statusData$.subscribe((data) => {
+  ngOnInit(): void {
+    this.subStatus = this.statusData$.subscribe((data) => {
       const topOffersSelector: MostOfferingItem[] = [];
       topOffersSelector.push({title: 'BTC', value: data.swap_totals.bitcoin_offered});
       topOffersSelector.push({title: 'DASH', value: data.swap_totals.dash_offered});
@@ -62,11 +69,16 @@ export class StatusCardsComponent implements AfterViewInit {
         return b.value - a.value;
       });
       this.mostOffering = topOffersSelector.slice(0, 3);
-    });
 
-
-    this.dataService.loadBlocks(1).subscribe((data) => {
-      
+      if (this.lastHeight === undefined || data.height > this.lastHeight) {
+        this.dataService.height.next(data.height);
+        this.lastHeight = data.height;
+      }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subWs.unsubscribe();
+    this.subStatus.unsubscribe();
   }
 }
