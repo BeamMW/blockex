@@ -431,7 +431,7 @@ def update_lelantus():
     lelantus_data = status_data.json()['shielded_possible_ready_in_hours']
     
     privacy_model = Max_privacy_withdraw()
-    privacy_model.from_json({'value': lelantus_data['shielded_possible_ready_in_hours']})
+    privacy_model.from_json({'value': lelantus_data})
     privacy_model.save()
 
     return True
