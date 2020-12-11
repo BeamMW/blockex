@@ -68,38 +68,38 @@ export class TableComponent implements OnInit, OnDestroy {
     this.offersPage = event ? event.pageIndex : 0;
 
     this.dataService.loadOffers(this.offersPage).subscribe((data) => {
-      const asd = [{
-        beam_amount: "3",
-        height_expired: 253126,
-        min_height: 252406,
-        status: 0,
-        status_string: "pending",
-        swap_amount: "3",
-        swap_currency: "BCH",
-        time_created: "2020.11.06 18:31:54",
-        txId: "1b726d0adffe45c993b801c8bb46184e"
-      },{
-        beam_amount: "3",
-        height_expired: 253126,
-        min_height: 252406,
-        status: 0,
-        status_string: "pending",
-        swap_amount: "3",
-        swap_currency: "BCH",
-        time_created: "2020.11.06 18:31:54",
-        txId: "1b726d0adffe45c993b801c8bb46184e"
-      },{
-        beam_amount: "3",
-        height_expired: 253126,
-        min_height: 252406,
-        status: 0,
-        status_string: "pending",
-        swap_amount: "3",
-        swap_currency: "BCH",
-        time_created: "2020.11.06 18:31:54",
-        txId: "1b726d0adffe45c993b801c8bb46184e"
-      }]
-      this.offersData = new MatTableDataSource(asd);
+      // const asd = [{
+      //   beam_amount: "3",
+      //   height_expired: 253126,
+      //   min_height: 252406,
+      //   status: 0,
+      //   status_string: "pending",
+      //   swap_amount: "3",
+      //   swap_currency: "BCH",
+      //   time_created: "2020.11.06 18:31:54",
+      //   txId: "1b726d0adffe45c993b801c8bb46184e"
+      // },{
+      //   beam_amount: "3",
+      //   height_expired: 253126,
+      //   min_height: 252406,
+      //   status: 0,
+      //   status_string: "pending",
+      //   swap_amount: "3",
+      //   swap_currency: "BCH",
+      //   time_created: "2020.11.06 18:31:54",
+      //   txId: "1b726d0adffe45c993b801c8bb46184e"
+      // },{
+      //   beam_amount: "3",
+      //   height_expired: 253126,
+      //   min_height: 252406,
+      //   status: 0,
+      //   status_string: "pending",
+      //   swap_amount: "3",
+      //   swap_currency: "BCH",
+      //   time_created: "2020.11.06 18:31:54",
+      //   txId: "1b726d0adffe45c993b801c8bb46184e"
+      // }]
+      this.offersData = new MatTableDataSource(data['offers']);
       this.offersCount = 100;
       //this.offersCount = data['count'];
     });

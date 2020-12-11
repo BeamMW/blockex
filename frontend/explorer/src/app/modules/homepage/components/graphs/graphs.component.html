@@ -1,5 +1,6 @@
 <div class="graphs" *ngIf="graphsLoaded">
-    <div class="graphs__block">
+  <div class="graphs__left">
+    <div class="graphs__left__block">
         <div class="chart-type-selector">
             <span class="type-selected" (click)="showTypesOptions($event)">
               <span>{{selectedBlocksChartType.name}}</span>
@@ -15,9 +16,18 @@
               </ul>
             </div>
         </div>
-        <div class="graphs__block__elem" [chart]="graphs.blocks"></div>
+        <div class="graphs__left__block__elem" [chart]="graphs.blocks"></div>
     </div>
-    <div class="graphs__fee">
-        <div class="graphs__fee__elem" [chart]="graphs.fee"></div>
+    <div class="graphs__left__fee">
+        <div class="graphs__left__fee__elem" [chart]="graphs.fee"></div>
     </div>
+  </div>
+  <div class="graphs__right">
+    <div class="graphs__right__swaps">
+      <div class="graphs__right__swaps__elem" [chart]="graphs.swaps"></div>
+    </div>
+    <div class="graphs__right__lelantus">
+        <div class="graphs__right__lelantus__elem" [chart]="graphs.lelantus"></div>
+    </div>
+  </div>
 </div>

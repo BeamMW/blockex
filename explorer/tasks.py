@@ -18,6 +18,7 @@ import io
 
 from .models import *
 from datetime import datetime, timedelta
+from django.utils import timezone
 
 HEIGHT_STEP = 43800
 BEAM_NODE_API = 'http://localhost:8888'
@@ -331,9 +332,8 @@ def update_charts():
 
     blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height).order_by('height')
 
-    timestamp_now = round(time.time())
-    date_now = datetime.fromtimestamp(timestamp_now)
-    date_from = datetime.fromtimestamp(timestamp_now - 345600)
+    date_now = timezone.now()
+    date_from = datetime.fromtimestamp(date_now - timedelta(days=int(4)))
 
     lelantus_data = Max_privacy_withdraw.objects.filter(created_at__gte=date_from, created_at__lt=date_now)
 
@@ -343,7 +343,8 @@ def update_charts():
     for data in lelantus_data:
         if (counter == 12):
             lelantus_avg = lelantus_sum / 12
-            lelantus_res.insert(0, [lelantus_avg, data.created_at])
+            lelantus_res.insert(0, [round(data.created_at.replace(tzinfo=timezone.utc).timestamp()), lelantus_avg])
+            first_time = 0
             lelantus_sum = 0
             counter = 0
 

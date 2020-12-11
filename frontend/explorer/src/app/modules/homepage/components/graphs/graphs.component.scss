@@ -4,25 +4,37 @@
 .graphs {
     padding-top: 40px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
 
-    &__block {
+    &__left{
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
 
-        &__elem {
-            margin-top: 30px;
+        &__block {
+            display: flex;
+            flex-direction: column;
+    
+            &__elem {
+                margin-top: 30px;
+            }
+        }
+    
+        &__fee {
+            display: flex;
+            flex-direction: column;
+    
+            &__elem {
+                margin-top: 42px;
+            }
         }
     }
 
-    &__fee {
+    &__right{
         display: flex;
         flex-direction: column;
-
-        &__elem {
-            margin-top: 42px;
-        }
+        justify-content: space-between;
     }
 }
 
@@ -48,27 +60,27 @@
 	stroke-width: 0px;
 }
 
-.graphs__block .highcharts-color-1 {
+.graphs__left__block .highcharts-color-1 {
     @include point-fill();
     stroke: #ff51ff;
 }
 
-.graphs__block .highcharts-color-2 {
+.graphs__left__block .highcharts-color-2 {
     @include point-fill();
     stroke: #24c1ff;
 }
 
-.graphs__block .highcharts-color-3 {
+.graphs__left__block .highcharts-color-3 {
     @include point-fill();
     stroke: #ff51ff;
 }
 
-.graphs__block .highcharts-color-0 {
+.graphs__left__block .highcharts-color-0 {
     @include point-fill();
     stroke: #24c1ff;
 }
 
-.graphs__fee .highcharts-color-0 {
+.graphs__left__fee .highcharts-color-0 {
     @include point-fill();
     stroke: #00e2c2;
 }

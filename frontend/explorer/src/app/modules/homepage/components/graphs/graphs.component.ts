@@ -32,6 +32,8 @@ export class GraphsComponent implements OnInit, OnDestroy {
   public graphs = {
     blocks: null,
     fee: null,
+    swaps: null,
+    lelantus: null 
   };
   public blockCharts = [
     {
@@ -288,6 +290,158 @@ export class GraphsComponent implements OnInit, OnDestroy {
         data: graphs.fee,
       }],
     });
+
+    this.graphs.swaps = new Chart({
+      chart: {
+        styledMode: true,
+        width: 535,
+        height: 430,
+        marginBottom: 100,
+        ignoreHiddenSeries: false,
+        type: 'line',
+      },
+      title: {
+        text: ''
+      },
+      credits: {
+          enabled: false
+      },
+      exporting: {
+        buttons: {
+          contextButton: {
+              enabled: false
+          }
+        }
+      },
+      yAxis: {
+        lineWidth: 0,
+        type: 'logarithmic',
+        title: {
+          text: 'Transaction fee',
+          margin: 34,
+        },
+        labels: {
+          formatter: this.feeYAxisFormatter,
+        }
+      },
+      xAxis: {
+        lineWidth: 0,
+        minorGridLineWidth: 0,
+        lineColor: 'transparent',
+        minorTickLength: 0,
+        tickLength: 0,
+        type: 'datetime',
+        minTickInterval: DAY_TICK,
+        gridLineColor: 'rgba(255, 255, 255, 0.1)',
+        gridLineWidth: 1,
+        labels: {
+          formatter: this.xAxisFormatter,
+        }
+      },
+      legend: {
+        width: 300,
+        itemWidth: 150,
+        itemMarginBottom: 10,
+        layout: 'horizontal',
+        align: 'center',
+        verticalAlign: 'bottom',
+        x: -10,
+        y: -15
+      },
+      tooltip: {
+        followPointer: false,
+        useHTML:true,
+        borderRadius: 10,
+        borderWidth: 0,
+        shadow: false,
+        formatter: this.tooltipFormatter
+      },
+      series: [{
+        type: 'line',
+        marker: {
+          radius: 2,
+          symbol: 'circle'
+        },
+        name: 'Fee',
+        data: graphs.fee,
+      }],
+    });
+
+    this.graphs.lelantus = new Chart({
+      chart: {
+        styledMode: true,
+        width: 535,
+        height: 430,
+        marginBottom: 100,
+        ignoreHiddenSeries: false,
+        type: 'line',
+      },
+      title: {
+        text: ''
+      },
+      credits: {
+          enabled: false
+      },
+      exporting: {
+        buttons: {
+          contextButton: {
+              enabled: false
+          }
+        }
+      },
+      yAxis: {
+        lineWidth: 0,
+        type: 'logarithmic',
+        title: {
+          text: 'Transaction fee',
+          margin: 34,
+        },
+        labels: {
+          formatter: this.feeYAxisFormatter,
+        }
+      },
+      xAxis: {
+        lineWidth: 0,
+        minorGridLineWidth: 0,
+        lineColor: 'transparent',
+        minorTickLength: 0,
+        tickLength: 0,
+        type: 'datetime',
+        minTickInterval: DAY_TICK,
+        gridLineColor: 'rgba(255, 255, 255, 0.1)',
+        gridLineWidth: 1,
+        labels: {
+          formatter: this.xAxisFormatter,
+        }
+      },
+      legend: {
+        width: 300,
+        itemWidth: 150,
+        itemMarginBottom: 10,
+        layout: 'horizontal',
+        align: 'center',
+        verticalAlign: 'bottom',
+        x: -10,
+        y: -15
+      },
+      tooltip: {
+        followPointer: false,
+        useHTML:true,
+        borderRadius: 10,
+        borderWidth: 0,
+        shadow: false,
+        formatter: this.tooltipFormatter
+      },
+      series: [{
+        type: 'line',
+        marker: {
+          radius: 2,
+          symbol: 'circle'
+        },
+        name: 'Fee',
+        data: graphs.lelantus,
+      }],
+    });
   }
 
   constructGraphsData(data) {
@@ -297,7 +451,8 @@ export class GraphsComponent implements OnInit, OnDestroy {
       hashrate: [],
       fee: [],
       fixed: [],
-      averageBlocks: []
+      averageBlocks: [],
+      lelantus: []
     };
 
     data.items.forEach(element => {
@@ -309,6 +464,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
       graphsData.hashrate.push([dateValue, element.hashrate]);
       graphsData.averageBlocks.push([dateValue, data.avg_blocks]);
     });
+    graphsData.lelantus = data.lelantus;
 
     return graphsData;
   }
