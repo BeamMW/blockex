@@ -400,9 +400,9 @@ def update_charts():
     for data in swap_data:
         if (swap_counter == 12):
             swap_res.insert(0, [round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000, data])
-            lel_counter = 0
+            swap_counter = 0
 
-        lel_counter += 1
+        swap_counter += 1
 
     result['swap_stats'] = swap_res
 
