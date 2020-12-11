@@ -92,5 +92,5 @@ class MaxPrivacyWithdrawSerializer(serializers.ModelSerializer):
 
 class SwapStatsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Max_privacy_withdraw
+        model = Swap_stats
         fields = ('btc', 'dash', 'doge', 'ltc', 'qtum')
