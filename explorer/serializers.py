@@ -89,3 +89,8 @@ class MaxPrivacyWithdrawSerializer(serializers.ModelSerializer):
         model = Max_privacy_withdraw
         fields = ('value', 'created_at')
 
+
+class SwapStatsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Max_privacy_withdraw
+        fields = ('btc', 'dash', 'doge', 'ltc', 'qtum')
