@@ -368,16 +368,15 @@ export class GraphsComponent implements OnInit, OnDestroy {
     });
 
     this.graphs.lelantus = new Chart({
+      title: {
+        text: '',
+      },
       chart: {
-        styledMode: true,
         width: 535,
         height: 430,
-        marginBottom: 100,
         ignoreHiddenSeries: false,
         type: 'line',
-      },
-      title: {
-        text: ''
+        styledMode: true
       },
       credits: {
           enabled: false
@@ -389,46 +388,44 @@ export class GraphsComponent implements OnInit, OnDestroy {
           }
         }
       },
-      yAxis: {
-        lineWidth: 0,
-        type: 'logarithmic',
+      yAxis: [{
+        lineColor: '#ff51ff',
         title: {
-          text: 'Transaction fee',
-          margin: 34,
-        },
-        labels: {
-          formatter: this.feeYAxisFormatter,
+          text: 'Blocks per hour',
+          margin: 24
         }
-      },
+      }, {
+        min: 0,
+        opposite: true,
+        title: {
+          rotation: 270,
+          text: 'Average difficulty',
+          margin: 34
+        }
+      }],
       xAxis: {
-        lineWidth: 0,
-        minorGridLineWidth: 0,
-        lineColor: 'transparent',
         minorTickLength: 0,
         tickLength: 0,
         type: 'datetime',
         minTickInterval: DAY_TICK,
-        gridLineColor: 'rgba(255, 255, 255, 0.1)',
-        gridLineWidth: 1,
         labels: {
           formatter: this.xAxisFormatter,
         }
       },
       legend: {
-        width: 300,
-        itemWidth: 150,
-        itemMarginBottom: 10,
+        width: 380,
+        itemWidth: 190,
+        itemMarginBottom: 12,
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        x: -10,
-        y: -15
+        x: 0,
+        y: 10
       },
       tooltip: {
         followPointer: false,
-        useHTML:true,
-        borderRadius: 10,
-        borderWidth: 0,
+        useHTML: true,
+        borderRadius: 20,
         shadow: false,
         formatter: this.tooltipFormatter
       },
@@ -436,10 +433,11 @@ export class GraphsComponent implements OnInit, OnDestroy {
         type: 'line',
         marker: {
           radius: 2,
-          symbol: 'circle'
+          symbol: 'circle',
         },
-        name: 'Fee',
-        data: graphs.lelantus,
+        name: 'Blocks per hour',
+        color: '#24c1ff',
+        data: graphs.lelantus
       }],
     });
   }

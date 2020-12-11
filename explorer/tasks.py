@@ -343,7 +343,7 @@ def update_charts():
     for data in lelantus_data:
         if (counter == 12):
             lelantus_avg = lelantus_sum / 12
-            lelantus_res.insert(0, [round(data.created_at.replace(tzinfo=timezone.utc).timestamp()), lelantus_avg])
+            lelantus_res.insert(0, [round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000, lelantus_avg])
             first_time = 0
             lelantus_sum = 0
             counter = 0
