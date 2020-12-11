@@ -52,6 +52,32 @@
         display: flex;
         flex-direction: column;
 
+        &__swaps {
+            display: flex;
+            flex-direction: column;
+    
+            &__title {
+                margin-left: 76px;
+                display: flex;
+                font-size: 12px;
+                font-weight: 500;
+                font-style: normal;
+                font-stretch: normal;
+                line-height: normal;
+                letter-spacing: 0.3px;
+                text-align: center;
+                color: #ffffff;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            &__elem {
+                margin-top: 30px;
+            }
+        }
+
         &__lelantus {
             display: flex;
             flex-direction: column;
@@ -131,6 +157,31 @@
 .graphs__right__lelantus .highcharts-color-0 {
     @include point-fill();
     stroke: #7881fb;
+}
+
+.graphs__right__swaps .highcharts-color-0 {
+    @include point-fill();
+    stroke: #fcaf38;
+}
+
+.graphs__right__swaps .highcharts-color-1 {
+    @include point-fill();
+    stroke: #008de4;
+}
+
+.graphs__right__swaps .highcharts-color-2 {
+    @include point-fill();
+    stroke: #c2a633;
+}
+
+.graphs__right__swaps .highcharts-color-3 {
+    @include point-fill();
+    stroke: #bebebe;
+}
+
+.graphs__right__swaps .highcharts-color-4 {
+    @include point-fill();
+    stroke: #2e9ad0;
 }
 
 .highcharts-axis-title {
@@ -219,13 +270,54 @@
     color: #00e2c2;
 }
 
-.highcharts-tooltip-2.highcharts-color-0 .tooltip-line-circle{
+.highcharts-tooltip-3.highcharts-color-0 .tooltip-line-circle{
     background-color: #7881fb;
 }
 
-.highcharts-tooltip-2.highcharts-color-0 .tooltip-line-color{
+.highcharts-tooltip-3.highcharts-color-0 .tooltip-line-color{
     color: #7881fb;
 }
+
+.highcharts-tooltip-2.highcharts-color-0 .tooltip-line-circle{
+    background-color: #fcaf38;
+}
+
+.highcharts-tooltip-2.highcharts-color-0 .tooltip-line-color{
+    color: #fcaf38;
+}
+
+.highcharts-tooltip-2.highcharts-color-1 .tooltip-line-circle{
+    background-color: #008de4;
+}
+
+.highcharts-tooltip-2.highcharts-color-1 .tooltip-line-color{
+    color: #008de4;
+}
+
+.highcharts-tooltip-2.highcharts-color-2 .tooltip-line-circle{
+    background-color: #c2a633;
+}
+
+.highcharts-tooltip-2.highcharts-color-2 .tooltip-line-color{
+    color: #c2a633;
+}
+
+.highcharts-tooltip-2.highcharts-color-3 .tooltip-line-circle{
+    background-color: #bebebe;
+}
+
+.highcharts-tooltip-2.highcharts-color-3 .tooltip-line-color{
+    color: #bebebe;
+}
+
+.highcharts-tooltip-2.highcharts-color-4 .tooltip-line-circle{
+    background-color: #2e9ad0;
+}
+
+.highcharts-tooltip-2.highcharts-color-4 .tooltip-line-color{
+    color: #2e9ad0;
+}
+
 
 .tooltip-line-circle {
     height: 5px;

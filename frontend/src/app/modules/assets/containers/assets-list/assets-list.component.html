@@ -7,7 +7,7 @@
         <span class="create-asset-text">Create asset helper</span>
       </div>
     </div>
-    <div>
+    <div class="paginator-wrapper">
       <mat-paginator class="paginator"
                  [pageSize]="20" [pageIndex]="page" [length]="count"
                  (page)="nextPage($event)" showFirstLastButtons></mat-paginator>

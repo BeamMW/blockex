@@ -292,16 +292,15 @@ export class GraphsComponent implements OnInit, OnDestroy {
     });
 
     this.graphs.swaps = new Chart({
+      title: {
+        text: '',
+      },
       chart: {
-        styledMode: true,
-        width: 535,
+        width: 610,
         height: 430,
-        marginBottom: 100,
         ignoreHiddenSeries: false,
         type: 'line',
-      },
-      title: {
-        text: ''
+        styledMode: true
       },
       credits: {
           enabled: false
@@ -313,46 +312,34 @@ export class GraphsComponent implements OnInit, OnDestroy {
           }
         }
       },
-      yAxis: {
-        lineWidth: 0,
-        type: 'logarithmic',
+      yAxis: [{
         title: {
-          text: 'Transaction fee',
-          margin: 34,
-        },
-        labels: {
-          formatter: this.feeYAxisFormatter,
+          text: 'Amount',
+          margin: 24
         }
-      },
+      }],
       xAxis: {
-        lineWidth: 0,
-        minorGridLineWidth: 0,
-        lineColor: 'transparent',
         minorTickLength: 0,
         tickLength: 0,
         type: 'datetime',
         minTickInterval: DAY_TICK,
-        gridLineColor: 'rgba(255, 255, 255, 0.1)',
-        gridLineWidth: 1,
         labels: {
           formatter: this.xAxisFormatter,
         }
       },
       legend: {
-        width: 300,
-        itemWidth: 150,
-        itemMarginBottom: 10,
+        width: 450,
+        itemWidth: 90,
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        x: -10,
-        y: -15
+        x: 0,
+        y: 10
       },
       tooltip: {
         followPointer: false,
-        useHTML:true,
-        borderRadius: 10,
-        borderWidth: 0,
+        useHTML: true,
+        borderRadius: 20,
         shadow: false,
         formatter: this.tooltipFormatter
       },
@@ -360,10 +347,43 @@ export class GraphsComponent implements OnInit, OnDestroy {
         type: 'line',
         marker: {
           radius: 2,
-          symbol: 'circle'
+          symbol: 'circle',
         },
-        name: 'Fee',
-        data: graphs.fee,
+        name: 'BTC',
+        data: graphs.swaps_btc
+      }, {
+        type: 'line',
+        marker: {
+          radius: 2,
+          symbol: 'circle',
+        },
+        name: 'DASH',
+        data: graphs.swaps_dash
+      }, {
+        type: 'line',
+        marker: {
+          symbol: 'circle',
+          radius: 2,
+        },
+        name: 'DOGE',
+        data: graphs.swaps_doge
+      }, {
+        type: 'line',
+        marker: {
+          symbol: 'circle',
+          radius: 2,
+        },
+        name: 'LTC',
+        data: graphs.swaps_ltc
+      }, {
+        type: 'line',
+        marker: {
+          symbol: 'circle',
+          radius: 2,
+        },
+        lineWidth: 1,
+        name: 'QTUM',
+        data: graphs.swaps_qtum
       }],
     });
 
@@ -442,7 +462,12 @@ export class GraphsComponent implements OnInit, OnDestroy {
       fee: [],
       fixed: [],
       averageBlocks: [],
-      lelantus: []
+      lelantus: [],
+      swaps_btc: [],
+      swaps_dash: [],
+      swaps_doge: [],
+      swaps_ltc: [],
+      swaps_qtum: []
     };
 
     data.items.forEach(element => {
@@ -455,6 +480,15 @@ export class GraphsComponent implements OnInit, OnDestroy {
       graphsData.averageBlocks.push([dateValue, data.avg_blocks]);
     });
     graphsData.lelantus = data.lelantus;
+
+    data.swap_stats.forEach(element => {
+      const dateValue = + new Date(element[0]);
+      graphsData.swaps_btc.push([dateValue, parseFloat(element[1].btc)]);
+      graphsData.swaps_dash.push([dateValue, parseFloat(element[1].dash)]);
+      graphsData.swaps_doge.push([dateValue, parseFloat(element[1].doge)]);
+      graphsData.swaps_ltc.push([dateValue, parseFloat(element[1].ltc)]);
+      graphsData.swaps_qtum.push([dateValue, parseFloat(element[1].qtum)]);
+    });
 
     return graphsData;
   }

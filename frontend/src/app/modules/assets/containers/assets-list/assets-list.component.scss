@@ -184,6 +184,7 @@
 .paginator-wrapper,
 .mat-header-row {
     @include paginator-wrapper-background();
+    border: none;
 }
 
 .paginator {
