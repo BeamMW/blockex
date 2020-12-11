@@ -400,7 +400,7 @@ def update_charts():
     for data in swap_data:
         if (swap_counter == 12):
             serialized_stats = SwapStatsSerializer(data)
-            swap_res.insert(0, [round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000, serialized_stats])
+            swap_res.insert(0, [round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000, serialized_stats.data])
             swap_counter = 0
 
         swap_counter += 1
