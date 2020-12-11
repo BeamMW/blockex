@@ -10,8 +10,7 @@
     &__left{
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-
+        
         &__block {
             display: flex;
             flex-direction: column;
@@ -24,9 +23,27 @@
         &__fee {
             display: flex;
             flex-direction: column;
+            margin-top: 34px;
+
+            &__title {
+                margin-left: 109px;
+                display: flex;
+                font-size: 12px;
+                font-weight: 500;
+                font-style: normal;
+                font-stretch: normal;
+                line-height: normal;
+                letter-spacing: 0.3px;
+                text-align: center;
+                color: #ffffff;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
     
             &__elem {
-                margin-top: 42px;
+                margin-top: 30px;
             }
         }
     }
@@ -34,7 +51,33 @@
     &__right{
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+
+        &__lelantus {
+            display: flex;
+            flex-direction: column;
+            margin-top: 34px;
+
+            &__title {
+                margin-left: 81px;
+                display: flex;
+                font-size: 12px;
+                font-weight: 500;
+                font-style: normal;
+                font-stretch: normal;
+                line-height: normal;
+                letter-spacing: 0.3px;
+                text-align: center;
+                color: #ffffff;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            &__elem {
+                margin-top: 30px;
+            }
+        }
     }
 }
 
@@ -85,8 +128,9 @@
     stroke: #00e2c2;
 }
 
-.highcharts-axis-labels {
-
+.graphs__right__lelantus .highcharts-color-0 {
+    @include point-fill();
+    stroke: #7881fb;
 }
 
 .highcharts-axis-title {
@@ -167,13 +211,20 @@
     color: #ff51ff;
 }
 
-
 .highcharts-tooltip-1.highcharts-color-0 .tooltip-line-circle{
     background-color: #00e2c2;
 }
 
 .highcharts-tooltip-1.highcharts-color-0 .tooltip-line-color{
     color: #00e2c2;
+}
+
+.highcharts-tooltip-2.highcharts-color-0 .tooltip-line-circle{
+    background-color: #7881fb;
+}
+
+.highcharts-tooltip-2.highcharts-color-0 .tooltip-line-color{
+    color: #7881fb;
 }
 
 .tooltip-line-circle {

@@ -19,14 +19,20 @@
         <div class="graphs__left__block__elem" [chart]="graphs.blocks"></div>
     </div>
     <div class="graphs__left__fee">
+        <span class="graphs__left__fee__title">
+            <span>FEE</span>
+        </span>
         <div class="graphs__left__fee__elem" [chart]="graphs.fee"></div>
     </div>
   </div>
   <div class="graphs__right">
-    <div class="graphs__right__swaps">
+    <!-- <div class="graphs__right__swaps">
       <div class="graphs__right__swaps__elem" [chart]="graphs.swaps"></div>
-    </div>
+    </div> -->
     <div class="graphs__right__lelantus">
+        <span class="graphs__right__lelantus__title">
+            <span>AVERAGE TIME TO WITHDRAW THE MAX PRIVACY COINS</span>
+        </span>
         <div class="graphs__right__lelantus__elem" [chart]="graphs.lelantus"></div>
     </div>
   </div>

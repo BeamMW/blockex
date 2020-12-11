@@ -114,7 +114,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
         text: '',
       },
       chart: {
-        width: 535,
+        width: 610,
         height: 430,
         ignoreHiddenSeries: false,
         type: 'line',
@@ -218,7 +218,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
     this.graphs.fee = new Chart({
       chart: {
         styledMode: true,
-        width: 535,
+        width: 610,
         height: 430,
         marginBottom: 100,
         ignoreHiddenSeries: false,
@@ -372,7 +372,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
         text: '',
       },
       chart: {
-        width: 535,
+        width: 610,
         height: 430,
         ignoreHiddenSeries: false,
         type: 'line',
@@ -391,16 +391,8 @@ export class GraphsComponent implements OnInit, OnDestroy {
       yAxis: [{
         lineColor: '#ff51ff',
         title: {
-          text: 'Blocks per hour',
+          text: 'Time, Hours',
           margin: 24
-        }
-      }, {
-        min: 0,
-        opposite: true,
-        title: {
-          rotation: 270,
-          text: 'Average difficulty',
-          margin: 34
         }
       }],
       xAxis: {
@@ -435,7 +427,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
           radius: 2,
           symbol: 'circle',
         },
-        name: 'Blocks per hour',
+        name: 'Average time',
         color: '#24c1ff',
         data: graphs.lelantus
       }],

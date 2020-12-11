@@ -75,7 +75,7 @@
                     </div>
                     <div class="card__left-part__lower">
                         <div class="card-header">ACTIVE SWAP OFFERS</div>
-                        <div class="card-content">{{data.swap_totals.total_swaps_count / 60 | number:'.'}}</div>
+                        <div class="card-content">{{data.swap_totals.total_swaps_count | number:'.'}}</div>
                     </div>
                 </div>
                 <div class="card__right-part" *ngIf="mostOffering.length > 0">

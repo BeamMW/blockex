@@ -325,32 +325,13 @@ def update_blockchain():
 
 @shared_task(name="update_charts", ignore_result=True)
 def update_charts():
+    # get data for blocks
     latest_block = Block.objects.latest('height')
     latest_block_height = int(latest_block.height)
     from_height = int(latest_block_height) - 4 * 1440
     to_height = int(latest_block_height) + 1
 
     blocks = Block.objects.filter(height__gte=from_height, height__lt=to_height).order_by('height')
-
-    date_now = timezone.now()
-    date_from = date_now - timedelta(days=int(4))
-
-    lelantus_data = Max_privacy_withdraw.objects.filter(created_at__gte=date_from, created_at__lt=date_now)
-
-    counter = 0
-    lelantus_res = []
-    lelantus_sum = 0
-    for data in lelantus_data:
-        if (counter == 12):
-            lelantus_avg = lelantus_sum / 12
-            lelantus_res.insert(0, [round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000, lelantus_avg])
-            first_time = 0
-            lelantus_sum = 0
-            counter = 0
-
-        lelantus_sum += float(data.value)
-        counter += 1
-
     hour_offset = timedelta(hours=int(2))
     start_date = blocks.first().timestamp
     end_date = blocks.last().timestamp
@@ -390,7 +371,40 @@ def update_charts():
     result['avg_blocks'] = (blocks.count() / len(result['items'])) / 2
     result['items'].pop(0)
 
+    #get lelantus data
+    date_now = timezone.now()
+    date_from = date_now - timedelta(days=int(4))
+
+    lelantus_data = Max_privacy_withdraw.objects.filter(created_at__gte=date_from, created_at__lt=date_now)
+
+    lel_counter = 0
+    lelantus_res = []
+    lelantus_sum = 0
+    for data in lelantus_data:
+        if (lel_counter == 12):
+            lelantus_avg = lelantus_sum / 12
+            lelantus_res.insert(0, [round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000, lelantus_avg])
+            lelantus_sum = 0
+            lel_counter = 0
+
+        lelantus_sum += float(data.value)
+        lel_counter += 1
+
     result['lelantus'] = lelantus_res
+
+    #get swaps data
+    swap_data = Swap_stats.objects.filter(created_at__gte=date_from, created_at__lt=date_now)
+
+    swap_counter = 0
+    swap_res = []
+    for data in swap_data:
+        if (swap_counter == 12):
+            swap_res.insert(0, [round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000, data])
+            lel_counter = 0
+
+        lel_counter += 1
+
+    result['swap_stats'] = swap_res
 
     _redis.set('graph_data', json.dumps(result, default=str))
     return True

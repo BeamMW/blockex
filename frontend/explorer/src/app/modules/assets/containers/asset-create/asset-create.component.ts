@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators, AbstractControl} from '@angular/for
 @Component({
   selector: 'app-asset-create',
   templateUrl: './asset-create.component.html',
-  styleUrls: ['./asset-create.component.css']
+  styleUrls: ['./asset-create.component.scss']
 })
 export class AssetCreateComponent implements OnInit {
   createForm: FormGroup;

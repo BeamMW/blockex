@@ -8,7 +8,7 @@ import { ActivatedRoute} from '@angular/router';
 @Component({
   selector: 'app-assets-list',
   templateUrl: './assets-list.component.html',
-  styleUrls: ['./assets-list.component.css']
+  styleUrls: ['./assets-list.component.scss']
 })
 export class AssetsListComponent implements OnInit {
   dataSource: any;

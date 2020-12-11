@@ -1,7 +1,8 @@
+@import 'ui-mixins';
+
 .assets-content {
     display: flex;
     flex-direction: column;
-
 }
 
 .assets-content-header {
@@ -62,26 +63,6 @@
     color: #333333;
 }
 
-.blocks-table-header-mainnet {
-    font-style: normal;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: 0.3px;
-    color: #333333;
-    background-color: rgba(0, 86, 131, 0.15);
-    border: 0;
-}
-
-.blocks-table-header-testnet {
-    font-style: normal;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: 0.3px;
-    color: #333333;
-    background-color: rgba(76, 0, 131, 0.15);
-    border: 0;
-}
-
 :host ::ng-deep.mat-header-row .mat-header-cell {
     font-weight: bolder !important;
     color: #333333;
@@ -101,25 +82,6 @@
 
 .mat-row:hover {
     background-color: #d9fbf6;
-}
-
-.paginator-wrapper-testnet {
-    background-color: rgba(76, 0, 131, 0.15);
-}
-
-.paginator-wrapper-mainnet {
-    background-color: rgba(0, 86, 131, 0.15);
-}
-
-.blocks-table-paginator-mainnet {
-    padding-right: 95px;
-    background-color: rgba(255, 255, 255, 0);
-}
-
-.blocks-table-paginator-testnet {
-    max-width: 1223px;
-    margin: 0 auto;
-    background-color: rgba(255, 255, 255, 0);
 }
 
 :host ::ng-deep.mat-paginator-page-size div:last-of-type {
@@ -217,4 +179,14 @@
 
 .create-asset-text {
     margin-left: 9px;
+}
+
+.paginator-wrapper,
+.mat-header-row {
+    @include paginator-wrapper-background();
+}
+
+.paginator {
+    background-color: rgba(255, 255, 255, 0);
+    padding: 0 140px;
 }
