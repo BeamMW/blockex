@@ -387,7 +387,10 @@ def update_charts():
             lelantus_sum = 0
             lel_counter = 0
 
-        lelantus_sum += float(data.value)
+        try:
+            lelantus_sum += float(data.value)
+        except ValueError,e:
+            lelantus_sum += 0
         lel_counter += 1
 
     result['lelantus'] = lelantus_res
