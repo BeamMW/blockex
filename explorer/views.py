@@ -197,7 +197,7 @@ def get_swap_offers(request):
     offers = requests.get(BEAM_NODE_API + '/swap_offers')
     data = offers.json()
     from_item = (int(page) - 1) * 20
-    res_offers = offers[from_item:20]
+    res_offers = data[from_item:20]
     return Response({'offers': res_offers, 'count': len(data)}, status=HTTP_200_OK)
 
 class BotView(View):
