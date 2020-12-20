@@ -394,7 +394,7 @@ def update_charts():
             'difficulty': diff,
             'hashrate': hashrate,
             'date': date,
-            'blocks_count': blocks_count
+            'blocks_count': blocks_count,
             'transactions': transactions
         })
 
