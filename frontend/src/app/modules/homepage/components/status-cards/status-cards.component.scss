@@ -17,10 +17,6 @@
         &__bottom {
             display: flex;
             flex: auto;
-            width: 100%;
-            height: 146px;
-            border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.05);
         }
 
         &__bottom {
@@ -31,6 +27,10 @@
     &__right {
         margin-left: 10px;
     }
+
+    &__left {
+        align-self: flex-start;
+    }
 }
 
 .card {
@@ -38,6 +38,9 @@
     padding: 20px;
     display: flex;
     flex-direction: row;
+    height: 106px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
 
     &__left-part,
     &__right-part {
@@ -49,6 +52,10 @@
             margin-top: auto;
         }
     }
+}
+
+.card.active {
+    height: 126px;
 }
 
 .card-header {
@@ -97,4 +104,131 @@
             margin-left: 5px;
         }
     }
+}
+
+.volumes-control {
+    display: flex;
+    cursor: pointer;
+
+    &__header {
+        opacity: .5;
+    }
+
+    &__arrow {
+        margin-left: 14px;
+
+        &__item {
+            width: .95rem;
+            height: 13px;
+            display: inline-block;
+            position: relative;
+
+            &__left, &__right {
+                top: .3rem;
+                position: absolute;
+                width: .6rem;
+                height: .13rem;
+                background-color: #bdbdbd;
+                display: inline-block;
+                transition: all .2s ease;
+            }
+            
+            &__left {
+                left: 0;
+                transform: rotate(45deg);
+            }
+            
+            &__right {
+                right: 0px;
+                transform: rotate(-45deg);
+            }
+
+            &__left.active {
+                transform: rotate(-45deg);
+            }
+
+            &__right.active {
+                transform: rotate(45deg);
+            }
+        }
+    }
+}
+
+.volumes-control-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    opacity: 1;
+}
+
+.unselectable {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+.switch{
+    top: -2px;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    font-size: 10px;
+    height: 16px;
+    line-height: normal;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0);
+    border: solid 1px rgba(255, 255, 255, 0.3);
+    position: relative;
+}
+  
+.switch__usd,
+.switch__btc{
+    cursor: pointer;
+    position: relative;
+    display: block;
+    float: left;
+    -webkit-transition: 300ms ease-in;
+    -moz-transition: 300ms ease-in;
+    transition: 300ms ease-in;
+    padding: 0 1em;
+    opacity: 0.5;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: normal;
+    color: #ffffff;
+}
+
+.switch__usd.selected,
+.switch__btc.selected {
+    color: rgba(255, 255, 255, 0);
+}
+
+.selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 0;
+    box-sizing: border-box;
+    -webkit-transition: 300ms ease-out;
+    -moz-transition: 300ms ease-out;
+    transition: 300ms ease-out;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    height: 18px;
+    top: -1px;
+    text-align: center;
+    text-transform: uppercase;
+    cursor: default;
+    border: solid 1px #24c1ff;
+    background-color: rgba(36, 193, 255, 0.1);
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #24c1ff;
+    opacity: 1;
 }

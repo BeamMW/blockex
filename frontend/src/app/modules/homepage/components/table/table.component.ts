@@ -26,10 +26,10 @@ export class TableComponent implements OnInit, OnDestroy {
   public selectorActiveTitle = this.selectorTitles.BLOCKS;
 
   public blocksCount: number;
-  public blocksPage: number;
+  public blocksPage: number = 0;
   public blocksData: any;
   public offersCount: number;
-  public offersPage: number;
+  public offersPage: number = 0;
   public offersData: any;
   private subscriber: any;
 
@@ -39,7 +39,15 @@ export class TableComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriber = this.dataService.height.subscribe((value) => {
-      this.loadBlocks(null);
+      if (this.selectorActiveTitle === this.selectorTitles.BLOCKS) {
+        this.loadBlocks({
+          pageIndex: this.blocksPage
+        });
+      } else {
+        this.loadOffers({
+          pageIndex: this.offersPage
+        })
+      }
     });
   }
 
@@ -53,7 +61,7 @@ export class TableComponent implements OnInit, OnDestroy {
     );
   }
 
-  loadBlocks(event?: PageEvent){
+  loadBlocks(event?){
     this.blocksPage = event ? event.pageIndex : 0;
 
     this.dataService.loadBlocks(this.blocksPage).subscribe((data) => {
@@ -64,41 +72,10 @@ export class TableComponent implements OnInit, OnDestroy {
     return event;
   }
 
-  loadOffers(event?: PageEvent){
+  loadOffers(event?){
     this.offersPage = event ? event.pageIndex : 0;
 
     this.dataService.loadOffers(this.offersPage).subscribe((data) => {
-      // const asd = [{
-      //   beam_amount: "3",
-      //   height_expired: 253126,
-      //   min_height: 252406,
-      //   status: 0,
-      //   status_string: "pending",
-      //   swap_amount: "3",
-      //   swap_currency: "BCH",
-      //   time_created: "2020.11.06 18:31:54",
-      //   txId: "1b726d0adffe45c993b801c8bb46184e"
-      // },{
-      //   beam_amount: "3",
-      //   height_expired: 253126,
-      //   min_height: 252406,
-      //   status: 0,
-      //   status_string: "pending",
-      //   swap_amount: "3",
-      //   swap_currency: "BCH",
-      //   time_created: "2020.11.06 18:31:54",
-      //   txId: "1b726d0adffe45c993b801c8bb46184e"
-      // },{
-      //   beam_amount: "3",
-      //   height_expired: 253126,
-      //   min_height: 252406,
-      //   status: 0,
-      //   status_string: "pending",
-      //   swap_amount: "3",
-      //   swap_currency: "BCH",
-      //   time_created: "2020.11.06 18:31:54",
-      //   txId: "1b726d0adffe45c993b801c8bb46184e"
-      // }]
       this.offersData = new MatTableDataSource(data['offers']);
       this.offersCount = 100;
       //this.offersCount = data['count'];

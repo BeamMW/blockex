@@ -1,0 +1,176 @@
+@import 'ui-mixins';
+
+.details {
+    padding: 0 140px;
+}
+
+.mat-column-block-header{
+    font-size: 20px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+.mat-column-name{
+    font-weight: bold;
+    max-width: 145px;
+}
+
+.details-card-container{
+    box-shadow: none;
+    max-width: 1290px;
+}
+
+.mat-header-row,
+.mat-row {
+    border: none;
+}
+
+.main-table-row{
+    background-color: rgb(251,251,251);
+}
+
+.main-table-name{
+    font-size: 12px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #333333;
+}
+
+.main-table-value{
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+.expansion-data-rows{
+    margin-top: 20px;
+}
+
+.expansion-data-title{
+    font-weight: bold;
+}
+
+.expansion-data-panel{
+    border-radius: unset;
+    box-shadow: none;
+    margin-top: 5px;
+}
+
+.searched-by,
+.expansion-data-header {
+    @include details-bg();
+}
+
+:host ::ng-deep.mat-expansion-panel-body {
+    padding: 0 !important;
+}
+
+:host ::ng-deep.mat-header-row .mat-header-cell {
+    font-weight: bolder !important;
+    color: #333333;
+    font-size: 12px;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+}
+
+.kernels-table {
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+}
+
+.inputs-table-header,
+.outputs-table-header,
+.kernels-table-header {
+    background-color: rgb(241,241,241);
+}
+
+.inputs-table .mat-row:nth-child(odd),
+.outputs-table .mat-row:nth-child(odd),
+.kernels-table .mat-row:nth-child(odd){
+    background-color: rgb(251,251,251);
+}
+
+.details-button-back{
+    margin-top: 50px;
+}
+
+.mat-column-commitment{
+    min-width: 720px;
+}
+
+.mat-column-fee {
+    min-width: 40px;
+}
+
+.mat-column-excess {
+    min-width: 510px;
+}
+
+.mat-column-id {
+    min-width: 600px;
+}
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.mat-table {
+    overflow: auto;
+}
+
+.mobile-label {
+    display: none;
+}
+
+@media(max-width: 600px) {
+  .mobile-label {
+      width: 95px;
+      display: inline-block;
+      font-weight: bold;
+  }
+
+  .mat-header-row {
+     display: none;
+  }
+
+  .mat-row {
+      flex-direction: column;
+      align-items: start;
+      padding: 8px 10px;
+      max-height: 370px;
+  }
+
+  .mat-column-fee {
+      max-width: 200px;
+  }
+
+  .commitment-cell,
+  .kernel-id-cell,
+  .excess-cell {
+      max-width: 190px;
+  }
+
+  .value-table-cell {
+      max-width: 250px;
+  }
+
+  mat-cell:first-of-type {
+      padding-left: 0;
+  }
+}

@@ -19,6 +19,7 @@ import io
 from .models import *
 from datetime import datetime, timedelta
 from django.utils import timezone
+from pycoingecko import CoinGeckoAPI
 
 HEIGHT_STEP = 43800
 BEAM_NODE_API = 'http://localhost:8888'
@@ -93,7 +94,26 @@ def update_status():
 
     swap_request = requests.get(BEAM_NODE_API + '/swap_totals')
     swap_totals = swap_request.json()
+
+    cg = CoinGeckoAPI()
+    cg_data = cg.get_price(ids=['bitcoin', 'dash', 'dogecoin', 'litecoin', 'qtum'], vs_currencies=['usd', 'btc'])
+
     data['swap_totals'] = swap_totals
+    data['swap_totals_usd'] = {
+        "bitcoin": float(swap_totals["bitcoin_offered"]) * cg_data["bitcoin"]["usd"],
+        "dash": float(swap_totals["dash_offered"]) * cg_data["dash"]["usd"],
+        "dogecoin": float(swap_totals["dogecoin_offered"]) * cg_data["dogecoin"]["usd"],
+        "litecoin": float(swap_totals["litecoin_offered"]) * cg_data["litecoin"]["usd"],
+        "qtum": float(swap_totals["qtum_offered"]) * cg_data["qtum"]["usd"]
+    }
+
+    data['swap_totals_btc'] = {
+        "bitcoin": float(swap_totals["bitcoin_offered"]) * cg_data["bitcoin"]["btc"],
+        "dash": float(swap_totals["dash_offered"]) * cg_data["dash"]["btc"],
+        "dogecoin": float(swap_totals["dogecoin_offered"]) * cg_data["dogecoin"]["btc"],
+        "litecoin": float(swap_totals["litecoin_offered"]) * cg_data["litecoin"]["btc"],
+        "qtum": float(swap_totals["qtum_offered"]) * cg_data["qtum"]["btc"]
+    }
 
     _redis.set('status', json.dumps(data, default=str))
     return data
@@ -352,10 +372,14 @@ def update_charts():
         hashrate = 0
         date = date_with_offset
         if blocks_count is not 0:
-            diff = offset_blocks.aggregate(Avg('difficulty'))['difficulty__avg']
-            hashrate = diff / 60
-            fee = offset_blocks.aggregate(Sum('fee'))['fee__sum']
-            date = offset_blocks.last().timestamp
+            if offset_blocks.aggregate(Avg('difficulty'))['difficulty__avg']:
+                diff = offset_blocks.aggregate(Avg('difficulty'))['difficulty__avg']
+            if diff:
+                hashrate = diff / 60
+            if offset_blocks.aggregate(Sum('fee'))['fee__sum']:
+                fee = offset_blocks.aggregate(Sum('fee'))['fee__sum']
+            if offset_blocks.last():
+                date = offset_blocks.last().timestamp
         
         result['items'].insert(0, {
             'fee': fee,
@@ -383,27 +407,39 @@ def update_charts():
     for data in lelantus_data:
         if (lel_counter == 12):
             lelantus_avg = lelantus_sum / 12
+            if lelantus_avg == 0 or lelantus_avg > 72:
+                lelantus_avg = 72    
             lelantus_res.insert(0, [round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000, lelantus_avg])
             lelantus_sum = 0
             lel_counter = 0
 
         try:
             lelantus_sum += float(data.value)
-        except ValueError,e:
+        except ValueError:
             lelantus_sum += 0
         lel_counter += 1
 
     result['lelantus'] = lelantus_res
 
     #get swaps data
-    swap_data = Swap_stats.objects.filter(created_at__gte=date_from, created_at__lt=date_now)
+    cg = CoinGeckoAPI()
+    cg_data = cg.get_price(ids=['bitcoin', 'dash', 'dogecoin', 'litecoin', 'qtum'], vs_currencies=['beam'])
 
+    swap_data = Swap_stats.objects.filter(created_at__gte=date_from, created_at__lt=date_now)
     swap_counter = 0
     swap_res = []
     for data in swap_data:
         if (swap_counter == 12):
             serialized_stats = SwapStatsSerializer(data)
-            swap_res.insert(0, [round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000, serialized_stats.data])
+            date_of_twelve_day = round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000
+            swap_res_to_beam = {
+                "btc": float(serialized_stats.data["btc"]) * cg_data["bitcoin"]["beam"],
+                "dash": float(serialized_stats.data["dash"]) * cg_data["dash"]["beam"],
+                "doge": float(serialized_stats.data["doge"]) * cg_data["dogecoin"]["beam"],
+                "ltc": float(serialized_stats.data["ltc"]) * cg_data["litecoin"]["beam"],
+                "qtum": float(serialized_stats.data["qtum"]) * cg_data["qtum"]["beam"]
+            }
+            swap_res.insert(0, [date_of_twelve_day, swap_res_to_beam])
             swap_counter = 0
 
         swap_counter += 1

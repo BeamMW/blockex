@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, ViewEncapsulation, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, ViewEncapsulation, OnInit, AfterContentInit } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { WebsocketService } from '../../../../modules/websocket';
 import { WS } from '../../../../websocket.events';
@@ -36,12 +36,20 @@ export interface MostOfferingItem {
   templateUrl: './status-cards.component.html',
   styleUrls: ['./status-cards.component.scss']
 })
-export class StatusCardsComponent implements OnInit, OnDestroy {
+export class StatusCardsComponent implements OnInit, OnDestroy, AfterContentInit {
   public statusData$: Observable<IStatus>;
   public mostOffering: MostOfferingItem[];
   private lastHeight: number;
   private subWs: any;
   private subStatus: any;
+  public isVolumesSelectVisible = false;
+  public offers: MostOfferingItem[];
+  public switcherValues = {
+    BTC: 'btc',
+    USD: 'usd'
+  }
+  public isSwitcherVisible = false;
+  public switcherSelectedValue: string = this.switcherValues.USD;
 
   constructor(
     private wsService: WebsocketService,
@@ -58,17 +66,17 @@ export class StatusCardsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subStatus = this.statusData$.subscribe((data) => {
-      const topOffersSelector: MostOfferingItem[] = [];
-      topOffersSelector.push({title: 'BTC', value: data.swap_totals.bitcoin_offered});
-      topOffersSelector.push({title: 'DASH', value: data.swap_totals.dash_offered});
-      topOffersSelector.push({title: 'DOGE', value: data.swap_totals.dogecoin_offered});
-      topOffersSelector.push({title: 'LTC', value: data.swap_totals.litecoin_offered});
-      topOffersSelector.push({title: 'QTUM', value: data.swap_totals.qtum_offered});
+      this.offers = [];
+      this.offers.push({title: 'BTC', value: data.swap_totals.bitcoin_offered});
+      this.offers.push({title: 'DASH', value: data.swap_totals.dash_offered});
+      this.offers.push({title: 'DOGE', value: data.swap_totals.dogecoin_offered});
+      this.offers.push({title: 'LTC', value: data.swap_totals.litecoin_offered});
+      this.offers.push({title: 'QTUM', value: data.swap_totals.qtum_offered});
 
-      topOffersSelector.sort((a, b) => {
+      this.offers.sort((a, b) => {
         return b.value - a.value;
       });
-      this.mostOffering = topOffersSelector.slice(0, 3);
+      this.mostOffering = this.offers.slice(0, 3);
 
       if (this.lastHeight === undefined || data.height > this.lastHeight) {
         this.dataService.height.next(data.height);
@@ -80,5 +88,23 @@ export class StatusCardsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subWs.unsubscribe();
     this.subStatus.unsubscribe();
+  }
+
+  ngAfterContentInit() {
+    setTimeout(() => {
+      this.isSwitcherVisible = true;
+    }, 1000);
+  }
+
+  volumesClicked() {
+    this.isVolumesSelectVisible = !this.isVolumesSelectVisible;
+  }
+
+  switcherClicked = (value: string) => {
+    this.switcherSelectedValue = value;
+    if (value === this.switcherValues.USD) {
+      
+    } else if (value === this.switcherValues.BTC) {
+    }
   }
 }

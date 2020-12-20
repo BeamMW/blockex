@@ -9,8 +9,8 @@
         @include top-background-color();
         display: flex;
         flex-direction: column;
-        padding: 0 140px;
-        height: 1340px;
+        padding: 20px 140px;
+        min-height: 1200px;
     }
 
     &__table-area {

@@ -12,6 +12,8 @@ import * as exporting from 'highcharts/modules/exporting.src';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     HomepageRoutingModule,
     ChartModule,
     MatPaginatorModule,
+    MatExpansionModule,
+    MatCardModule,
     MatTableModule
   ]
 })

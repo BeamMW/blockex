@@ -45,6 +45,10 @@ export class DataService {
     return this.http.get<any>(this.API_BASE + '/explorer/search/' + '?q=' + query);
   }
 
+  loadBlock(hash) {
+    return this.http.get<Block>(this.API_BASE + '/explorer/block/' + '?hash=' + hash);
+  }
+
   getAssetsList(height = null) {
     const heightParam = (height !== null) ? '?height=' + height : '';
     return this.http.get<{assets: Asset[]}>(this.API_BASE + '/explorer/get_assets_list/' + heightParam);

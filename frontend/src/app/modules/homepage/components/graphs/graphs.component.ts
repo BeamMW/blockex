@@ -50,6 +50,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
   ];
   public isChartTypesVisible = false;
   public selectedBlocksChartType = this.blockCharts[0];
+  private lastConstructedGraphs: any;
 
   @HostListener('document:click', ['$event']) clickout(event) {
     this.isChartTypesVisible = false;
@@ -114,6 +115,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
         text: '',
       },
       chart: {
+        shadow: false,
         width: 610,
         height: 430,
         ignoreHiddenSeries: false,
@@ -174,20 +176,20 @@ export class GraphsComponent implements OnInit, OnDestroy {
       series: [{
         type: 'line',
         marker: {
+          enabledThreshold: 0,
           radius: 2,
           symbol: 'circle',
         },
         name: 'Blocks per hour',
-        color: '#24c1ff',
         data: graphs.blocks
       }, {
         type: 'line',
         marker: {
+          enabledThreshold: 0,
           radius: 2,
           symbol: 'circle',
         },
         name: 'Average difficulty',
-        color: '#ff51ff',
         data: graphs.difficulty,
         yAxis: 1
       }, {
@@ -199,7 +201,6 @@ export class GraphsComponent implements OnInit, OnDestroy {
         },
         lineWidth: 1,
         name: 'Fixed 60 blocks',
-        color: '#24c1ff',
         data: graphs.fixed
       }, {
         type: 'line',
@@ -210,18 +211,17 @@ export class GraphsComponent implements OnInit, OnDestroy {
         },
         lineWidth: 1,
         name: 'Average blocks',
-        color: '#ff51ff',
         data: graphs.averageBlocks
       }],
     });
 
     this.graphs.fee = new Chart({
       chart: {
+        shadow: false,
         styledMode: true,
         width: 610,
         height: 430,
         marginBottom: 100,
-        ignoreHiddenSeries: false,
         type: 'line',
       },
       title: {
@@ -241,7 +241,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
         lineWidth: 0,
         type: 'logarithmic',
         title: {
-          text: 'Transaction fee',
+          text: 'Transaction Fee, GROTH',
           margin: 34,
         },
         labels: {
@@ -256,8 +256,6 @@ export class GraphsComponent implements OnInit, OnDestroy {
         tickLength: 0,
         type: 'datetime',
         minTickInterval: DAY_TICK,
-        gridLineColor: 'rgba(255, 255, 255, 0.1)',
-        gridLineWidth: 1,
         labels: {
           formatter: this.xAxisFormatter,
         }
@@ -283,6 +281,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
       series: [{
         type: 'line',
         marker: {
+          enabledThreshold: 0,
           radius: 2,
           symbol: 'circle'
         },
@@ -296,6 +295,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
         text: '',
       },
       chart: {
+        shadow: false,
         width: 610,
         height: 430,
         ignoreHiddenSeries: false,
@@ -346,6 +346,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
       series: [{
         type: 'line',
         marker: {
+          enabledThreshold: 0,
           radius: 2,
           symbol: 'circle',
         },
@@ -354,6 +355,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
       }, {
         type: 'line',
         marker: {
+          enabledThreshold: 0,
           radius: 2,
           symbol: 'circle',
         },
@@ -362,6 +364,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
       }, {
         type: 'line',
         marker: {
+          enabledThreshold: 0,
           symbol: 'circle',
           radius: 2,
         },
@@ -370,6 +373,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
       }, {
         type: 'line',
         marker: {
+          enabledThreshold: 0,
           symbol: 'circle',
           radius: 2,
         },
@@ -378,10 +382,10 @@ export class GraphsComponent implements OnInit, OnDestroy {
       }, {
         type: 'line',
         marker: {
+          enabledThreshold: 0,
           symbol: 'circle',
           radius: 2,
         },
-        lineWidth: 1,
         name: 'QTUM',
         data: graphs.swaps_qtum
       }],
@@ -392,6 +396,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
         text: '',
       },
       chart: {
+        shadow: false,
         width: 610,
         height: 430,
         ignoreHiddenSeries: false,
@@ -444,11 +449,11 @@ export class GraphsComponent implements OnInit, OnDestroy {
       series: [{
         type: 'line',
         marker: {
+          enabledThreshold: 0,
           radius: 2,
           symbol: 'circle',
         },
         name: 'Average time',
-        color: '#24c1ff',
         data: graphs.lelantus
       }],
     });
@@ -490,6 +495,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
       graphsData.swaps_qtum.push([dateValue, parseFloat(element[1].qtum)]);
     });
 
+    this.lastConstructedGraphs = JSON.parse(JSON.stringify(graphsData));
     return graphsData;
   }
 
@@ -499,7 +505,11 @@ export class GraphsComponent implements OnInit, OnDestroy {
       if (this.graphsLoaded) {
         this.graphs.blocks.ref$.subscribe((blockChart) => {
           blockChart.series[0].setData(graphsConstructed.blocks);
-          blockChart.series[1].setData(graphsConstructed.difficulty);
+          if (this.selectedBlocksChartType.num == this.blockCharts[0].num) {
+            blockChart.series[1].setData(graphsConstructed.difficulty);
+          } else {
+            blockChart.series[1].setData(graphsConstructed.hashrate);
+          }
           blockChart.series[2].setData(graphsConstructed.fixed);
           blockChart.series[3].setData(graphsConstructed.averageBlocks);
         });
@@ -525,6 +535,40 @@ export class GraphsComponent implements OnInit, OnDestroy {
       selectedType.isSelected = true;
       this.selectedBlocksChartType.isSelected = false;
       this.selectedBlocksChartType = selectedType;
+
+      if (selectedType.num == this.blockCharts[0].num) {
+        this.graphs.blocks.ref$.subscribe((blockChart) => {
+          blockChart.series[1].setData(this.lastConstructedGraphs.difficulty);
+          blockChart.update({
+            name: "Average difficulty"
+          });
+          blockChart.yAxis[1].update({
+              title:{
+                  text: "Average difficulty"
+              }
+          });
+          blockChart.legend.allItems[1].update({
+            name: "Average difficulty"
+          });
+          blockChart.redraw();
+        });
+      } else if (selectedType.num == this.blockCharts[1].num) {
+        this.graphs.blocks.ref$.subscribe((blockChart) => {
+          blockChart.series[1].setData(this.lastConstructedGraphs.hashrate);
+          blockChart.update({
+            name: "Average hash rate"
+          });
+          blockChart.yAxis[1].update({
+              title:{
+                  text: "Average hash rate"
+              }
+          });
+          blockChart.legend.allItems[1].update({
+            name: "Average hash rate"
+          });
+          blockChart.redraw();
+        });
+      }
     }
-  }
+    }
 }

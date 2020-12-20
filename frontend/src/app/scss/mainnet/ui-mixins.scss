@@ -36,3 +36,7 @@
 @mixin paginator-wrapper-background {
     background-color: rgba(0, 86, 131, 0.15);
 }
+
+@mixin details-bg {
+    background-color: #d9e6ed !important;
+}
