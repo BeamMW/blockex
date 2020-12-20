@@ -370,16 +370,23 @@ def update_charts():
         fee = 0
         diff = 0
         hashrate = 0
+        transactions = 0
         date = date_with_offset
         if blocks_count is not 0:
-            if offset_blocks.aggregate(Avg('difficulty'))['difficulty__avg']:
-                diff = offset_blocks.aggregate(Avg('difficulty'))['difficulty__avg']
+            dif_avg_value = offset_blocks.aggregate(Avg('difficulty'))['difficulty__avg']
+            if dif_avg_value:
+                diff = dif_avg_value
             if diff:
                 hashrate = diff / 60
-            if offset_blocks.aggregate(Sum('fee'))['fee__sum']:
-                fee = offset_blocks.aggregate(Sum('fee'))['fee__sum']
-            if offset_blocks.last():
-                date = offset_blocks.last().timestamp
+            fee_sum_value = offset_blocks.aggregate(Sum('fee'))['fee__sum']
+            if fee_sum_value:
+                fee = fee_sum_value
+            last_block_value = offset_blocks.last()
+            if last_block_value:
+                date = last_block_value.timestamp
+            transactions_count = offset_blocks.aggregate(Count('kernels'))
+            if transactions_count:
+                transactions = transactions_count
         
         result['items'].insert(0, {
             'fee': fee,
@@ -403,13 +410,16 @@ def update_charts():
 
     lel_counter = 0
     lelantus_res = []
+    lelantus_tr_res = []
     lelantus_sum = 0
     for data in lelantus_data:
         if (lel_counter == 12):
             lelantus_avg = lelantus_sum / 12
             if lelantus_avg == 0 or lelantus_avg > 72:
-                lelantus_avg = 72    
-            lelantus_res.insert(0, [round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000, lelantus_avg])
+                lelantus_avg = 72   
+            date_value = round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000 
+            lelantus_res.insert(0, [date_value, lelantus_avg])
+            lelantus_tr_res.insert(0, [date_value, data.per_day])
             lelantus_sum = 0
             lel_counter = 0
 
@@ -420,6 +430,7 @@ def update_charts():
         lel_counter += 1
 
     result['lelantus'] = lelantus_res
+    result['lelantus_trs'] = lelantus_tr_res
 
     #get swaps data
     cg = CoinGeckoAPI()
@@ -495,10 +506,10 @@ def update_notification():
 @shared_task(name='update_lelantus', ignore_result=True)
 def update_lelantus():
     status_data = requests.get(BEAM_NODE_API + '/status')
-    lelantus_data = status_data.json()['shielded_possible_ready_in_hours']
+    st_data_json = status_data.json()
     
     privacy_model = Max_privacy_withdraw()
-    privacy_model.from_json({'value': lelantus_data})
+    privacy_model.from_json({'value': st_data_json['shielded_possible_ready_in_hours'], 'per_day': st_data_json['shielded_outputs_per_24h']})
     privacy_model.save()
 
     swaps_data = requests.get(BEAM_NODE_API + '/swap_totals')
