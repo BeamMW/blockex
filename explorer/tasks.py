@@ -395,6 +395,7 @@ def update_charts():
             'hashrate': hashrate,
             'date': date,
             'blocks_count': blocks_count
+            'transactions': transactions
         })
 
         end_date = date_with_offset
