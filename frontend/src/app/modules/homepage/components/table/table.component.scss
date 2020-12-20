@@ -86,8 +86,11 @@
     letter-spacing: 0.35px;
     color: #333333;
 
+    &__url {
+        color: #00d3ff;;
+    }
+
     &__link {
-        color: #00d3ff;
         cursor: pointer;
     }
 }

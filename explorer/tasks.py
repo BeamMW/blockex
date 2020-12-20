@@ -423,7 +423,7 @@ def update_charts():
 
     #get swaps data
     cg = CoinGeckoAPI()
-    cg_data = cg.get_price(ids=['bitcoin', 'dash', 'dogecoin', 'litecoin', 'qtum'], vs_currencies=['beam'])
+    cg_data = cg.get_price(ids=['bitcoin', 'dash', 'dogecoin', 'litecoin', 'qtum'], vs_currencies=['usd', 'btc'])
 
     swap_data = Swap_stats.objects.filter(created_at__gte=date_from, created_at__lt=date_now)
     swap_counter = 0
@@ -432,14 +432,24 @@ def update_charts():
         if (swap_counter == 12):
             serialized_stats = SwapStatsSerializer(data)
             date_of_twelve_day = round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000
-            swap_res_to_beam = {
-                "btc": float(serialized_stats.data["btc"]) * cg_data["bitcoin"]["beam"],
-                "dash": float(serialized_stats.data["dash"]) * cg_data["dash"]["beam"],
-                "doge": float(serialized_stats.data["doge"]) * cg_data["dogecoin"]["beam"],
-                "ltc": float(serialized_stats.data["ltc"]) * cg_data["litecoin"]["beam"],
-                "qtum": float(serialized_stats.data["qtum"]) * cg_data["qtum"]["beam"]
+            
+            swap_usd = {
+                "bitcoin": float(serialized_stats.data["btc"]) * cg_data["bitcoin"]["usd"],
+                "dash": float(serialized_stats.data["dash"]) * cg_data["dash"]["usd"],
+                "dogecoin": float(serialized_stats.data["doge"]) * cg_data["dogecoin"]["usd"],
+                "litecoin": float(serialized_stats.data["ltc"]) * cg_data["litecoin"]["usd"],
+                "qtum": float(serialized_stats.data["qtum"]) * cg_data["qtum"]["usd"]
             }
-            swap_res.insert(0, [date_of_twelve_day, swap_res_to_beam])
+
+            swap_btc = {
+                "bitcoin": float(serialized_stats.data["btc"]) * cg_data["bitcoin"]["btc"],
+                "dash": float(serialized_stats.data["dash"]) * cg_data["dash"]["btc"],
+                "dogecoin": float(serialized_stats.data["doge"]) * cg_data["dogecoin"]["btc"],
+                "litecoin": float(serialized_stats.data["ltc"]) * cg_data["litecoin"]["btc"],
+                "qtum": float(serialized_stats.data["qtum"]) * cg_data["qtum"]["btc"]
+            }
+            
+            swap_res.insert(0, [date_of_twelve_day, {"usd": swap_usd, "btc": swap_btc}])
             swap_counter = 0
 
         swap_counter += 1

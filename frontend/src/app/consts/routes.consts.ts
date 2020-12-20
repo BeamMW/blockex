@@ -12,7 +12,7 @@ export enum routesConsts {
   TESTNET_TITLE = 'testnet',
   MASTERNET_TITLE = 'masternet',
   BEAMX_TITLE = 'beamx',
-  WALLET_MAINNET_DOWNLOAD = 'https://beam.mw/downloads/mainnet-windows',
-  WALLET_TESTNET_DONWLOAD = 'https://beam.mw/downloads/testnet-windows',
-  WALLET_BEAMX_DOWNLOAD = 'https://beam.mw/downloads/beamx-windows'
+  WALLET_MAINNET_DOWNLOAD = 'https://beam.mw/downloads/mainnet',
+  WALLET_TESTNET_DONWLOAD = 'https://beam.mw/downloads/testnet',
+  WALLET_BEAMX_DOWNLOAD = 'https://beam.mw/downloads/beamx'
 }
