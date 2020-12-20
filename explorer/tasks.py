@@ -1,6 +1,7 @@
 from celery import shared_task
 from celery.schedules import crontab
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count
 from django.db import IntegrityError
 from django.db.models import Sum, Avg
 from channels.layers import get_channel_layer
