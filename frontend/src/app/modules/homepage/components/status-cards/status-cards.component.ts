@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, ViewEncapsulation, OnInit, AfterContentInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, ViewEncapsulation, EventEmitter, Output, OnInit, AfterContentInit } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { WebsocketService } from '../../../../modules/websocket';
 import { WS } from '../../../../websocket.events';
 import { DataService } from '../../../../services/data/data.service';
+import { currencies } from '../../../../consts'
 
 export interface IStatus {
   height: number;
@@ -16,6 +17,24 @@ export interface IStatus {
   next_treasury_emission_coin_amount: string;
   total_emission: string;
   swap_totals: {
+    beams_offered: number,
+    bitcoin_offered: number,
+    dash_offered: number,
+    dogecoin_offered: number,
+    litecoin_offered: number,
+    qtum_offered: number,
+    total_swaps_count: number
+  };
+  swap_totals_usd: {
+    beams_offered: number,
+    bitcoin_offered: number,
+    dash_offered: number,
+    dogecoin_offered: number,
+    litecoin_offered: number,
+    qtum_offered: number,
+    total_swaps_count: number
+  };
+  swap_totals_btc: {
     beams_offered: number,
     bitcoin_offered: number,
     dash_offered: number,
@@ -37,6 +56,8 @@ export interface MostOfferingItem {
   styleUrls: ['./status-cards.component.scss']
 })
 export class StatusCardsComponent implements OnInit, OnDestroy, AfterContentInit {
+  @Output() changeStatsCurrency = new EventEmitter<string>();
+
   public statusData$: Observable<IStatus>;
   public mostOffering: MostOfferingItem[];
   private lastHeight: number;
@@ -45,11 +66,12 @@ export class StatusCardsComponent implements OnInit, OnDestroy, AfterContentInit
   public isVolumesSelectVisible = false;
   public offers: MostOfferingItem[];
   public switcherValues = {
-    BTC: 'btc',
-    USD: 'usd'
+    BTC: currencies.BTC,
+    USD: currencies.USD
   }
   public isSwitcherVisible = false;
   public switcherSelectedValue: string = this.switcherValues.USD;
+  private lastStatusData: IStatus;
 
   constructor(
     private wsService: WebsocketService,
@@ -64,20 +86,29 @@ export class StatusCardsComponent implements OnInit, OnDestroy, AfterContentInit
     this.statusData$ = this.wsService.on<IStatus>(WS.INIT.INIT_STATUS, WS.UPDATE.UPDATE_STATUS);
   }
 
+  loadOffersStats(data) {
+    this.offers = [];
+    this.offers.push({title: 'BTC', value: data.bitcoin});
+    this.offers.push({title: 'DASH', value: data.dash});
+    this.offers.push({title: 'DOGE', value: data.dogecoin});
+    this.offers.push({title: 'LTC', value: data.litecoin});
+    this.offers.push({title: 'QTUM', value: data.qtum});
+
+    this.offers.sort((a, b) => {
+      return b.value - a.value;
+    });
+    this.mostOffering = this.offers.slice(0, 3);
+  }
+
   ngOnInit(): void {
     this.subStatus = this.statusData$.subscribe((data) => {
-      this.offers = [];
-      this.offers.push({title: 'BTC', value: data.swap_totals.bitcoin_offered});
-      this.offers.push({title: 'DASH', value: data.swap_totals.dash_offered});
-      this.offers.push({title: 'DOGE', value: data.swap_totals.dogecoin_offered});
-      this.offers.push({title: 'LTC', value: data.swap_totals.litecoin_offered});
-      this.offers.push({title: 'QTUM', value: data.swap_totals.qtum_offered});
-
-      this.offers.sort((a, b) => {
-        return b.value - a.value;
-      });
-      this.mostOffering = this.offers.slice(0, 3);
-
+      this.lastStatusData = data;
+      if (this.switcherSelectedValue === this.switcherValues.USD) {
+        this.loadOffersStats(data.swap_totals_usd);
+      } else if (this.switcherSelectedValue === this.switcherValues.BTC) {
+        this.loadOffersStats(data.swap_totals_btc);
+      }
+      
       if (this.lastHeight === undefined || data.height > this.lastHeight) {
         this.dataService.height.next(data.height);
         this.lastHeight = data.height;
@@ -103,8 +134,11 @@ export class StatusCardsComponent implements OnInit, OnDestroy, AfterContentInit
   switcherClicked = (value: string) => {
     this.switcherSelectedValue = value;
     if (value === this.switcherValues.USD) {
-      
+      this.changeStatsCurrency.emit(currencies.USD);
+      this.loadOffersStats(this.lastStatusData.swap_totals_usd);
     } else if (value === this.switcherValues.BTC) {
+      this.changeStatsCurrency.emit(currencies.BTC);
+      this.loadOffersStats(this.lastStatusData.swap_totals_btc);
     }
   }
 }

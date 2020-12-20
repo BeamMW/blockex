@@ -77,8 +77,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
     this.dataService.loadOffers(this.offersPage).subscribe((data) => {
       this.offersData = new MatTableDataSource(data['offers']);
-      this.offersCount = 100;
-      //this.offersCount = data['count'];
+      this.offersCount = data['count'];
     });
 
     return event;

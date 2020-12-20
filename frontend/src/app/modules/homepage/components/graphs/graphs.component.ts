@@ -1,7 +1,8 @@
-import { Component, OnInit, AfterViewInit, ViewEncapsulation, HostListener, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewEncapsulation, SimpleChanges, Input, HostListener, OnDestroy } from '@angular/core';
 import { WebsocketService } from '../../../../modules/websocket';
 import { WS } from '../../../../websocket.events';
 import { Observable } from 'rxjs';
+import { currencies } from '../../../../consts';
 
 import { Chart } from 'angular-highcharts';
 
@@ -26,6 +27,8 @@ const DAY_TICK = 24 * 60 * 60 * 1000;
   encapsulation: ViewEncapsulation.None
 })
 export class GraphsComponent implements OnInit, OnDestroy {
+  @Input() activeCurrency: string;
+
   private subscriber: any;
   public graphsData$: Observable<IGraphs>;
   public graphsLoaded = false;
@@ -314,7 +317,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
       },
       yAxis: [{
         title: {
-          text: 'Amount',
+          text: 'Amount, USD',
           margin: 24
         }
       }],
@@ -351,7 +354,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
           symbol: 'circle',
         },
         name: 'BTC',
-        data: graphs.swaps_btc
+        data: graphs.swaps_btc_usd
       }, {
         type: 'line',
         marker: {
@@ -360,7 +363,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
           symbol: 'circle',
         },
         name: 'DASH',
-        data: graphs.swaps_dash
+        data: graphs.swaps_dash_usd
       }, {
         type: 'line',
         marker: {
@@ -369,7 +372,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
           radius: 2,
         },
         name: 'DOGE',
-        data: graphs.swaps_doge
+        data: graphs.swaps_doge_usd
       }, {
         type: 'line',
         marker: {
@@ -378,7 +381,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
           radius: 2,
         },
         name: 'LTC',
-        data: graphs.swaps_ltc
+        data: graphs.swaps_ltc_usd
       }, {
         type: 'line',
         marker: {
@@ -387,7 +390,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
           radius: 2,
         },
         name: 'QTUM',
-        data: graphs.swaps_qtum
+        data: graphs.swaps_qtum_usd
       }],
     });
 
@@ -468,11 +471,16 @@ export class GraphsComponent implements OnInit, OnDestroy {
       fixed: [],
       averageBlocks: [],
       lelantus: [],
-      swaps_btc: [],
-      swaps_dash: [],
-      swaps_doge: [],
-      swaps_ltc: [],
-      swaps_qtum: []
+      swaps_btc_usd: [],
+      swaps_dash_usd: [],
+      swaps_doge_usd: [],
+      swaps_ltc_usd: [],
+      swaps_qtum_usd: [],
+      swaps_btc_btc: [],
+      swaps_dash_btc: [],
+      swaps_doge_btc: [],
+      swaps_ltc_btc: [],
+      swaps_qtum_btc: []
     };
 
     data.items.forEach(element => {
@@ -488,11 +496,17 @@ export class GraphsComponent implements OnInit, OnDestroy {
 
     data.swap_stats.forEach(element => {
       const dateValue = + new Date(element[0]);
-      graphsData.swaps_btc.push([dateValue, parseFloat(element[1].btc)]);
-      graphsData.swaps_dash.push([dateValue, parseFloat(element[1].dash)]);
-      graphsData.swaps_doge.push([dateValue, parseFloat(element[1].doge)]);
-      graphsData.swaps_ltc.push([dateValue, parseFloat(element[1].ltc)]);
-      graphsData.swaps_qtum.push([dateValue, parseFloat(element[1].qtum)]);
+      graphsData.swaps_btc_usd.push([dateValue, parseFloat(element[1].usd.bitcoin)]);
+      graphsData.swaps_dash_usd.push([dateValue, parseFloat(element[1].usd.dash)]);
+      graphsData.swaps_doge_usd.push([dateValue, parseFloat(element[1].usd.dogecoin)]);
+      graphsData.swaps_ltc_usd.push([dateValue, parseFloat(element[1].usd.litecoin)]);
+      graphsData.swaps_qtum_usd.push([dateValue, parseFloat(element[1].usd.qtum)]);
+
+      graphsData.swaps_btc_btc.push([dateValue, parseFloat(element[1].btc.bitcoin)]);
+      graphsData.swaps_dash_btc.push([dateValue, parseFloat(element[1].btc.dash)]);
+      graphsData.swaps_doge_btc.push([dateValue, parseFloat(element[1].btc.dogecoin)]);
+      graphsData.swaps_ltc_btc.push([dateValue, parseFloat(element[1].btc.litecoin)]);
+      graphsData.swaps_qtum_btc.push([dateValue, parseFloat(element[1].btc.qtum)]);
     });
 
     this.lastConstructedGraphs = JSON.parse(JSON.stringify(graphsData));
@@ -513,6 +527,32 @@ export class GraphsComponent implements OnInit, OnDestroy {
           blockChart.series[2].setData(graphsConstructed.fixed);
           blockChart.series[3].setData(graphsConstructed.averageBlocks);
         });
+
+        this.graphs.fee.ref$.subscribe((feeChart) => {
+          feeChart.series[0].setData(graphsConstructed.fee);
+        });
+
+        this.graphs.lelantus.ref$.subscribe((lelChart) => {
+          lelChart.series[0].setData(graphsConstructed.lelantus);
+        });
+
+        if (this.activeCurrency === currencies.BTC) {
+          this.graphs.swaps.ref$.subscribe((swapsChart) => {
+            swapsChart.series[0].setData(graphsConstructed.swaps_btc_btc);
+            swapsChart.series[1].setData(graphsConstructed.swaps_dash_btc);
+            swapsChart.series[2].setData(graphsConstructed.swaps_doge_btc);
+            swapsChart.series[3].setData(graphsConstructed.swaps_ltc_btc);
+            swapsChart.series[4].setData(graphsConstructed.swaps_qtum_btc);
+          });
+        } else if (this.activeCurrency === currencies.USD) {
+          this.graphs.swaps.ref$.subscribe((swapsChart) => {
+            swapsChart.series[0].setData(graphsConstructed.swaps_btc_usd);
+            swapsChart.series[1].setData(graphsConstructed.swaps_dash_usd);
+            swapsChart.series[2].setData(graphsConstructed.swaps_doge_usd);
+            swapsChart.series[3].setData(graphsConstructed.swaps_ltc_usd);
+            swapsChart.series[4].setData(graphsConstructed.swaps_qtum_usd);
+          });
+        }
       } else {
         this.graphsInit(graphsConstructed);
         this.graphsLoaded = true;
@@ -523,6 +563,41 @@ export class GraphsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.graphsLoaded = false;
     this.subscriber.unsubscribe();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const value = changes.activeCurrency.currentValue;
+    if (value !== undefined) {
+      if (value === currencies.BTC) {
+        this.graphs.swaps.ref$.subscribe((swapsChart) => {
+          swapsChart.series[0].setData(this.lastConstructedGraphs.swaps_btc_btc);
+          swapsChart.series[1].setData(this.lastConstructedGraphs.swaps_dash_btc);
+          swapsChart.series[2].setData(this.lastConstructedGraphs.swaps_doge_btc);
+          swapsChart.series[3].setData(this.lastConstructedGraphs.swaps_ltc_btc);
+          swapsChart.series[4].setData(this.lastConstructedGraphs.swaps_qtum_btc);
+          swapsChart.yAxis[0].update({
+            title:{
+                text: "Amount, BTC"
+            }
+          });
+          swapsChart.redraw();
+        });
+      } else if (value === currencies.USD) {
+        this.graphs.swaps.ref$.subscribe((swapsChart) => {
+          swapsChart.series[0].setData(this.lastConstructedGraphs.swaps_btc_usd);
+          swapsChart.series[1].setData(this.lastConstructedGraphs.swaps_dash_usd);
+          swapsChart.series[2].setData(this.lastConstructedGraphs.swaps_doge_usd);
+          swapsChart.series[3].setData(this.lastConstructedGraphs.swaps_ltc_usd);
+          swapsChart.series[4].setData(this.lastConstructedGraphs.swaps_qtum_usd);
+          swapsChart.yAxis[0].update({
+            title:{
+                text: "Amount, USD"
+            }
+          });
+          swapsChart.redraw();
+        });
+      }
+    }
   }
 
   showTypesOptions(event): void {

@@ -108,7 +108,7 @@
                         <div class="card-offering__item" 
                                 *ngFor="let item of (isVolumesSelectVisible ? offers : mostOffering)">
                             <span class="card-offering__item__title">{{item.title}}:</span>
-                            <span class="card-offering__item__value">{{item.value}}</span>
+                            <span class="card-offering__item__value">{{item.value | number:'.'}}</span>
                         </div>
                     </div>
                 </div>

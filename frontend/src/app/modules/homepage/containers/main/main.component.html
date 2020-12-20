@@ -1,7 +1,7 @@
 <div class="container">
     <div class="container__overview">
-        <app-status-cards></app-status-cards>
-        <app-graphs></app-graphs>
+        <app-status-cards (changeStatsCurrency)="onChangeStatsCurrency($event)"></app-status-cards>
+        <app-graphs [activeCurrency]="activeCurrency"></app-graphs>
     </div>
     <div class="container__table-area">
         <app-table></app-table>
