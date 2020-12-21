@@ -27,10 +27,23 @@
   </div>
   <div class="graphs__right">
     <div class="graphs__right__swaps">
-      <span class="graphs__right__swaps__title">
-            <span>OFFERED VOLUME</span>
-      </span>
-      <div class="graphs__right__swaps__elem" [chart]="graphs.swaps"></div>
+      <div class="chart-type-selector">
+        <span class="type-selected" (click)="showTypesSecondOptions($event)">
+          <span>{{selectedTrChartType.name}}</span>
+          <img src="../../../../../assets/modules/homepage/components/graphs/arrow-down-small.svg" class="arrow-down-small">
+        </span>
+        <div class="type-options" *ngIf="isChartTypesSecondVisible">
+          <ul>
+            <li class="type-options-item" *ngFor="let p of trCharts"
+                [class.selected]="p.isSelected"
+                (click)="trChartTypeChange(p)">
+              <span> {{p.name}} </span>
+            </li>
+          </ul>
+        </div>
+    </div>
+      <div class="graphs__right__swaps__elem" [chart]="graphs.swaps" *ngIf="selectedTrChartType.num == trCharts[0].num"></div>
+      <div class="graphs__right__trs__elem" [chart]="graphs.transactions" *ngIf="selectedTrChartType.num == trCharts[1].num"></div>
     </div>
     <div class="graphs__right__lelantus">
         <span class="graphs__right__lelantus__title">

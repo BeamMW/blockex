@@ -36,7 +36,8 @@ export class GraphsComponent implements OnInit, OnDestroy {
     blocks: null,
     fee: null,
     swaps: null,
-    lelantus: null 
+    lelantus: null,
+    transactions: null 
   };
   public blockCharts = [
     {
@@ -51,12 +52,27 @@ export class GraphsComponent implements OnInit, OnDestroy {
       isSelected: false
     }
   ];
+
+  public trCharts = [
+    {
+      num: 1,
+      name: 'OFFERED VOLUME',
+      isSelected: true
+    }, {
+      num: 0,
+      name: 'TRANSACTIONS AMOUNT',
+      isSelected: false
+    }
+  ];
   public isChartTypesVisible = false;
+  public isChartTypesSecondVisible = false;
   public selectedBlocksChartType = this.blockCharts[0];
+  public selectedTrChartType = this.trCharts[0];
   private lastConstructedGraphs: any;
 
   @HostListener('document:click', ['$event']) clickout(event) {
     this.isChartTypesVisible = false;
+    this.isChartTypesSecondVisible = false;
   }
 
   constructor(private wsService: WebsocketService) {
@@ -460,6 +476,80 @@ export class GraphsComponent implements OnInit, OnDestroy {
         data: graphs.lelantus
       }],
     });
+
+    this.graphs.transactions = new Chart({
+      title: {
+        text: '',
+      },
+      chart: {
+        shadow: false,
+        width: 610,
+        height: 430,
+        ignoreHiddenSeries: false,
+        type: 'line',
+        styledMode: true
+      },
+      credits: {
+          enabled: false
+      },
+      exporting: {
+        buttons: {
+          contextButton: {
+              enabled: false
+          }
+        }
+      },
+      yAxis: [{
+        title: {
+          text: 'Transactions amount',
+          margin: 24
+        }
+      }],
+      xAxis: {
+        minorTickLength: 0,
+        tickLength: 0,
+        type: 'datetime',
+        minTickInterval: DAY_TICK,
+        labels: {
+          formatter: this.xAxisFormatter,
+        }
+      },
+      legend: {
+        width: 450,
+        itemWidth: 90,
+        layout: 'horizontal',
+        align: 'center',
+        verticalAlign: 'bottom',
+        x: 0,
+        y: 10
+      },
+      tooltip: {
+        followPointer: false,
+        useHTML: true,
+        borderRadius: 20,
+        shadow: false,
+        formatter: this.tooltipFormatter
+      },
+      series: [{
+        type: 'line',
+        marker: {
+          enabledThreshold: 0,
+          radius: 2,
+          symbol: 'circle',
+        },
+        name: 'Regular',
+        data: graphs.transactions
+      }, {
+        type: 'line',
+        marker: {
+          enabledThreshold: 0,
+          radius: 2,
+          symbol: 'circle',
+        },
+        name: 'Shielded',
+        data: graphs.lelantus_trs
+      }],
+    });
   }
 
   constructGraphsData(data) {
@@ -480,7 +570,9 @@ export class GraphsComponent implements OnInit, OnDestroy {
       swaps_dash_btc: [],
       swaps_doge_btc: [],
       swaps_ltc_btc: [],
-      swaps_qtum_btc: []
+      swaps_qtum_btc: [],
+      transactions: [],
+      lelantus_trs: []
     };
 
     data.items.forEach(element => {
@@ -491,8 +583,10 @@ export class GraphsComponent implements OnInit, OnDestroy {
       graphsData.fixed.push([dateValue, 60]);
       graphsData.hashrate.push([dateValue, element.hashrate]);
       graphsData.averageBlocks.push([dateValue, data.avg_blocks]);
+      graphsData.transactions.push([dateValue, element.transactions.kernels__count])
     });
     graphsData.lelantus = data.lelantus;
+    graphsData.lelantus_trs = data.lelantus_trs;
 
     data.swap_stats.forEach(element => {
       const dateValue = + new Date(element[0]);
@@ -534,6 +628,11 @@ export class GraphsComponent implements OnInit, OnDestroy {
 
         this.graphs.lelantus.ref$.subscribe((lelChart) => {
           lelChart.series[0].setData(graphsConstructed.lelantus);
+        });
+
+        this.graphs.transactions.ref$.subscribe((trChart) => {
+          trChart.series[0].setData(graphsConstructed.transactions);
+          trChart.series[1].setData(graphsConstructed.lelantus_trs);
         });
 
         if (this.activeCurrency === currencies.BTC) {
@@ -600,6 +699,19 @@ export class GraphsComponent implements OnInit, OnDestroy {
     }
   }
 
+  showTypesSecondOptions(event) {
+    event.stopPropagation();
+    this.isChartTypesSecondVisible = !this.isChartTypesSecondVisible;
+  }
+
+  trChartTypeChange(selectedType) {
+    if (!selectedType.isSelected) {
+      selectedType.isSelected = true;
+      this.selectedTrChartType.isSelected = false;
+      this.selectedTrChartType = selectedType;
+    }
+  }
+
   showTypesOptions(event): void {
     event.stopPropagation();
     this.isChartTypesVisible = !this.isChartTypesVisible;
@@ -645,5 +757,5 @@ export class GraphsComponent implements OnInit, OnDestroy {
         });
       }
     }
-    }
+  }
 }

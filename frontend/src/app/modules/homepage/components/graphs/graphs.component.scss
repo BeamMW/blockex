@@ -52,7 +52,8 @@
         display: flex;
         flex-direction: column;
 
-        &__swaps {
+        &__swaps,
+        &__trs {
             display: flex;
             flex-direction: column;
     
@@ -154,34 +155,44 @@
     stroke: #00e2c2;
 }
 
-.graphs__right__lelantus .highcharts-color-0 {
+.graphs__right__lelantus__elem .highcharts-color-0 {
     @include point-fill();
     stroke: #7881fb;
 }
 
-.graphs__right__swaps .highcharts-color-0 {
+.graphs__right__swaps__elem .highcharts-color-0 {
     @include point-fill();
     stroke: #fcaf38;
 }
 
-.graphs__right__swaps .highcharts-color-1 {
+.graphs__right__swaps__elem .highcharts-color-1 {
     @include point-fill();
     stroke: #008de4;
 }
 
-.graphs__right__swaps .highcharts-color-2 {
+.graphs__right__swaps__elem .highcharts-color-2 {
     @include point-fill();
     stroke: #c2a633;
 }
 
-.graphs__right__swaps .highcharts-color-3 {
+.graphs__right__swaps__elem .highcharts-color-3 {
     @include point-fill();
     stroke: #bebebe;
 }
 
-.graphs__right__swaps .highcharts-color-4 {
+.graphs__right__swaps__elem .highcharts-color-4 {
     @include point-fill();
     stroke: #2e9ad0;
+}
+
+.graphs__right__trs__elem .highcharts-color-0 {
+    @include point-fill();
+    stroke: #39fdf2;
+}
+
+.graphs__right__trs__elem .highcharts-color-1 {
+    @include point-fill();
+    stroke: #fb0a6a;
 }
 
 .highcharts-axis-title {
@@ -270,52 +281,68 @@
     color: #00e2c2;
 }
 
-.highcharts-tooltip-3.highcharts-color-0 .tooltip-line-circle{
+.graphs__right__lelantus__elem .highcharts-color-0 .tooltip-line-circle{
     background-color: #7881fb;
 }
 
-.highcharts-tooltip-3.highcharts-color-0 .tooltip-line-color{
+.graphs__right__lelantus__elem .highcharts-color-0 .tooltip-line-color{
     color: #7881fb;
 }
 
-.highcharts-tooltip-2.highcharts-color-0 .tooltip-line-circle{
+.graphs__right__swaps__elem .highcharts-color-0 .tooltip-line-circle{
     background-color: #fcaf38;
 }
 
-.highcharts-tooltip-2.highcharts-color-0 .tooltip-line-color{
+.graphs__right__swaps__elem .highcharts-color-0 .tooltip-line-color{
     color: #fcaf38;
 }
 
-.highcharts-tooltip-2.highcharts-color-1 .tooltip-line-circle{
+.graphs__right__swaps__elem .highcharts-color-1 .tooltip-line-circle{
     background-color: #008de4;
 }
 
-.highcharts-tooltip-2.highcharts-color-1 .tooltip-line-color{
+.graphs__right__swaps__elem .highcharts-color-1 .tooltip-line-color{
     color: #008de4;
 }
 
-.highcharts-tooltip-2.highcharts-color-2 .tooltip-line-circle{
+.graphs__right__swaps__elem .highcharts-color-2 .tooltip-line-circle{
     background-color: #c2a633;
 }
 
-.highcharts-tooltip-2.highcharts-color-2 .tooltip-line-color{
+.graphs__right__swaps__elem .highcharts-color-2 .tooltip-line-color{
     color: #c2a633;
 }
 
-.highcharts-tooltip-2.highcharts-color-3 .tooltip-line-circle{
+.graphs__right__swaps__elem .highcharts-color-3 .tooltip-line-circle{
     background-color: #bebebe;
 }
 
-.highcharts-tooltip-2.highcharts-color-3 .tooltip-line-color{
+.graphs__right__swaps__elem .highcharts-color-3 .tooltip-line-color{
     color: #bebebe;
 }
 
-.highcharts-tooltip-2.highcharts-color-4 .tooltip-line-circle{
+.graphs__right__swaps__elem .highcharts-color-4 .tooltip-line-circle{
     background-color: #2e9ad0;
 }
 
-.highcharts-tooltip-2.highcharts-color-4 .tooltip-line-color{
+.graphs__right__swaps__elem .highcharts-color-4 .tooltip-line-color{
     color: #2e9ad0;
+}
+
+.graphs__right__trs__elem .highcharts-color-0 .tooltip-line-circle{
+    background-color: #39fdf2;
+}
+
+.graphs__right__trs__elem .highcharts-color-0 .tooltip-line-color{
+    color: #39fdf2;
+}
+
+.graphs__right__trs__elem .highcharts-color-1 .tooltip-line-circle{
+    background-color: #fb0a6a;
+}
+
+.graphs__right__trs__elem .highcharts-color-1 .tooltip-line-color{
+    color: #fb0a6a;
 }
 
 
@@ -410,6 +437,8 @@
 
 .chart-type-selector .type-options .type-options-item {
     margin-top: 14px;
+    text-align: start;
+    padding-left: 14px;
     height: 15px;
     cursor: pointer;
 }

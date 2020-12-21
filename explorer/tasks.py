@@ -421,7 +421,7 @@ def update_charts():
                 lelantus_avg = 72   
             date_value = round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000 
             lelantus_res.insert(0, [date_value, lelantus_avg])
-            lelantus_tr_res.insert(0, [date_value, data.per_day])
+            lelantus_tr_res.insert(0, [date_value, float(data.per_day)])
             lelantus_sum = 0
             lel_counter = 0
 
