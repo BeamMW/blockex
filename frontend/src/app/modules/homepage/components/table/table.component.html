@@ -164,6 +164,10 @@
                 <mat-header-row *matHeaderRowDef="displayedOffersColumns"></mat-header-row>
                 <mat-row class="offers-table-row" *matRowDef="let row; columns: displayedOffersColumns;"></mat-row>
             </mat-table>
+
+            <div *ngIf="!offersLoadInProgress && offersCount === 0" class="empty-offers-message">
+                There are no active offers.
+            </div>
         </ng-container>
     </div>
 </div>

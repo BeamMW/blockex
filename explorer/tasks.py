@@ -432,7 +432,7 @@ def update_charts():
 
     #get lelantus data
     date_now = timezone.now()
-    date_from = date_now - timedelta(days=int(4))
+    date_from = date_now - timedelta(days=int(4), hours=int(4))
 
     lelantus_data = Max_privacy_withdraw.objects.filter(created_at__gte=date_from, created_at__lt=date_now)
 
@@ -578,5 +578,15 @@ def update_swap_offers_daily_clear():
     offers = Swaps_daily_stats.objects.all()
     if offers:
         offers.delete()
+
+    date_now = timezone.now()
+    dates_before = date_now - timedelta(days=int(5))
+    data_to_remove = Max_privacy_withdraw.filter(created_at__lt=dates_before)
+    if data_to_remove:
+        data_to_remove.delete()
+    
+    data_to_remove = Swap_stats.filter(created_at__lt=dates_before)
+    if data_to_remove:
+        data_to_remove.delete()
 
     return True

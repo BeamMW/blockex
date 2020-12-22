@@ -80,6 +80,18 @@
     color: #ffffff;
 }
 
+.card-content-empty {
+    margin-top: 10px;
+    opacity: 0.5;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+}
+
 .card-offering {
     margin-top: auto;
     display: flex;
@@ -101,7 +113,6 @@
         }
 
         &__value {
-            text-transform: uppercase;
             margin-left: 5px;
         }
     }

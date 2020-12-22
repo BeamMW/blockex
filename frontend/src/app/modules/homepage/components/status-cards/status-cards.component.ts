@@ -16,33 +16,22 @@ export interface IStatus {
   next_treasury_emission_block_height: string;
   next_treasury_emission_coin_amount: string;
   total_emission: string;
-  swap_totals: {
-    beams_offered: number,
-    bitcoin_offered: number,
-    dash_offered: number,
-    dogecoin_offered: number,
-    litecoin_offered: number,
-    qtum_offered: number,
-    total_swaps_count: number
+  swaps_stats_btc: {
+    bitcoin: number,
+    dash: number,
+    dogecoin: number,
+    litecoin: number,
+    qtum: number
   };
-  swap_totals_usd: {
-    beams_offered: number,
-    bitcoin_offered: number,
-    dash_offered: number,
-    dogecoin_offered: number,
-    litecoin_offered: number,
-    qtum_offered: number,
-    total_swaps_count: number
+  swaps_stats_usd: {
+    bitcoin: number,
+    dash: number,
+    dogecoin: number,
+    litecoin: number,
+    qtum: number
   };
-  swap_totals_btc: {
-    beams_offered: number,
-    bitcoin_offered: number,
-    dash_offered: number,
-    dogecoin_offered: number,
-    litecoin_offered: number,
-    qtum_offered: number,
-    total_swaps_count: number
-  };
+  swaps_stats_sum_btc: number,
+  swaps_stats_sum_usd: number;
 }
 
 export interface MostOfferingItem {
@@ -104,9 +93,9 @@ export class StatusCardsComponent implements OnInit, OnDestroy, AfterContentInit
     this.subStatus = this.statusData$.subscribe((data) => {
       this.lastStatusData = data;
       if (this.switcherSelectedValue === this.switcherValues.USD) {
-        this.loadOffersStats(data.swap_totals_usd);
+        this.loadOffersStats(data.swaps_stats_usd);
       } else if (this.switcherSelectedValue === this.switcherValues.BTC) {
-        this.loadOffersStats(data.swap_totals_btc);
+        this.loadOffersStats(data.swaps_stats_btc);
       }
       
       if (this.lastHeight === undefined || data.height > this.lastHeight) {
@@ -135,10 +124,10 @@ export class StatusCardsComponent implements OnInit, OnDestroy, AfterContentInit
     this.switcherSelectedValue = value;
     if (value === this.switcherValues.USD) {
       this.changeStatsCurrency.emit(currencies.USD);
-      this.loadOffersStats(this.lastStatusData.swap_totals_usd);
+      this.loadOffersStats(this.lastStatusData.swaps_stats_usd);
     } else if (value === this.switcherValues.BTC) {
       this.changeStatsCurrency.emit(currencies.BTC);
-      this.loadOffersStats(this.lastStatusData.swap_totals_btc);
+      this.loadOffersStats(this.lastStatusData.swaps_stats_btc);
     }
   }
 }

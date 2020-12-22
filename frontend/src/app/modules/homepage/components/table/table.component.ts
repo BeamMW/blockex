@@ -31,6 +31,7 @@ export class TableComponent implements OnInit, OnDestroy {
   public offersCount: number;
   public offersPage: number = 0;
   public offersData: any;
+  public offersLoadInProgress = false;
   private subscriber: any;
 
   constructor(
@@ -73,11 +74,13 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   loadOffers(event?){
+    this.offersLoadInProgress = true;
     this.offersPage = event ? event.pageIndex : 0;
 
     this.dataService.loadOffers(this.offersPage).subscribe((data) => {
       this.offersData = new MatTableDataSource(data['offers']);
       this.offersCount = data['count'];
+      this.offersLoadInProgress = false;
     });
 
     return event;

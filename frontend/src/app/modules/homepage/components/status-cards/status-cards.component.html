@@ -71,47 +71,63 @@
                 <div class="card__left-part">
                     <div class="card__left-part__upper">
                         <div class="card-header">TOTAL OFFERS AMOUNT (last 24 hours)</div>
-                        <div class="card-content">{{data.swap_totals.beams_offered | number:'.'}} BEAM</div>
+                        <ng-container *ngIf="data.swaps_stats_sum_usd !== 0 ">
+                            <div class="card-content">
+                                {{switcherSelectedValue === switcherValues.USD ?
+                                    data.swaps_stats_sum_usd : data.swaps_stats_sum_btc | number:'.'}} 
+                                    {{switcherSelectedValue | uppercase}}
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="data.swaps_stats_sum_usd === 0 ">
+                            <div class="card-content-empty">
+                                There are no active offers.
+                            </div>
+                        </ng-container>
                     </div>
                     <div class="card__left-part__lower"></div>
                 </div>
-                <div class="card__right-part" *ngIf="mostOffering.length > 0">
-                    <div class="card-header volumes-control-header">
-                        <div class="volumes-control" (click)="volumesClicked()">
-                            <span class="volumes-control__header unselectable">TOP VOLUMES</span>
-                            <span class="volumes-control__arrow">
-                                <span class="volumes-control__arrow__item">
-                                    <span class="volumes-control__arrow__item__left" 
-                                            [class.active]="isVolumesSelectVisible"></span>
-                                    <span class="volumes-control__arrow__item__right" 
-                                            [class.active]="isVolumesSelectVisible"></span>
+                <ng-container *ngIf="data.swaps_stats_sum_usd !== 0 ">
+                    <div class="card__right-part" *ngIf="mostOffering.length > 0">
+                        <div class="card-header volumes-control-header">
+                            <div class="volumes-control" (click)="volumesClicked()">
+                                <span class="volumes-control__header unselectable">TOP VOLUMES</span>
+                                <span class="volumes-control__arrow">
+                                    <span class="volumes-control__arrow__item">
+                                        <span class="volumes-control__arrow__item__left" 
+                                                [class.active]="isVolumesSelectVisible"></span>
+                                        <span class="volumes-control__arrow__item__right" 
+                                                [class.active]="isVolumesSelectVisible"></span>
+                                    </span>
                                 </span>
-                            </span>
+                            </div>
+                            <div class="switch" *ngIf="isSwitcherVisible">
+                                <div #usd class="switch__usd" 
+                                    [class.selected]="switcherSelectedValue === switcherValues.USD"
+                                    (click)="switcherClicked(switcherValues.USD)">USD</div>
+                                <div #btc class="switch__btc"
+                                    [class.selected]="switcherSelectedValue === switcherValues.BTC"
+                                    (click)="switcherClicked(switcherValues.BTC)">BTC</div>
+                                <div #selector class="selector"
+                                    [ngStyle]="{'left': switcherSelectedValue === switcherValues.USD ? 
+                                        -1 + 'px' : usd.clientWidth + 1 + 'px',
+                                        'width': switcherSelectedValue === switcherValues.USD ?
+                                        usd.clientWidth + 'px' : btc.clientWidth + 'px'}">
+                                    {{switcherSelectedValue}}
+                                </div>
+                            </div>
                         </div>
-                        <div class="switch" *ngIf="isSwitcherVisible">
-                            <div #usd class="switch__usd" 
-                                [class.selected]="switcherSelectedValue === switcherValues.USD"
-                                (click)="switcherClicked(switcherValues.USD)">USD</div>
-                            <div #btc class="switch__btc"
-                                [class.selected]="switcherSelectedValue === switcherValues.BTC"
-                                (click)="switcherClicked(switcherValues.BTC)">BTC</div>
-                            <div #selector class="selector"
-                                [ngStyle]="{'left': switcherSelectedValue === switcherValues.USD ? 
-                                    -1 + 'px' : usd.clientWidth + 1 + 'px',
-                                    'width': switcherSelectedValue === switcherValues.USD ?
-                                    usd.clientWidth + 'px' : btc.clientWidth + 'px'}">
-                                {{switcherSelectedValue}}
+                        <div class="card-offering">
+                            <div class="card-offering__item" 
+                                    *ngFor="let item of (isVolumesSelectVisible ? offers : mostOffering)">
+                                <span class="card-offering__item__title">{{item.title}}:</span>
+                                <span class="card-offering__item__value">
+                                    {{item.value | number:'.'}} 
+                                    {{switcherSelectedValue | uppercase}}
+                                </span>
                             </div>
                         </div>
                     </div>
-                    <div class="card-offering">
-                        <div class="card-offering__item" 
-                                *ngFor="let item of (isVolumesSelectVisible ? offers : mostOffering)">
-                            <span class="card-offering__item__title">{{item.title}}:</span>
-                            <span class="card-offering__item__value">{{item.value | number:'.'}} {{switcherSelectedValue}}</span>
-                        </div>
-                    </div>
-                </div>
+                </ng-container>
             </div>
         </div>
     </div>
