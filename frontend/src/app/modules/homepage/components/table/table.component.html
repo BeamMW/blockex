@@ -72,24 +72,24 @@
                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="inputs">
-                    <mat-header-cell *matHeaderCellDef> #INPUTS: </mat-header-cell>
-                    <mat-cell *matCellDef="let element">
+                    <mat-header-cell class="input-cell-header" *matHeaderCellDef> #INPUTS: </mat-header-cell>
+                    <mat-cell class="input-cell" *matCellDef="let element">
                         <span class="desktop-label">
                             {{element.inputs}}
                         </span>
                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="outputs">
-                    <mat-header-cell *matHeaderCellDef> #OUTPUTS: </mat-header-cell>
-                    <mat-cell *matCellDef="let element">
+                    <mat-header-cell class="output-cell-header" *matHeaderCellDef> #OUTPUTS: </mat-header-cell>
+                    <mat-cell class="output-cell-header" *matCellDef="let element">
                         <span class="desktop-label">
                             {{element.outputs}}
                         </span>
                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="fees">
-                    <mat-header-cell *matHeaderCellDef> FEES: </mat-header-cell>
-                    <mat-cell *matCellDef="let element">
+                    <mat-header-cell class="fee-cell-header" *matHeaderCellDef> FEES: </mat-header-cell>
+                    <mat-cell class="fee-cell" *matCellDef="let element">
                         <span class="desktop-label">
                             {{element.fee}}
                         </span>

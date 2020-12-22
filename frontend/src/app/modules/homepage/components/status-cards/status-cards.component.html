@@ -70,7 +70,7 @@
             <div class="card" [class.active]="isVolumesSelectVisible">
                 <div class="card__left-part">
                     <div class="card__left-part__upper">
-                        <div class="card-header">TOTAL OFFERS AMOUNT</div>
+                        <div class="card-header">TOTAL OFFERS AMOUNT (last 24 hours)</div>
                         <div class="card-content">{{data.swap_totals.beams_offered | number:'.'}} BEAM</div>
                     </div>
                     <div class="card__left-part__lower"></div>
@@ -108,7 +108,7 @@
                         <div class="card-offering__item" 
                                 *ngFor="let item of (isVolumesSelectVisible ? offers : mostOffering)">
                             <span class="card-offering__item__title">{{item.title}}:</span>
-                            <span class="card-offering__item__value">{{item.value | number:'.'}}</span>
+                            <span class="card-offering__item__value">{{item.value | number:'.'}} {{switcherSelectedValue}}</span>
                         </div>
                     </div>
                 </div>

@@ -33,7 +33,7 @@
           <img src="../../../../../assets/modules/homepage/components/graphs/arrow-down-small.svg" class="arrow-down-small">
         </span>
         <div class="type-options" *ngIf="isChartTypesSecondVisible">
-          <ul>
+          <ul class="type-options-list">
             <li class="type-options-item" *ngFor="let p of trCharts"
                 [class.selected]="p.isSelected"
                 (click)="trChartTypeChange(p)">

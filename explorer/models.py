@@ -121,3 +121,14 @@ class Swap_stats(models.Model):
         self.doge = _json['doge']
         self.ltc = _json['ltc']
         self.qtum = _json['qtum']
+
+
+class Swaps_daily_stats(models.Model):
+    swap_amount = models.CharField(null=False, blank=False, max_length=8)
+    swap_currency = models.CharField(null=False, blank=False, max_length=8)
+    tx_id = models.CharField(null=False, blank=False, unique=True, max_length=40)
+    
+    def from_json(self, _json):
+        self.swap_amount = _json['swap_amount']
+        self.swap_currency = _json['swap_currency']
+        self.tx_id = _json['tx_id']

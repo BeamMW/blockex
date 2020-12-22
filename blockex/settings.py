@@ -159,6 +159,16 @@ CELERYBEAT_SCHEDULE  = {
         'task': 'update_lelantus',
         'schedule': crontab(minute='*/10'),
         'args': None
+    },
+    'update_swap_offers_daily_cumulative': {
+        'task': 'swap_offers_daily_cumulative',
+        'schedule': crontab(minute='*/1'),
+        'args': None
+    },
+    'update_swap_offers_daily_clear': {
+        'task': 'swap_offers_daily_clear',
+        'schedule': crontab(minute='0', hour='0'),
+        'args': None
     }
 }
 

@@ -93,28 +93,54 @@ def update_status():
     data['next_treasury_emission_coin_amount'] = _redis.get('next_treasury_coin_amount')
     data['total_emission'] = _redis.get('total_coins_emission')
 
-    swap_request = requests.get(BEAM_NODE_API + '/swap_totals')
-    swap_totals = swap_request.json()
-
     cg = CoinGeckoAPI()
     cg_data = cg.get_price(ids=['bitcoin', 'dash', 'dogecoin', 'litecoin', 'qtum'], vs_currencies=['usd', 'btc'])
 
-    data['swap_totals'] = swap_totals
-    data['swap_totals_usd'] = {
-        "bitcoin": float(swap_totals["bitcoin_offered"]) * cg_data["bitcoin"]["usd"],
-        "dash": float(swap_totals["dash_offered"]) * cg_data["dash"]["usd"],
-        "dogecoin": float(swap_totals["dogecoin_offered"]) * cg_data["dogecoin"]["usd"],
-        "litecoin": float(swap_totals["litecoin_offered"]) * cg_data["litecoin"]["usd"],
-        "qtum": float(swap_totals["qtum_offered"]) * cg_data["qtum"]["usd"]
+    daily_swaps = Swaps_daily_stats.objects.all()
+
+    swaps_stats = {
+        "btc": 0,
+        "dash": 0,
+        "doge": 0,
+        "ltc": 0,
+        "qtum": 0
     }
 
-    data['swap_totals_btc'] = {
-        "bitcoin": float(swap_totals["bitcoin_offered"]) * cg_data["bitcoin"]["btc"],
-        "dash": float(swap_totals["dash_offered"]) * cg_data["dash"]["btc"],
-        "dogecoin": float(swap_totals["dogecoin_offered"]) * cg_data["dogecoin"]["btc"],
-        "litecoin": float(swap_totals["litecoin_offered"]) * cg_data["litecoin"]["btc"],
-        "qtum": float(swap_totals["qtum_offered"]) * cg_data["qtum"]["btc"]
+    if daily_swaps:
+        for swap_info in daily_swaps:
+            if swap_info.swap_currency == "BTC":
+                swaps_stats["btc"] += float(swap_info.swap_amount)
+            elif swap_info.swap_currency == "DASH":
+                swaps_stats["dash"] += float(swap_info.swap_amount)
+            elif swap_info.swap_currency == "DOGE":
+                swaps_stats["doge"] += float(swap_info.swap_amount)
+            elif swap_info.swap_currency == "LTC":
+                swaps_stats["ltc"] += float(swap_info.swap_amount)
+            elif swap_info.swap_currency == "QTUM":
+                swaps_stats["qtum"] += float(swap_info.swap_amount)
+
+    swaps_stats_usd = {
+        "bitcoin": swaps_stats["btc"] * cg_data["bitcoin"]["usd"],
+        "dash": swaps_stats["dash"] * cg_data["dash"]["usd"],
+        "dogecoin": swaps_stats["doge"] * cg_data["dogecoin"]["usd"],
+        "litecoin": swaps_stats["ltc"] * cg_data["litecoin"]["usd"],
+        "qtum": swaps_stats["qtum"] * cg_data["qtum"]["usd"]
     }
+    swaps_stats_sum_usd = sum(swaps_stats_usd.values())
+
+    swaps_stats_btc = {
+        "bitcoin": swaps_stats["btc"] * cg_data["bitcoin"]["btc"],
+        "dash": swaps_stats["dash"] * cg_data["dash"]["btc"],
+        "dogecoin": swaps_stats["doge"] * cg_data["dogecoin"]["btc"],
+        "litecoin": swaps_stats["ltc"] * cg_data["litecoin"]["btc"],
+        "qtum": swaps_stats["qtum"] * cg_data["qtum"]["btc"]
+    }
+    swaps_stats_sum_btc = sum(swaps_stats_btc.values())
+
+    data['swaps_stats_btc'] = swaps_stats_btc
+    data['swaps_stats_sum_btc'] = swaps_stats_sum_btc
+    data['swaps_stats_usd'] = swaps_stats_usd
+    data['swaps_stats_sum_usd'] = swaps_stats_sum_usd
 
     _redis.set('status', json.dumps(data, default=str))
     return data
@@ -525,5 +551,33 @@ def update_lelantus():
         'qtum': swaps_stats['qtum_offered']
     })
     swaps_model.save()
+
+    return True
+
+@shared_task(name='update_swap_offers_daily_cumulative', ignore_result=True)
+def swap_offers_daily_cumulative():
+    r = requests.get(BEAM_NODE_API + '/swap_offers')
+    offers = r.json()
+
+    for _offer in offers:
+        try:
+            obj = Swaps_daily_stats.objects.get(tx_id=_offer['txId'])
+        except Swaps_daily_stats.DoesNotExist:
+            obj = Swaps_daily_stats()
+            obj.from_json({
+                'swap_amount': _offer['swap_amount'], 
+                'swap_currency': _offer['swap_currency', 
+                'tx_id': _offer['txId']
+            })
+            obj.save()
+
+    return True
+
+
+@shared_task(name='update_swap_offers_daily_clear', ignore_result=True)
+def swap_offers_daily_clear():
+    offers = Swaps_daily_stats.objects.all()
+    if offers:
+        offers.delete()
 
     return True

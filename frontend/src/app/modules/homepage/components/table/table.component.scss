@@ -132,6 +132,7 @@
 .height-cell,
 .height-cell-header {
     max-width: 75px;
+    min-width: 60px;
 }
 
 .hash-cell,
@@ -156,3 +157,25 @@
 .coins-cell {
     font-weight: bolder !important;
 }
+
+.kernel-cell,
+.kernel-cell-header {
+    min-width: 65px;
+}
+
+.input-cell,
+.input-cell-header {
+    min-width: 55px;
+}
+
+.output-cell,
+.output-cell-header {
+    min-width: 65px;
+}
+
+.fee-cell-header,
+fee-cell {
+    min-width: 55px;
+}
+
+
