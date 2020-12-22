@@ -566,9 +566,8 @@ def swap_offers_daily_cumulative():
             obj = Swaps_daily_stats()
             obj.from_json({
                 'swap_amount': _offer['swap_amount'], 
-                'swap_currency': _offer['swap_currency', 
-                'tx_id': _offer['txId']
-            })
+                'swap_currency': _offer['swap_currency'], 
+                'tx_id': _offer['txId']})
             obj.save()
 
     return True
