@@ -555,7 +555,7 @@ def update_lelantus():
     return True
 
 @shared_task(name='update_swap_offers_daily_cumulative', ignore_result=True)
-def swap_offers_daily_cumulative():
+def update_swap_offers_daily_clear():
     r = requests.get(BEAM_NODE_API + '/swap_offers')
     offers = r.json()
 
@@ -574,7 +574,7 @@ def swap_offers_daily_cumulative():
 
 
 @shared_task(name='update_swap_offers_daily_clear', ignore_result=True)
-def swap_offers_daily_clear():
+def update_swap_offers_daily_clear():
     offers = Swaps_daily_stats.objects.all()
     if offers:
         offers.delete()
