@@ -372,6 +372,9 @@ def update_blockchain():
 
 @shared_task(name="update_charts", ignore_result=True)
 def update_charts():
+    cg = CoinGeckoAPI()
+    cg_data = cg.get_price(ids=['bitcoin', 'dash', 'dogecoin', 'litecoin', 'qtum'], vs_currencies=['usd', 'btc'])
+    
     # get data for blocks
     latest_block = Block.objects.latest('height')
     latest_block_height = int(latest_block.height)
@@ -387,10 +390,17 @@ def update_charts():
 
     result = {
         'items': [],
-        'avg_blocks': 0
+        'avg_blocks': 0,
+        'lelantus': [],
+        'lelantus_trs': [],
+        'swap_stats': []
     }
-
+    
+    lelantus_data = Max_privacy_withdraw.objects.filter(created_at__gte=start_date, created_at__lt=end_date).order_by('created_at')
+    swap_data = Swap_stats.objects.filter(created_at__gte=start_date, created_at__lt=end_date).order_by('created_at')
+    
     while end_date > start_date:
+        #blocks info start
         offset_blocks = blocks.filter(timestamp__gte=date_with_offset, timestamp__lt=end_date)
         blocks_count = offset_blocks.count() / 2
 
@@ -423,77 +433,51 @@ def update_charts():
             'blocks_count': blocks_count,
             'transactions': transactions
         })
+        #block info end
+
+        #lelantus info start
+        offset_lelantus = lelantus_data.filter(timestamp__gte=date_with_offset, timestamp__lt=end_date)
+        lelantus_count = offset_lelantus.count()
+
+        lelantus_sum = 0
+        for data in offset_lelantus:
+            try:
+                lelantus_sum += float(data.value)
+            except ValueError:
+                lelantus_sum += 0
+        result['lelantus'].insert(0, [date, lelantus_sum / lelantus_count])
+        result['lelantus_trs'].insert(0, [date, float(offset_lelantus.last().per_day)])
+        #lelantus info end
+
+        #swaps info start
+        offset_swaps = swap_data.filter(timestamp__gte=date_with_offset, timestamp__lt=end_date)
+        swap_item = offset_swaps.last()
+
+        swap_usd = {
+            "bitcoin": float(swap_item.btc) * cg_data["bitcoin"]["usd"],
+            "dash": float(swap_item.dash) * cg_data["dash"]["usd"],
+            "dogecoin": float(swap_item.doge) * cg_data["dogecoin"]["usd"],
+            "litecoin": float(swap_item.ltc) * cg_data["litecoin"]["usd"],
+            "qtum": float(swap_item.qtum) * cg_data["qtum"]["usd"]
+        }
+
+        swap_btc = {
+            "bitcoin": float(swap_item.btc) * cg_data["bitcoin"]["btc"],
+            "dash": float(swap_item.dash) * cg_data["dash"]["btc"],
+            "dogecoin": float(swap_item.doge) * cg_data["dogecoin"]["btc"],
+            "litecoin": float(swap_item.ltc) * cg_data["litecoin"]["btc"],
+            "qtum": float(swap_item.qtum) * cg_data["qtum"]["btc"]
+        }
+        
+        result['swap_stats'].insert(0, [date, {"usd": swap_usd, "btc": swap_btc}])
+
+        #swaps info end
 
         end_date = date_with_offset
         date_with_offset -= hour_offset
 
     result['avg_blocks'] = (blocks.count() / len(result['items'])) / 2
     result['items'].pop(0)
-
-    #get lelantus data
-    date_now = timezone.now()
-    date_from = date_now - timedelta(days=int(4), hours=int(4))
-
-    lelantus_data = Max_privacy_withdraw.objects.filter(created_at__gte=date_from, created_at__lt=date_now)
-
-    lel_counter = 0
-    lelantus_res = []
-    lelantus_tr_res = []
-    lelantus_sum = 0
-    for data in lelantus_data:
-        if (lel_counter == 12):
-            lelantus_avg = lelantus_sum / 12
-            if lelantus_avg == 0 or lelantus_avg > 72:
-                lelantus_avg = 72   
-            date_value = round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000 
-            lelantus_res.insert(0, [date_value, lelantus_avg])
-            lelantus_tr_res.insert(0, [date_value, float(data.per_day)])
-            lelantus_sum = 0
-            lel_counter = 0
-
-        try:
-            lelantus_sum += float(data.value)
-        except ValueError:
-            lelantus_sum += 0
-        lel_counter += 1
-
-    result['lelantus'] = lelantus_res
-    result['lelantus_trs'] = lelantus_tr_res
-
-    #get swaps data
-    cg = CoinGeckoAPI()
-    cg_data = cg.get_price(ids=['bitcoin', 'dash', 'dogecoin', 'litecoin', 'qtum'], vs_currencies=['usd', 'btc'])
-
-    swap_data = Swap_stats.objects.filter(created_at__gte=date_from, created_at__lt=date_now)
-    swap_counter = 0
-    swap_res = []
-    for data in swap_data:
-        if (swap_counter == 12):
-            serialized_stats = SwapStatsSerializer(data)
-            date_of_twelve_day = round(data.created_at.replace(tzinfo=timezone.utc).timestamp()) * 1000
-            
-            swap_usd = {
-                "bitcoin": float(serialized_stats.data["btc"]) * cg_data["bitcoin"]["usd"],
-                "dash": float(serialized_stats.data["dash"]) * cg_data["dash"]["usd"],
-                "dogecoin": float(serialized_stats.data["doge"]) * cg_data["dogecoin"]["usd"],
-                "litecoin": float(serialized_stats.data["ltc"]) * cg_data["litecoin"]["usd"],
-                "qtum": float(serialized_stats.data["qtum"]) * cg_data["qtum"]["usd"]
-            }
-
-            swap_btc = {
-                "bitcoin": float(serialized_stats.data["btc"]) * cg_data["bitcoin"]["btc"],
-                "dash": float(serialized_stats.data["dash"]) * cg_data["dash"]["btc"],
-                "dogecoin": float(serialized_stats.data["doge"]) * cg_data["dogecoin"]["btc"],
-                "litecoin": float(serialized_stats.data["ltc"]) * cg_data["litecoin"]["btc"],
-                "qtum": float(serialized_stats.data["qtum"]) * cg_data["qtum"]["btc"]
-            }
-            
-            swap_res.insert(0, [date_of_twelve_day, {"usd": swap_usd, "btc": swap_btc}])
-            swap_counter = 0
-
-        swap_counter += 1
-
-    result['swap_stats'] = swap_res
 
     _redis.set('graph_data', json.dumps(result, default=str))
     return True

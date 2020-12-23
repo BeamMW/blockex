@@ -74,7 +74,7 @@
                         <ng-container *ngIf="data.swaps_stats_sum_usd !== 0 ">
                             <div class="card-content">
                                 {{switcherSelectedValue === switcherValues.USD ?
-                                    data.swaps_stats_sum_usd : data.swaps_stats_sum_btc | number:'.'}} 
+                                    data.swaps_stats_sum_usd : data.swaps_stats_sum_btc | number:'1.0-8'}} 
                                     {{switcherSelectedValue | uppercase}}
                             </div>
                         </ng-container>
@@ -121,7 +121,7 @@
                                     *ngFor="let item of (isVolumesSelectVisible ? offers : mostOffering)">
                                 <span class="card-offering__item__title">{{item.title}}:</span>
                                 <span class="card-offering__item__value">
-                                    {{item.value | number:'.'}} 
+                                    {{item.value | number:'1.0-8'}} 
                                     {{switcherSelectedValue | uppercase}}
                                 </span>
                             </div>

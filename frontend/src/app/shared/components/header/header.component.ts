@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { routesConsts } from '../../../consts';
 import { Router } from '@angular/router';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +10,9 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   public isAssets = this.router.url.split('/')[1] === 'assets';
-  constructor(private router: Router) { }
+  public isMobile = this.deviceService.isMobile();
+  
+  constructor(private router: Router, private deviceService: DeviceDetectorService) { }
 
   ngOnInit(): void {}
 
