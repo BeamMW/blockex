@@ -585,8 +585,16 @@ export class GraphsComponent implements OnInit, OnDestroy {
       graphsData.averageBlocks.push([dateValue, data.avg_blocks]);
       graphsData.transactions.push([dateValue, element.transactions.kernels__count])
     });
-    graphsData.lelantus = data.lelantus;
-    graphsData.lelantus_trs = data.lelantus_trs;
+
+    data.lelantus.forEach(element => {
+      const dateValue = + new Date(element[0]);
+      graphsData.lelantus.push([dateValue, parseFloat(element[1])])
+    });
+
+    data.lelantus_trs.forEach(element => {
+      const dateValue = + new Date(element[0]);
+      graphsData.lelantus_trs.push([dateValue, parseFloat(element[1])])
+    });
 
     data.swap_stats.forEach(element => {
       const dateValue = + new Date(element[0]);

@@ -445,7 +445,10 @@ def update_charts():
                 lelantus_sum += float(data.value)
             except ValueError:
                 lelantus_sum += 0
-        result['lelantus'].insert(0, [date, lelantus_sum / lelantus_count])
+        lelantus_avg = lelantus_sum / lelantus_count
+        if lelantus_avg == 0 or lelantus_avg > 72:
+            lelantus_avg = 72   
+        result['lelantus'].insert(0, [date, lelantus_avg])
         result['lelantus_trs'].insert(0, [date, float(offset_lelantus.last().per_day)])
         #lelantus info end
 
