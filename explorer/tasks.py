@@ -395,7 +395,7 @@ def update_charts():
         'lelantus_trs': [],
         'swap_stats': []
     }
-    
+
     lelantus_data = Max_privacy_withdraw.objects.filter(created_at__gte=start_date, created_at__lt=end_date).order_by('created_at')
     swap_data = Swap_stats.objects.filter(created_at__gte=start_date, created_at__lt=end_date).order_by('created_at')
     
@@ -436,7 +436,7 @@ def update_charts():
         #block info end
 
         #lelantus info start
-        offset_lelantus = lelantus_data.filter(timestamp__gte=date_with_offset, timestamp__lt=end_date)
+        offset_lelantus = lelantus_data.filter(created_at__gte=date_with_offset, created_at__lt=end_date)
         lelantus_count = offset_lelantus.count()
 
         lelantus_sum = 0
@@ -450,7 +450,7 @@ def update_charts():
         #lelantus info end
 
         #swaps info start
-        offset_swaps = swap_data.filter(timestamp__gte=date_with_offset, timestamp__lt=end_date)
+        offset_swaps = swap_data.filter(created_at__gte=date_with_offset, created_at__lt=end_date)
         swap_item = offset_swaps.last()
 
         swap_usd = {
