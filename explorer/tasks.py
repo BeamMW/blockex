@@ -437,17 +437,19 @@ def update_charts():
 
         #lelantus info start
         offset_lelantus = lelantus_data.filter(created_at__gte=date_with_offset, created_at__lt=end_date)
-        lelantus_count = offset_lelantus.count()
+        lelantus_avg = 0
+        if offset_lelantus:
+            lelantus_count = offset_lelantus.count()
 
-        lelantus_sum = 0
-        for data in offset_lelantus:
-            try:
-                lelantus_sum += float(data.value)
-            except ValueError:
-                lelantus_sum += 0
-        lelantus_avg = lelantus_sum / lelantus_count
-        if lelantus_avg == 0 or lelantus_avg > 72:
-            lelantus_avg = 72   
+            lelantus_sum = 0
+            for data in offset_lelantus:
+                try:
+                    lelantus_sum += float(data.value)
+                except ValueError:
+                    lelantus_sum += 0
+            lelantus_avg = lelantus_sum / lelantus_count
+            if lelantus_avg == 0 or lelantus_avg > 72:
+                lelantus_avg = 72   
         result['lelantus'].insert(0, [date, lelantus_avg])
         result['lelantus_trs'].insert(0, [date, float(offset_lelantus.last().per_day)])
         #lelantus info end
