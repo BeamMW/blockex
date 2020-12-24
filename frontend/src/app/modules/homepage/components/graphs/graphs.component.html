@@ -1,12 +1,70 @@
-<div class="graphs" *ngIf="graphsLoaded">
-  <div class="graphs__left">
-    <div class="graphs__left__block">
+<ng-container *ngIf="!isMobile">
+  <div class="graphs" *ngIf="graphsLoaded">
+    <div class="graphs__left">
+      <div class="graphs__left__block">
+          <div class="chart-type-selector">
+              <span class="type-selected" (click)="showTypesOptions($event)">
+                <span>{{selectedBlocksChartType.name}}</span>
+                <img src="../../../../../assets/modules/homepage/components/graphs/arrow-down-small.svg" class="arrow-down-small">
+              </span>
+              <div class="type-options" *ngIf="isChartTypesVisible">
+                <ul>
+                  <li class="type-options-item" *ngFor="let p of blockCharts"
+                      [class.selected]="p.isSelected"
+                      (click)="blocksChartTypeChange(p)">
+                    <span> {{p.name}} </span>
+                  </li>
+                </ul>
+              </div>
+          </div>
+          <div class="graphs__left__block__elem" [chart]="graphs.blocks"></div>
+      </div>
+      <div class="graphs__left__fee">
+          <span class="graphs__left__fee__title">
+              <span>FEE</span>
+          </span>
+          <div class="graphs__left__fee__elem" [chart]="graphs.fee"></div>
+      </div>
+    </div>
+    <div class="graphs__right">
+      <div class="graphs__right__swaps">
         <div class="chart-type-selector">
-            <span class="type-selected" (click)="showTypesOptions($event)">
+          <span class="type-selected" (click)="showTypesSecondOptions($event)">
+            <span>{{selectedTrChartType.name}}</span>
+            <img src="../../../../../assets/modules/homepage/components/graphs/arrow-down-small.svg" class="arrow-down-small">
+          </span>
+          <div class="type-options" *ngIf="isChartTypesSecondVisible">
+            <ul class="type-options-list">
+              <li class="type-options-item" *ngFor="let p of trCharts"
+                  [class.selected]="p.isSelected"
+                  (click)="trChartTypeChange(p)">
+                <span> {{p.name}} </span>
+              </li>
+            </ul>
+          </div>
+      </div>
+        <div class="graphs__right__swaps__elem" [chart]="graphs.swaps" *ngIf="selectedTrChartType.num == trCharts[0].num"></div>
+        <div class="graphs__right__trs__elem" [chart]="graphs.transactions" *ngIf="selectedTrChartType.num == trCharts[1].num"></div>
+      </div>
+      <div class="graphs__right__lelantus">
+          <span class="graphs__right__lelantus__title">
+              <span>AVERAGE TIME TO WITHDRAW THE MAX PRIVACY COINS</span>
+          </span>
+          <div class="graphs__right__lelantus__elem" [chart]="graphs.lelantus"></div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isMobile">
+  <div class="graphs-mob" *ngIf="graphsLoaded">
+    <div class="graphs-mob__block">
+        <div class="chart-type-selector">
+            <span class="type-selected mob" (click)="showTypesOptions($event)">
               <span>{{selectedBlocksChartType.name}}</span>
               <img src="../../../../../assets/modules/homepage/components/graphs/arrow-down-small.svg" class="arrow-down-small">
             </span>
-            <div class="type-options" *ngIf="isChartTypesVisible">
+            <div class="type-options mob" *ngIf="isChartTypesVisible">
               <ul>
                 <li class="type-options-item" *ngFor="let p of blockCharts"
                     [class.selected]="p.isSelected"
@@ -16,23 +74,21 @@
               </ul>
             </div>
         </div>
-        <div class="graphs__left__block__elem" [chart]="graphs.blocks"></div>
+        <div class="graphs-mob__block__elem" [chart]="graphs.blocks"></div>
     </div>
-    <div class="graphs__left__fee">
-        <span class="graphs__left__fee__title">
+    <div class="graphs-mob__fee">
+        <span class="graphs-mob__fee__title mob">
             <span>FEE</span>
         </span>
-        <div class="graphs__left__fee__elem" [chart]="graphs.fee"></div>
+        <div class="graphs-mob__fee__elem" [chart]="graphs.fee"></div>
     </div>
-  </div>
-  <div class="graphs__right">
-    <div class="graphs__right__swaps">
+    <div class="graphs-mob__swaps">
       <div class="chart-type-selector">
-        <span class="type-selected" (click)="showTypesSecondOptions($event)">
+        <span class="type-selected mob" (click)="showTypesSecondOptions($event)">
           <span>{{selectedTrChartType.name}}</span>
           <img src="../../../../../assets/modules/homepage/components/graphs/arrow-down-small.svg" class="arrow-down-small">
         </span>
-        <div class="type-options" *ngIf="isChartTypesSecondVisible">
+        <div class="type-options mob" *ngIf="isChartTypesSecondVisible">
           <ul class="type-options-list">
             <li class="type-options-item" *ngFor="let p of trCharts"
                 [class.selected]="p.isSelected"
@@ -42,14 +98,14 @@
           </ul>
         </div>
     </div>
-      <div class="graphs__right__swaps__elem" [chart]="graphs.swaps" *ngIf="selectedTrChartType.num == trCharts[0].num"></div>
-      <div class="graphs__right__trs__elem" [chart]="graphs.transactions" *ngIf="selectedTrChartType.num == trCharts[1].num"></div>
+      <div class="graphs-mob__swaps__elem" [chart]="graphs.swaps" *ngIf="selectedTrChartType.num == trCharts[0].num"></div>
+      <div class="graphs-mob__trs__elem" [chart]="graphs.transactions" *ngIf="selectedTrChartType.num == trCharts[1].num"></div>
     </div>
-    <div class="graphs__right__lelantus">
-        <span class="graphs__right__lelantus__title">
+    <div class="graphs-mob__lelantus">
+        <span class="graphs-mob__lelantus__title mob">
             <span>AVERAGE TIME TO WITHDRAW THE MAX PRIVACY COINS</span>
         </span>
-        <div class="graphs__right__lelantus__elem" [chart]="graphs.lelantus"></div>
+        <div class="graphs-mob__lelantus__elem" [chart]="graphs.lelantus"></div>
     </div>
   </div>
-</div>
+</ng-container>

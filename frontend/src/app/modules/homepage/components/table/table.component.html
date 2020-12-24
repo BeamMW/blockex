@@ -147,7 +147,7 @@
                     <mat-header-cell class="expired-cell-header" *matHeaderCellDef> EXPIRED (approx.): </mat-header-cell>
                     <mat-cell class="expired-cell" *matCellDef="let element">
                         <span class="desktop-label">
-                            {{element.height_expired}}
+                            {{element.expired_time | date: 'medium'}}
                         </span>
                     </mat-cell>
                 </ng-container>

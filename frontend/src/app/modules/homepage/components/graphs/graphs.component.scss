@@ -108,6 +108,115 @@
     }
 }
 
+
+.graphs-mob {
+    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+
+    &__block {
+        display: flex;
+        flex-direction: column;
+
+        &__elem {
+            margin-top: 30px;
+        }
+    }
+
+    &__fee {
+        display: flex;
+        flex-direction: column;
+        margin-top: 45px;
+
+        &__title {
+            margin-left: 109px;
+            display: flex;
+            font-size: 12px;
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: 0.3px;
+            text-align: center;
+            color: #ffffff;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        &__title.mob {
+            margin-left: 0;
+            display: flex;
+            align-self: center;
+        }
+
+        &__elem {
+            margin-top: 30px;
+        }
+    }
+
+    &__swaps,
+    &__trs {
+        display: flex;
+        flex-direction: column;
+
+        &__title {
+            margin-left: 76px;
+            display: flex;
+            font-size: 12px;
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: 0.3px;
+            text-align: center;
+            color: #ffffff;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        &__elem {
+            margin-top: 30px;
+        }
+    }
+
+    &__lelantus {
+        display: flex;
+        flex-direction: column;
+        margin-top: 45px;
+
+        &__title {
+            margin-left: 81px;
+            display: flex;
+            font-size: 12px;
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: 0.3px;
+            text-align: center;
+            color: #ffffff;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        &__title.mob {
+            margin-left: 0;
+            display: flex;
+            align-self: center;
+        }
+
+        &__elem {
+            margin-top: 30px;
+        }
+    }
+}
+
 .highcharts-background {
     fill: rgba(255, 255, 255, 0);
 }
@@ -130,66 +239,79 @@
 	stroke-width: 0px;
 }
 
+.graphs-mob__block__elem .highcharts-color-1,
 .graphs__left__block__elem .highcharts-color-1 {
     @include point-fill();
     stroke: #ff51ff;
 }
 
+.graphs-mob__block__elem .highcharts-color-2,
 .graphs__left__block__elem .highcharts-color-2 {
     @include point-fill();
     stroke: #24c1ff;
 }
 
+.graphs-mob__block__elem .highcharts-color-3,
 .graphs__left__block__elem .highcharts-color-3 {
     @include point-fill();
     stroke: #ff51ff;
 }
 
+.graphs-mob__block__elem .highcharts-color-0,
 .graphs__left__block__elem .highcharts-color-0 {
     @include point-fill();
     stroke: #24c1ff;
 }
 
+.graphs-mob__fee__elem .highcharts-color-0,
 .graphs__left__fee__elem .highcharts-color-0 {
     @include point-fill();
     stroke: #00e2c2;
 }
 
+.graphs-mob__lelantus__elem .highcharts-color-0,
 .graphs__right__lelantus__elem .highcharts-color-0 {
     @include point-fill();
     stroke: #7881fb;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-0,
 .graphs__right__swaps__elem .highcharts-color-0 {
     @include point-fill();
     stroke: #fcaf38;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-1,
 .graphs__right__swaps__elem .highcharts-color-1 {
     @include point-fill();
     stroke: #008de4;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-2,
 .graphs__right__swaps__elem .highcharts-color-2 {
     @include point-fill();
     stroke: #c2a633;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-3,
 .graphs__right__swaps__elem .highcharts-color-3 {
     @include point-fill();
     stroke: #bebebe;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-4,
 .graphs__right__swaps__elem .highcharts-color-4 {
     @include point-fill();
     stroke: #2e9ad0;
 }
 
+.graphs-mob__trs__elem .highcharts-color-0,
 .graphs__right__trs__elem .highcharts-color-0 {
     @include point-fill();
     stroke: #39fdf2;
 }
 
+.graphs-mob__trs__elem .highcharts-color-1,
 .graphs__right__trs__elem .highcharts-color-1 {
     @include point-fill();
     stroke: #fb0a6a;
@@ -241,106 +363,132 @@
     float: left;
 }
 
+.graphs-mob__block__elem .highcharts-color-1 .tooltip-line-circle,
 .graphs__left__block__elem .highcharts-color-1 .tooltip-line-circle{
     background-color: #ff51ff;
 }
 
+.graphs-mob__block__elem .highcharts-color-1 .tooltip-line-color,
 .graphs__left__block__elem .highcharts-color-1 .tooltip-line-color{
     color: #ff51ff;
 }
 
+.graphs-mob__block__elem .highcharts-color-0 .tooltip-line-circle,
 .graphs__left__block__elem .highcharts-color-0 .tooltip-line-circle{
     background-color: #24c1ff;
 }
 
+.graphs-mob__block__elem .highcharts-color-0 .tooltip-line-color,
 .graphs__left__block__elem .highcharts-color-0 .tooltip-line-color{
     color: #24c1ff;
 }
 
+.graphs-mob__block__elem .highcharts-color-2 .tooltip-line-circle,
 .graphs__left__block__elem .highcharts-color-2 .tooltip-line-circle{
     background-color: #24c1ff;
 }
 
+.graphs-mob__block__elem .highcharts-color-2 .tooltip-line-color,
 .graphs__left__block__elem .highcharts-color-2 .tooltip-line-color{
     color: #24c1ff;
 }
 
+.graphs-mob__block__elem .highcharts-color-3 .tooltip-line-circle,
 .graphs__left__block__elem .highcharts-color-3 .tooltip-line-circle{
     background-color: #ff51ff;
 }
 
+.graphs-mob__block__elem .highcharts-color-3 .tooltip-line-color,
 .graphs__left__block__elem .highcharts-color-3 .tooltip-line-color{
     color: #ff51ff;
 }
 
+.graphs-mob__fee__elem .highcharts-color-0 .tooltip-line-circle,
 .graphs__left__fee__elem .highcharts-color-0 .tooltip-line-circle{
     background-color: #00e2c2;
 }
 
+.graphs-mob__fee__elem .highcharts-color-0 .tooltip-line-color,
 .graphs__left__fee__elem .highcharts-color-0 .tooltip-line-color{
     color: #00e2c2;
 }
 
+.graphs-mob__lelantus__elem .highcharts-color-0 .tooltip-line-circle,
 .graphs__right__lelantus__elem .highcharts-color-0 .tooltip-line-circle{
     background-color: #7881fb;
 }
 
+.graphs-mob__lelantus__elem .highcharts-color-0 .tooltip-line-color,
 .graphs__right__lelantus__elem .highcharts-color-0 .tooltip-line-color{
     color: #7881fb;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-0 .tooltip-line-circle,
 .graphs__right__swaps__elem .highcharts-color-0 .tooltip-line-circle{
     background-color: #fcaf38;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-0 .tooltip-line-color,
 .graphs__right__swaps__elem .highcharts-color-0 .tooltip-line-color{
     color: #fcaf38;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-1 .tooltip-line-circle,
 .graphs__right__swaps__elem .highcharts-color-1 .tooltip-line-circle{
     background-color: #008de4;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-1 .tooltip-line-color,
 .graphs__right__swaps__elem .highcharts-color-1 .tooltip-line-color{
     color: #008de4;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-2 .tooltip-line-circle,
 .graphs__right__swaps__elem .highcharts-color-2 .tooltip-line-circle{
     background-color: #c2a633;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-2 .tooltip-line-color,
 .graphs__right__swaps__elem .highcharts-color-2 .tooltip-line-color{
     color: #c2a633;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-3 .tooltip-line-circle,
 .graphs__right__swaps__elem .highcharts-color-3 .tooltip-line-circle{
     background-color: #bebebe;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-3 .tooltip-line-color,
 .graphs__right__swaps__elem .highcharts-color-3 .tooltip-line-color{
     color: #bebebe;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-4 .tooltip-line-circle,
 .graphs__right__swaps__elem .highcharts-color-4 .tooltip-line-circle{
     background-color: #2e9ad0;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-4 .tooltip-line-color,
 .graphs__right__swaps__elem .highcharts-color-4 .tooltip-line-color{
     color: #2e9ad0;
 }
 
+.graphs-mob__trs__elem .highcharts-color-0 .tooltip-line-circle,
 .graphs__right__trs__elem .highcharts-color-0 .tooltip-line-circle{
     background-color: #39fdf2;
 }
 
+.graphs-mob__trs__elem .highcharts-color-0 .tooltip-line-color,
 .graphs__right__trs__elem .highcharts-color-0 .tooltip-line-color{
     color: #39fdf2;
 }
 
+.graphs-mob__trs__elem .highcharts-color-1 .tooltip-line-circle,
 .graphs__right__trs__elem .highcharts-color-1 .tooltip-line-circle{
     background-color: #fb0a6a;
 }
 
+.graphs-mob__trs__elem .highcharts-color-1 .tooltip-line-color,
 .graphs__right__trs__elem .highcharts-color-1 .tooltip-line-color{
     color: #fb0a6a;
 }
@@ -421,6 +569,10 @@
     margin-left: 80px;
 }
 
+.chart-type-selector .type-selected.mob {
+    margin: 0 auto;
+}
+
 .chart-type-selector .type-options {
     @include selector-bg-color();
     margin-left: 64px;
@@ -433,6 +585,11 @@
     box-sizing: border-box;
     border-radius: 10px;
     opacity: 1;
+}
+
+.chart-type-selector .type-options.mob {
+    left: 31%;
+    margin-left: 0;
 }
 
 .chart-type-selector .type-options .type-options-item {

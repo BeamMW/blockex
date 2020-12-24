@@ -1,6 +1,8 @@
 <div class="container">
-    <div class="container__overview">
+    <div class="container__overview" [class.mobile]="isMobile">
         <app-status-cards (changeStatsCurrency)="onChangeStatsCurrency($event)"></app-status-cards>
+    </div>
+    <div class="container__graphs" [class.mobile]="isMobile">
         <app-graphs [activeCurrency]="activeCurrency"></app-graphs>
     </div>
     <div class="container__table-area">

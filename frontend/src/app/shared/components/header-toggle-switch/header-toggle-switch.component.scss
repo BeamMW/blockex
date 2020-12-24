@@ -1,58 +1,112 @@
 @import 'ui-mixins';
 
-.switch{
+.switch {
     margin: auto;
     font-size: 1em;
     height: 31px;
     line-height: 2em;
-    border-radius: 0.3em;
     background: rgba(255, 255, 255, 0);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 20px;
     position: relative;
     display: block;
     float: left;
+
+    &__testnet,
+    &__mainnet,
+    &__beamx {
+        cursor: pointer;
+        position: relative;
+        display: block;
+        float: left;
+        -webkit-transition: 300ms ease-in;
+        -moz-transition: 300ms ease-in;
+        transition: 300ms ease-in;
+        padding: 0 1em;
+        opacity: 0.5;
+        font-family: ProximaNova;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 7px;
+        color: #ffffff;
+    }
+
+    &__selector {
+        @include switcher-selector-color();
+        position: absolute;
+        width: 0;
+        box-sizing: border-box;
+        -webkit-transition: 300ms ease-out;
+        -moz-transition: 300ms ease-out;
+        transition: 300ms ease-out;
+        border-radius: 15.5px;
+        font-size: 14px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        letter-spacing: 7px;
+        height: 33px;
+        top: -1px;
+        text-indent: 7px;
+        text-align: center;
+        text-transform: uppercase;
+        cursor: default;
+    }
+    
 }
-  
-.switch__testnet,
-.switch__mainnet,
-.switch__beamx{
-    cursor: pointer;
+
+.switch-mob {
+    margin: auto;
+    font-size: 1em;
+    height: 31px;
+    line-height: 2em;
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
     position: relative;
     display: block;
     float: left;
-    -webkit-transition: 300ms ease-in;
-    -moz-transition: 300ms ease-in;
-    transition: 300ms ease-in;
-    padding: 0 1em;
-    opacity: 0.5;
-    font-family: ProximaNova;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 7px;
-    color: #ffffff;
-}
 
-.selector{
-    @include switcher-selector-color();
-    position: absolute;
-    width: 0;
-    box-sizing: border-box;
-    -webkit-transition: 300ms ease-out;
-    -moz-transition: 300ms ease-out;
-    transition: 300ms ease-out;
-    border-radius: 15.5px;
-    font-size: 14px;
-    font-weight: 600;
-    font-stretch: normal;
-    font-style: normal;
-    letter-spacing: 7px;
-    height: 33px;
-    top: -1px;
-    text-indent: 7px;
-    text-align: center;
-    text-transform: uppercase;
-    cursor: default;
+    &__testnet,
+    &__mainnet,
+    &__beamx {
+        cursor: pointer;
+        position: relative;
+        display: block;
+        float: left;
+        -webkit-transition: 300ms ease-in;
+        -moz-transition: 300ms ease-in;
+        transition: 300ms ease-in;
+        padding: 0 .8em;
+        opacity: 0.5;
+        font-family: ProximaNova;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 5.5px;
+        color: #ffffff;
+    }
+
+    &__selector {
+        @include switcher-selector-color();
+        position: absolute;
+        width: 0;
+        box-sizing: border-box;
+        -webkit-transition: 300ms ease-out;
+        -moz-transition: 300ms ease-out;
+        transition: 300ms ease-out;
+        border-radius: 15.5px;
+        font-size: 13px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        letter-spacing: 5.5px;
+        height: 33px;
+        top: -1px;
+        text-transform: uppercase;
+        cursor: default;
+        align-items: center;
+        display: flex;
+    }    
 }
 
 .without-switch {

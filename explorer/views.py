@@ -196,6 +196,11 @@ def get_swap_offers(request):
     page = request.GET['page']
     offers = requests.get(BEAM_NODE_API + '/swap_offers')
     data = offers.json()
+
+    def get_height(item):
+        return item.get('min_height')
+
+    data.sort(key=get_height)
     from_item = (int(page) - 1) * 20
     res_offers = data[from_item:20]
     return Response({'offers': res_offers, 'count': len(data)}, status=HTTP_200_OK)

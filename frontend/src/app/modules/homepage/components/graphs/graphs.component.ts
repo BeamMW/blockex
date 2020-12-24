@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { currencies } from '../../../../consts';
 
 import { Chart } from 'angular-highcharts';
+import { matSelectAnimations } from '@angular/material/select';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 export interface IGraphs {
   items: {
@@ -69,13 +71,24 @@ export class GraphsComponent implements OnInit, OnDestroy {
   public selectedBlocksChartType = this.blockCharts[0];
   public selectedTrChartType = this.trCharts[0];
   private lastConstructedGraphs: any;
+  private swapChartStates = {
+    USD: {
+      y_title: 'Amount, USD',
+    },
+    BTC: {
+      y_title: 'Amount, BTC',
+    }
+  };
+  public isMobile = this.deviceService.isMobile();
 
-  @HostListener('document:click', ['$event']) clickout(event) {
+  @HostListener('document:click', ['$event']) clickout(event: any) {
     this.isChartTypesVisible = false;
     this.isChartTypesSecondVisible = false;
   }
 
-  constructor(private wsService: WebsocketService) {
+  constructor(
+      private deviceService: DeviceDetectorService,
+      private wsService: WebsocketService) {
     this.wsService.publicStatus.subscribe((isConnected) => {
       if (isConnected) {
         this.wsService.send(WS.INIT.INIT_GRAPHS);
@@ -86,6 +99,14 @@ export class GraphsComponent implements OnInit, OnDestroy {
 
   tooltipFormatter = function() {
     const date = new Date(this.x);
+    let maximumFractionDigits = 0;
+    if (this.series.name === 'BTC' || 
+      this.series.name === 'LTC' || 
+      this.series.name === 'DOGE' ||
+      this.series.name === 'DASH' || 
+      this.series.name === 'QTUM') {
+        maximumFractionDigits = 8;
+    } 
     return '<div class="chart-tooltip-container">' +
       '<span class="tooltip-line-color">\u2015\u2015</span>' +
       '<div class="tooltip-line-circle"></div>' +
@@ -94,7 +115,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
           new Intl.DateTimeFormat('en-US', {month: 'long'}).format(date) + ' ' +
           date.getFullYear() + ', ' + (date.getHours() < 10 ? '0' : '') + date.getHours()
           + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()  + '</div>' +
-      '<div class="tooltip-value">' + this.y.toLocaleString('en-US', {maximumFractionDigits: 0}) + '</div></div>';
+      '<div class="tooltip-value">' + this.y.toLocaleString('en-US', {maximumFractionDigits: maximumFractionDigits}) + '</div></div>';
   };
 
   xAxisFormatter = function() {
@@ -135,8 +156,8 @@ export class GraphsComponent implements OnInit, OnDestroy {
       },
       chart: {
         shadow: false,
-        width: 610,
-        height: 430,
+        width: this.isMobile ? window.innerWidth * 0.95 : 610,
+        height: this.isMobile ? 420 : 430,
         ignoreHiddenSeries: false,
         type: 'line',
         styledMode: true
@@ -154,7 +175,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
       yAxis: [{
         lineColor: '#ff51ff',
         title: {
-          text: 'Blocks per hour',
+          text: this.isMobile ? '' : 'Blocks per hour',
           margin: 24
         }
       }, {
@@ -162,7 +183,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
         opposite: true,
         title: {
           rotation: 270,
-          text: 'Average difficulty',
+          text: this.isMobile ? '' : 'Average difficulty',
           margin: 34
         }
       }],
@@ -182,7 +203,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        x: 0,
+        x: this.isMobile ? 40 : 0,
         y: 10
       },
       tooltip: {
@@ -238,8 +259,8 @@ export class GraphsComponent implements OnInit, OnDestroy {
       chart: {
         shadow: false,
         styledMode: true,
-        width: 610,
-        height: 430,
+        width: this.isMobile ? window.innerWidth * 0.95 : 610,
+        height: this.isMobile ? 420 : 430,
         marginBottom: 100,
         type: 'line',
       },
@@ -260,7 +281,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
         lineWidth: 0,
         type: 'logarithmic',
         title: {
-          text: 'Transaction Fee, GROTH',
+          text: this.isMobile ? '' : 'Transaction Fee, GROTH',
           margin: 34,
         },
         labels: {
@@ -286,7 +307,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        x: -10,
+        x: this.isMobile ? 10 : -10,
         y: -15
       },
       tooltip: {
@@ -315,8 +336,8 @@ export class GraphsComponent implements OnInit, OnDestroy {
       },
       chart: {
         shadow: false,
-        width: 610,
-        height: 430,
+        width: this.isMobile ? window.innerWidth * 0.95 : 610,
+        height: this.isMobile ? 420 : 430,
         ignoreHiddenSeries: false,
         type: 'line',
         styledMode: true
@@ -333,7 +354,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
       },
       yAxis: [{
         title: {
-          text: 'Amount, USD',
+          text: this.isMobile ? '' : 'Amount, USD',
           margin: 24
         }
       }],
@@ -347,12 +368,13 @@ export class GraphsComponent implements OnInit, OnDestroy {
         }
       },
       legend: {
-        width: 450,
-        itemWidth: 90,
+        width: this.isMobile ? 380 : 450,
+        itemWidth: this.isMobile ? 190 : 90,
+        itemMarginBottom: this.isMobile ? 12 : 0,
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        x: 0,
+        x: this.isMobile ? 40 : 0,
         y: 10
       },
       tooltip: {
@@ -416,8 +438,8 @@ export class GraphsComponent implements OnInit, OnDestroy {
       },
       chart: {
         shadow: false,
-        width: 610,
-        height: 430,
+        width: this.isMobile ? window.innerWidth * 0.95 : 610,
+        height: this.isMobile ? 420 : 430,
         ignoreHiddenSeries: false,
         type: 'line',
         styledMode: true
@@ -435,7 +457,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
       yAxis: [{
         lineColor: '#ff51ff',
         title: {
-          text: 'Time, Hours',
+          text: this.isMobile ? '' : 'Time, Hours',
           margin: 24
         }
       }],
@@ -455,7 +477,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        x: 0,
+        x: this.isMobile ? 40 : 0,
         y: 10
       },
       tooltip: {
@@ -483,8 +505,8 @@ export class GraphsComponent implements OnInit, OnDestroy {
       },
       chart: {
         shadow: false,
-        width: 610,
-        height: 430,
+        width: this.isMobile ? window.innerWidth * 0.95 : 610,
+        height: this.isMobile ? 420 : 430,
         ignoreHiddenSeries: false,
         type: 'line',
         styledMode: true
@@ -501,7 +523,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
       },
       yAxis: [{
         title: {
-          text: 'Transactions amount',
+          text: this.isMobile ? '' : 'Transactions amount',
           margin: 24
         }
       }],
@@ -520,7 +542,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        x: 0,
+        x: this.isMobile ? 40 : 0,
         y: 10
       },
       tooltip: {
@@ -552,6 +574,10 @@ export class GraphsComponent implements OnInit, OnDestroy {
     });
   }
 
+  formatDateForGraph(date) {
+    return new Date(date.replace(' ', 'T')).getTime()
+  }
+
   constructGraphsData(data) {
     const graphsData = {
       blocks: [],
@@ -576,7 +602,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
     };
 
     data.items.forEach(element => {
-      const dateValue = + new Date(element.date);
+      const dateValue = this.formatDateForGraph(element.date);
       graphsData.blocks.push([dateValue, element.blocks_count]);
       graphsData.difficulty.push([dateValue, element.difficulty]);
       graphsData.fee.push([dateValue, element.fee === 0 ? LOG_MIN_VALUE : element.fee]);
@@ -587,17 +613,17 @@ export class GraphsComponent implements OnInit, OnDestroy {
     });
 
     data.lelantus.forEach(element => {
-      const dateValue = + new Date(element[0]);
+      const dateValue = this.formatDateForGraph(element[0]);
       graphsData.lelantus.push([dateValue, parseFloat(element[1])])
     });
 
     data.lelantus_trs.forEach(element => {
-      const dateValue = + new Date(element[0]);
+      const dateValue = this.formatDateForGraph(element[0]);
       graphsData.lelantus_trs.push([dateValue, parseFloat(element[1])])
     });
 
     data.swap_stats.forEach(element => {
-      const dateValue = + new Date(element[0]);
+      const dateValue = this.formatDateForGraph(element[0]);
       graphsData.swaps_btc_usd.push([dateValue, parseFloat(element[1].usd.bitcoin)]);
       graphsData.swaps_dash_usd.push([dateValue, parseFloat(element[1].usd.dash)]);
       graphsData.swaps_doge_usd.push([dateValue, parseFloat(element[1].usd.dogecoin)]);
@@ -672,36 +698,35 @@ export class GraphsComponent implements OnInit, OnDestroy {
     this.subscriber.unsubscribe();
   }
 
+  swapChartUpdate(swapsChart, state) {
+    swapsChart.series[0].setData(state === this.swapChartStates.BTC ? 
+      this.lastConstructedGraphs.swaps_btc_btc : this.lastConstructedGraphs.swaps_btc_usd);
+    swapsChart.series[1].setData(state === this.swapChartStates.BTC ? 
+      this.lastConstructedGraphs.swaps_dash_btc : this.lastConstructedGraphs.swaps_dash_usd);
+    swapsChart.series[2].setData(state === this.swapChartStates.BTC ? 
+      this.lastConstructedGraphs.swaps_doge_btc : this.lastConstructedGraphs.swaps_doge_usd);
+    swapsChart.series[3].setData(state === this.swapChartStates.BTC ? 
+      this.lastConstructedGraphs.swaps_ltc_btc : this.lastConstructedGraphs.swaps_ltc_usd);
+    swapsChart.series[4].setData(state === this.swapChartStates.BTC ? 
+      this.lastConstructedGraphs.swaps_qtum_btc : this.lastConstructedGraphs.swaps_qtum_usd);
+    swapsChart.yAxis[0].update({
+      title:{
+          text: state.y_title
+      }
+    });
+    swapsChart.redraw();
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     const value = changes.activeCurrency.currentValue;
     if (value !== undefined) {
       if (value === currencies.BTC) {
         this.graphs.swaps.ref$.subscribe((swapsChart) => {
-          swapsChart.series[0].setData(this.lastConstructedGraphs.swaps_btc_btc);
-          swapsChart.series[1].setData(this.lastConstructedGraphs.swaps_dash_btc);
-          swapsChart.series[2].setData(this.lastConstructedGraphs.swaps_doge_btc);
-          swapsChart.series[3].setData(this.lastConstructedGraphs.swaps_ltc_btc);
-          swapsChart.series[4].setData(this.lastConstructedGraphs.swaps_qtum_btc);
-          swapsChart.yAxis[0].update({
-            title:{
-                text: "Amount, BTC"
-            }
-          });
-          swapsChart.redraw();
+          this.swapChartUpdate(swapsChart, this.swapChartStates.BTC);
         });
       } else if (value === currencies.USD) {
         this.graphs.swaps.ref$.subscribe((swapsChart) => {
-          swapsChart.series[0].setData(this.lastConstructedGraphs.swaps_btc_usd);
-          swapsChart.series[1].setData(this.lastConstructedGraphs.swaps_dash_usd);
-          swapsChart.series[2].setData(this.lastConstructedGraphs.swaps_doge_usd);
-          swapsChart.series[3].setData(this.lastConstructedGraphs.swaps_ltc_usd);
-          swapsChart.series[4].setData(this.lastConstructedGraphs.swaps_qtum_usd);
-          swapsChart.yAxis[0].update({
-            title:{
-                text: "Amount, USD"
-            }
-          });
-          swapsChart.redraw();
+          this.swapChartUpdate(swapsChart, this.swapChartStates.USD);
         });
       }
     }

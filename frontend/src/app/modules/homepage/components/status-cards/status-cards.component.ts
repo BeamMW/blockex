@@ -5,11 +5,13 @@ import { WebsocketService } from '../../../../modules/websocket';
 import { WS } from '../../../../websocket.events';
 import { DataService } from '../../../../services/data/data.service';
 import { currencies } from '../../../../consts'
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 export interface IStatus {
   height: number;
   difficulty: number;
   timestamp: string;
+  dateFormatted: number;
   coins_in_circulation_mined: number;
   coins_in_circulation_treasury: string;
   total_coins_in_circulation: number;
@@ -61,10 +63,18 @@ export class StatusCardsComponent implements OnInit, OnDestroy, AfterContentInit
   public isSwitcherVisible = false;
   public switcherSelectedValue: string = this.switcherValues.USD;
   private lastStatusData: IStatus;
+  public isMobile = this.deviceService.isMobile();
+  public componentParams = {
+    isBlockCardExpanded: false,
+    isTreasuryCardExpanded: false,
+    isEmissionCardExpanded: false,
+    isOffersCardExpanded: false
+  }
 
   constructor(
     private wsService: WebsocketService,
-    private dataService: DataService
+    private dataService: DataService,
+    private deviceService: DeviceDetectorService
   ) {
 
     this.subWs = this.wsService.publicStatus.subscribe((isConnected) => {
@@ -92,6 +102,7 @@ export class StatusCardsComponent implements OnInit, OnDestroy, AfterContentInit
   ngOnInit(): void {
     this.subStatus = this.statusData$.subscribe((data) => {
       this.lastStatusData = data;
+      data.dateFormatted = new Date(data.timestamp.replace(' ', 'T')).getTime();
       if (this.switcherSelectedValue === this.switcherValues.USD) {
         this.loadOffersStats(data.swaps_stats_usd);
       } else if (this.switcherSelectedValue === this.switcherValues.BTC) {
@@ -120,7 +131,8 @@ export class StatusCardsComponent implements OnInit, OnDestroy, AfterContentInit
     this.isVolumesSelectVisible = !this.isVolumesSelectVisible;
   }
 
-  switcherClicked = (value: string) => {
+  switcherClicked = (event, value: string) => {
+    event.stopPropagation();
     this.switcherSelectedValue = value;
     if (value === this.switcherValues.USD) {
       this.changeStatsCurrency.emit(currencies.USD);
@@ -129,5 +141,21 @@ export class StatusCardsComponent implements OnInit, OnDestroy, AfterContentInit
       this.changeStatsCurrency.emit(currencies.BTC);
       this.loadOffersStats(this.lastStatusData.swaps_stats_btc);
     }
+  }
+
+  blockCardControlClicked() {
+    this.componentParams.isBlockCardExpanded = !this.componentParams.isBlockCardExpanded;
+  }
+
+  treasuryCardControlClicked() {
+    this.componentParams.isTreasuryCardExpanded = !this.componentParams.isTreasuryCardExpanded;
+  }
+
+  emissionCardControlClicked() {
+    this.componentParams.isEmissionCardExpanded = !this.componentParams.isEmissionCardExpanded;
+  }
+
+  offersCardControlClicked() {
+    this.componentParams.isOffersCardExpanded = !this.componentParams.isOffersCardExpanded;
   }
 }

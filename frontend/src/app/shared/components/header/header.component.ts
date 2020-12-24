@@ -11,6 +11,10 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 export class HeaderComponent implements OnInit {
   public isAssets = this.router.url.split('/')[1] === 'assets';
   public isMobile = this.deviceService.isMobile();
+  public componentParams = {
+    isSearchInputVisible: false,
+    isAssetsButtonVisible: false
+  }
   
   constructor(private router: Router, private deviceService: DeviceDetectorService) { }
 
@@ -18,5 +22,15 @@ export class HeaderComponent implements OnInit {
 
   assetsClicked(): void {
     this.router.navigate([routesConsts.CONFIDENTIAL_ASSETS_LIST]);
+  }
+
+  searchClicked() {
+    this.componentParams.isSearchInputVisible = !this.componentParams.isSearchInputVisible;
+    this.componentParams.isAssetsButtonVisible = false;
+  }
+
+  assetsControlClicked() {
+    this.componentParams.isAssetsButtonVisible = !this.componentParams.isAssetsButtonVisible;
+    this.componentParams.isSearchInputVisible = false;
   }
 }

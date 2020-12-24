@@ -4,6 +4,7 @@
 }
 
 .cards {
+    min-width: 1350px;
     display: flex;
     flex-direction: row;
 
@@ -181,7 +182,7 @@
 }
 
 
-.switch{
+.switch {
     top: -2px;
     display: flex;
     align-items: center;
@@ -196,7 +197,7 @@
 }
   
 .switch__usd,
-.switch__btc{
+.switch__btc {
     cursor: pointer;
     position: relative;
     display: block;
@@ -243,4 +244,87 @@
     letter-spacing: normal;
     color: #24c1ff;
     opacity: 1;
+}
+
+// mobile part
+
+.cards-mob {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-mob {
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+
+    &__section.dist{
+        margin-top: 15px;
+    }
+}
+
+.card-mob.dist {
+    margin-top: 10px;
+}
+
+.section-control {
+    display: flex;
+    cursor: pointer;
+    margin-left: auto;
+
+    &__header {
+        opacity: .5;
+    }
+
+    &__arrow {
+        &__item {
+            width: .95rem;
+            height: 13px;
+            display: inline-block;
+            position: relative;
+
+            &__left, &__right {
+                top: .4rem;
+                position: absolute;
+                width: .6rem;
+                height: .13rem;
+                background-color: #bdbdbd;
+                display: inline-block;
+                transition: all .2s ease;
+            }
+            
+            &__left {
+                left: 0;
+                transform: rotate(45deg);
+            }
+            
+            &__right {
+                right: 0px;
+                transform: rotate(-45deg);
+            }
+
+            &__left.active {
+                transform: rotate(-45deg);
+            }
+
+            &__right.active {
+                transform: rotate(45deg);
+            }
+        }
+    }
+}
+
+.card-header.control {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-content.curr {
+    display: flex;
+}
+
+.switch.curr {
+    top: 0;
 }

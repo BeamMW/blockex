@@ -1,16 +1,37 @@
-<div class="switch" *ngIf="selectedValue !== routesConstsVal.MASTERNET_TITLE">
-    <div #mainnet class="switch__mainnet" (click)="switcherClicked('mainnet')" >MAINNET</div>
-    <div #testnet class="switch__testnet" (click)="switcherClicked('testnet')">TESTNET</div>
-    <div #beamx class="switch__beamx" (click)="switcherClicked('beamx')">BEAM X</div>
-    <div #selector class="selector"
-        [ngStyle]="{'left': selectedValue === routesConstsVal.MAINNET_TITLE ? -2 + 'px' : 
-            selectedValue === routesConstsVal.TESTNET_TITLE ? mainnet.clientWidth + 'px' : 
-            mainnet.clientWidth + testnet.clientWidth + 1 + 'px',
-            'width': selectedValue === routesConstsVal.MAINNET_TITLE ? mainnet.clientWidth + 'px' : 
-            selectedValue === routesConstsVal.TESTNET_TITLE ? testnet.clientWidth + 'px' : 
-            beamx.clientWidth + 'px'}">
-        {{selectedValue}}
-    </div>
-</div>
+<!-- *ngIf="selectedValue !== routesConstsVal.MASTERNET_TITLE" -->
 
-<div class="without-switch" *ngIf="selectedValue === routesConstsVal.MASTERNET_TITLE"></div>
+<ng-container *ngIf="!isMobile">
+    <div class="switch" >
+        <div #mainnet class="switch__mainnet" (click)="switcherClicked('mainnet')" >MAINNET</div>
+        <div #testnet class="switch__testnet" (click)="switcherClicked('testnet')">TESTNET</div>
+        <div #beamx class="switch__beamx" (click)="switcherClicked('beamx')">BEAM X</div>
+        <div #selector class="switch__selector"
+            [ngStyle]="{'left': selectedValue === routesConstsVal.MAINNET_TITLE ? -2 + 'px' : 
+                selectedValue === routesConstsVal.TESTNET_TITLE ? mainnet.clientWidth + 'px' : 
+                mainnet.clientWidth + testnet.clientWidth + 1 + 'px',
+                'width': selectedValue === routesConstsVal.MAINNET_TITLE ? mainnet.clientWidth + 'px' : 
+                selectedValue === routesConstsVal.TESTNET_TITLE ? testnet.clientWidth + 'px' : 
+                beamx.clientWidth + 'px'}">
+            {{selectedValue}}
+        </div>
+    </div>
+    
+    <div class="without-switch" *ngIf="selectedValue === routesConstsVal.MASTERNET_TITLE"></div>
+</ng-container>
+
+<ng-container *ngIf="isMobile">
+    <div class="switch-mob" >
+        <div #mainnet class="switch-mob__mainnet" (click)="switcherClicked('mainnet')" >MAINNET</div>
+        <div #testnet class="switch-mob__testnet" (click)="switcherClicked('testnet')">TESTNET</div>
+        <div #beamx class="switch-mob__beamx" (click)="switcherClicked('beamx')">BEAM X</div>
+        <div #selector class="switch-mob__selector"
+            [ngStyle]="{'left': selectedValue === routesConstsVal.MAINNET_TITLE ? -2 + 'px' : 
+                selectedValue === routesConstsVal.TESTNET_TITLE ? mainnet.clientWidth + 'px' : 
+                mainnet.clientWidth + testnet.clientWidth + 1 + 'px',
+                'width': selectedValue === routesConstsVal.MAINNET_TITLE ? mainnet.clientWidth + 'px' : 
+                selectedValue === routesConstsVal.TESTNET_TITLE ? testnet.clientWidth + 'px' : 
+                beamx.clientWidth + 'px'}">
+            <span>{{selectedValue}}</span>
+        </div>
+    </div>
+</ng-container>

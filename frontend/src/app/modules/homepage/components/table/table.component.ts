@@ -78,6 +78,14 @@ export class TableComponent implements OnInit, OnDestroy {
     this.offersPage = event ? event.pageIndex : 0;
 
     this.dataService.loadOffers(this.offersPage).subscribe((data) => {
+      data['offers'].map(element => {
+        let createdDate = new Date(element.time_created.replaceAll('.', '-').replace(' ', 'T')+'Z');
+        const heightDiffInHours = (element.height_expired - element.min_height) / 60;
+        element.time_created = createdDate.toUTCString();
+        element['expired_time'] = createdDate.setHours(createdDate.getHours() + Math.round(heightDiffInHours));
+        
+        return element;
+      });
       this.offersData = new MatTableDataSource(data['offers']);
       this.offersCount = data['count'];
       this.offersLoadInProgress = false;

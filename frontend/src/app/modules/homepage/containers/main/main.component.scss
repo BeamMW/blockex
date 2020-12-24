@@ -8,13 +8,28 @@
     &__overview {
         @include top-background-color();
         display: flex;
-        flex-direction: column;
         padding: 20px 140px 40px;
-        min-height: 1200px;
+        min-height: 300px;
+    }
+
+    &__overview.mobile {
+        padding: 16px;
+        min-height: 200px;
+        overflow: hidden;
+    }
+
+    &__graphs {
+        @include top-background-color();
+        display: flex;
+        padding: 0 140px;
+        min-height: 300px;
+    }
+
+    &__graphs.mobile {
+        padding-left: 10px;
     }
 
     &__table-area {
         display: flex;
-        height: 150px; // remove
     }
 }

@@ -1,134 +1,284 @@
-<div class="cards" *ngIf="statusData$ | async as data">
-    <div class="cards__left">
-        <div class="cards__left__top">
-            <div class="card">
-                <div class="card__left-part">
-                    <div class="card__left-part__upper">
-                        <div class="card-header">BLOCKCHAIN HEIGHT</div>
-                        <div class="card-content">{{data.height | number:'.'}}</div>
+<ng-container *ngIf="!isMobile">
+    <div class="cards" *ngIf="statusData$ | async as data">
+        <div class="cards__left">
+            <div class="cards__left__top">
+                <div class="card">
+                    <div class="card__left-part">
+                        <div class="card__left-part__upper">
+                            <div class="card-header">BLOCKCHAIN HEIGHT</div>
+                            <div class="card-content">{{data.height | number:'.'}}</div>
+                        </div>
+                        <div class="card__left-part__lower">
+                            <div class="card-header">HASHRATE</div>
+                            <div class="card-content">{{data.difficulty / 60 | number:'.'}} Sol/s</div>
+                        </div>
                     </div>
-                    <div class="card__left-part__lower">
-                        <div class="card-header">HASHRATE</div>
-                        <div class="card-content">{{data.difficulty / 60 | number:'.'}} Sol/s</div>
+                    <div class="card__right-part">
+                        <div class="card__left-part__upper">
+                            <div class="card-header">LATEST BLOCK</div>
+                            <div class="card-content">{{data.dateFormatted | date:'medium'}}</div>
+                        </div>
+                        <div class="card__left-part__lower">
+                            <div class="card-header">LATEST BLOCK DIFFICULTY</div>
+                            <div class="card-content">{{data.difficulty | number:'.'}}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="card__right-part">
-                    <div class="card__left-part__upper">
-                        <div class="card-header">LATEST BLOCK</div>
-                        <div class="card-content">{{data.timestamp | date:'medium'}}</div>
+            </div>
+            <div class="cards__left__bottom">
+                <div class="card">
+                    <div class="card__left-part">
+                        <div class="card__left-part__upper">
+                            <div class="card-header">TOTAL COINS IN CIRCULATION</div>
+                            <div class="card-content">{{data.total_coins_in_circulation | number:'.'}} BEAM</div>
+                        </div>
                     </div>
-                    <div class="card__left-part__lower">
-                        <div class="card-header">LATEST BLOCK DIFFICULTY</div>
-                        <div class="card-content">{{data.difficulty | number:'.'}}</div>
+                    <div class="card__right-part">
+                        <div class="card__left-part__upper">
+                            <div class="card-header">COINS IN CIRCULATION (mined)</div>
+                            <div class="card-content">{{data.coins_in_circulation_mined | number:'.'}} BEAM</div>
+                        </div>
+                        <div class="card__left-part__lower">
+                            <div class="card-header">COINS IN CIRCULATION (treasury)</div>
+                            <div class="card-content">{{data.coins_in_circulation_treasury | number:'.' }} BEAM</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="cards__left__bottom">
-            <div class="card">
-                <div class="card__left-part">
-                    <div class="card__left-part__upper">
-                        <div class="card-header">TOTAL COINS IN CIRCULATION</div>
-                        <div class="card-content">{{data.total_coins_in_circulation | number:'.'}} BEAM</div>
+        <div class="cards__right">
+            <div class="cards__right__top">
+                <div class="card">
+                    <div class="card__left-part">
+                        <div class="card__left-part__upper">
+                            <div class="card-header">TOTAL EMISSION</div>
+                            <div class="card-content">{{data.total_emission | number:'.'}} BEAM</div>
+                        </div>
+                    </div>
+                    <div class="card__right-part">
+                        <div class="card__left-part__upper">
+                            <div class="card-header">NEXT TREASURY EMISSION</div>
+                            <div class="card-content">{{data.next_treasury_emission_coin_amount | number:'.'}} BEAM</div>
+                        </div>
+                        <div class="card__left-part__lower">
+                            <div class="card-header">NEXT TREASURY EMISSION (block height)</div>
+                            <div class="card-content">{{data.next_treasury_emission_block_height | number:'.' }}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="card__right-part">
-                    <div class="card__left-part__upper">
-                        <div class="card-header">COINS IN CIRCULATION (mined)</div>
-                        <div class="card-content">{{data.coins_in_circulation_mined | number:'.'}} BEAM</div>
+            </div>
+            <div class="cards__right__bottom">
+                <div class="card" [class.active]="isVolumesSelectVisible">
+                    <div class="card__left-part">
+                        <div class="card__left-part__upper">
+                            <div class="card-header">TOTAL OFFERS AMOUNT (last 24 hours)</div>
+                            <ng-container *ngIf="data.swaps_stats_sum_usd !== 0 ">
+                                <div class="card-content">
+                                    {{switcherSelectedValue === switcherValues.USD ?
+                                        data.swaps_stats_sum_usd : data.swaps_stats_sum_btc | number:'1.0-8'}} 
+                                        {{switcherSelectedValue | uppercase}}
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="data.swaps_stats_sum_usd === 0 ">
+                                <div class="card-content-empty">
+                                    There are no active offers.
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="card__left-part__lower"></div>
                     </div>
-                    <div class="card__left-part__lower">
-                        <div class="card-header">COINS IN CIRCULATION (treasury)</div>
-                        <div class="card-content">{{data.coins_in_circulation_treasury | number:'.' }} BEAM</div>
-                    </div>
+                    <ng-container *ngIf="data.swaps_stats_sum_usd !== 0 ">
+                        <div class="card__right-part" *ngIf="mostOffering.length > 0">
+                            <div class="card-header volumes-control-header">
+                                <div class="volumes-control" (click)="volumesClicked()">
+                                    <span class="volumes-control__header unselectable">TOP VOLUMES</span>
+                                    <span class="volumes-control__arrow">
+                                        <span class="volumes-control__arrow__item">
+                                            <span class="volumes-control__arrow__item__left" 
+                                                    [class.active]="isVolumesSelectVisible"></span>
+                                            <span class="volumes-control__arrow__item__right" 
+                                                    [class.active]="isVolumesSelectVisible"></span>
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="switch" *ngIf="isSwitcherVisible">
+                                    <div #usd class="switch__usd" 
+                                        [class.selected]="switcherSelectedValue === switcherValues.USD"
+                                        (click)="switcherClicked($event, switcherValues.USD)">USD</div>
+                                    <div #btc class="switch__btc"
+                                        [class.selected]="switcherSelectedValue === switcherValues.BTC"
+                                        (click)="switcherClicked($event, switcherValues.BTC)">BTC</div>
+                                    <div #selector class="selector"
+                                        [ngStyle]="{'left': switcherSelectedValue === switcherValues.USD ? 
+                                            -1 + 'px' : usd.clientWidth + 1 + 'px',
+                                            'width': switcherSelectedValue === switcherValues.USD ?
+                                            usd.clientWidth + 'px' : btc.clientWidth + 'px'}">
+                                        {{switcherSelectedValue}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-offering">
+                                <div class="card-offering__item" 
+                                        *ngFor="let item of (isVolumesSelectVisible ? offers : mostOffering)">
+                                    <span class="card-offering__item__title">{{item.title}}:</span>
+                                    <span class="card-offering__item__value">
+                                        {{item.value | number:'1.0-8'}} 
+                                        {{switcherSelectedValue | uppercase}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
                 </div>
             </div>
         </div>
     </div>
-    <div class="cards__right">
-        <div class="cards__right__top">
-            <div class="card">
-                <div class="card__left-part">
-                    <div class="card__left-part__upper">
-                        <div class="card-header">TOTAL EMISSION</div>
-                        <div class="card-content">{{data.total_emission | number:'.'}} BEAM</div>
-                    </div>
+</ng-container>
+
+<ng-container *ngIf="isMobile">
+    <div class="cards-mob" *ngIf="statusData$ | async as data">
+        <div class="card-mob" (click)="blockCardControlClicked()">
+            <div class="card-mob__section">
+                <div class="card-header control">
+                    <span>BLOCKCHAIN HEIGHT</span>
+                    <span class="section-control__arrow">
+                        <span class="section-control__arrow__item">
+                            <span class="section-control__arrow__item__left" 
+                                    [class.active]="componentParams.isBlockCardExpanded"></span>
+                            <span class="section-control__arrow__item__right" 
+                                    [class.active]="componentParams.isBlockCardExpanded"></span>
+                        </span>
+                    </span>
                 </div>
-                <div class="card__right-part">
-                    <div class="card__left-part__upper">
-                        <div class="card-header">NEXT TREASURY EMISSION</div>
-                        <div class="card-content">{{data.next_treasury_emission_coin_amount | number:'.'}} BEAM</div>
-                    </div>
-                    <div class="card__left-part__lower">
-                        <div class="card-header">NEXT TREASURY EMISSION (block height)</div>
-                        <div class="card-content">{{data.next_treasury_emission_block_height | number:'.' }}</div>
-                    </div>
-                </div>
+                <div class="card-content">{{data.height | number:'.'}}</div>
             </div>
+            <ng-container *ngIf="componentParams.isBlockCardExpanded">
+                <div class="card-mob__section dist">
+                    <div class="card-header">HASHRATE</div>
+                    <div class="card-content">{{data.difficulty / 60 | number:'.'}} Sol/s</div>
+                </div>
+                <div class="card-mob__section dist">
+                    <div class="card-header">LATEST BLOCK</div>
+                    <div class="card-content">{{data.dateFormatted | date:'medium'}}</div>
+                </div>
+                <div class="card-mob__section dist">
+                    <div class="card-header">LATEST BLOCK DIFFICULTY</div>
+                    <div class="card-content">{{data.difficulty | number:'.'}}</div>
+                </div>
+            </ng-container>
         </div>
-        <div class="cards__right__bottom">
-            <div class="card" [class.active]="isVolumesSelectVisible">
-                <div class="card__left-part">
-                    <div class="card__left-part__upper">
-                        <div class="card-header">TOTAL OFFERS AMOUNT (last 24 hours)</div>
-                        <ng-container *ngIf="data.swaps_stats_sum_usd !== 0 ">
-                            <div class="card-content">
-                                {{switcherSelectedValue === switcherValues.USD ?
-                                    data.swaps_stats_sum_usd : data.swaps_stats_sum_btc | number:'1.0-8'}} 
-                                    {{switcherSelectedValue | uppercase}}
-                            </div>
-                        </ng-container>
-                        <ng-container *ngIf="data.swaps_stats_sum_usd === 0 ">
-                            <div class="card-content-empty">
-                                There are no active offers.
-                            </div>
-                        </ng-container>
-                    </div>
-                    <div class="card__left-part__lower"></div>
+
+        <div class="card-mob dist" (click)="treasuryCardControlClicked()">
+            <div class="card-mob__section">
+                <div class="card-header control">
+                    <span>TOTAL COINS IN CIRCULATION</span>
+                    <span class="section-control__arrow">
+                        <span class="section-control__arrow__item">
+                            <span class="section-control__arrow__item__left" 
+                                    [class.active]="componentParams.isTreasuryCardExpanded"></span>
+                            <span class="section-control__arrow__item__right" 
+                                    [class.active]="componentParams.isTreasuryCardExpanded"></span>
+                        </span>
+                    </span>
+                </div>
+                <div class="card-content">{{data.total_coins_in_circulation | number:'.'}} BEAM</div>
+            </div>
+            <ng-container *ngIf="componentParams.isTreasuryCardExpanded">
+                <div class="card-mob__section dist">
+                    <div class="card-header">NEXT TREASURY EMISSION</div>
+                    <div class="card-content">{{data.next_treasury_emission_coin_amount | number:'.'}} BEAM</div>
+                </div>
+                <div class="card-mob__section dist">
+                    <div class="card-header">NEXT TREASURY EMISSION (block height)</div>
+                    <div class="card-content">{{data.next_treasury_emission_block_height | number:'.' }}</div>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="card-mob dist" (click)="emissionCardControlClicked()">
+            <div class="card-mob__section">
+                <div class="card-header control">
+                    <span>TOTAL EMISSION</span>
+                    <span class="section-control__arrow">
+                        <span class="section-control__arrow__item">
+                            <span class="section-control__arrow__item__left" 
+                                    [class.active]="componentParams.isEmissionCardExpanded"></span>
+                            <span class="section-control__arrow__item__right" 
+                                    [class.active]="componentParams.isEmissionCardExpanded"></span>
+                        </span>
+                    </span>
+                </div>
+                <div class="card-content">{{data.total_emission | number:'.'}} BEAM</div>
+            </div>
+            <ng-container *ngIf="componentParams.isEmissionCardExpanded">
+                <div class="card-mob__section dist">
+                    <div class="card-header">NEXT TREASURY EMISSION</div>
+                    <div class="card-content">{{data.next_treasury_emission_coin_amount | number:'.'}} BEAM</div>
+                </div>
+                <div class="card-mob__section dist">
+                    <div class="card-header">NEXT TREASURY EMISSION (block height)</div>
+                    <div class="card-content">{{data.next_treasury_emission_block_height | number:'.' }}</div>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="card-mob dist" (click)="offersCardControlClicked()">
+            <div class="card-mob__section">
+                <div class="card-header control">
+                    <span>TOTAL OFFERS AMOUNT (last 24 hours)</span>
+                    <span class="section-control__arrow">
+                        <span class="section-control__arrow__item">
+                            <span class="section-control__arrow__item__left" 
+                                    [class.active]="componentParams.isOffersCardExpanded"></span>
+                            <span class="section-control__arrow__item__right" 
+                                    [class.active]="componentParams.isOffersCardExpanded"></span>
+                        </span>
+                    </span>
                 </div>
                 <ng-container *ngIf="data.swaps_stats_sum_usd !== 0 ">
-                    <div class="card__right-part" *ngIf="mostOffering.length > 0">
-                        <div class="card-header volumes-control-header">
-                            <div class="volumes-control" (click)="volumesClicked()">
-                                <span class="volumes-control__header unselectable">TOP VOLUMES</span>
-                                <span class="volumes-control__arrow">
-                                    <span class="volumes-control__arrow__item">
-                                        <span class="volumes-control__arrow__item__left" 
-                                                [class.active]="isVolumesSelectVisible"></span>
-                                        <span class="volumes-control__arrow__item__right" 
-                                                [class.active]="isVolumesSelectVisible"></span>
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="switch" *ngIf="isSwitcherVisible">
-                                <div #usd class="switch__usd" 
-                                    [class.selected]="switcherSelectedValue === switcherValues.USD"
-                                    (click)="switcherClicked(switcherValues.USD)">USD</div>
-                                <div #btc class="switch__btc"
-                                    [class.selected]="switcherSelectedValue === switcherValues.BTC"
-                                    (click)="switcherClicked(switcherValues.BTC)">BTC</div>
-                                <div #selector class="selector"
-                                    [ngStyle]="{'left': switcherSelectedValue === switcherValues.USD ? 
-                                        -1 + 'px' : usd.clientWidth + 1 + 'px',
-                                        'width': switcherSelectedValue === switcherValues.USD ?
-                                        usd.clientWidth + 'px' : btc.clientWidth + 'px'}">
-                                    {{switcherSelectedValue}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-offering">
-                            <div class="card-offering__item" 
-                                    *ngFor="let item of (isVolumesSelectVisible ? offers : mostOffering)">
-                                <span class="card-offering__item__title">{{item.title}}:</span>
-                                <span class="card-offering__item__value">
-                                    {{item.value | number:'1.0-8'}} 
-                                    {{switcherSelectedValue | uppercase}}
-                                </span>
+                    <div class="card-content curr">
+                        <span>{{switcherSelectedValue === switcherValues.USD ?
+                            data.swaps_stats_sum_usd : data.swaps_stats_sum_btc | number:'1.0-8'}} 
+                            {{switcherSelectedValue | uppercase}}
+                        </span>
+                        <div class="switch curr" *ngIf="isSwitcherVisible">
+                            <div #usd class="switch__usd" 
+                                [class.selected]="switcherSelectedValue === switcherValues.USD"
+                                (click)="switcherClicked($event, switcherValues.USD)">USD</div>
+                            <div #btc class="switch__btc"
+                                [class.selected]="switcherSelectedValue === switcherValues.BTC"
+                                (click)="switcherClicked($event, switcherValues.BTC)">BTC</div>
+                            <div #selector class="selector"
+                                [ngStyle]="{'left': switcherSelectedValue === switcherValues.USD ? 
+                                    -1 + 'px' : usd.clientWidth + 1 + 'px',
+                                    'width': switcherSelectedValue === switcherValues.USD ?
+                                    usd.clientWidth + 'px' : btc.clientWidth + 'px'}">
+                                {{switcherSelectedValue}}
                             </div>
                         </div>
                     </div>
                 </ng-container>
+                <ng-container *ngIf="data.swaps_stats_sum_usd === 0 ">
+                    <div class="card-content-empty">
+                        There are no active offers.
+                    </div>
+                </ng-container>
             </div>
+            <ng-container *ngIf="componentParams.isOffersCardExpanded">
+                <div class="card-mob__section dist">
+                    <div class="card-header">TOP VOLUMES</div>
+                    <div class="card-offering">
+                        <div class="card-offering__item" 
+                                *ngFor="let item of offers">
+                            <span class="card-offering__item__title">{{item.title}}:</span>
+                            <span class="card-offering__item__value">
+                                {{item.value | number:'1.0-8'}} 
+                                {{switcherSelectedValue | uppercase}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
         </div>
     </div>
-</div>
+</ng-container>
