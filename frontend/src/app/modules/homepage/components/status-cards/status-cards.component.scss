@@ -4,7 +4,6 @@
 }
 
 .cards {
-    min-width: 1350px;
     display: flex;
     flex-direction: row;
 
@@ -251,6 +250,10 @@
 .cards-mob {
     display: flex;
     flex-direction: column;
+}
+
+.cards-mob .card-header {
+    align-items: center;
 }
 
 .card-mob {

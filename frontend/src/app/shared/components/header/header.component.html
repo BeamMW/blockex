@@ -22,7 +22,7 @@
                     [class.search]=!componentParams.isSearchInputVisible
                     [class.decline]=componentParams.isSearchInputVisible
                     (click)="searchClicked()"></div>
-                <div class="assets-control"
+                <div class="assets-control" *ngIf="!isAssets"
                     [class.accept]=!componentParams.isAssetsButtonVisible
                     [class.decline]=componentParams.isAssetsButtonVisible
                     (click)="assetsControlClicked()"></div>

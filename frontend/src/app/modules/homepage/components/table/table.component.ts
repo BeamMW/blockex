@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { environment } from './../../../../../environments/environment';
 import { routesConsts } from '../../../../consts';
 import { MatTableDataSource } from '@angular/material/table';
 import { DataService } from '../../../../services/data/data.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-table',
@@ -12,6 +13,39 @@ import { Router } from '@angular/router';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit, OnDestroy {
+  @HostListener('document:click', ['$event']) clickout(event: any) {
+    this.isSelectedOfferVisible = false;
+  }
+
+  public icons = {
+    BTC: {
+      value: 'BTC',
+      iconUrl: `../../../../../assets/modules/homepage/components/table/icon-btc.svg`
+    },
+    LTC: {
+      value: 'LTC',
+      iconUrl: `../../../../../assets/modules/homepage/components/table/icon-ltc.svg`
+    },
+    BCH: {
+      value: 'BCH',
+      iconUrl: `../../../../../assets/modules/homepage/components/table/icon-bch.svg`
+    },
+    DASH: {
+      value: 'DASH',
+      iconUrl: `../../../../../assets/modules/homepage/components/table/icon-dash.svg`
+    },
+    DOGE: {
+      value: 'DOGE',
+      iconUrl: `../../../../../assets/modules/homepage/components/table/icon-doge.svg`
+    },
+    QTUM: {
+      value: 'QTUM',
+      iconUrl: `../../../../../assets/modules/homepage/components/table/icon-qtum.svg`
+    }
+  }
+  public iconBeamUrl: string = `../../../../../assets/modules/homepage/components/table/icon-beam.svg`;
+  public iconArrowDownUrl: string = `../../../../../assets/modules/homepage/components/table/arrow-down.svg`;
+
   public selectorTitles = {
     BLOCKS: 'BLOCKS',
     AS_OFFERS: 'ATOMIC SWAP OFFERS',
@@ -22,8 +56,52 @@ export class TableComponent implements OnInit, OnDestroy {
   ]
   public displayedColumns: string[] = ['height', 'hash', 'age',
     'difficulty', 'kernels', 'inputs', 'outputs', 'fees'];
-  public dataSource = ELEMENT_DATA;
   public selectorActiveTitle = this.selectorTitles.BLOCKS;
+  public isMobile = this.deviceService.isMobile();
+
+  public offerFilters = [{
+    name: 'All',
+    isSelected: true,
+    value: 'all',
+    active: true
+  }, {
+    name: 'BTC (Bitcoin)',
+    isSelected: false,
+    value: 'BTC',
+    active: false
+  }, {
+    name: 'BCH (Bitcoin Cash)',
+    isSelected: false,
+    value: 'BCH',
+    active: false
+  }, {
+    name: 'BSV (Bitcoin SV)',
+    isSelected: false,
+    value: 'BSV',
+    active: false
+  }, {
+    name: 'LTC (Litecoin)',
+    isSelected: false,
+    value: 'LTC',
+    active: false
+  }, {
+    name: 'DASH (Dash)',
+    isSelected: false,
+    value: 'DASH',
+    active: false
+  }, {
+    name: 'QTUM (Qtum)',
+    isSelected: false,
+    value: 'QTUM',
+    active: false
+  }, {
+    name: 'DOGE (Dogecoin)',
+    isSelected: false,
+    value: 'BTC',
+    active: false
+  }];
+  public selectedOfferFilter = this.offerFilters[0];
+  public isSelectedOfferVisible = false;
 
   public blocksCount: number;
   public blocksPage: number = 0;
@@ -35,6 +113,7 @@ export class TableComponent implements OnInit, OnDestroy {
   private subscriber: any;
 
   constructor(
+    private deviceService: DeviceDetectorService,
     private dataService: DataService,
     private router: Router) { }
 
@@ -78,15 +157,33 @@ export class TableComponent implements OnInit, OnDestroy {
     this.offersPage = event ? event.pageIndex : 0;
 
     this.dataService.loadOffers(this.offersPage).subscribe((data) => {
+      this.offerFilters.forEach((item) => {
+        if (item !== this.offerFilters[0]) {
+          item.active = false;
+        }
+      });
       data['offers'].map(element => {
         let createdDate = new Date(element.time_created.replaceAll('.', '-').replace(' ', 'T')+'Z');
         const heightDiffInHours = (element.height_expired - element.min_height) / 60;
         element.time_created = createdDate.toUTCString();
         element['expired_time'] = createdDate.setHours(createdDate.getHours() + Math.round(heightDiffInHours));
         
+        const filterItem = this.offerFilters.find((item) => {
+          return item.value === element.swap_currency;
+        });
+
+        if (filterItem !== undefined) {
+          filterItem.active = true;
+        }
+
         return element;
       });
       this.offersData = new MatTableDataSource(data['offers']);
+      if (this.selectedOfferFilter !== this.offerFilters[0]) {
+        this.offersData.filter = this.selectedOfferFilter.value;
+      } else {
+        this.offersData.filter = '';
+      }
       this.offersCount = data['count'];
       this.offersLoadInProgress = false;
     });
@@ -117,24 +214,38 @@ export class TableComponent implements OnInit, OnDestroy {
       this.loadOffers(null);
     }
   }
-}
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+  getSecondCurrencyIcon(currValue) {
+    if (currValue === this.icons.BTC.value) {
+      return this.icons.BTC.iconUrl;
+    } else if (currValue === this.icons.BCH.value) {
+      return this.icons.BCH.iconUrl;
+    } else if (currValue === this.icons.DASH.value) {
+      return this.icons.DASH.iconUrl;
+    } else if (currValue === this.icons.DOGE.value) {
+      return this.icons.DOGE.iconUrl;
+    } else if (currValue === this.icons.LTC.value) {
+      return this.icons.LTC.iconUrl;
+    } else if (currValue === this.icons.QTUM.value) {
+      return this.icons.QTUM.iconUrl;
+    }
+  }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-];
+  offersFilterClicked(item) {
+    if (this.selectedOfferFilter !== item) {
+      this.selectedOfferFilter.isSelected = false;
+      this.selectedOfferFilter = item;
+      this.selectedOfferFilter.isSelected = true;
+      if (this.selectedOfferFilter !== this.offerFilters[0]) {
+        this.offersData.filter = item.value;
+      } else {
+        this.offersData.filter = '';
+      }
+    }
+  }
+
+  showOffersOptions(event) {
+    event.stopPropagation();
+    this.isSelectedOfferVisible = !this.isSelectedOfferVisible;
+  }
+}

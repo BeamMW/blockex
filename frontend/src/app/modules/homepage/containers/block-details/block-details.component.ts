@@ -4,6 +4,7 @@ import { DataService } from '../../../../services';
 import { Router, NavigationEnd} from '@angular/router';
 import { routesConsts } from "../../../../consts";
 import {environment} from "../../../../../environments/environment";
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-block-details',
@@ -28,8 +29,13 @@ export class BlockDetailsComponent implements OnInit {
     outputs: ['commitment', 'extra'],
     block: ['name', 'value']
   };
+  public isMobile = this.deviceService.isMobile();
 
-  constructor(private router: Router, private dataService: DataService, private route: ActivatedRoute) {
+  constructor(
+      private router: Router,
+      private deviceService: DeviceDetectorService,
+      private dataService: DataService, 
+      private route: ActivatedRoute) {
     route.queryParams.subscribe(params => {
       if (params.searched_by !== undefined) {
         this.searchedBy = params.searched_by;
@@ -70,6 +76,13 @@ export class BlockDetailsComponent implements OnInit {
         day: 'numeric', hour: 'numeric',
         minute: 'numeric', second: 'numeric' }), additional: ''}
     ];
+
+    if (blockItem.rate_btc !== null && blockItem.rate_usd !== null) {
+      this.block.data.push({
+        name: 'EXCHANGE RATE', value: blockItem.rate_btc + ' BTC | ' + blockItem.rate_usd + ' USD', additional: ''
+      });
+    }
+
     this.block.inputs = blockItem.inputs;
     this.block.outputs = blockItem.outputs;
     this.block.kernels = blockItem.kernels;

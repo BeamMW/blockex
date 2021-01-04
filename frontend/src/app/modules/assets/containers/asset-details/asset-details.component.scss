@@ -1,3 +1,5 @@
+@import 'ui-mixins';
+
 .details-content {
     margin: 40px auto auto;
     display: flex;
@@ -60,7 +62,7 @@
 }
 
 .details-data {
-    background-color: rgba(239, 239, 240, 0.1);
+    @include paginator-wrapper-background();
     padding-left: 20px;
     padding-top: 20px;
     margin-top: 20px;
@@ -112,4 +114,26 @@
     line-height: normal;
     letter-spacing: normal;
     color: #333333;
+}
+
+@media(max-width: 769px) {
+    .details-content {
+        width: 100%;
+    }
+
+    .details-data {
+        margin: 20px 20px 0 20px;
+    }
+
+    .short-label {
+        margin-left: 20px;
+    }
+
+    .data-title {
+        width: 160px;
+    }
+
+    .data-value {
+        max-width: calc(100% - 170px);
+    }
 }

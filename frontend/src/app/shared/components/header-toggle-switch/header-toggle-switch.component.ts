@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { routesConsts } from './../../../consts';
 import { environment } from './../../../../environments/environment';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { env } from 'process';
 
 @Component({
   selector: 'app-header-toggle-switch',

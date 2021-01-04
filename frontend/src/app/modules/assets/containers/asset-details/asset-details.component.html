@@ -11,7 +11,8 @@
     </div>
     <div class="details-data">
       <div class="details-data-row">
-        <div class="data-title">METADATA SCHEMA VERSION:</div>
+        <div class="data-title" *ngIf="isFullScreen">METADATA SCHEMA VERSION:</div>
+        <div class="data-title" *ngIf="!isFullScreen">SCHEMA VERSION:</div>
         <div class="data-value">
           <ng-container *ngIf="assetData.schema_version.length > 0">
             {{assetData.schema_version}}
@@ -26,7 +27,8 @@
         <div class="data-value">{{assetData.asset_name}}</div>
       </div>
       <div class="details-data-row">
-        <div class="data-title">SHORT NAME / ASSET CODE:</div>
+        <div class="data-title" *ngIf="isFullScreen">SHORT NAME / ASSET CODE:</div>
+        <div class="data-title" *ngIf="!isFullScreen">SHORT NAME</div>
         <div class="data-value">{{assetData.asset_code}}</div>
       </div>
       <div class="details-data-row">
@@ -75,7 +77,7 @@
         </div>
       </div>
       <div class="details-data-row">
-        <div class="data-title">WEBSITE:</div>
+        <div class="data-title">DESCRIPTION PAPER:</div>
         <div class="data-value">
           <ng-container *ngIf="assetData.pdf_url.length > 0">
             {{assetData.pdf_url}}

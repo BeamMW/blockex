@@ -131,7 +131,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
 
     let res = '';
     if (this.value >= 1000) {
-        const suffixes = ['', '', 'M', 'M'];
+        const suffixes = ['', '', 'M', 'M', 'T', 'T'];
         const suffixNum = Math.floor(('' + this.value).length / 3);
         let shortValue;
         for (let precision = 2; precision >= 1; precision--) {
@@ -156,7 +156,6 @@ export class GraphsComponent implements OnInit, OnDestroy {
       },
       chart: {
         shadow: false,
-        width: this.isMobile ? window.innerWidth * 0.95 : 610,
         height: this.isMobile ? 420 : 430,
         ignoreHiddenSeries: false,
         type: 'line',
@@ -259,7 +258,6 @@ export class GraphsComponent implements OnInit, OnDestroy {
       chart: {
         shadow: false,
         styledMode: true,
-        width: this.isMobile ? window.innerWidth * 0.95 : 610,
         height: this.isMobile ? 420 : 430,
         marginBottom: 100,
         type: 'line',
@@ -336,7 +334,6 @@ export class GraphsComponent implements OnInit, OnDestroy {
       },
       chart: {
         shadow: false,
-        width: this.isMobile ? window.innerWidth * 0.95 : 610,
         height: this.isMobile ? 420 : 430,
         ignoreHiddenSeries: false,
         type: 'line',
@@ -438,7 +435,6 @@ export class GraphsComponent implements OnInit, OnDestroy {
       },
       chart: {
         shadow: false,
-        width: this.isMobile ? window.innerWidth * 0.95 : 610,
         height: this.isMobile ? 420 : 430,
         ignoreHiddenSeries: false,
         type: 'line',
@@ -505,7 +501,6 @@ export class GraphsComponent implements OnInit, OnDestroy {
       },
       chart: {
         shadow: false,
-        width: this.isMobile ? window.innerWidth * 0.95 : 610,
         height: this.isMobile ? 420 : 430,
         ignoreHiddenSeries: false,
         type: 'line',
@@ -762,11 +757,13 @@ export class GraphsComponent implements OnInit, OnDestroy {
           blockChart.update({
             name: "Average difficulty"
           });
-          blockChart.yAxis[1].update({
-              title:{
-                  text: "Average difficulty"
-              }
-          });
+          if (!this.isMobile) {
+            blockChart.yAxis[1].update({
+                title:{
+                    text: "Average difficulty"
+                }
+            });
+          }
           blockChart.legend.allItems[1].update({
             name: "Average difficulty"
           });
@@ -778,11 +775,13 @@ export class GraphsComponent implements OnInit, OnDestroy {
           blockChart.update({
             name: "Average hash rate"
           });
-          blockChart.yAxis[1].update({
-              title:{
-                  text: "Average hash rate"
-              }
-          });
+          if (!this.isMobile) {
+            blockChart.yAxis[1].update({
+                title:{
+                    text: "Average hash rate"
+                }
+            });
+          }
           blockChart.legend.allItems[1].update({
             name: "Average hash rate"
           });

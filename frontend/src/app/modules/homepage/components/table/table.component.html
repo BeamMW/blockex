@@ -1,5 +1,5 @@
-<div class="table-container">
-    <div class="table-container__header">
+<div class="table-container" [class.mobile]="isMobile">
+    <div class="table-container__header" *ngIf="!isMobile">
         <div class="table-selector">
             <div class="table-selector__item" (click)="selectorItemBlocksClicked()">
                 <div class="table-selector__item__title" 
@@ -17,101 +17,141 @@
             </div>
         </div>
         <div class="swap-promt" *ngIf="selectorActiveTitle === selectorTitles.AS_OFFERS">
-            <span class="swap-promt__link" (click)="downloadsClicked()">Download</span> Beam Wallet from 
+            <span class="swap-promt__link swap-promt__url" (click)="downloadsClicked()">Download</span> Beam Wallet from 
             <span class="swap-promt__url">beam.mw</span> 
             and swap
         </div>
     </div>
+    <div class="table-container__header-mob" *ngIf="isMobile">
+        <div class="swap-promt mobile" *ngIf="selectorActiveTitle === selectorTitles.AS_OFFERS">
+            <span class="swap-promt__link swap-promt__url" (click)="downloadsClicked()">Download</span> Beam Wallet from 
+            <span class="swap-promt__url">beam.mw</span> 
+            and swap
+        </div>
+        <div class="table-selector">
+            <div class="table-selector__item" (click)="selectorItemBlocksClicked()">
+                <div class="table-selector__item__title" 
+                    [class.active]="selectorActiveTitle === selectorTitles.BLOCKS">
+                    {{selectorTitles.BLOCKS}}</div>
+                <div class="table-selector__item__bottom-line"
+                    *ngIf="selectorActiveTitle === selectorTitles.BLOCKS"></div>
+            </div>
+            <div class="table-selector__item" (click)="selectorItemASOClicked()">
+                <div class="table-selector__item__title" 
+                    [class.active]="selectorActiveTitle === selectorTitles.AS_OFFERS">
+                    {{selectorTitles.AS_OFFERS}}</div>
+                <div class="table-selector__item__bottom-line"
+                    *ngIf="selectorActiveTitle === selectorTitles.AS_OFFERS"></div>
+            </div>
+        </div>
+    </div>
     <div class="table-container__content">
         <ng-container *ngIf="selectorActiveTitle === selectorTitles.BLOCKS">
-            <div class="paginator-wrapper">
-                <mat-paginator class="paginator" [pageSize]="20" [pageIndex]="blocksPage" [length]="blocksCount"
+            <div class="paginator-wrapper" [class.mobile]="isMobile">
+                <mat-paginator class="paginator" [class.mobile]="isMobile"
+                    [pageSize]="20" [pageIndex]="blocksPage" [length]="blocksCount"
                     (page)="loadBlocks($event)" showFirstLastButtons></mat-paginator>
             </div>
-            <mat-table [dataSource]="blocksData"class="blocks-table">
+            <mat-table [dataSource]="blocksData" class="blocks-table" [class.mobile]="isMobile">
                 <!-- Position Column -->
                 <ng-container matColumnDef="height">
                     <mat-header-cell class="height-cell-header" *matHeaderCellDef> HEIGHT: </mat-header-cell>
-                    <mat-cell class="height-cell" *matCellDef="let element">
-                        <span class="desktop-label">
-                            {{element.height}}
-                        </span>
+                    <mat-cell class="height-cell" [class.mobile]="isMobile" *matCellDef="let element">
+                        <span class="mobile-label" *ngIf="isMobile">HEIGHT:</span>
+                        <span class="desktop-label" [class.mobile]="isMobile">{{element.height | number:'.'}}</span>
                     </mat-cell>
                 </ng-container>
                 <!-- Hash Column -->
                 <ng-container matColumnDef="hash">
                     <mat-header-cell class="hash-cell-header" *matHeaderCellDef> HASH: </mat-header-cell>
                     <mat-cell class="hash-cell" *matCellDef="let element">
-                        <span class="desktop-label">
-                            {{element.hash}}
-                        </span>
+                        <span class="mobile-label" *ngIf="isMobile">HASH:</span>
+                        <span class="desktop-label" [class.mobile]="isMobile">{{element.hash}}</span>
                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="age">
                     <mat-header-cell class="age-cell-header" *matHeaderCellDef> AGE: </mat-header-cell>
                     <mat-cell class="age-cell" *matCellDef="let element">
-                        <span class="desktop-label">
-                            {{element.timestamp | date:'medium'}}
-                        </span>
+                        <span class="mobile-label" *ngIf="isMobile">AGE:</span>
+                        <span class="desktop-label" [class.mobile]="isMobile">{{element.timestamp | date:'medium'}}</span>
                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="difficulty">
                     <mat-header-cell class="diff-cell-header" *matHeaderCellDef> DIFFICULTY: </mat-header-cell>
                     <mat-cell class="diff-cell" *matCellDef="let element">
-                        <span class="desktop-label">
-                            {{element.difficulty | number:'.'}}
-                        </span>
+                        <span class="mobile-label" *ngIf="isMobile">DIFFICULTY:</span>
+                        <span class="desktop-label" [class.mobile]="isMobile">{{element.difficulty | number:'.'}}</span>
                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="kernels">
                     <mat-header-cell class="kernel-cell-header" *matHeaderCellDef> #KERNELS: </mat-header-cell>
                     <mat-cell class="kernel-cell" *matCellDef="let element">
-                        <span class="desktop-label">
-                            {{element.kernels}}
-                        </span>
+                        <span class="mobile-label" *ngIf="isMobile">#KERNELS:</span>
+                        <span class="desktop-label" [class.mobile]="isMobile">{{element.kernels | number:'.'}}</span>
                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="inputs">
                     <mat-header-cell class="input-cell-header" *matHeaderCellDef> #INPUTS: </mat-header-cell>
                     <mat-cell class="input-cell" *matCellDef="let element">
-                        <span class="desktop-label">
-                            {{element.inputs}}
-                        </span>
+                        <span class="mobile-label" *ngIf="isMobile">#INPUTS:</span>
+                        <span class="desktop-label" [class.mobile]="isMobile">{{element.inputs | number:'.'}}</span>
                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="outputs">
                     <mat-header-cell class="output-cell-header" *matHeaderCellDef> #OUTPUTS: </mat-header-cell>
                     <mat-cell class="output-cell-header" *matCellDef="let element">
-                        <span class="desktop-label">
-                            {{element.outputs}}
-                        </span>
+                        <span class="mobile-label" *ngIf="isMobile">#OUTPUTS:</span>
+                        <span class="desktop-label" [class.mobile]="isMobile">{{element.outputs | number:'.'}}</span>
                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="fees">
                     <mat-header-cell class="fee-cell-header" *matHeaderCellDef> FEES: </mat-header-cell>
                     <mat-cell class="fee-cell" *matCellDef="let element">
-                        <span class="desktop-label">
-                            {{element.fee}}
-                        </span>
+                        <span class="mobile-label" *ngIf="isMobile"> FEES:</span>
+                        <span class="desktop-label" [class.mobile]="isMobile">{{element.fee | number:'.'}}</span>
                     </mat-cell>
                 </ng-container>
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row class="blocks-table-row" (click)="showBlockDetails(row)"
+                <mat-header-row *matHeaderRowDef="displayedColumns" 
+                                class="blocks-table-header-row" 
+                                [class.mobile]="isMobile"></mat-header-row>
+                <mat-row class="blocks-table-row" [class.mobile]="isMobile" (click)="showBlockDetails(row)"
                     *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
         </ng-container>
 
         <ng-container *ngIf="selectorActiveTitle === selectorTitles.AS_OFFERS">
-            <div class="paginator-wrapper">
-                <mat-paginator class="paginator" [pageSize]="20" [pageIndex]="offersPage" [length]="offersCount"
+            <div class="paginator-wrapper" [class.mobile]="isMobile">
+                <div class="offer-type-selector" [class.mobile]="isMobile" *ngIf="!offersLoadInProgress && offersCount > 0">
+                    <span class="offer-selected" (click)="showOffersOptions($event)">
+                        <span>Coins: </span>
+                        <span class="offer-selected__value">{{selectedOfferFilter.name}}</span>
+                        <img [src]="iconArrowDownUrl" class="arrow-down-small">
+                    </span>
+                    <div class="type-options" *ngIf="isSelectedOfferVisible">
+                      <ul>
+                          <ng-container *ngFor="let p of offerFilters">
+                            <li class="type-options-item"
+                                [class.selected]="p.isSelected" *ngIf="p.active"
+                                (click)="offersFilterClicked(p)">
+                                    <span> {{p.name}} </span>
+                            </li>
+                          </ng-container>
+                      </ul>
+                    </div>
+                </div>
+                <mat-paginator class="paginator" [class.mobile]="isMobile"
+                    [pageSize]="20" [pageIndex]="offersPage" [length]="offersCount"
                     (page)="loadOffers($event)" showFirstLastButtons></mat-paginator>
             </div>
-            <mat-table [dataSource]="offersData" class="offers-table">
+            <mat-table [dataSource]="offersData" [class.mobile]="isMobile" class="offers-table">
                 <ng-container matColumnDef="coins">
                     <mat-header-cell class="coins-cell-header" *matHeaderCellDef> COINS: </mat-header-cell>
-                    <mat-cell class="coins-cell" *matCellDef="let element">
+                    <mat-cell class="coins-cell" [class.mobile]="isMobile" *matCellDef="let element">
+                        <span class="offer-mobile-label" *ngIf="isMobile">COINS:</span>
                         <span class="desktop-label">
-                           BEAM/{{element.swap_currency}} 
+                            <img class="beam-coin-icon" [src]="iconBeamUrl">
+                            <img class="second-coin-icon" [src]="getSecondCurrencyIcon(element.swap_currency)">
+                            <span>BEAM/{{element.swap_currency}}</span> 
                         </span>
                     </mat-cell>
                 </ng-container>
@@ -119,8 +159,9 @@
                 <ng-container matColumnDef="amount-send">
                     <mat-header-cell class="amount-send-cell-header" *matHeaderCellDef> AMOUNT (send): </mat-header-cell>
                     <mat-cell class="amount-send-cell" *matCellDef="let element">
-                        <span class="desktop-label">
-                            {{element.beam_amount}} BEAM
+                        <span class="offer-mobile-label" *ngIf="isMobile">AMOUNT (SEND):</span>
+                        <span class="desktop-label" [class.mobile]="isMobile">
+                            {{element.beam_amount | number:'.'}} BEAM
                         </span>
                     </mat-cell>
                 </ng-container>
@@ -128,8 +169,9 @@
                 <ng-container matColumnDef="amount-rec">
                     <mat-header-cell class="amount-rec-cell-header" *matHeaderCellDef> AMOUNT (receive): </mat-header-cell>
                     <mat-cell class="amount-rec-cell" *matCellDef="let element">
-                        <span class="desktop-label">
-                            {{element.swap_amount+' '+element.swap_currency}}
+                        <span class="offer-mobile-label" *ngIf="isMobile">AMOUNT (RECEIVE):</span>
+                        <span class="desktop-label" [class.mobile]="isMobile">
+                            {{element.swap_amount | number:'.'}} {{element.swap_currency}}
                         </span>
                     </mat-cell>
                 </ng-container>
@@ -137,7 +179,8 @@
                 <ng-container matColumnDef="created">
                     <mat-header-cell class="created-cell-header" *matHeaderCellDef> CREATED: </mat-header-cell>
                     <mat-cell class="created-cell" *matCellDef="let element">
-                        <span class="desktop-label">
+                        <span class="offer-mobile-label" *ngIf="isMobile">CREATED:</span>
+                        <span class="desktop-label" [class.mobile]="isMobile">
                             {{element.time_created | date:'medium'}}
                         </span>
                     </mat-cell>
@@ -146,7 +189,8 @@
                 <ng-container matColumnDef="expired">
                     <mat-header-cell class="expired-cell-header" *matHeaderCellDef> EXPIRED (approx.): </mat-header-cell>
                     <mat-cell class="expired-cell" *matCellDef="let element">
-                        <span class="desktop-label">
+                        <span class="offer-mobile-label" *ngIf="isMobile">EXPIRED (APPROX.):</span>
+                        <span class="desktop-label" [class.mobile]="isMobile">
                             {{element.expired_time | date: 'medium'}}
                         </span>
                     </mat-cell>
@@ -155,14 +199,15 @@
                 <ng-container matColumnDef="tr-id">
                     <mat-header-cell class="tr-id-cell-header" *matHeaderCellDef> TRANSACTION ID: </mat-header-cell>
                     <mat-cell class="tr-id-cell" *matCellDef="let element">
-                        <span class="desktop-label">
-                            {{element.txId}}
-                        </span>
+                        <span class="offer-mobile-label" *ngIf="isMobile">TRANSACTION ID:</span>
+                        <span class="desktop-label" [class.mobile]="isMobile"> {{element.txId}} </span>
                     </mat-cell>
                 </ng-container>
                   
-                <mat-header-row *matHeaderRowDef="displayedOffersColumns"></mat-header-row>
-                <mat-row class="offers-table-row" *matRowDef="let row; columns: displayedOffersColumns;"></mat-row>
+                <mat-header-row class="offers-table-header-row" [class.mobile]="isMobile"
+                    *matHeaderRowDef="displayedOffersColumns"></mat-header-row>
+                <mat-row class="offers-table-row" [class.mobile]="isMobile"
+                    *matRowDef="let row; columns: displayedOffersColumns;"></mat-row>
             </mat-table>
 
             <div *ngIf="!offersLoadInProgress && offersCount === 0" class="empty-offers-message">

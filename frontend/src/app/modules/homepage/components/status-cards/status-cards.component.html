@@ -74,8 +74,8 @@
                             <div class="card-header">TOTAL OFFERS AMOUNT (last 24 hours)</div>
                             <ng-container *ngIf="data.swaps_stats_sum_usd !== 0 ">
                                 <div class="card-content">
-                                    {{switcherSelectedValue === switcherValues.USD ?
-                                        data.swaps_stats_sum_usd : data.swaps_stats_sum_btc | number:'1.0-8'}} 
+                                    {{(switcherSelectedValue === switcherValues.USD ?
+                                        data.swaps_stats_sum_usd : data.swaps_stats_sum_btc) | number:'1.0-8'}} 
                                         {{switcherSelectedValue | uppercase}}
                                 </div>
                             </ng-container>
@@ -226,7 +226,7 @@
             <div class="card-mob__section">
                 <div class="card-header control">
                     <span>TOTAL OFFERS AMOUNT (last 24 hours)</span>
-                    <span class="section-control__arrow">
+                    <span class="section-control__arrow" *ngIf="data.swaps_stats_sum_usd !== 0">
                         <span class="section-control__arrow__item">
                             <span class="section-control__arrow__item__left" 
                                     [class.active]="componentParams.isOffersCardExpanded"></span>
@@ -237,8 +237,8 @@
                 </div>
                 <ng-container *ngIf="data.swaps_stats_sum_usd !== 0 ">
                     <div class="card-content curr">
-                        <span>{{switcherSelectedValue === switcherValues.USD ?
-                            data.swaps_stats_sum_usd : data.swaps_stats_sum_btc | number:'1.0-8'}} 
+                        <span>{{(switcherSelectedValue === switcherValues.USD ?
+                            data.swaps_stats_sum_usd : data.swaps_stats_sum_btc) | number:'1.0-8'}} 
                             {{switcherSelectedValue | uppercase}}
                         </span>
                         <div class="switch curr" *ngIf="isSwitcherVisible">
@@ -264,7 +264,7 @@
                     </div>
                 </ng-container>
             </div>
-            <ng-container *ngIf="componentParams.isOffersCardExpanded">
+            <ng-container *ngIf="componentParams.isOffersCardExpanded && data.swaps_stats_sum_usd !== 0">
                 <div class="card-mob__section dist">
                     <div class="card-header">TOP VOLUMES</div>
                     <div class="card-offering">

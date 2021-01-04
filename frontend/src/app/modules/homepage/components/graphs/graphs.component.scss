@@ -2,16 +2,19 @@
 @import 'ui-mixins';
 
 .graphs {
-    padding-top: 40px;
+    width: 100%;
+    overflow: hidden;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 
-    &__left{
+    &__left {
         display: flex;
         flex-direction: column;
+        width: 50%;
         
         &__block {
+            padding: 0 5px;
             display: flex;
             flex-direction: column;
     
@@ -21,6 +24,7 @@
         }
     
         &__fee {
+            padding: 0 5px;
             display: flex;
             flex-direction: column;
             margin-top: 45px;
@@ -51,9 +55,11 @@
     &__right{
         display: flex;
         flex-direction: column;
+        width: 50%;
 
         &__swaps,
         &__trs {
+            padding: 0 5px;
             display: flex;
             flex-direction: column;
     
@@ -80,6 +86,7 @@
         }
 
         &__lelantus {
+            padding: 0 5px;
             display: flex;
             flex-direction: column;
             margin-top: 45px;
@@ -119,7 +126,7 @@
         flex-direction: column;
 
         &__elem {
-            margin-top: 30px;
+            margin-top: 10px;
         }
     }
 
@@ -152,7 +159,7 @@
         }
 
         &__elem {
-            margin-top: 30px;
+            margin-top: 10px;
         }
     }
 
@@ -179,7 +186,7 @@
         }
 
         &__elem {
-            margin-top: 30px;
+            margin-top: 10px;
         }
     }
 
@@ -212,7 +219,7 @@
         }
 
         &__elem {
-            margin-top: 30px;
+            margin-top: 10px;
         }
     }
 }
@@ -608,3 +615,22 @@
 .arrow-down-small {
     margin-left: 5px;
 }
+
+.axis-titles {
+    display: flex;
+    place-content: space-between;
+    font-size: 14px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+    margin-top: 35px;
+}
+
+// @media(max-width: 1380px) {
+//     .graphs {
+//         flex-direction: column;
+//     }
+// }

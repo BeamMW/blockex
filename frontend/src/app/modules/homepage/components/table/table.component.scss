@@ -9,9 +9,35 @@
     @include paginator-wrapper-background();
 }
 
+.paginator-wrapper {
+    padding: 0 140px;
+    display: flex;
+    justify-content: flex-end;
+}
+
 .paginator {
     background-color: rgba(255, 255, 255, 0);
-    padding: 0 140px;
+}
+
+.paginator-wrapper.mobile,
+.paginator.mobile {
+    padding: 0;
+}
+
+:host .paginator.mobile ::ng-deep.mat-paginator-container {
+    padding: 8px 15px 20px 15px;
+}
+
+:host .paginator.mobile ::ng-deep.mat-paginator-range-actions {
+    width: 100%;
+}
+
+:host .paginator.mobile ::ng-deep.mat-paginator-range-label {
+    margin: 0 auto 0 0;
+}
+
+:host .paginator.mobile ::ng-deep.mat-paginator-page-size {
+    margin-right: 11px;
 }
 
 :host ::ng-deep.mat-paginator-page-size div:last-of-type {
@@ -30,6 +56,13 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+    }
+
+    &__header-mob {
+        padding: 30px 22px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 }
 
@@ -95,6 +128,12 @@
     }
 }
 
+.swap-promt.mobile {
+    margin-bottom: 30px;
+    width: 175px;
+    text-align: center;
+}
+
 .blocks-table {
     box-shadow: none;
     font-size: 12px;
@@ -127,6 +166,10 @@
 
 .mat-row:nth-child(odd){
     background-color: rgb(251,251,251);
+}
+
+.mat-row::after {
+    min-height: 0;
 }
 
 .height-cell,
@@ -174,7 +217,7 @@
 }
 
 .fee-cell-header,
-fee-cell {
+.fee-cell {
     min-width: 55px;
 }
 
@@ -191,4 +234,158 @@ fee-cell {
     margin: 50px auto;
 }
 
+.blocks-table.mobile {
+    overflow: hidden;
+}
 
+.offers-table.mobile {
+    overflow: hidden;
+}
+
+.mobile-label {
+    width: 100px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.offer-mobile-label {
+    width: 150px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.blocks-table-header-row.mobile,
+.offers-table-header-row.mobile {
+    display: none;
+}
+
+.offers-table-row.mobile,
+.blocks-table-row.mobile {
+    flex-direction: column;
+    align-items: start;
+    padding: 8px 24px;
+    max-height: 390px;
+}
+
+.height-cell.mobile {
+    max-width: none;
+    padding-left: 0;
+}
+
+.desktop-label.mobile {
+    max-width: 205px;
+}
+
+.second-coin-icon,
+.beam-coin-icon {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+}
+
+.beam-coin-icon {
+    z-index: 20;
+}
+
+.second-coin-icon {
+    z-index: 10;
+    margin-left: 14px;
+}
+
+.coins-cell .desktop-label {
+    display: flex;
+    align-items: center;
+}
+
+.coins-cell .desktop-label span {
+    margin-left: 45px;
+}
+
+.coins-cell.mobile {
+    padding-left: 0;
+}
+
+.offer-type-selector {
+    display: flex;
+    margin-right: 25px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.offer-type-selector.mobile {
+    width: 240px;
+    margin-right: 0;
+}
+
+.offer-type-selector .offer-selected {
+    display: flex;
+    cursor: pointer;
+    height: 11px;
+    margin: auto;
+    opacity: 0.5;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #333333;
+
+    &__value {
+        margin-left: 5px;
+        font-weight: bold;
+    }
+}
+
+.offer-type-selector.mobile .offer-selected {
+    margin-top: 22px;
+    margin-left: 16px;
+}
+
+.offer-type-selector .type-options {
+    @include selector-bg-color();
+    z-index: 100;
+    width: 176px;
+    position: absolute;
+    border: none;
+    margin-top: 40px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    opacity: 1;
+}
+
+.offer-type-selector.mobile .type-options {
+    margin-left: 16px;
+}
+
+.offer-type-selector .type-options .type-options-item {
+    padding: 7px 14px;
+    text-align: start;
+    height: 15px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+}
+
+.offer-type-selector .type-options ul{
+    list-style: none;
+    margin: 7px 0;
+    padding: 0;
+}
+
+.offer-type-selector .type-options .type-options-item.selected {
+    @include selector-selected-color();
+}
+
+@media(max-width: 1440px) {
+    .table-container:not(.mobile){
+        min-width: 1350px;
+    }
+}

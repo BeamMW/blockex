@@ -10,7 +10,9 @@ import { DataService } from '../../../../services';
 export class AssetDetailsComponent implements OnInit {
   assetData: any;
   assetLoaded = false;
+  isFullScreen = false;
   constructor(private router: Router, private route: ActivatedRoute, private dataService: DataService) {
+    this.isFullScreen = window.innerWidth > 768;
   }
 
   getAssetItem (id) {

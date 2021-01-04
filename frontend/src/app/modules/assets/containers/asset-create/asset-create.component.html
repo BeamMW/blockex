@@ -9,7 +9,7 @@
             <div class="mandatory-values">
               <div class="mand-values-row">
                 <div class="mand-title">METADATA SCHEMA VERSION:</div>
-                <input class="mand-input" type="text" name="shemaVer" formControlName="shemaVer"
+                <input class="mand-input" type="text" name="shemaVer" placeholder="1" formControlName="shemaVer"
                       (input)="schemaVerChanged(createForm.get('shemaVer'))"/>
               </div>
               <div class="mand-values-row">
@@ -69,44 +69,67 @@
                 <input class="mand-input" type="text" name="website" formControlName="website"
                       (input)="websiteChanged(createForm.get('website'))"/>
               </div>
+              <div class="error"
+                *ngIf="createForm.controls['website'].hasError('pattern')">
+                Invalid url
+              </div>
               <div class="mand-values-row">
                 <div class="mand-title">DESCRIPTION PAPER:</div>
                 <input class="mand-input" type="text" name="descPaper" formControlName="descPaper"
                       (input)="descPaperChanged(createForm.get('descPaper'))"/>
               </div>
+              <div class="error"
+                *ngIf="createForm.controls['descPaper'].hasError('pattern')">
+                Invalid url
+              </div>
               <div class="mand-values-row">
-                <div class="mand-title">FAVICON:</div>
+                <div class="mand-title">PATH TO FAVICON:</div>
                 <input class="mand-input" type="text" name="favicon" formControlName="favicon"
                       (input)="faviconChanged(createForm.get('favicon'))"/>
               </div>
+              <div class="error"
+                *ngIf="createForm.controls['favicon'].hasError('pattern')">
+                Invalid url
+              </div>
               <div class="mand-values-row">
-                <div class="mand-title">LOGO:</div>
+                <div class="mand-title">PATH TO LOGO:</div>
                 <input class="mand-input" type="text" name="logo" formControlName="logo"
                       (input)="logoChanged(createForm.get('logo'))"/>
+              </div>
+              <div class="error"
+                *ngIf="createForm.controls['logo'].hasError('pattern')">
+                Invalid url
               </div>
             </div>
           </div>
         </div>
       </form>
 
-      <div class="create-command-area">
-        <div class="command-title">REGISTRATION COMMAND:</div>
-        <div class="command-supply" *ngIf="!notEmpty">Supply assets parameters</div>
-        <div class="command-field" *ngIf="notEmpty">{{assetCommand}}</div>
-        <div class="command-copy" *ngIf="notEmpty" (click)="copyMessage()">
-          <img src="../../assets/icon-copy.svg" class="icon-copy" width="15px" height="17px"/>
-          <span>Copy</span>
+      <div class="command">
+        <div class="metadata-max error"
+            *ngIf="commandLength > COMMAND_MAX_LENGTH">
+          Maximum of 16384 characters in metadata
         </div>
-        <div class="command-paste" *ngIf="notEmpty">
-          Paste this command in command line
+        <div class="create-command-area" [class.metadata-max-error]="commandLength > COMMAND_MAX_LENGTH">
+          <div class="command-title">REGISTRATION COMMAND:</div>
+          <div class="command-supply" *ngIf="!notEmpty">Supply assets parameters</div>
+          <div class="command-field" *ngIf="notEmpty">{{assetCommand}}</div>
+          <div class="command-copy" *ngIf="notEmpty" (click)="copyMessage()">
+            <img src="../../assets/icon-copy.svg" class="icon-copy" width="15px" height="17px"/>
+            <span>Copy</span>
+          </div>
+          <div class="command-paste" *ngIf="notEmpty">
+            Paste this command in command line
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div class="create-separator"></div>
-  <div class="create-see-more">To see more info please check 
+  <div class="create-see-more"> See 
     <div class="asset-descr-link" (click)="openDescriptorClicked()">
       Asset Descriptor
     </div>
+    <span><span>&nbsp;</span>for more info.</span>
   </div>
 </div>

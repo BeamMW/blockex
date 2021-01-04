@@ -1,22 +1,31 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 import { DataService } from './../../../services';
 import { Router } from '@angular/router';
 import { routesConsts } from './../../../consts';
+import { ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-header-search',
   templateUrl: './header-search.component.html',
   styleUrls: ['./header-search.component.scss']
 })
-export class HeaderSearchComponent implements OnInit {
+export class HeaderSearchComponent implements OnInit, AfterViewInit {
   @Input() isAssetsVal: boolean;
 
   public placeholderVal: string;
-
-  constructor(private dataService: DataService, private router: Router) {}
+  @ViewChild('searchInput', { static: false }) input: ElementRef;
+  constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
     this.placeholderVal =  this.isAssetsVal ? 'Search by asset, description, ratio' : 'Search by height, hash, kernel ID';
+  }
+
+  ngAfterViewInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params.searched_by !== undefined) {
+        this.input.nativeElement.value = params.searched_by;
+      }
+    });
   }
 
   onEventMethod(e): void {

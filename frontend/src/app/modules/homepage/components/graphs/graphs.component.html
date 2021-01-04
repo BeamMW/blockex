@@ -23,6 +23,7 @@
           <span class="graphs__left__fee__title">
               <span>FEE</span>
           </span>
+          
           <div class="graphs__left__fee__elem" [chart]="graphs.fee"></div>
       </div>
     </div>
@@ -74,12 +75,19 @@
               </ul>
             </div>
         </div>
+        <div class="axis-titles">
+          <span class="axis-titles__first">Blocks per hour</span>
+          <span class="axis-titlessecond">{{selectedBlocksChartType.tooltip}}</span>
+        </div>
         <div class="graphs-mob__block__elem" [chart]="graphs.blocks"></div>
     </div>
     <div class="graphs-mob__fee">
         <span class="graphs-mob__fee__title mob">
             <span>FEE</span>
         </span>
+        <div class="axis-titles">
+          <span class="axis-titles__first">Fee, Groth</span>
+        </div>
         <div class="graphs-mob__fee__elem" [chart]="graphs.fee"></div>
     </div>
     <div class="graphs-mob__swaps">
@@ -97,7 +105,15 @@
             </li>
           </ul>
         </div>
-    </div>
+      </div>
+      <div class="axis-titles">
+        <span class="axis-titles__first" *ngIf="selectedTrChartType.num === trCharts[0].num">
+          Amount, {{(activeCurrency !== undefined ? activeCurrency : 'usd') | uppercase}}
+        </span>
+        <span class="axis-titles__first" *ngIf="selectedTrChartType.num === trCharts[1].num">
+          Transactions amount
+        </span>
+      </div>
       <div class="graphs-mob__swaps__elem" [chart]="graphs.swaps" *ngIf="selectedTrChartType.num == trCharts[0].num"></div>
       <div class="graphs-mob__trs__elem" [chart]="graphs.transactions" *ngIf="selectedTrChartType.num == trCharts[1].num"></div>
     </div>
@@ -105,6 +121,9 @@
         <span class="graphs-mob__lelantus__title mob">
             <span>AVERAGE TIME TO WITHDRAW THE MAX PRIVACY COINS</span>
         </span>
+        <div class="axis-titles">
+          <span class="axis-titles__first">Time, Hours</span>
+        </div>
         <div class="graphs-mob__lelantus__elem" [chart]="graphs.lelantus"></div>
     </div>
   </div>

@@ -14,12 +14,15 @@ export class AssetsListComponent implements OnInit {
   dataSource: any;
   displayedColumns: string[] = ['coin', 'id', 'value', 'description', 'website'];
   loading_assets = true;
+  isFullScreen = false;
   count = 0;
   page = 0;
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
-    private router: Router) { }
+    private router: Router) {
+      this.isFullScreen = window.innerWidth > 768;
+  }
 
   ngOnInit() {
     const assetsByHeight = this.route.snapshot.queryParamMap.get('height');

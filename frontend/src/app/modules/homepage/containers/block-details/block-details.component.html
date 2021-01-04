@@ -2,24 +2,24 @@
   <div class="details-card-container">
     <span class="mobile-label mat-column-block-header">{{block.header}}</span>
         <mat-table #table [dataSource]="block.data">
-        <ng-container class="main-table-name" matColumnDef="name">
-            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
-        </ng-container>
+            <ng-container class="main-table-name" matColumnDef="name">
+                <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            </ng-container>
 
-        <ng-container matColumnDef="value">
-            <mat-cell class="main-table-value" *matCellDef="let element">
-            <span class="value-table-cell">{{element.value}} {{element.additional}}</span>
-            </mat-cell>
-        </ng-container>
+            <ng-container matColumnDef="value">
+                <mat-cell class="main-table-value" *matCellDef="let element">
+                    <span class="value-table-cell">{{element.value}} {{element.additional}}</span>
+                </mat-cell>
+            </ng-container>
 
-        <ng-container matColumnDef="block-header">
-            <mat-header-cell *matHeaderCellDef style="font-size: 18px">
-            {{block.header}}
-            </mat-header-cell>
-        </ng-container>
+            <ng-container matColumnDef="block-header">
+                <mat-header-cell *matHeaderCellDef style="font-size: 18px">
+                    {{block.header}}
+                </mat-header-cell>
+            </ng-container>
 
-        <mat-header-row *matHeaderRowDef="['block-header']"></mat-header-row>
-        <mat-row class="main-table-row" *matRowDef="let row; columns: displayedColumns.block;"></mat-row>
+            <mat-header-row *matHeaderRowDef="['block-header']"></mat-header-row>
+            <mat-row class="main-table-row" *matRowDef="let row; columns: displayedColumns.block;"></mat-row>
         </mat-table>
 
     <div class="expansion-data-rows">

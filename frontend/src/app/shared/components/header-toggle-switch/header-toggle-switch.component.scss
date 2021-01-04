@@ -96,6 +96,7 @@
         transition: 300ms ease-out;
         border-radius: 15.5px;
         font-size: 13px;
+        text-indent: 5.5px;
         font-weight: 600;
         font-stretch: normal;
         font-style: normal;
@@ -104,8 +105,8 @@
         top: -1px;
         text-transform: uppercase;
         cursor: default;
-        align-items: center;
         display: flex;
+        place-content: center;
     }    
 }
 

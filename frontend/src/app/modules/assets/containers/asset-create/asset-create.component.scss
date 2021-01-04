@@ -1,3 +1,5 @@
+@import 'ui-mixins';
+
 .create-content {
     width: 1180px;
     display: flex;
@@ -42,9 +44,9 @@
 
 .optional-title,
 .mandatory-title {
+    @include paginator-wrapper-background();
     height: 55px;
     padding-left: 16px;
-    background-color: #d9e6ed;
     display: flex;
     align-items: center;
     font-size: 12px;
@@ -123,6 +125,10 @@
     border-radius: 5px;
     background-color: rgba(217, 230, 237, 0.35);
     padding: 20px;
+}
+
+.create-command-area.metadata-max-error {
+    border: 1px solid #ff5e5e;
 }
 
 .command-title {
@@ -243,6 +249,11 @@
     margin: 10px auto 0 auto;
 }
 
+.command {
+    display: flex;
+    flex-direction: column;
+}
+
 .error {
     font-family: "ProximaNovaIt", sans-serif;
     font-size: 12px;
@@ -253,4 +264,72 @@
     letter-spacing: normal;
     color: #ff5e5e;
     margin-left: 190px;
+}
+
+.metadata-max {
+    margin-left: 40px;
+    margin-bottom: 20px;
+}
+
+@media(max-width: 769px) {
+    .create {
+        overflow: hidden;
+    }
+
+    .create-content {
+        width: unset;
+        padding: 0 20px;
+    }
+
+    .create-main {
+        flex-direction: column;
+    }
+
+    .create-data {
+        width: 100%;
+    }
+    
+    .mand-values-row {
+        flex-direction: column;
+    }
+
+    .mand-input {
+        margin-top: 10px;
+        width: 280px;
+    }
+    
+    .create-command-area {
+        width: unset;
+        margin-left: 0;
+    }
+
+    .mand-values-row {
+        align-items: unset;
+    }
+    
+    .create-separator {
+        width: 100%;
+    }
+    
+    .create-see-more {
+        width: 100%;
+    }
+
+    .create-form {
+        width: 100%;
+    }
+
+    .command {
+        margin-top: 30px;
+        width: 100%;
+    }
+
+    .error {
+        margin-left: 0;
+    }
+
+    .create-see-more,
+    .create-separator {
+        padding: 0 20px;
+    }
 }

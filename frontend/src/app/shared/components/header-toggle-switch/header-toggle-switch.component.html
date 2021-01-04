@@ -1,7 +1,5 @@
-<!-- *ngIf="selectedValue !== routesConstsVal.MASTERNET_TITLE" -->
-
 <ng-container *ngIf="!isMobile">
-    <div class="switch" >
+    <div class="switch" *ngIf="selectedValue !== routesConstsVal.MASTERNET_TITLE">
         <div #mainnet class="switch__mainnet" (click)="switcherClicked('mainnet')" >MAINNET</div>
         <div #testnet class="switch__testnet" (click)="switcherClicked('testnet')">TESTNET</div>
         <div #beamx class="switch__beamx" (click)="switcherClicked('beamx')">BEAM X</div>
@@ -20,7 +18,7 @@
 </ng-container>
 
 <ng-container *ngIf="isMobile">
-    <div class="switch-mob" >
+    <div class="switch-mob" *ngIf="selectedValue !== routesConstsVal.MASTERNET_TITLE">
         <div #mainnet class="switch-mob__mainnet" (click)="switcherClicked('mainnet')" >MAINNET</div>
         <div #testnet class="switch-mob__testnet" (click)="switcherClicked('testnet')">TESTNET</div>
         <div #beamx class="switch-mob__beamx" (click)="switcherClicked('beamx')">BEAM X</div>
