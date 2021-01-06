@@ -13,6 +13,7 @@ import { ActivatedRoute} from '@angular/router';
 export class AssetsListComponent implements OnInit {
   dataSource: any;
   displayedColumns: string[] = ['coin', 'id', 'value', 'description', 'website'];
+  displayedColumnsMobile: string[] = ['coin', 'description', 'website'];
   loading_assets = true;
   isFullScreen = false;
   count = 0;

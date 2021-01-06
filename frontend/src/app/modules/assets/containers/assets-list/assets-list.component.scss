@@ -285,4 +285,9 @@
         max-width: 215px;
         white-space: normal;
     }
+
+    .description-cell-header,
+    .description-cell {
+        min-width: 0;
+    }
 }

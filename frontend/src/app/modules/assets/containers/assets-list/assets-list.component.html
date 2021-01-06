@@ -116,28 +116,9 @@
               </span>
             </mat-cell>
           </ng-container>
-          <ng-container matColumnDef="id">
-            <mat-header-cell class="id-cell-header" *matHeaderCellDef> ID: </mat-header-cell>
-            <mat-cell class="id-cell" *matCellDef="let element">
-              <span class="mobile-label">ID:</span>
-              <span class="id-label">
-                {{element.id}}
-              </span>
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="value">
-            <mat-header-cell class="value-cell-header" *matHeaderCellDef> VALUE: </mat-header-cell>
-            <mat-cell class="value-cell" *matCellDef="let element">
-              <span class="mobile-label">VALUE:</span>
-              <span class="value-label">
-                {{element.value}}
-              </span>
-            </mat-cell>
-          </ng-container>
           <ng-container matColumnDef="description">
             <mat-header-cell class="description-cell-header" *matHeaderCellDef> DESCRIPTION: </mat-header-cell>
             <mat-cell class="description-cell" *matCellDef="let element">
-              <span class="mobile-label">DESCRIPTION:</span>
               <span class="description-label">
                 {{element.short_desc}}
               </span>
@@ -146,15 +127,16 @@
           <ng-container matColumnDef="website">
             <mat-header-cell class="website-cell-header" *matHeaderCellDef> WEBSITE: </mat-header-cell>
             <mat-cell class="website-cell" *matCellDef="let element">
-              <span class="mobile-label">WEBSITE:</span>
               <span class="website-label" (click)="websiteClicked($event, element.site_url)">
                 {{element.site_url}}
               </span>
             </mat-cell>
           </ng-container>
         
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row class="blocks-table-row" (click)="coinClicked(row)" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          <mat-header-row *matHeaderRowDef="displayedColumnsMobile"></mat-header-row>
+          <mat-row class="blocks-table-row" 
+            (click)="coinClicked(row)" 
+            *matRowDef="let row; columns: displayedColumnsMobile;"></mat-row>
         </mat-table>
       </div>
     </div>

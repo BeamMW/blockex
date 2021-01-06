@@ -263,7 +263,7 @@
 .blocks-table-row.mobile {
     flex-direction: column;
     align-items: start;
-    padding: 8px 24px;
+    padding: 8px 24px 30px 24px;
     max-height: 390px;
 }
 
@@ -273,7 +273,7 @@
 }
 
 .desktop-label.mobile {
-    max-width: 205px;
+    max-width: 170px;
 }
 
 .second-coin-icon,
@@ -387,5 +387,21 @@
 @media(max-width: 1440px) {
     .table-container:not(.mobile){
         min-width: 1350px;
+    }
+}
+
+@media(max-width: 768px) {
+    .table-selector {
+        &__item {
+            &__title {
+                font-size: 14px;
+            }
+        }
+    }
+
+
+    
+    .mat-row {
+        min-height: 25px;
     }
 }
