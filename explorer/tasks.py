@@ -484,7 +484,8 @@ def update_charts():
 
     result['avg_blocks'] = (blocks.count() / len(result['items'])) / 2
     result['items'].pop(0)
-    result['lelantus_trs'].pop(0)
+    if len(result['lelantus_trs']) > 0:
+        result['lelantus_trs'].pop(0)
 
     _redis.set('graph_data', json.dumps(result, default=str))
     return True
