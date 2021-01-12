@@ -21,6 +21,7 @@ from .models import *
 from datetime import datetime, timedelta
 from django.utils import timezone
 from pycoingecko import CoinGeckoAPI
+from django.db.models import Max
 
 HEIGHT_STEP = 43800
 BEAM_NODE_API = 'http://localhost:8888'
