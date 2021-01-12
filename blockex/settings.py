@@ -140,11 +140,11 @@ CELERYBEAT_SCHEDULE  = {
         'schedule': crontab(minute='*/1'),
         'args': None
     },
-    # 'automatic_bot_check': {
-    #     'task': 'bot_check',
-    #     'schedule': crontab(minute='*/1'),
-    #     'args': None
-    # },
+    'automatic_bot_check': {
+        'task': 'bot_check',
+        'schedule': crontab(minute='*/1'),
+        'args': None
+    },
     'automatic_update_blockchain': {
         'task': 'update_blockchain',
         'schedule': crontab(minute='*/1'),
