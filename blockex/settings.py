@@ -157,7 +157,7 @@ CELERYBEAT_SCHEDULE  = {
     },
     'automatic_update_lelantus': {
         'task': 'update_lelantus',
-        'schedule': crontab(minute='*/10'),
+        'schedule': crontab(minute='*/1'),
         'args': None
     },
     'automatic_update_swap_offers_daily_cumulative': {
