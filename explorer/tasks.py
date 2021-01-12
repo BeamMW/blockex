@@ -460,8 +460,8 @@ def update_charts():
         swap_item = {
             "btc": offset_swaps.aggregate(Max('btc')),
             "dash": offset_swaps.aggregate(Max('dash')),
-            "dogecoin": offset_swaps.aggregate(Max('dogecoin')),
-            "litecoin": offset_swaps.aggregate(Max('litecoin')),
+            "dogecoin": offset_swaps.aggregate(Max('doge')),
+            "litecoin": offset_swaps.aggregate(Max('ltc')),
             "qtum": offset_swaps.aggregate(Max('qtum'))
         }
 
