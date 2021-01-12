@@ -457,11 +457,11 @@ def update_charts():
         #swaps info start
         offset_swaps = swap_data.filter(created_at__gte=date_with_offset, created_at__lt=end_date)
         swap_item = {
-            "btc": offset_swaps.objects.aggregate(Max('btc')),
-            "dash": offset_swaps.objects.aggregate(Max('dash')),
-            "dogecoin": offset_swaps.objects.aggregate(Max('dogecoin')),
-            "litecoin": offset_swaps.objects.aggregate(Max('litecoin')),
-            "qtum": offset_swaps.objects.aggregate(Max('qtum'))
+            "btc": offset_swaps.aggregate(Max('btc')),
+            "dash": offset_swaps.aggregate(Max('dash')),
+            "dogecoin": offset_swaps.aggregate(Max('dogecoin')),
+            "litecoin": offset_swaps.aggregate(Max('litecoin')),
+            "qtum": offset_swaps.aggregate(Max('qtum'))
         }
 
         if swap_item:
