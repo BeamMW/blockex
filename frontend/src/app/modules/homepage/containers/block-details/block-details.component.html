@@ -110,10 +110,12 @@
             </ng-container>
 
             <ng-container matColumnDef="extra">
-                <mat-header-cell *matHeaderCellDef> Extra: </mat-header-cell>
-                <mat-cell *matCellDef="let element" [class.searched-by]="element.kernel_id == searchedBy && isFadein">
+                <mat-header-cell *matHeaderCellDef class="kernel-extra-header-cell"> Extra: </mat-header-cell>
+                <mat-cell *matCellDef="let element" 
+                    class="kernel-extra-cell"
+                    [class.searched-by]="element.kernel_id == searchedBy && isFadein">
                 <span class="mobile-label">Extra:</span>
-                <span class="excess-cell">{{element.extra}}</span>
+                <span class="kernel-extra-value-cell">{{element.extra}}</span>
                 </mat-cell>
             </ng-container>
 

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { from } from 'rxjs';
 import { routesConsts } from '../../../consts';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-header-logo',
@@ -8,6 +10,7 @@ import { routesConsts } from '../../../consts';
   styleUrls: ['./header-logo.component.scss']
 })
 export class HeaderLogoComponent implements OnInit {
+  public isBeamx = environment.envTitle === routesConsts.BEAMX_TITLE;
 
   constructor(private router: Router) { }
 

@@ -17,6 +17,15 @@ const routes: Routes = [{
         }
     ]
   }, {
+    path: 'block',
+    children: [
+        {
+            path: '', component: HeaderComponent, outlet: 'header'
+        }, {
+            path: '', component: BlockDetailsComponent
+        }
+    ]
+  }, {
     path: 'block/:hash',
     children: [
         {

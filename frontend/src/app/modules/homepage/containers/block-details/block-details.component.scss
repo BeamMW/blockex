@@ -138,6 +138,13 @@
     display: none;
 }
 
+.kernel-extra-cell,
+.kernel-extra-value-cell,
+.kernel-extra-header-cell {
+    white-space: break-spaces;
+    min-width: 390px;
+}
+
 @media(max-width: 600px) {
     .details {
         padding: 16px;
@@ -360,5 +367,14 @@
         color: #333333;
         width: auto;
         min-width: auto;
+    }
+
+
+    .kernel-extra-cell,
+    .kernel-extra-value-cell,
+    .kernel-extra-header-celll {
+        white-space: break-spaces;
+        max-width: 260px;
+        min-width: 135px;
     }
 }

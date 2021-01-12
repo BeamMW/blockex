@@ -27,3 +27,16 @@
         }
     }
 }
+
+.logo-x {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+
+    &__title {
+        color: #ffffff;
+        font-size: 13px;
+        margin-top: 5px;
+        text-align: center;
+    }
+}
