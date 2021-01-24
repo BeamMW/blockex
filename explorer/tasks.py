@@ -116,7 +116,7 @@ def update_status():
         "dai": 0,
         "usdt": 0,
         "eth": 0,
-        "wrapped-bitcoin": 0,
+        "wbtc": 0,
 
     }
 
