@@ -95,7 +95,15 @@ def update_status():
     data['total_emission'] = _redis.get('total_coins_emission')
 
     cg = CoinGeckoAPI()
-    cg_data = cg.get_price(ids=['bitcoin', 'dash', 'dogecoin', 'litecoin', 'qtum'], vs_currencies=['usd', 'btc'])
+    cg_data = cg.get_price(ids=['bitcoin',
+        'dash',
+        'dogecoin',
+        'litecoin',
+        'qtum',
+        'dai',
+        'wrapped-bitcoin',
+        'ethereum',
+        'tether'], vs_currencies=['usd', 'btc'])
 
     daily_swaps = Swaps_daily_stats.objects.all()
 
@@ -104,7 +112,12 @@ def update_status():
         "dash": 0,
         "doge": 0,
         "ltc": 0,
-        "qtum": 0
+        "qtum": 0,
+        "dai": 0,
+        "usdt": 0,
+        "eth": 0,
+        "wrapped-bitcoin": 0,
+
     }
 
     if daily_swaps:
@@ -119,13 +132,25 @@ def update_status():
                 swaps_stats["ltc"] += float(swap_info.swap_amount)
             elif swap_info.swap_currency == "QTUM":
                 swaps_stats["qtum"] += float(swap_info.swap_amount)
+            elif swap_info.swap_currency == "WBTC":
+                swaps_stats["wbtc"] += float(swap_info.swap_amount)
+            elif swap_info.swap_currency == "ETH":
+                swaps_stats["eth"] += float(swap_info.swap_amount)
+            elif swap_info.swap_currency == "USDT":
+                swaps_stats["usdt"] += float(swap_info.swap_amount)
+            elif swap_info.swap_currency == "DAI":
+                swaps_stats["dai"] += float(swap_info.swap_amount)
 
     swaps_stats_usd = {
         "bitcoin": swaps_stats["btc"] * cg_data["bitcoin"]["usd"],
         "dash": swaps_stats["dash"] * cg_data["dash"]["usd"],
         "dogecoin": swaps_stats["doge"] * cg_data["dogecoin"]["usd"],
         "litecoin": swaps_stats["ltc"] * cg_data["litecoin"]["usd"],
-        "qtum": swaps_stats["qtum"] * cg_data["qtum"]["usd"]
+        "qtum": swaps_stats["qtum"] * cg_data["qtum"]["usd"],
+        "wbtc": swaps_stats["wbtc"] * cg_data["wrapped-bitcoin"]["usd"],
+        "eth": swaps_stats["eth"] * cg_data["ethereum"]["usd"],
+        "usdt": swaps_stats["usdt"] * cg_data["tether"]["usd"],
+        "dai": swaps_stats["dai"] * cg_data["dai"]["usd"]
     }
     swaps_stats_sum_usd = sum(swaps_stats_usd.values())
 
@@ -134,7 +159,11 @@ def update_status():
         "dash": swaps_stats["dash"] * cg_data["dash"]["btc"],
         "dogecoin": swaps_stats["doge"] * cg_data["dogecoin"]["btc"],
         "litecoin": swaps_stats["ltc"] * cg_data["litecoin"]["btc"],
-        "qtum": swaps_stats["qtum"] * cg_data["qtum"]["btc"]
+        "qtum": swaps_stats["qtum"] * cg_data["qtum"]["btc"],
+        "wbtc": swaps_stats["wbtc"] * cg_data["wrapped-bitcoin"]["btc"],
+        "eth": swaps_stats["eth"] * cg_data["ethereum"]["btc"],
+        "usdt": swaps_stats["usdt"] * cg_data["tether"]["btc"],
+        "dai": swaps_stats["dai"] * cg_data["dai"]["btc"]
     }
     swaps_stats_sum_btc = sum(swaps_stats_btc.values())
 
@@ -374,7 +403,16 @@ def update_blockchain():
 @shared_task(name="update_charts", ignore_result=True)
 def update_charts():
     cg = CoinGeckoAPI()
-    cg_data = cg.get_price(ids=['bitcoin', 'dash', 'dogecoin', 'litecoin', 'qtum'], vs_currencies=['usd', 'btc'])
+    cg_data = cg.get_price(ids=[
+        'bitcoin',
+        'dash',
+        'dogecoin',
+        'litecoin',
+        'qtum',
+        'dai',
+        'wrapped-bitcoin',
+        'ethereum',
+        'tether'], vs_currencies=['usd', 'btc'])
     
     # get data for blocks
     latest_block = Block.objects.latest('height')
@@ -462,7 +500,11 @@ def update_charts():
             "dash": offset_swaps.aggregate(Max('dash')),
             "dogecoin": offset_swaps.aggregate(Max('doge')),
             "litecoin": offset_swaps.aggregate(Max('ltc')),
-            "qtum": offset_swaps.aggregate(Max('qtum'))
+            "qtum": offset_swaps.aggregate(Max('qtum')),
+            "wbtc": offset_swaps.aggregate(Max('wbtc')),
+            "eth": offset_swaps.aggregate(Max('eth')),
+            "usdt": offset_swaps.aggregate(Max('usdt')),
+            "dai": offset_swaps.aggregate(Max('dai'))
         }
 
         if swap_item:
@@ -471,7 +513,11 @@ def update_charts():
                 "dash": float(swap_item["dash"]["dash__max"]) * cg_data["dash"]["usd"],
                 "dogecoin": float(swap_item["dogecoin"]["doge__max"]) * cg_data["dogecoin"]["usd"],
                 "litecoin": float(swap_item["litecoin"]["ltc__max"]) * cg_data["litecoin"]["usd"],
-                "qtum": float(swap_item["qtum"]["qtum__max"]) * cg_data["qtum"]["usd"]
+                "qtum": float(swap_item["qtum"]["qtum__max"]) * cg_data["qtum"]["usd"],
+                "wbtc": float(swap_item["wbtc"]["wbtc__max"]) * cg_data["wrapped-bitcoin"]["usd"],
+                "eth": float(swap_item["eth"]["eth__max"]) * cg_data["ethereum"]["usd"],
+                "usdt": float(swap_item["usdt"]["usdt__max"]) * cg_data["tether"]["usd"],
+                "dai": float(swap_item["dai"]["dai__max"]) * cg_data["dai"]["usd"],
             }
 
             swap_btc = {
@@ -479,7 +525,11 @@ def update_charts():
                 "dash": float(swap_item["dash"]["dash__max"]) * cg_data["dash"]["btc"],
                 "dogecoin": float(swap_item["dogecoin"]["doge__max"]) * cg_data["dogecoin"]["btc"],
                 "litecoin": float(swap_item["litecoin"]["ltc__max"]) * cg_data["litecoin"]["btc"],
-                "qtum": float(swap_item["qtum"]["qtum__max"]) * cg_data["qtum"]["btc"]
+                "qtum": float(swap_item["qtum"]["qtum__max"]) * cg_data["qtum"]["btc"],
+                "wbtc": float(swap_item["wbtc"]["wbtc__max"]) * cg_data["wrapped-bitcoin"]["btc"],
+                "eth": float(swap_item["eth"]["eth__max"]) * cg_data["ethereum"]["btc"],
+                "usdt": float(swap_item["usdt"]["usdt__max"]) * cg_data["tether"]["btc"],
+                "dai": float(swap_item["dai"]["dai__max"]) * cg_data["dai"]["btc"],
             }
         
             result['swap_stats'].insert(0, [date, {"usd": swap_usd, "btc": swap_btc}])
@@ -547,7 +597,11 @@ def update_lelantus():
         'dash': swaps_stats['dash_offered'],
         'doge': swaps_stats['dogecoin_offered'],
         'ltc': swaps_stats['litecoin_offered'],
-        'qtum': swaps_stats['qtum_offered']
+        'qtum': swaps_stats['qtum_offered'],
+        'wbtc': swaps_stats['wbtc_offered'],
+        'eth': swaps_stats['ethereum_offered'],
+        'usdt': swaps_stats['usdt_offered'],
+        'dai': swaps_stats['dai_offered']
     })
     swaps_model.save()
 

@@ -113,6 +113,10 @@ class Swap_stats(models.Model):
     doge = models.CharField(null=False, blank=False, max_length=16)
     ltc = models.CharField(null=False, blank=False, max_length=16)
     qtum = models.CharField(null=False, blank=False, max_length=16)
+    wbtc = models.CharField(null=False, blank=False, max_length=16)
+    usdt = models.CharField(null=False, blank=False, max_length=16)
+    eth = models.CharField(null=False, blank=False, max_length=16)
+    dai = models.CharField(null=False, blank=False, max_length=16)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def from_json(self, _json):
@@ -121,6 +125,10 @@ class Swap_stats(models.Model):
         self.doge = _json['doge']
         self.ltc = _json['ltc']
         self.qtum = _json['qtum']
+        self.wbtc = _json['wbtc']
+        self.usdt = _json['usdt']
+        self.eth = _json['eth']
+        self.dai = _json['dai']
 
 
 class Swaps_daily_stats(models.Model):
