@@ -312,6 +312,34 @@
     stroke: #2e9ad0;
 }
 
+.graphs-mob__swaps__elem .highcharts-color-5,
+.graphs__right__swaps__elem .highcharts-color-5 {
+    @include point-fill();
+    stroke: #f09241;
+}
+
+
+.graphs-mob__swaps__elem .highcharts-color-6,
+.graphs__right__swaps__elem .highcharts-color-6 {
+    @include point-fill();
+    stroke: #8a93b2;
+}
+
+
+.graphs-mob__swaps__elem .highcharts-color-7,
+.graphs__right__swaps__elem .highcharts-color-7 {
+    @include point-fill();
+    stroke: #53ae94;
+}
+
+
+.graphs-mob__swaps__elem .highcharts-color-8,
+.graphs__right__swaps__elem .highcharts-color-8 {
+    @include point-fill();
+    stroke: #f5ac37;
+}
+
+
 .graphs-mob__trs__elem .highcharts-color-0,
 .graphs__right__trs__elem .highcharts-color-0 {
     @include point-fill();
@@ -478,6 +506,26 @@
 .graphs-mob__swaps__elem .highcharts-color-4 .tooltip-line-color,
 .graphs__right__swaps__elem .highcharts-color-4 .tooltip-line-color{
     color: #2e9ad0;
+}
+
+.graphs-mob__swaps__elem .highcharts-color-5 .tooltip-line-color,
+.graphs__right__swaps__elem .highcharts-color-5 .tooltip-line-color{
+    color: #f09241;
+}
+
+.graphs-mob__swaps__elem .highcharts-color-6 .tooltip-line-color,
+.graphs__right__swaps__elem .highcharts-color-6 .tooltip-line-color{
+    color: #8a93b2;
+}
+
+.graphs-mob__swaps__elem .highcharts-color-7 .tooltip-line-color,
+.graphs__right__swaps__elem .highcharts-color-7 .tooltip-line-color{
+    color: #53ae94;
+}
+
+.graphs-mob__swaps__elem .highcharts-color-8 .tooltip-line-color,
+.graphs__right__swaps__elem .highcharts-color-8 .tooltip-line-color{
+    color: #f5ac37;
 }
 
 .graphs-mob__trs__elem .highcharts-color-0 .tooltip-line-circle,

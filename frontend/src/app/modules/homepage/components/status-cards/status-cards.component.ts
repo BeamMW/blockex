@@ -92,6 +92,10 @@ export class StatusCardsComponent implements OnInit, OnDestroy, AfterContentInit
     this.offers.push({title: 'DOGE', value: data.dogecoin});
     this.offers.push({title: 'LTC', value: data.litecoin});
     this.offers.push({title: 'QTUM', value: data.qtum});
+    this.offers.push({title: 'WBTC', value: data.wbtc});
+    this.offers.push({title: 'ETH', value: data.eth});
+    this.offers.push({title: 'USDT', value: data.usdt});
+    this.offers.push({title: 'DAI', value: data.dai});
 
     this.offers.sort((a, b) => {
       return b.value - a.value;

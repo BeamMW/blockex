@@ -103,7 +103,11 @@ export class GraphsComponent implements OnInit, OnDestroy {
     if (this.series.name === 'BTC' || 
       this.series.name === 'LTC' || 
       this.series.name === 'DOGE' ||
-      this.series.name === 'DASH' || 
+      this.series.name === 'DASH' ||
+      this.series.name === 'WBTC' ||
+      this.series.name === 'USDT' ||
+      this.series.name === 'ETH' ||
+      this.series.name === 'DAI' || 
       this.series.name === 'QTUM') {
         maximumFractionDigits = 8;
     } 
@@ -367,7 +371,7 @@ export class GraphsComponent implements OnInit, OnDestroy {
       legend: {
         width: this.isMobile ? 380 : 450,
         itemWidth: this.isMobile ? 190 : 90,
-        itemMarginBottom: this.isMobile ? 12 : 0,
+        itemMarginBottom: 12,
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
@@ -426,6 +430,42 @@ export class GraphsComponent implements OnInit, OnDestroy {
         },
         name: 'QTUM',
         data: graphs.swaps_qtum_usd
+      }, {
+        type: 'line',
+        marker: {
+          enabledThreshold: 0,
+          symbol: 'circle',
+          radius: 2,
+        },
+        name: 'WBTC',
+        data: graphs.swaps_wbtc_usd
+      }, {
+        type: 'line',
+        marker: {
+          enabledThreshold: 0,
+          symbol: 'circle',
+          radius: 2,
+        },
+        name: 'ETH',
+        data: graphs.swaps_eth_usd
+      }, {
+        type: 'line',
+        marker: {
+          enabledThreshold: 0,
+          symbol: 'circle',
+          radius: 2,
+        },
+        name: 'USDT',
+        data: graphs.swaps_usdt_usd
+      }, {
+        type: 'line',
+        marker: {
+          enabledThreshold: 0,
+          symbol: 'circle',
+          radius: 2,
+        },
+        name: 'DAI',
+        data: graphs.swaps_dai_usd
       }],
     });
 
@@ -585,11 +625,19 @@ export class GraphsComponent implements OnInit, OnDestroy {
       swaps_btc_usd: [],
       swaps_dash_usd: [],
       swaps_doge_usd: [],
+      swaps_wbtc_usd: [],
+      swaps_usdt_usd: [],
+      swaps_eth_usd: [],
+      swaps_dai_usd: [],
       swaps_ltc_usd: [],
       swaps_qtum_usd: [],
       swaps_btc_btc: [],
       swaps_dash_btc: [],
       swaps_doge_btc: [],
+      swaps_wbtc_btc: [],
+      swaps_usdt_btc: [],
+      swaps_eth_btc: [],
+      swaps_dai_btc: [],
       swaps_ltc_btc: [],
       swaps_qtum_btc: [],
       transactions: [],
@@ -624,12 +672,20 @@ export class GraphsComponent implements OnInit, OnDestroy {
       graphsData.swaps_doge_usd.push([dateValue, parseFloat(element[1].usd.dogecoin)]);
       graphsData.swaps_ltc_usd.push([dateValue, parseFloat(element[1].usd.litecoin)]);
       graphsData.swaps_qtum_usd.push([dateValue, parseFloat(element[1].usd.qtum)]);
+      graphsData.swaps_wbtc_usd.push([dateValue, parseFloat(element[1].usd.wbtc)]);
+      graphsData.swaps_eth_usd.push([dateValue, parseFloat(element[1].usd.eth)]);
+      graphsData.swaps_usdt_usd.push([dateValue, parseFloat(element[1].usd.usdt)]);
+      graphsData.swaps_dai_usd.push([dateValue, parseFloat(element[1].usd.dai)]);
 
       graphsData.swaps_btc_btc.push([dateValue, parseFloat(element[1].btc.bitcoin)]);
       graphsData.swaps_dash_btc.push([dateValue, parseFloat(element[1].btc.dash)]);
       graphsData.swaps_doge_btc.push([dateValue, parseFloat(element[1].btc.dogecoin)]);
       graphsData.swaps_ltc_btc.push([dateValue, parseFloat(element[1].btc.litecoin)]);
       graphsData.swaps_qtum_btc.push([dateValue, parseFloat(element[1].btc.qtum)]);
+      graphsData.swaps_wbtc_btc.push([dateValue, parseFloat(element[1].btc.wbtc)]);
+      graphsData.swaps_eth_btc.push([dateValue, parseFloat(element[1].btc.eth)]);
+      graphsData.swaps_usdt_btc.push([dateValue, parseFloat(element[1].btc.usdt)]);
+      graphsData.swaps_dai_btc.push([dateValue, parseFloat(element[1].btc.dai)]);
     });
 
     this.lastConstructedGraphs = JSON.parse(JSON.stringify(graphsData));
@@ -671,6 +727,10 @@ export class GraphsComponent implements OnInit, OnDestroy {
             swapsChart.series[2].setData(graphsConstructed.swaps_doge_btc);
             swapsChart.series[3].setData(graphsConstructed.swaps_ltc_btc);
             swapsChart.series[4].setData(graphsConstructed.swaps_qtum_btc);
+            swapsChart.series[5].setData(graphsConstructed.swaps_wbtc_btc);
+            swapsChart.series[6].setData(graphsConstructed.swaps_eth_btc);
+            swapsChart.series[7].setData(graphsConstructed.swaps_usdt_btc);
+            swapsChart.series[8].setData(graphsConstructed.swaps_dai_btc);
           });
         } else if (this.activeCurrency === currencies.USD) {
           this.graphs.swaps.ref$.subscribe((swapsChart) => {
@@ -679,6 +739,10 @@ export class GraphsComponent implements OnInit, OnDestroy {
             swapsChart.series[2].setData(graphsConstructed.swaps_doge_usd);
             swapsChart.series[3].setData(graphsConstructed.swaps_ltc_usd);
             swapsChart.series[4].setData(graphsConstructed.swaps_qtum_usd);
+            swapsChart.series[5].setData(graphsConstructed.swaps_wbtc_usd);
+            swapsChart.series[6].setData(graphsConstructed.swaps_eth_usd);
+            swapsChart.series[7].setData(graphsConstructed.swaps_usdt_usd);
+            swapsChart.series[8].setData(graphsConstructed.swaps_dai_usd);
           });
         }
       } else {
@@ -704,6 +768,14 @@ export class GraphsComponent implements OnInit, OnDestroy {
       this.lastConstructedGraphs.swaps_ltc_btc : this.lastConstructedGraphs.swaps_ltc_usd);
     swapsChart.series[4].setData(state === this.swapChartStates.BTC ? 
       this.lastConstructedGraphs.swaps_qtum_btc : this.lastConstructedGraphs.swaps_qtum_usd);
+    swapsChart.series[5].setData(state === this.swapChartStates.BTC ? 
+      this.lastConstructedGraphs.swaps_wbtc_btc : this.lastConstructedGraphs.swaps_wbtc_usd);
+    swapsChart.series[6].setData(state === this.swapChartStates.BTC ? 
+      this.lastConstructedGraphs.swaps_eth_btc : this.lastConstructedGraphs.swaps_eth_usd);
+    swapsChart.series[7].setData(state === this.swapChartStates.BTC ? 
+      this.lastConstructedGraphs.swaps_usdt_btc : this.lastConstructedGraphs.swaps_usdt_usd);
+    swapsChart.series[8].setData(state === this.swapChartStates.BTC ? 
+      this.lastConstructedGraphs.swaps_dai_btc : this.lastConstructedGraphs.swaps_dai_usd);
     swapsChart.yAxis[0].update({
       title:{
           text: state.y_title

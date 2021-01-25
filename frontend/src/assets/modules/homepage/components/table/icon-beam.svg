@@ -1,26 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
     <defs>
-        <radialGradient id="qvltzxpgca" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+        <radialGradient id="myko81zj3a" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
             <stop offset="0%" stop-color="#008471"/>
             <stop offset="100%" stop-color="#103051"/>
         </radialGradient>
     </defs>
     <g fill="none" fill-rule="evenodd">
         <g>
-            <g>
-                <g transform="translate(-100 -157) translate(90 147) translate(10 10)">
-                    <circle cx="12" cy="12" r="9.682" stroke="#002D55" stroke-width="3"/>
-                    <circle cx="12" cy="12" r="9.182" fill="url(#qvltzxpgca)" stroke="#00F6D2" stroke-width="2"/>
-                    <g fill="#FFF">
-                        <g>
-                            <path d="M5.115 0l5.112 8.864H5.114V7.383h2.61l-2.61-4.597V0z" transform="translate(6.91 6.864)"/>
-                            <path d="M.001 0l5.113 8.864H0V7.383h2.61L0 2.787V0z" transform="translate(6.91 6.864) matrix(-1 0 0 1 5.114 0)"/>
-                            <path d="M5.114 3.928L5.114 6.844 3.496 6.847z" transform="translate(6.91 6.864)"/>
-                            <path d="M6.731 3.928L6.731 6.844 5.114 6.847z" transform="translate(6.91 6.864) matrix(-1 0 0 1 11.845 0)"/>
-                        </g>
-                        <path d="M0 5.1L5.455 2.727 5.455 5.455 0 5.344z" transform="translate(6.91 6.864) matrix(-1 0 0 1 5.455 0)"/>
-                        <path d="M5.455 5.1L10.909 2.727 10.909 5.455 5.455 5.344z" transform="translate(6.91 6.864)"/>
+            <g transform="translate(-50 -50) translate(50 50)">
+                <circle cx="11" cy="11" r="10" fill="url(#myko81zj3a)" stroke="#00F6D2" stroke-width="2"/>
+                <g fill="#FFF">
+                    <g>
+                        <path d="M5.626 0l5.624 9.75H5.625V8.122h2.87L5.626 3.065V0z" transform="translate(5.4 5.35)"/>
+                        <path d="M.001 0l5.624 9.75H0V8.122h2.87L.001 3.065V0z" transform="translate(5.4 5.35) matrix(-1 0 0 1 5.625 0)"/>
+                        <path d="M5.625 4.32L5.625 7.528 3.846 7.531z" transform="translate(5.4 5.35)"/>
+                        <path d="M7.404 4.32L7.404 7.528 5.625 7.531z" transform="translate(5.4 5.35) matrix(-1 0 0 1 13.03 0)"/>
                     </g>
+                    <path d="M0 5.61L6 3 6 6 0 5.878z" transform="translate(5.4 5.35) matrix(-1 0 0 1 6 0)"/>
+                    <path d="M6 5.61L12 3 12 6 6 5.878z" transform="translate(5.4 5.35)"/>
                 </g>
             </g>
         </g>

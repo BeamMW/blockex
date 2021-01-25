@@ -41,6 +41,22 @@ export class TableComponent implements OnInit, OnDestroy {
     QTUM: {
       value: 'QTUM',
       iconUrl: `../../../../../assets/modules/homepage/components/table/icon-qtum.svg`
+    },
+    WBTC: {
+      value: 'WBTC',
+      iconUrl: `../../../../../assets/modules/homepage/components/table/icon-wbtc.svg`
+    },
+    USDT: {
+      value: 'USDT',
+      iconUrl: `../../../../../assets/modules/homepage/components/table/icon-usdt.svg`
+    },
+    ETH: {
+      value: 'ETH',
+      iconUrl: `../../../../../assets/modules/homepage/components/table/icon-eth.svg`
+    },
+    DAI: {
+      value: 'DAI',
+      iconUrl: `../../../../../assets/modules/homepage/components/table/icon-dai.svg`
     }
   }
   public iconBeamUrl: string = `../../../../../assets/modules/homepage/components/table/icon-beam.svg`;
@@ -52,7 +68,7 @@ export class TableComponent implements OnInit, OnDestroy {
   };
 
   public displayedOffersColumns: string[] = [
-    'coins', 'amount-send', 'amount-rec', 'created', 'expired', 'tr-id'
+    'coins', 'amount-send', 'amount-rec', 'rate', 'created', 'expired', 'tr-id'
   ]
   public displayedColumns: string[] = ['height', 'hash', 'age',
     'difficulty', 'kernels', 'inputs', 'outputs', 'fees'];
@@ -93,6 +109,26 @@ export class TableComponent implements OnInit, OnDestroy {
     name: 'QTUM (Qtum)',
     isSelected: false,
     value: 'QTUM',
+    active: false
+  }, {
+    name: 'DAI (Dai)',
+    isSelected: false,
+    value: 'DAI',
+    active: false
+  }, {
+    name: 'WBTC (Wrapped Bitcoin)',
+    isSelected: false,
+    value: 'WBTC',
+    active: false
+  }, {
+    name: 'ETH (Ethereum)',
+    isSelected: false,
+    value: 'ETH',
+    active: false
+  }, {
+    name: 'USDT (Tether)',
+    isSelected: false,
+    value: 'USDT',
     active: false
   }, {
     name: 'DOGE (Dogecoin)',
@@ -215,20 +251,88 @@ export class TableComponent implements OnInit, OnDestroy {
     }
   }
 
-  getSecondCurrencyIcon(currValue) {
-    if (currValue === this.icons.BTC.value) {
+  getCurrencyIcon(val) {
+    if (val === this.icons.BTC.value) {
       return this.icons.BTC.iconUrl;
-    } else if (currValue === this.icons.BCH.value) {
+    } else if (val === this.icons.BCH.value) {
       return this.icons.BCH.iconUrl;
-    } else if (currValue === this.icons.DASH.value) {
+    } else if (val === this.icons.DASH.value) {
       return this.icons.DASH.iconUrl;
-    } else if (currValue === this.icons.DOGE.value) {
+    } else if (val === this.icons.DOGE.value) {
       return this.icons.DOGE.iconUrl;
-    } else if (currValue === this.icons.LTC.value) {
+    } else if (val === this.icons.LTC.value) {
       return this.icons.LTC.iconUrl;
-    } else if (currValue === this.icons.QTUM.value) {
+    } else if (val === this.icons.QTUM.value) {
       return this.icons.QTUM.iconUrl;
+    } else if (val === this.icons.WBTC.value) {
+      return this.icons.WBTC.iconUrl;
+    } else if (val === this.icons.ETH.value) {
+      return this.icons.ETH.iconUrl;
+    } else if (val === this.icons.USDT.value) {
+      return this.icons.USDT.iconUrl;
+    } else if (val === this.icons.DAI.value) {
+      return this.icons.DAI.iconUrl;
     }
+  }
+
+  getFirstCurrencyIcon(elem) {
+    if (elem.is_beam_side) {
+      return this.getCurrencyIcon(elem.swap_currency);
+    } else {
+      return this.iconBeamUrl;
+    }
+  }
+
+  getSecondCurrencyIcon(elem) {
+    if (!elem.is_beam_side) {
+      return this.getCurrencyIcon(elem.swap_currency);
+    } else {
+      return this.iconBeamUrl;
+    }
+  }
+
+  getCurrencyTitle(elem) {
+    if (elem.is_beam_side) {
+      return elem.swap_currency+'/BEAM';
+    } else {
+      return 'BEAM/'+elem.swap_currency;
+    }
+  }
+
+  getSendAmount(elem) {
+    if (elem.is_beam_side) {
+      return elem.swap_amount;
+    } else {
+      return elem.beam_amount;
+    }
+  }
+
+  getReceiveAmount(elem) {
+    if (elem.is_beam_side) {
+      return elem.beam_amount;
+    } else {
+      return elem.swap_amount;
+    }
+  }
+
+  getSendCurr(elem) {
+    if (elem.is_beam_side) {
+      return elem.swap_currency;
+    } else {
+      return 'BEAM';
+    }
+  }
+
+  getReceiveCurr(elem) {
+    if (elem.is_beam_side) {
+      return 'BEAM';
+    } else {
+      return elem.swap_currency;
+    }
+  }
+
+  getRate(elem) {
+    return elem.swap_amount / elem.beam_amount;
   }
 
   offersFilterClicked(item) {

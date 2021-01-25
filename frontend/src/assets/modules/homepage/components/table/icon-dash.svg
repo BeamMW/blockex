@@ -1,22 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
     <defs>
-        <radialGradient id="8jhjxax8ha" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+        <radialGradient id="vfaqwe730a" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
             <stop offset="0%" stop-color="#006BAD"/>
             <stop offset="100%" stop-color="#103051"/>
         </radialGradient>
     </defs>
     <g fill="none" fill-rule="evenodd">
         <g>
-            <g>
-                <g transform="translate(-773 -157) translate(90 147) translate(683 10)">
-                    <circle cx="12" cy="12" r="9.682" stroke="#002D55" stroke-width="3"/>
-                    <g transform="translate(2 2)">
-                        <circle cx="10" cy="10" r="9.182" fill="url(#8jhjxax8ha)" stroke="#008DE4" stroke-width="2"/>
-                        <g fill="#FFF" fill-rule="nonzero">
-                            <path d="M6.588.013H2.929l-.303 1.695 3.302.004c1.626 0 2.106.59 2.092 1.57-.007.5-.225 1.35-.319 1.626-.25.734-.765 1.57-2.695 1.568l-3.21-.002-.304 1.697h3.651c1.288 0 1.834-.15 2.415-.417C8.844 7.157 9.61 5.89 9.917 4.233c.456-2.466-.112-4.22-3.33-4.22" transform="translate(4.91 5.91)"/>
-                            <path d="M1.35 3.24c-.959 0-1.096.625-1.186 1.003-.119.493-.158.694-.158.694h3.746c.96 0 1.096-.624 1.186-1.002.12-.493.159-.695.159-.695H1.351z" transform="translate(4.91 5.91)"/>
-                        </g>
-                    </g>
+            <g transform="translate(-280 -92) translate(280 92)">
+                <circle cx="11" cy="11" r="10" fill="url(#vfaqwe730a)" stroke="#008DE4" stroke-width="2"/>
+                <g fill="#FFF" fill-rule="nonzero">
+                    <path d="M7.246.014H3.222l-.334 1.865 3.633.004c1.789 0 2.316.65 2.301 1.727-.008.55-.247 1.485-.35 1.789-.276.807-.842 1.727-2.965 1.725L1.975 7.12l-.333 1.867h4.015c1.417 0 2.018-.166 2.657-.458 1.415-.657 2.257-2.052 2.595-3.874.501-2.713-.123-4.642-3.663-4.642" transform="translate(5.4 6.5)"/>
+                    <path d="M1.486 3.564C.43 3.564.28 4.251.18 4.667c-.131.542-.175.764-.175.764h4.122c1.055 0 1.205-.687 1.304-1.102.132-.543.175-.765.175-.765H1.486z" transform="translate(5.4 6.5)"/>
                 </g>
             </g>
         </g>

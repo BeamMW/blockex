@@ -145,13 +145,15 @@
             </div>
             <mat-table [dataSource]="offersData" [class.mobile]="isMobile" class="offers-table">
                 <ng-container matColumnDef="coins">
-                    <mat-header-cell class="coins-cell-header" *matHeaderCellDef> COINS: </mat-header-cell>
+                    <mat-header-cell class="coins-cell-header" 
+                        [class.mobile]="isMobile" 
+                        *matHeaderCellDef> COINS: </mat-header-cell>
                     <mat-cell class="coins-cell" [class.mobile]="isMobile" *matCellDef="let element">
                         <span class="offer-mobile-label" *ngIf="isMobile">COINS:</span>
                         <span class="desktop-label">
-                            <img class="beam-coin-icon" [src]="iconBeamUrl">
-                            <img class="second-coin-icon" [src]="getSecondCurrencyIcon(element.swap_currency)">
-                            <span>BEAM/{{element.swap_currency}}</span> 
+                            <img class="first-coin-icon" [src]="getFirstCurrencyIcon(element)">
+                            <img class="second-coin-icon" [src]="getSecondCurrencyIcon(element)">
+                            <span>{{getCurrencyTitle(element)}}</span> 
                         </span>
                     </mat-cell>
                 </ng-container>
@@ -161,7 +163,7 @@
                     <mat-cell class="amount-send-cell" *matCellDef="let element">
                         <span class="offer-mobile-label" *ngIf="isMobile">AMOUNT (SEND):</span>
                         <span class="desktop-label" [class.mobile]="isMobile">
-                            {{element.beam_amount | number:'.'}} BEAM
+                            {{getSendAmount(element) | number:'.0-10'}} {{getSendCurr(element)}}
                         </span>
                     </mat-cell>
                 </ng-container>
@@ -171,7 +173,17 @@
                     <mat-cell class="amount-rec-cell" *matCellDef="let element">
                         <span class="offer-mobile-label" *ngIf="isMobile">AMOUNT (RECEIVE):</span>
                         <span class="desktop-label" [class.mobile]="isMobile">
-                            {{element.swap_amount | number:'.'}} {{element.swap_currency}}
+                            {{getReceiveAmount(element) | number:'.0-10'}} {{getReceiveCurr(element)}}
+                        </span>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="rate">
+                    <mat-header-cell class="rate-cell-header" *matHeaderCellDef> RATE: </mat-header-cell>
+                    <mat-cell class="rate-cell" *matCellDef="let element">
+                        <span class="offer-mobile-label" *ngIf="isMobile">RATE:</span>
+                        <span class="desktop-label" [class.mobile]="isMobile">
+                            {{getRate(element) | number:'.0-10'}}
                         </span>
                     </mat-cell>
                 </ng-container>

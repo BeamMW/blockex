@@ -1,17 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
     <defs>
-        <radialGradient id="uhklxhsc6a" cx="50%" cy="50%" r="41.403%" fx="50%" fy="50%">
+        <radialGradient id="swloqwjlha" cx="50%" cy="50%" r="41.403%" fx="50%" fy="50%">
             <stop offset="0%" stop-color="#BEBEBE"/>
             <stop offset="100%" stop-color="#0B2B4D"/>
         </radialGradient>
     </defs>
     <g fill="none" fill-rule="evenodd">
         <g>
-            <g>
-                <g transform="translate(-457 -159) translate(90 147) translate(367 12)">
-                    <circle cx="10" cy="10" r="9.182" fill="url(#uhklxhsc6a)" stroke="#BEBEBE" stroke-width="2"/>
-                    <path fill="#FFF" fill-rule="nonzero" d="M9.86 11.801L10.395 9.8 11.661 9.34 11.976 8.164 11.965 8.135 10.719 8.587 11.616 5.227 9.07 5.227 7.895 9.612 6.915 9.968 6.591 11.181 7.571 10.825 6.879 13.409 13.656 13.409 14.091 11.801 9.86 11.801"/>
-                </g>
+            <g transform="translate(-396 -92) translate(396 92)">
+                <circle cx="11" cy="11" r="10" fill="url(#swloqwjlha)" stroke="#BEBEBE" stroke-width="2"/>
+                <path fill="#FFF" fill-rule="nonzero" d="M10.846 12.981L11.434 10.78 12.827 10.274 13.173 8.98 13.161 8.948 11.79 9.446 12.778 5.75 9.977 5.75 8.685 10.573 7.606 10.965 7.25 12.299 8.328 11.907 7.566 14.75 15.022 14.75 15.5 12.981 10.846 12.981"/>
             </g>
         </g>
     </g>

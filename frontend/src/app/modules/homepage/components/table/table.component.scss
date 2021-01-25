@@ -201,6 +201,26 @@
     font-weight: bolder !important;
 }
 
+.coins-cell,
+.coins-cell-header {
+    max-width: 130px;
+}
+
+.coins-cell.mobile,
+.coins-cell-header.mobile {
+    max-width: none;
+}
+
+.tr-id-cell,
+.tr-id-cell-header {
+    min-width: 265px;
+}
+
+.rate-cell,
+.rate-cell-header {
+    max-width: 115px;
+}
+
 .kernel-cell,
 .kernel-cell-header {
     min-width: 65px;
@@ -277,13 +297,13 @@
 }
 
 .second-coin-icon,
-.beam-coin-icon {
+.first-coin-icon {
     position: absolute;
     width: 20px;
     height: 20px;
 }
 
-.beam-coin-icon {
+.first-coin-icon {
     z-index: 20;
 }
 
