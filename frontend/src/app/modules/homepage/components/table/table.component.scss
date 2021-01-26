@@ -221,6 +221,11 @@
     max-width: 115px;
 }
 
+.rate-cell.mobile,
+.rate-cell-header.mobile {
+    max-width: none;
+}
+
 .kernel-cell,
 .kernel-cell-header {
     min-width: 65px;

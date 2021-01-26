@@ -179,8 +179,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="rate">
-                    <mat-header-cell class="rate-cell-header" *matHeaderCellDef> RATE: </mat-header-cell>
-                    <mat-cell class="rate-cell" *matCellDef="let element">
+                    <mat-header-cell class="rate-cell-header" [class.mobile]="isMobile" *matHeaderCellDef> RATE: </mat-header-cell>
+                    <mat-cell class="rate-cell" [class.mobile]="isMobile" *matCellDef="let element">
                         <span class="offer-mobile-label" *ngIf="isMobile">RATE:</span>
                         <span class="desktop-label" [class.mobile]="isMobile">
                             {{getRate(element) | number:'.0-10'}}

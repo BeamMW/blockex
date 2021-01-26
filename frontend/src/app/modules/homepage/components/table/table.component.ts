@@ -215,6 +215,9 @@ export class TableComponent implements OnInit, OnDestroy {
         return element;
       });
       this.offersData = new MatTableDataSource(data['offers']);
+      this.offersData.filterPredicate = function(data: any, filterValue: string) {
+        return data.swap_currency === filterValue;
+      };
       if (this.selectedOfferFilter !== this.offerFilters[0]) {
         this.offersData.filter = this.selectedOfferFilter.value;
       } else {
@@ -277,14 +280,14 @@ export class TableComponent implements OnInit, OnDestroy {
 
   getFirstCurrencyIcon(elem) {
     if (elem.is_beam_side) {
-      return this.getCurrencyIcon(elem.swap_currency);
-    } else {
       return this.iconBeamUrl;
+    } else {
+      return this.getCurrencyIcon(elem.swap_currency);
     }
   }
 
   getSecondCurrencyIcon(elem) {
-    if (!elem.is_beam_side) {
+    if (elem.is_beam_side) {
       return this.getCurrencyIcon(elem.swap_currency);
     } else {
       return this.iconBeamUrl;
@@ -292,7 +295,7 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   getCurrencyTitle(elem) {
-    if (elem.is_beam_side) {
+    if (!elem.is_beam_side) {
       return elem.swap_currency+'/BEAM';
     } else {
       return 'BEAM/'+elem.swap_currency;
@@ -301,33 +304,33 @@ export class TableComponent implements OnInit, OnDestroy {
 
   getSendAmount(elem) {
     if (elem.is_beam_side) {
-      return elem.swap_amount;
-    } else {
       return elem.beam_amount;
+    } else {
+      return elem.swap_amount;
     }
   }
 
   getReceiveAmount(elem) {
     if (elem.is_beam_side) {
-      return elem.beam_amount;
-    } else {
       return elem.swap_amount;
+    } else {
+      return elem.beam_amount;
     }
   }
 
   getSendCurr(elem) {
     if (elem.is_beam_side) {
-      return elem.swap_currency;
-    } else {
       return 'BEAM';
+    } else {
+      return elem.swap_currency;
     }
   }
 
   getReceiveCurr(elem) {
     if (elem.is_beam_side) {
-      return 'BEAM';
-    } else {
       return elem.swap_currency;
+    } else {
+      return 'BEAM';
     }
   }
 
