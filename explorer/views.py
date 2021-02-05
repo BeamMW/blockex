@@ -202,7 +202,8 @@ def get_swap_offers(request):
 
     data.sort(key=get_height)
     from_item = (int(page) - 1) * 20
-    res_offers = data[from_item:20]
+    to_item = from_item + 20
+    res_offers = data[from_item:to_item]
     return Response({'offers': res_offers, 'count': len(data)}, status=HTTP_200_OK)
 
 class BotView(View):
