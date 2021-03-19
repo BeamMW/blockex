@@ -9,7 +9,7 @@ billiard==3.6.3.0
 celery==5.0.5
 certifi==2018.11.29
 cffi==1.14.4
-channels==3.0.2
+channels==3.0.3
 channels-redis==3.2.0
 chardet==3.0.4
 click==7.1.2
