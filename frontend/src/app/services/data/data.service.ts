@@ -18,7 +18,8 @@ const enum PARAMS {
   SITE_URL = 'OPT_SITE_URL=',
   PDF_URL = 'OPT_PDF_URL=',
   FAVICON_URL = 'OPT_FAVICON_URL=',
-  LOGO_URL = 'OPT_LOGO_URL='
+  LOGO_URL = 'OPT_LOGO_URL=',
+  COLOR = 'OPT_COLOR='
 }
 
 @Injectable({
@@ -70,7 +71,8 @@ export class DataService {
       const pdfUrlIndex = metadata.indexOf(PARAMS.PDF_URL);
       const faviconUrlIndex = metadata.indexOf(PARAMS.FAVICON_URL);
       const logoUrlIndex = metadata.indexOf(PARAMS.LOGO_URL);
-
+      const colorIndex = metadata.indexOf(PARAMS.COLOR);
+      let pdfLinkFromTo = metadata.indexOf(SEPARATOR, pdfUrlIndex);
       const assetItem = {
           lock_height: item.lock_height,
           value: item.value_lo,
@@ -96,11 +98,13 @@ export class DataService {
           site_url: siteUrlIndex > 0 ?
             metadata.slice(siteUrlIndex + PARAMS.SITE_URL.length, metadata.indexOf(SEPARATOR, siteUrlIndex)) : '',
           pdf_url: pdfUrlIndex > 0 ?
-            metadata.slice(pdfUrlIndex + PARAMS.PDF_URL.length, metadata.indexOf(SEPARATOR, pdfUrlIndex)) : '',
+            metadata.slice(pdfUrlIndex + PARAMS.PDF_URL.length, pdfLinkFromTo > 0 ? pdfLinkFromTo : metadata.length) : '',
           favicon_url: faviconUrlIndex > 0 ?
             metadata.slice(faviconUrlIndex + PARAMS.FAVICON_URL.length, metadata.indexOf(SEPARATOR, faviconUrlIndex)) : '',
           logo_url: logoUrlIndex > 0 ?
-            metadata.slice(logoUrlIndex + PARAMS.LOGO_URL.length, metadata.indexOf(SEPARATOR, logoUrlIndex)) : ''
+            metadata.slice(logoUrlIndex + PARAMS.LOGO_URL.length, metadata.indexOf(SEPARATOR, logoUrlIndex)) : '',
+          color: colorIndex > 0 ?
+            metadata.slice(colorIndex + PARAMS.COLOR.length, metadata.indexOf(SEPARATOR, colorIndex)) : ''
       };
 
       return assetItem;

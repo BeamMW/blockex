@@ -65,6 +65,8 @@
 .mandatory-values {
     display: flex;
     flex-direction: column;
+
+    transition: all .2s ease;
 }
 
 .mand-values-row {
@@ -127,7 +129,7 @@
     padding: 20px;
 }
 
-.create-command-area.metadata-max-error {
+.error-active {
     border: 1px solid #ff5e5e;
 }
 
@@ -266,9 +268,87 @@
     margin-left: 190px;
 }
 
-.metadata-max {
-    margin-left: 40px;
-    margin-bottom: 20px;
+.error-text {
+    margin-top: 20px;
+    font-family: "ProximaNovaIt", sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ff5e5e;
+}
+
+.mand-input.ng-invalid {
+    border: 1px solid #ff5e5e;
+}
+
+.switch {
+    top: -2px;
+    display: flex;
+    align-items: center;
+    place-self: flex-start;
+    margin-top: 10px;
+    font-size: 10px;
+    height: 16px;
+    line-height: normal;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0);
+    border: solid 1px rgba(5, 247, 211);
+    position: relative;
+}
+  
+.switch__usd,
+.switch__btc {
+    cursor: pointer;
+    position: relative;
+    display: block;
+    float: left;
+    -webkit-transition: 300ms ease-in;
+    -moz-transition: 300ms ease-in;
+    transition: 300ms ease-in;
+    padding: 0 1em;
+    opacity: 0.5;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: normal;
+    color: #ffffff;
+}
+
+.switch__usd.selected,
+.switch__btc.selected {
+    color: rgba(255, 255, 255, 0);
+}
+
+.selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 0;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    height: 18px;
+    top: -1px;
+    text-align: center;
+    text-transform: uppercase;
+    cursor: default;
+    border: solid 1px rgba(5, 247, 211);
+    background-color: rgba(5, 247, 211, 0.1);
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #042e5a;
+    opacity: 1;
+}
+
+.title-suggestion {
+    font-size: 10px;
+    opacity: 0.6;
 }
 
 @media(max-width: 769px) {

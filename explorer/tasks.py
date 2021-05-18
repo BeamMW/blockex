@@ -508,29 +508,30 @@ def update_charts():
         }
 
         if swap_item:
-            swap_usd = {
-                "bitcoin": float(swap_item["btc"]["btc__max"]) * cg_data["bitcoin"]["usd"],
-                "dash": float(swap_item["dash"]["dash__max"]) * cg_data["dash"]["usd"],
-                "dogecoin": float(swap_item["dogecoin"]["doge__max"]) * cg_data["dogecoin"]["usd"],
-                "litecoin": float(swap_item["litecoin"]["ltc__max"]) * cg_data["litecoin"]["usd"],
-                "qtum": float(swap_item["qtum"]["qtum__max"]) * cg_data["qtum"]["usd"],
-                "wbtc": float(swap_item["wbtc"]["wbtc__max"]) * cg_data["wrapped-bitcoin"]["usd"],
-                "eth": float(swap_item["eth"]["eth__max"]) * cg_data["ethereum"]["usd"],
-                "usdt": float(swap_item["usdt"]["usdt__max"]) * cg_data["tether"]["usd"],
-                "dai": float(swap_item["dai"]["dai__max"]) * cg_data["dai"]["usd"],
-            }
+            if swap_item["btc"]["btc__max"] != None:
+                swap_usd = {
+                    "bitcoin": float(swap_item["btc"]["btc__max"]) * cg_data["bitcoin"]["usd"],
+                    "dash": float(swap_item["dash"]["dash__max"]) * cg_data["dash"]["usd"],
+                    "dogecoin": float(swap_item["dogecoin"]["doge__max"]) * cg_data["dogecoin"]["usd"],
+                    "litecoin": float(swap_item["litecoin"]["ltc__max"]) * cg_data["litecoin"]["usd"],
+                    "qtum": float(swap_item["qtum"]["qtum__max"]) * cg_data["qtum"]["usd"],
+                    "wbtc": float(swap_item["wbtc"]["wbtc__max"]) * cg_data["wrapped-bitcoin"]["usd"],
+                    "eth": float(swap_item["eth"]["eth__max"]) * cg_data["ethereum"]["usd"],
+                    "usdt": float(swap_item["usdt"]["usdt__max"]) * cg_data["tether"]["usd"],
+                    "dai": float(swap_item["dai"]["dai__max"]) * cg_data["dai"]["usd"],
+                }
 
-            swap_btc = {
-                "bitcoin": float(swap_item["btc"]["btc__max"]) * cg_data["bitcoin"]["btc"],
-                "dash": float(swap_item["dash"]["dash__max"]) * cg_data["dash"]["btc"],
-                "dogecoin": float(swap_item["dogecoin"]["doge__max"]) * cg_data["dogecoin"]["btc"],
-                "litecoin": float(swap_item["litecoin"]["ltc__max"]) * cg_data["litecoin"]["btc"],
-                "qtum": float(swap_item["qtum"]["qtum__max"]) * cg_data["qtum"]["btc"],
-                "wbtc": float(swap_item["wbtc"]["wbtc__max"]) * cg_data["wrapped-bitcoin"]["btc"],
-                "eth": float(swap_item["eth"]["eth__max"]) * cg_data["ethereum"]["btc"],
-                "usdt": float(swap_item["usdt"]["usdt__max"]) * cg_data["tether"]["btc"],
-                "dai": float(swap_item["dai"]["dai__max"]) * cg_data["dai"]["btc"],
-            }
+                swap_btc = {
+                    "bitcoin": float(swap_item["btc"]["btc__max"]) * cg_data["bitcoin"]["btc"],
+                    "dash": float(swap_item["dash"]["dash__max"]) * cg_data["dash"]["btc"],
+                    "dogecoin": float(swap_item["dogecoin"]["doge__max"]) * cg_data["dogecoin"]["btc"],
+                    "litecoin": float(swap_item["litecoin"]["ltc__max"]) * cg_data["litecoin"]["btc"],
+                    "qtum": float(swap_item["qtum"]["qtum__max"]) * cg_data["qtum"]["btc"],
+                    "wbtc": float(swap_item["wbtc"]["wbtc__max"]) * cg_data["wrapped-bitcoin"]["btc"],
+                    "eth": float(swap_item["eth"]["eth__max"]) * cg_data["ethereum"]["btc"],
+                    "usdt": float(swap_item["usdt"]["usdt__max"]) * cg_data["tether"]["btc"],
+                    "dai": float(swap_item["dai"]["dai__max"]) * cg_data["dai"]["btc"],
+                }
         
             result['swap_stats'].insert(0, [date, {"usd": swap_usd, "btc": swap_btc}])
 
