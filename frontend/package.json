@@ -22,7 +22,7 @@
     "@angular/platform-browser-dynamic": "~11.0.1",
     "@angular/router": "~11.0.1",
     "angular-highcharts": "^10.0.1",
-    "highcharts": "^8.2.2",
+    "highcharts": "^9.0.0",
     "ngx-device-detector": "^2.0.4",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
