@@ -9,3 +9,7 @@ db.sqlite3
 celerybeat-schedule.bak
 celerybeat-schedule.dat
 celerybeat-schedule.dir
+server/.env-celery.dev
+server/.env.dev
+server/.env.prod
+server/env
