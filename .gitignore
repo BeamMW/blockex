@@ -13,3 +13,6 @@ server/.env-celery.dev
 server/.env.dev
 server/.env.prod
 server/env
+
+.DS_Store
+.DS_Store?
