@@ -1,7 +1,7 @@
 <div class="details">
   <div class="details-content" *ngIf="assetLoaded">
     <div class="details-top">
-      <img [src]="assetData.favicon_url" onerror="this.onerror=null; this.style.display='none'" width="22px" height="22px">
+      <img [src]="assetData.id === 7 ? iconBeamx : assetData.favicon_url" onerror="this.onerror=null; this.style.display='none'" width="22px" height="22px">
       <span class="short-label">
         {{assetData.asset_code}}
       </span>
@@ -37,7 +37,7 @@
       </div>
       <div class="details-data-row">
         <div class="data-title">SMALLEST UNIT NAME:</div>
-        <div class="data-value">{{assetData.smallest_unit_name}}</div>
+        <div class="data-value">{{assetData.id === 7 ? 'GROTHX' : assetData.smallest_unit_name}}</div>
       </div>
       <div class="details-data-row">
         <div class="data-title">RATIO:</div>
@@ -46,10 +46,10 @@
       <div class="details-data-row descr">
         <div class="data-title">SHORT DESCRIPTION:</div>
         <div class="data-value">
-          <ng-container *ngIf="assetData.short_desc.length > 0">
-            {{assetData.short_desc}}
+          <ng-container *ngIf="assetData.id === 7 ||assetData.short_desc.length > 0">
+            {{assetData.id === 7 ? 'BeamX DAO governance token' : assetData.short_desc}}
           </ng-container>
-          <div *ngIf="assetData.short_desc.length === 0" class="not-available">
+          <div *ngIf="assetData.id !== 7 && assetData.short_desc.length === 0" class="not-available">
             not available
           </div>
         </div>
@@ -57,10 +57,10 @@
       <div class="details-data-row descr">
         <div class="data-title">LONG DESCRIPTION:</div>
         <div class="data-value">
-          <ng-container *ngIf="assetData.full_desc.length > 0">
-            {{assetData.full_desc}}
+          <ng-container *ngIf="assetData.id === 7 || assetData.full_desc.length > 0">
+            {{assetData.id === 7 ? fullDesc : assetData.full_desc}}
           </ng-container>
-          <div *ngIf="assetData.full_desc.length === 0" class="not-available">
+          <div *ngIf="assetData.id !== 7 && assetData.full_desc.length === 0" class="not-available">
             not available
           </div>
         </div>
@@ -68,10 +68,10 @@
       <div class="details-data-row">
         <div class="data-title">WEBSITE:</div>
         <div class="data-value">
-          <ng-container *ngIf="assetData.site_url.length > 0">
-            {{assetData.site_url}}
-          </ng-container>
-          <div *ngIf="assetData.site_url.length === 0" class="not-available">
+          <div class="clickable" *ngIf="assetData.id === 7 || assetData.site_url.length > 0" (click)="siteClicked(assetData.id, assetData.site_url)">
+            {{assetData.id === 7 ? 'https://www.beamxdao.org/' : assetData.site_url}}
+          </div>
+          <div *ngIf="assetData.id !== 7 && assetData.site_url.length === 0" class="not-available">
             not available
           </div>
         </div>
@@ -79,17 +79,17 @@
       <div class="details-data-row">
         <div class="data-title">DESCRIPTION PAPER:</div>
         <div class="data-value">
-          <ng-container *ngIf="assetData.pdf_url.length > 0">
-            {{assetData.pdf_url}}
-          </ng-container>
-          <div *ngIf="assetData.pdf_url.length === 0" class="not-available">
+          <div class="clickable" *ngIf="assetData.id === 7 || assetData.pdf_url.length > 0" (click)="pdfClicked(assetData.id, assetData.site_url)">
+            {{assetData.id === 7 ? 'https://documentation.beam.mw/overview/beamx-tokenomics' : assetData.pdf_url}}
+          </div>
+          <div *ngIf="assetData.id !== 7 && assetData.pdf_url.length === 0" class="not-available">
             not available
           </div>
         </div>
       </div>
       <div class="details-data-row">
         <div class="data-title">LOGO:</div>
-        <img [src]="assetData.logo_url" onerror="this.onerror=null; this.style.display='none'">
+        <img [class.beamxed]="assetData.id === 7" [src]="assetData.id === 7 ? iconBeamx : assetData.logo_url" onerror="this.onerror=null; this.style.display='none'">
       </div>
     </div>
   </div>

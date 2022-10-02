@@ -93,7 +93,7 @@
 }
 
 .card-offering {
-    margin-top: auto;
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
     font-size: 14px;
@@ -105,8 +105,6 @@
     color: #ffffff;
 
     &__item {
-        margin-top: 8px;
-        
         &__title {
             font-weight: 600;
             color: rgba(255, 255, 255, 0.5);
@@ -115,6 +113,10 @@
         &__value {
             margin-left: 5px;
         }
+    }
+
+    &__item:not(:first-child) {
+        margin-top: 5px;
     }
 }
 

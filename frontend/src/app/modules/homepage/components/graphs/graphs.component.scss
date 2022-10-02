@@ -633,7 +633,8 @@
     margin-left: 64px;
     z-index: 10;
     width: 176px;
-    height: 72px;
+    display: flex;
+    flex-direction: row;
     position: absolute;
     border: none;
     margin-top: 20px;
@@ -650,7 +651,6 @@
 .chart-type-selector .type-options .type-options-item {
     padding: 7px 14px;
     text-align: start;
-    height: 15px;
     cursor: pointer;
 }
 

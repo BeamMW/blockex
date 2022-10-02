@@ -1,6 +1,11 @@
 <section *ngIf="!loading_block" class="details">
-  <div class="details-card-container">
-    <span class="mobile-label mat-column-block-header">{{block.header}}</span>
+    <div class="details-card-container">
+        <div class="back-control" (click)="backToExplorer()">
+            <svg-icon class="back-icon" src="../../assets/icon-back.svg" 
+                [svgStyle]="{ 'width.px':16, 'height.px':16 }"></svg-icon>
+            <span class="back-control-text">back</span>
+        </div>
+        <span class="mobile-label mat-column-block-header">{{block.header}}</span>
         <mat-table #table [dataSource]="block.data">
             <ng-container class="main-table-name" matColumnDef="name">
                 <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
@@ -13,8 +18,20 @@
             </ng-container>
 
             <ng-container matColumnDef="block-header">
-                <mat-header-cell *matHeaderCellDef style="font-size: 18px">
+                <mat-header-cell class="block-title" *matHeaderCellDef style="font-size: 18px">
+                    <svg-icon class="prev-icon" (click)="prev_clicked()" src="../../assets/icon-prev.svg"
+                        #tooltip="matTooltip"
+                        matTooltip="Previous block"
+                        [matTooltipPosition]="position.value!"
+                        matTooltipHideDelay="500"
+                        [svgStyle]="{ 'width.px':20, 'height.px':20 }"></svg-icon>
                     {{block.header}}
+                    <svg-icon class="next-icon" (click)="next_clicked()" src="../../assets/icon-next.svg"
+                        #tooltip="matTooltip"
+                        matTooltip="Next block"
+                        [matTooltipPosition]="position.value!"
+                        matTooltipHideDelay="500"
+                        [svgStyle]="{ 'width.px':20, 'height.px':20 }"></svg-icon>
                 </mat-header-cell>
             </ng-container>
 
@@ -22,115 +39,116 @@
             <mat-row class="main-table-row" *matRowDef="let row; columns: displayedColumns.block;"></mat-row>
         </mat-table>
 
-    <div class="expansion-data-rows">
-        <mat-expansion-panel class="expansion-data-panel">
-            <mat-expansion-panel-header class="expansion-data-header">
-            <mat-panel-title class="expansion-data-title">
-                INPUTS: {{block.inputs.length}}
-            </mat-panel-title>
-            </mat-expansion-panel-header>
+        <div class="expansion-data-rows">
+            <mat-expansion-panel class="expansion-data-panel">
+                <mat-expansion-panel-header class="expansion-data-header">
+                    <mat-panel-title class="expansion-data-title">
+                        INPUTS: {{block.inputs.length}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
 
-            <div class="table-container">
-            <mat-table class="inputs-table" #table [dataSource]="block.inputs">
-                <ng-container matColumnDef="height">
-                <mat-header-cell *matHeaderCellDef> Height: </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    <span class="mobile-label">Height:</span>
-                    {{element.height}}
-                </mat-cell>
-                </ng-container>
+                <div class="table-container">
+                    <mat-table class="inputs-table" #table [dataSource]="block.inputs">
+                        <ng-container matColumnDef="height">
+                            <mat-header-cell class="height-cell-header" *matHeaderCellDef> Height: </mat-header-cell>
+                            <mat-cell class="height-cell" *matCellDef="let element">
+                                <span class="mobile-label">Height:</span>
+                                {{element.height}}
+                            </mat-cell>
+                        </ng-container>
 
-                <ng-container matColumnDef="commitment">
-                <mat-header-cell *matHeaderCellDef> Commitment: </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    <span class="mobile-label">Commitment:</span>
-                    <span class="commitment-cell">{{element.commitment}}</span>
-                </mat-cell>
-                </ng-container>
+                        <ng-container matColumnDef="commitment">
+                            <mat-header-cell class="commitment-cell-header" *matHeaderCellDef> Commitment: </mat-header-cell>
+                            <mat-cell class="commitment-cell" *matCellDef="let element">
+                                <span class="mobile-label">Commitment:</span>
+                                <span class="commitment-cell-value">{{element.commitment}}</span>
+                            </mat-cell>
+                        </ng-container>
 
-                <ng-container matColumnDef="extra">
-                <mat-header-cell *matHeaderCellDef> Extra: </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    <span class="mobile-label">Extra:</span>
-                    {{element.extra}}
-                </mat-cell>
-                </ng-container>
+                        <mat-header-row class="inputs-table-header" *matHeaderRowDef="displayedColumns.inputs"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns.inputs;"></mat-row>
+                    </mat-table>
+                </div>
+            </mat-expansion-panel>
 
-                <mat-header-row class="inputs-table-header" *matHeaderRowDef="displayedColumns.inputs"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns.inputs;"></mat-row>
-            </mat-table>
-            </div>
-        </mat-expansion-panel>
+            <mat-expansion-panel class="expansion-data-panel">
+                <mat-expansion-panel-header class="expansion-data-header">
+                <mat-panel-title class="expansion-data-title">
+                    OUTPUTS: {{block.outputs.length}}
+                </mat-panel-title>
+                </mat-expansion-panel-header>
 
-        <mat-expansion-panel class="expansion-data-panel">
-            <mat-expansion-panel-header class="expansion-data-header">
-            <mat-panel-title class="expansion-data-title">
-                OUTPUTS: {{block.outputs.length}}
-            </mat-panel-title>
-            </mat-expansion-panel-header>
+                <div class="table-container">
+                    <mat-table class="outputs-table" #table [dataSource]="block.outputs">
+                        <ng-container matColumnDef="commitment">
+                            <mat-header-cell class="out-commitment-header-cell" *matHeaderCellDef> Commitment: </mat-header-cell>
+                            <mat-cell class="out-commitment-cell" *matCellDef="let element">
+                                <span class="mobile-label">Commitment:</span>
+                                <span class="commitment-cell"> {{element.commitment}} </span>
+                            </mat-cell>
+                        </ng-container>
 
-            <div class="table-container">
-            <mat-table class="outputs-table" #table [dataSource]="block.outputs">
-                <ng-container matColumnDef="commitment">
-                <mat-header-cell *matHeaderCellDef> Commitment: </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    <span class="mobile-label">Commitment:</span>
-                    <span class="commitment-cell"> {{element.commitment}} </span>
-                </mat-cell>
-                </ng-container>
+                        <mat-header-row class="outputs-table-header" *matHeaderRowDef="displayedColumns.outputs"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns.outputs;"></mat-row>
+                    </mat-table>
+                </div>
+            </mat-expansion-panel>
 
-                <ng-container matColumnDef="extra">
-                <mat-header-cell *matHeaderCellDef> Extra: </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    <span class="mobile-label">Extra:</span>
-                    {{element.extra}}
-                </mat-cell>
-                </ng-container>
+            <mat-expansion-panel class="expansion-data-panel" [expanded]="kernelsExpanded">
+                <mat-expansion-panel-header class="expansion-data-header">
+                    <mat-panel-title class="expansion-data-title">
+                        KERNELS: {{block.kernels.length}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
 
-                <mat-header-row class="outputs-table-header" *matHeaderRowDef="displayedColumns.outputs"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns.outputs;"></mat-row>
-            </mat-table>
-            </div>
-        </mat-expansion-panel>
+                <mat-table #table class="kernels-table" [dataSource]="kernels" multiTemplateDataRows>
+                    <ng-container matColumnDef="fee">
+                        <mat-header-cell class="fee-cell-header" *matHeaderCellDef> Fee: </mat-header-cell>
+                        <mat-cell class="fee-cell-gl" *matCellDef="let element"
+                        [class.searched-by]="element.kernel_id == searchedBy && isFadein">
+                            <span class="mobile-label">Fee:</span>
+                            <span class="fee-cell" [attr.id]="element.kernel_id">{{element.fee}}</span>
+                        </mat-cell>
+                    </ng-container>
 
-        <mat-expansion-panel class="expansion-data-panel" [expanded]="kernelsExpanded">
-            <mat-expansion-panel-header class="expansion-data-header">
-            <mat-panel-title class="expansion-data-title">
-                KERNELS: {{block.kernels.length}}
-            </mat-panel-title>
-            </mat-expansion-panel-header>
+                    <ng-container matColumnDef="id">
+                        <mat-header-cell class="kernel-cell-header" *matHeaderCellDef> Id: </mat-header-cell>
+                        <mat-cell class="kernel-cell" *matCellDef="let element"
+                        [class.searched-by]="element.kernel_id == searchedBy && isFadein">
+                            <span class="mobile-label">Id:</span>
+                            <span class="kernel-id-cell">{{element.id}}</span>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="expand">
+                        <mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <button mat-icon-button aria-label="expand row" *ngIf="element.contract !== undefined"
+                            class="clickable"
+                            (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+                                SMART CONTRACT INFO
+                            </button>
+                        </mat-cell>
+                    </ng-container>
 
-            <mat-table class="kernels-table" #table [dataSource]="block.kernels">
-            <ng-container matColumnDef="fee">
-                <mat-header-cell *matHeaderCellDef> Fee: </mat-header-cell>
-                <mat-cell *matCellDef="let element" [class.searched-by]="element.kernel_id == searchedBy && isFadein">
-                <span class="mobile-label">Fee:</span>
-                <span class="fee-cell" [attr.id]="element.kernel_id">{{element.fee}}</span>
-                </mat-cell>
-            </ng-container>
+                    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+                    <ng-container matColumnDef="expandedDetail">
+                        <mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.kernelsWithExpand.length">
+                            <div class="example-element-detail" *ngIf="element.contract !== undefined"
+                                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                                <ngx-json-viewer [json]="element.contract"></ngx-json-viewer>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
 
-            <ng-container matColumnDef="extra">
-                <mat-header-cell *matHeaderCellDef class="kernel-extra-header-cell"> Extra: </mat-header-cell>
-                <mat-cell *matCellDef="let element" 
-                    class="kernel-extra-cell"
-                    [class.searched-by]="element.kernel_id == searchedBy && isFadein">
-                <span class="mobile-label">Extra:</span>
-                <span class="kernel-extra-value-cell">{{element.extra}}</span>
-                </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="id">
-                <mat-header-cell *matHeaderCellDef> Id: </mat-header-cell>
-                <mat-cell *matCellDef="let element" [class.searched-by]="element.kernel_id == searchedBy && isFadein">
-                <span class="mobile-label">Id:</span>
-                <span class="kernel-id-cell">{{element.kernel_id}}</span>
-                </mat-cell>
-            </ng-container>
-
-            <mat-header-row class="kernels-table-header" *matHeaderRowDef="displayedColumns.kernels"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns.kernels;"></mat-row>
-            </mat-table>
-        </mat-expansion-panel>
+                    <mat-header-row class="kernels-table-header" *matHeaderRowDef="displayedColumns.kernelsWithExpand"></mat-header-row>
+                    <mat-row *matRowDef="let element; columns: displayedColumns.kernelsWithExpand;"
+                        class="example-element-row"
+                        [class.example-expanded-row]="expandedElement === element"
+                        (click)="expandedElement = expandedElement === element ? null : element">
+                    </mat-row>
+                    <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></mat-row>
+                </mat-table>
+            </mat-expansion-panel>
+        </div>
     </div>
-  </div>
 </section>

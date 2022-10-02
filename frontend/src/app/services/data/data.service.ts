@@ -35,29 +35,37 @@ export class DataService {
   }
 
   loadBlocks(page = 1): any {
-    return this.http.get<Block[]>(this.API_BASE + '/explorer/blocks/' + '?page=' + (page + 1));
+    return this.http.get<Block[]>(this.API_BASE + '/blocks/' + '?page=' + (page + 1));
   }
 
   loadOffers(page = 1): any {
-    return this.http.get<Offer[]>(this.API_BASE + '/explorer/get_swap_offers/?page=' + (page + 1));
+    return this.http.get<Offer[]>(this.API_BASE + '/get_swap_offers/?page=' + (page + 1));
+  }
+
+  loadContracts(page: number): any {
+    return this.http.get<any[]>(this.API_BASE + '/contracts/?page=' + (page + 1));
+  }
+
+  loadContractById(id): any {
+    return this.http.get<any[]>(this.API_BASE + '/contract/' + id + '/');
   }
 
   searchBlock(query) {
-    return this.http.get<any>(this.API_BASE + '/explorer/search/' + '?q=' + query);
+    return this.http.get<any>(this.API_BASE + '/search/' + query + '/');
   }
 
   loadBlock(hash) {
-    return this.http.get<Block>(this.API_BASE + '/explorer/block/' + '?hash=' + hash);
+    return this.http.get<Block>(this.API_BASE + '/block/' + hash + '/');
   }
 
   getAssetsList(height = null) {
     const heightParam = (height !== null) ? '?height=' + height : '';
-    return this.http.get<{assets: Asset[]}>(this.API_BASE + '/explorer/get_assets_list/' + heightParam);
+    return this.http.get<{assets: Asset[]}>(this.API_BASE + '/get_assets_list/' + heightParam + '/');
   }
 
   loadAssets(data) {
     this.assetsList = data.assets.map(function(item) {
-      const metadata = item.metadata;
+      const metadata = item.metadata.text;
 
       const assetNameIndex = metadata.indexOf(PARAMS.ASSET_NAME);
       const assetCodeIndex = metadata.indexOf(PARAMS.ASSET_CODE);
@@ -76,7 +84,7 @@ export class DataService {
       const assetItem = {
           lock_height: item.lock_height,
           value: item.value_lo,
-          id: item.id,
+          id: item.aid,
           asset_name: assetNameIndex > 0 ?
             metadata.slice(assetNameIndex + PARAMS.ASSET_NAME.length, metadata.indexOf(SEPARATOR, assetNameIndex)) : '',
           asset_code: assetCodeIndex > 0 ?

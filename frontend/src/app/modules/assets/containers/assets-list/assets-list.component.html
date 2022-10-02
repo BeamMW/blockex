@@ -18,7 +18,7 @@
           <ng-container matColumnDef="coin">
             <mat-header-cell class="coin-cell-header" *matHeaderCellDef> COIN: </mat-header-cell>
             <mat-cell class="coin-cell" *matCellDef="let element">
-              <img [src]="element.logo_url" class="asset-icon" 
+              <img [src]="element.id === 7 ? iconBeamx : element.logo_url" class="asset-icon" 
                 onerror="this.onerror=null; this.style.display='none'" width="22px" height="22px">
               <span class="short-label">
                 {{element.asset_code}}
@@ -56,15 +56,15 @@
             <mat-header-cell class="description-cell-header" *matHeaderCellDef> DESCRIPTION: </mat-header-cell>
             <mat-cell class="description-cell" *matCellDef="let element">
               <span class="description-label">
-                {{element.short_desc}}
+                {{element.id === 7 ? 'BeamX DAO governance token' : element.short_desc}}
               </span>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="website">
             <mat-header-cell class="website-cell-header" *matHeaderCellDef> WEBSITE: </mat-header-cell>
             <mat-cell class="website-cell" *matCellDef="let element">
-              <span class="website-label" (click)="websiteClicked($event, element.site_url)">
-                {{element.site_url}}
+              <span class="website-label" (click)="websiteClicked($event, element.id === 7 ? 'https://www.beamxdao.org/' : element.site_url)">
+                {{element.id === 7 ? 'https://www.beamxdao.org/' : element.site_url}}
               </span>
             </mat-cell>
           </ng-container>
@@ -96,7 +96,7 @@
           <ng-container matColumnDef="coin">
             <mat-header-cell class="coin-cell-header" *matHeaderCellDef> COIN: </mat-header-cell>
             <mat-cell class="coin-cell" *matCellDef="let element">
-              <img [src]="element.logo_url" class="asset-icon" 
+              <img [src]="element.id === 7 ? iconBeamx : element.logo_url" class="asset-icon" 
                 onerror="this.onerror=null; this.style.display='none'" width="22px" height="22px">
               <div class="cell-labels">
                 <span class="short-label">
@@ -120,7 +120,7 @@
             <mat-header-cell class="description-cell-header" *matHeaderCellDef> DESCRIPTION: </mat-header-cell>
             <mat-cell class="description-cell" *matCellDef="let element">
               <span class="description-label">
-                {{element.short_desc}}
+                {{element.id === 7 ? fullDesc : element.short_desc}}
               </span>
             </mat-cell>
           </ng-container>
@@ -128,7 +128,7 @@
             <mat-header-cell class="website-cell-header" *matHeaderCellDef> WEBSITE: </mat-header-cell>
             <mat-cell class="website-cell" *matCellDef="let element">
               <span class="website-label" (click)="websiteClicked($event, element.site_url)">
-                {{element.site_url}}
+                {{element.id === 7 ? 'https://www.beamxdao.org/' : element.site_url}}
               </span>
             </mat-cell>
           </ng-container>

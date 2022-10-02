@@ -1,7 +1,7 @@
 @import 'ui-mixins';
 
 .details {
-    padding: 0 140px;
+    padding: 0 140px 50px 140px;
 }
 
 .mat-column-block-header{
@@ -15,13 +15,15 @@
 }
 
 .mat-column-name{
-    font-weight: bold;
+    font-weight: 600;
     max-width: 145px;
 }
 
 .details-card-container{
     box-shadow: none;
     max-width: 1290px;
+    display: flex;
+    flex-direction: column;
 }
 
 .mat-header-row,
@@ -58,7 +60,8 @@
 }
 
 .expansion-data-title{
-    font-weight: bold;
+    font-weight: 400;
+    font-size: 12px;
 }
 
 .expansion-data-panel{
@@ -77,7 +80,7 @@
 }
 
 :host ::ng-deep.mat-header-row .mat-header-cell {
-    font-weight: bolder !important;
+    font-weight: 600 !important;
     color: #333333;
     font-size: 12px;
     font-style: normal;
@@ -99,8 +102,7 @@
 }
 
 .inputs-table .mat-row:nth-child(odd),
-.outputs-table .mat-row:nth-child(odd),
-.kernels-table .mat-row:nth-child(odd){
+.outputs-table .mat-row:nth-child(odd){
     background-color: rgb(251,251,251);
 }
 
@@ -108,12 +110,26 @@
     margin-top: 50px;
 }
 
-.mat-column-commitment{
-    min-width: 720px;
+.out-commitment-cell,
+.out-commitment-header-cell,
+.kernel-cell,
+.kernel-cell-header,
+.commitment-cell-header,
+.commitment-cell {
+    min-width: 530px;
+    max-width: 600px;
 }
 
-.mat-column-fee {
-    min-width: 40px;
+.height-cell,
+.height-cell-header {
+    min-width: 85px;
+    max-width: 95px;
+}
+
+.fee-cell-gl,
+.fee-cell-header {
+    min-width: 80px;
+    max-width: 100px;
 }
 
 .mat-column-excess {
@@ -138,11 +154,126 @@
     display: none;
 }
 
-.kernel-extra-cell,
-.kernel-extra-value-cell,
-.kernel-extra-header-cell {
+.extra-cell,
+.extra-value-cell,
+.extra-header-cell {
     white-space: break-spaces;
-    min-width: 390px;
+    min-width: 160px;
+}
+
+.separator {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: 20px 0;
+}
+
+.back-control {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: inline-flex;
+    width: min-content;
+}
+
+.back-control-text {
+    font-weight: bold;
+    margin-left: 10px;
+    font-size: 20px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.back-icon {
+    display: flex;
+}
+
+.back-icon svg {
+    align-self: center;
+}
+
+.prev-icon {
+    display: flex;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.next-icon {
+    display: flex;
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+.prev-icon svg,
+.next-icon svg {
+    align-self: center;
+}
+
+.block-title {
+    padding: 0;
+    user-select: none;
+    font-size: 20px !important;
+}
+
+mat-cell {
+    font-size: 12px;
+}
+
+mat-row {
+    min-height: 35px;
+}
+
+::ng-deep .mat-tooltip {
+    margin-bottom: 7px !important;
+    background-color: #39586D;
+}
+
+  
+  tr.example-detail-row {
+    height: 0;
+  }
+  
+  tr.example-element-row:not(.example-expanded-row):hover {
+    background: whitesmoke;
+  }
+  
+  tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+  }
+  
+  .example-element-row td {
+    border-bottom-width: 0;
+  }
+  
+  .example-element-detail {
+    overflow: hidden;
+    display: flex;
+  }
+  
+  .example-element-diagram {
+    min-width: 80px;
+    border: 2px solid black;
+    padding: 8px;
+    font-weight: lighter;
+    margin: 8px 0;
+    height: 104px;
+  }
+  
+  .example-element-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+  }
+  
+  .example-element-description {
+    padding: 16px;
+  }
+  
+  .example-element-description-attribution {
+    opacity: 0.5;
+  }
+
+.clickable {
+    color: blue;
 }
 
 @media(max-width: 600px) {
@@ -188,7 +319,8 @@
     }
     
     .expansion-data-title{
-        font-weight: bold;
+        font-weight: 400;
+        font-size: 12px;
     }
     
     .expansion-data-panel{
@@ -210,7 +342,7 @@
     }
     
     :host ::ng-deep.mat-header-row .mat-header-cell {
-        font-weight: bolder !important;
+        font-weight: 600 !important;
         color: #333333;
         font-size: 12px;
         font-style: normal;
@@ -307,7 +439,7 @@
         max-width: 200px;
     }
     
-    .commitment-cell,
+    .commitment-cell-value,
     .kernel-id-cell,
     .excess-cell {
         max-width: 190px;
@@ -370,9 +502,9 @@
     }
 
 
-    .kernel-extra-cell,
-    .kernel-extra-value-cell,
-    .kernel-extra-header-celll {
+    .extra-cell,
+    .extra-value-cell,
+    .extra-header-celll {
         white-space: break-spaces;
         max-width: 260px;
         min-width: 135px;

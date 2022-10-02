@@ -15,6 +15,13 @@
                 <div class="table-selector__item__bottom-line"
                     *ngIf="selectorActiveTitle === selectorTitles.AS_OFFERS"></div>
             </div>
+            <div class="table-selector__item" (click)="selectorItemContractsClicked()">
+                <div class="table-selector__item__title" 
+                    [class.active]="selectorActiveTitle === selectorTitles.CONTRACTS">
+                    {{selectorTitles.CONTRACTS}}</div>
+                <div class="table-selector__item__bottom-line"
+                    *ngIf="selectorActiveTitle === selectorTitles.CONTRACTS"></div>
+            </div>
         </div>
         <div class="swap-promt" *ngIf="selectorActiveTitle === selectorTitles.AS_OFFERS">
             <span class="swap-promt__link swap-promt__url" (click)="downloadsClicked()">Download</span> Beam Wallet from 
@@ -220,10 +227,73 @@
                     *matHeaderRowDef="displayedOffersColumns"></mat-header-row>
                 <mat-row class="offers-table-row" [class.mobile]="isMobile"
                     *matRowDef="let row; columns: displayedOffersColumns;"></mat-row>
+
+                <div *matNoDataRow class="empty-offers-message">
+                    There are no active offers.
+                </div>
+            </mat-table>
+        </ng-container>
+
+        <ng-container *ngIf="selectorActiveTitle === selectorTitles.CONTRACTS">
+            <div class="paginator-wrapper" [class.mobile]="isMobile">
+                <mat-paginator class="paginator" [class.mobile]="isMobile"
+                    [pageSize]="20" [pageIndex]="contractsPage" [length]="contractsCount"
+                    (page)="loadContracts($event)" showFirstLastButtons></mat-paginator>
+            </div>
+            <mat-table [dataSource]="contractsData" [class.mobile]="isMobile" class="offers-table">
+                <ng-container matColumnDef="contract-id">
+                    <mat-header-cell class="cid-cell-header" 
+                        [class.mobile]="isMobile" 
+                        *matHeaderCellDef> CONTRACT ID: </mat-header-cell>
+                    <mat-cell class="cid-cell" [class.mobile]="isMobile" *matCellDef="let element">
+                        <span class="offer-mobile-label" *ngIf="isMobile">CONTRACT ID:</span>
+                        <span class="desktop-label">
+                            <span>{{element.cid}}</span> 
+                        </span>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                    <mat-header-cell class="name-cell-header" 
+                        [class.mobile]="isMobile" 
+                        *matHeaderCellDef> NAME: </mat-header-cell>
+                    <mat-cell class="name-cell" [class.mobile]="isMobile" *matCellDef="let element">
+                        <span class="offer-mobile-label" *ngIf="isMobile">NAME:</span>
+                        <span class="desktop-label">
+                            <span>{{loadName(element)}}</span> 
+                        </span>
+                    </mat-cell>
+                </ng-container>
+    
+                <ng-container matColumnDef="height">
+                    <mat-header-cell class="h-cell-header" *matHeaderCellDef> HEIGHT: </mat-header-cell>
+                    <mat-cell class="h-cell" *matCellDef="let element">
+                        <span class="offer-mobile-label" *ngIf="isMobile">HEIGHT:</span>
+                        <span class="desktop-label">
+                            <span>{{element.height}}</span> 
+                        </span>
+                    </mat-cell>
+                </ng-container>
+    
+                <ng-container matColumnDef="shader-id">
+                    <mat-header-cell class="sid-cell-header" *matHeaderCellDef> SHADER ID: </mat-header-cell>
+                    <mat-cell class="sid-cell" *matCellDef="let element">
+                        <span class="offer-mobile-label" *ngIf="isMobile">SHADER ID:</span>
+                        <span class="desktop-label">
+                            <span>{{element.sid}}</span> 
+                        </span>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row class="offers-table-header-row" [class.mobile]="isMobile"
+                    *matHeaderRowDef="displayedContractsColumns"></mat-header-row>
+                <mat-row class="offers-table-row" [class.mobile]="isMobile"
+                    (click)="showContractDetails(row)"
+                    *matRowDef="let row; columns: displayedContractsColumns;"></mat-row>
             </mat-table>
 
-            <div *ngIf="!offersLoadInProgress && offersCount === 0" class="empty-offers-message">
-                There are no active offers.
+            <div *ngIf="!contractsLoadInProgress && contractsCount === 0" class="empty-offers-message">
+                There are no active contracts.
             </div>
         </ng-container>
     </div>

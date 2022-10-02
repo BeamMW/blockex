@@ -64,7 +64,7 @@
 }
 
 :host ::ng-deep.mat-header-row .mat-header-cell {
-    font-weight: bolder !important;
+    font-weight: 600 !important;
     color: #333333;
 }
 
@@ -85,7 +85,7 @@
 }
 
 :host ::ng-deep.mat-paginator-page-size div:last-of-type {
-    font-weight: bolder;
+    font-weight: 600;
     color: #333333;
 }
 
@@ -170,7 +170,7 @@
 
 .website-cell-header,
 .website-cell {
-    max-width: 100px;
+    max-width: 150px;
 }
 
 .website-label {
@@ -192,6 +192,10 @@
     padding: 0 140px;
 }
 
+.value-cell,
+.value-cell-header {
+    max-width: 190px;
+}
 
 @media(max-width: 769px) {
     .paginator {

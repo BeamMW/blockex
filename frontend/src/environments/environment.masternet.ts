@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  wsEndpoint: 'wss://masternet-explorer.beam.mw/ws/explorer/',
+  wsEndpoint: 'ws://localhost:1337/ws/explorer/',//'wss://explorer-api.beam.mw/masternet/ws/explorer/',
   reconnectInterval: 2000,
-  apiBaseUrl: 'https://masternet-explorer.beam.mw',
+  apiBaseUrl: 'http://localhost:1337/explorer', //'https://explorer-api.beam.mw/masternet', //masternet-explorer.beam.mw
   envTitle: 'masternet'
 };

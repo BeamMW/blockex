@@ -100,7 +100,7 @@ export class StatusCardsComponent implements OnInit, OnDestroy, AfterContentInit
     this.offers.sort((a, b) => {
       return b.value - a.value;
     });
-    this.mostOffering = this.offers.slice(0, 3);
+    this.mostOffering = this.offers.slice(0, 4);
   }
 
   ngOnInit(): void {

@@ -68,7 +68,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "2mb"
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -84,13 +84,13 @@
                   "with": "src/environments/environment.masternet.ts"
                 }
               ],
-              "optimization": true,
+              "optimization": false,
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "extractLicenses": true,
+              "extractLicenses": false,
               "vendorChunk": false,
-              "buildOptimizer": true,
+              "buildOptimizer": false,
               "stylePreprocessorOptions": {
                 "includePaths": [
                   "src/app/scss/masternet"
@@ -100,7 +100,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "2mb"
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -164,12 +164,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "2mb"
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "50kb"
+                  "maximumError": "1mb"
                 }
               ]
             }

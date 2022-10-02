@@ -6,6 +6,9 @@ import { DataService } from '../../../../services/data/data.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import ExplorerManager from '../../../../shared/ExplorerManager';
+
+const explorerManager = ExplorerManager.getInstance();
 
 @Component({
   selector: 'app-table',
@@ -17,62 +20,68 @@ export class TableComponent implements OnInit, OnDestroy {
     this.isSelectedOfferVisible = false;
   }
 
-  public icons = {
-    BTC: {
+  public icons = [
+    {
       value: 'BTC',
       iconUrl: `../../../../../assets/modules/homepage/components/table/icon-btc.svg`
     },
-    LTC: {
+    {
       value: 'LTC',
       iconUrl: `../../../../../assets/modules/homepage/components/table/icon-ltc.svg`
     },
-    BCH: {
+    {
       value: 'BCH',
       iconUrl: `../../../../../assets/modules/homepage/components/table/icon-bch.svg`
     },
-    DASH: {
+    {
       value: 'DASH',
       iconUrl: `../../../../../assets/modules/homepage/components/table/icon-dash.svg`
     },
-    DOGE: {
+    {
       value: 'DOGE',
       iconUrl: `../../../../../assets/modules/homepage/components/table/icon-doge.svg`
     },
-    QTUM: {
+    {
       value: 'QTUM',
       iconUrl: `../../../../../assets/modules/homepage/components/table/icon-qtum.svg`
     },
-    WBTC: {
+    {
       value: 'WBTC',
       iconUrl: `../../../../../assets/modules/homepage/components/table/icon-wbtc.svg`
     },
-    USDT: {
+    {
       value: 'USDT',
       iconUrl: `../../../../../assets/modules/homepage/components/table/icon-usdt.svg`
     },
-    ETH: {
+    {
       value: 'ETH',
       iconUrl: `../../../../../assets/modules/homepage/components/table/icon-eth.svg`
     },
-    DAI: {
+    {
       value: 'DAI',
       iconUrl: `../../../../../assets/modules/homepage/components/table/icon-dai.svg`
     }
-  }
+  ];
   public iconBeamUrl: string = `../../../../../assets/modules/homepage/components/table/icon-beam.svg`;
   public iconArrowDownUrl: string = `../../../../../assets/modules/homepage/components/table/arrow-down.svg`;
 
   public selectorTitles = {
     BLOCKS: 'BLOCKS',
     AS_OFFERS: 'ATOMIC SWAP OFFERS',
+    CONTRACTS: 'CONTRACTS'
   };
+
+  public displayedContractsColumns: string[] = [
+    'contract-id', 'name', 'height', 'shader-id'
+  ]
 
   public displayedOffersColumns: string[] = [
     'coins', 'amount-send', 'amount-rec', 'rate', 'created', 'expired', 'tr-id'
   ]
   public displayedColumns: string[] = ['height', 'hash', 'age',
     'difficulty', 'kernels', 'inputs', 'outputs', 'fees'];
-  public selectorActiveTitle = this.selectorTitles.BLOCKS;
+  public selectorActiveTitle = explorerManager.selectedTab !== null ? 
+    explorerManager.selectedTab : this.selectorTitles.BLOCKS;
   public isMobile = this.deviceService.isMobile();
 
   public offerFilters = [{
@@ -136,22 +145,35 @@ export class TableComponent implements OnInit, OnDestroy {
     value: 'BTC',
     active: false
   }];
+
+  public contractsNames = [
+    {cid: '2f4a3a736b10e8a217ff23a8f7fa20959431ab3d1fe3226d044101ee5007e6da', name: 'DAO CORE'},
+    {cid: '560881a267df92b45d48a1dc6495fdd29b37878e1040b22b1c4f1ea13b467dc9', name: 'BANS'}
+  ]
+
   public selectedOfferFilter = this.offerFilters[0];
   public isSelectedOfferVisible = false;
 
   public blocksCount: number;
-  public blocksPage: number = 0;
+  public blocksPage: number = explorerManager.currentPage > 0 ? explorerManager.currentPage : 0;
   public blocksData: any;
+
   public offersCount: number;
-  public offersPage: number = 0;
+  public offersPage: number = explorerManager.currentPage > 0 ? explorerManager.currentPage : 0;
   public offersData: any;
   public offersLoadInProgress = false;
+
+  public contractsCount: number;
+  public contractsPage: number = explorerManager.currentPage > 0 ? explorerManager.currentPage : 0;
+  public contractsData: any;
+  public contractsLoadInProgress = false;
+
   private subscriber: any;
 
   constructor(
     private deviceService: DeviceDetectorService,
     private dataService: DataService,
-    private router: Router) { }
+    private router: Router) {}
 
   ngOnInit(): void {
     this.subscriber = this.dataService.height.subscribe((value) => {
@@ -159,10 +181,14 @@ export class TableComponent implements OnInit, OnDestroy {
         this.loadBlocks({
           pageIndex: this.blocksPage
         });
-      } else {
+      } else if (this.selectorActiveTitle === this.selectorTitles.AS_OFFERS) {
         this.loadOffers({
           pageIndex: this.offersPage
         })
+      } else if (this.selectorActiveTitle === this.selectorTitles.CONTRACTS) {
+        this.loadContracts({
+          pageIndex: this.contractsPage
+        });
       }
     });
     this.loadOffers(null);
@@ -178,9 +204,16 @@ export class TableComponent implements OnInit, OnDestroy {
     );
   }
 
+  public showContractDetails(contract) {
+    this.router.navigate(
+      ['/contract', contract.cid]
+    );
+  }
+
   loadBlocks(event?){
     this.blocksPage = event ? event.pageIndex : 0;
-
+    explorerManager.currentPage = event ? event.pageIndex : 0;
+    explorerManager.selectedTab = this.selectorTitles.BLOCKS;
     this.dataService.loadBlocks(this.blocksPage).subscribe((data) => {
       this.blocksData = new MatTableDataSource(data['results']);
       this.blocksCount = data['count'];
@@ -189,10 +222,35 @@ export class TableComponent implements OnInit, OnDestroy {
     return event;
   }
 
+  loadContracts(event?) {
+    this.contractsLoadInProgress = true;
+    this.contractsPage = event ? event.pageIndex : 0;
+    explorerManager.currentPage = event ? event.pageIndex : 0;
+    explorerManager.selectedTab = this.selectorTitles.CONTRACTS;
+    this.dataService.loadContracts(this.contractsPage).subscribe((data) => {
+      this.contractsData = new MatTableDataSource(data['contracts']);
+      this.contractsCount = data['count'];
+      this.contractsLoadInProgress = false;
+    });
+  }
+
+  loadName(element) {
+    if (element.name) {
+      return element.name
+    }
+    
+    const citem = this.contractsNames.find((item) => {
+      return item.cid === element.cid;
+    });
+    
+    return citem !== undefined ? citem.name : '';
+  }
+
   loadOffers(event?){
     this.offersLoadInProgress = true;
     this.offersPage = event ? event.pageIndex : 0;
-
+    explorerManager.currentPage = event ? event.pageIndex : 0;
+    explorerManager.selectedTab = this.selectorTitles.AS_OFFERS;
     this.dataService.loadOffers(this.offersPage).subscribe((data) => {
       this.offerFilters.forEach((item) => {
         if (item !== this.offerFilters[0]) {
@@ -255,27 +313,22 @@ export class TableComponent implements OnInit, OnDestroy {
     }
   }
 
+  selectorItemContractsClicked(): void {
+    if (this.selectorActiveTitle !== this.selectorTitles.CONTRACTS) {
+      this.selectorActiveTitle = this.selectorTitles.CONTRACTS;
+      this.loadContracts();
+    }
+  }
+
   getCurrencyIcon(val) {
-    if (val === this.icons.BTC.value) {
-      return this.icons.BTC.iconUrl;
-    } else if (val === this.icons.BCH.value) {
-      return this.icons.BCH.iconUrl;
-    } else if (val === this.icons.DASH.value) {
-      return this.icons.DASH.iconUrl;
-    } else if (val === this.icons.DOGE.value) {
-      return this.icons.DOGE.iconUrl;
-    } else if (val === this.icons.LTC.value) {
-      return this.icons.LTC.iconUrl;
-    } else if (val === this.icons.QTUM.value) {
-      return this.icons.QTUM.iconUrl;
-    } else if (val === this.icons.WBTC.value) {
-      return this.icons.WBTC.iconUrl;
-    } else if (val === this.icons.ETH.value) {
-      return this.icons.ETH.iconUrl;
-    } else if (val === this.icons.USDT.value) {
-      return this.icons.USDT.iconUrl;
-    } else if (val === this.icons.DAI.value) {
-      return this.icons.DAI.iconUrl;
+    const url = this.icons.find((item) => {
+      if (item.value === val) {
+        return item.iconUrl;
+      }
+    });
+    
+    if (url) {
+      return url;
     }
   }
 

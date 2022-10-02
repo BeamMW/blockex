@@ -24,6 +24,10 @@ export class AssetsListComponent implements OnInit {
     private router: Router) {
       this.isFullScreen = window.innerWidth > 768;
   }
+  fullDesc = 'BEAMX token is a Confidential Asset issued on top of the Beam blockchain with a fixed emission of 100,000,000 units (except for the lender of a "last resort" scenario).\
+  BEAMX is the governance token for the BeamX DAO, managed by the BeamX DAO Core contract\
+  Holders can earn BeamX tokens by participating in the DAO activities: providing liquidity to the DeFi applications governed by the DAO or participating in the governance process.'
+  public iconBeamx: string = `../../../../../assets/beamx-icon.svg`;
 
   ngOnInit() {
     const assetsByHeight = this.route.snapshot.queryParamMap.get('height');
@@ -48,6 +52,7 @@ export class AssetsListComponent implements OnInit {
   }
 
   coinClicked(coinData) {
+    console.log('ccc', coinData)
     this.router.navigate([routesConsts.CONFIDENTIAL_ASSET_DETAILS, coinData.id]);
   }
 

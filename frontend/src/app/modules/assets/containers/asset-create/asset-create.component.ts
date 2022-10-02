@@ -47,7 +47,7 @@ export class AssetCreateComponent implements OnInit {
     this.createForm = new FormGroup({
       shemaVer: new FormControl({value: '', disabled: true}),
       assetName: new FormControl('', [Validators.pattern('^[a-zA-Z0-9.,_-\\s]*$')]),
-      assetCode: new FormControl('', [Validators.pattern('^[a-zA-Z0-9.,_-\\s]*$')]),
+      assetCode: new FormControl('', [Validators.maxLength(6), Validators.pattern('^[a-zA-Z0-9.,_-\\s]*$')]),
       assetUnitName: new FormControl('', [Validators.pattern('^[a-zA-Z0-9.,_-\\s]*$')]),
       smallestUnitName: new FormControl('', [Validators.pattern('^[a-zA-Z0-9.,_-\\s]*$')]),
       ratio: new FormControl('', [Validators.max(RATIO_MAX), Validators.pattern('^[0-9]*')]),

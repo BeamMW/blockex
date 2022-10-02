@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  wsEndpoint: 'wss://beamx-testnet-explorer.beam.mw/ws/explorer/',
+  wsEndpoint: 'wss://explorer-api.beam.mw/dappnet/ws/explorer/',//'',
   reconnectInterval: 2000,
-  apiBaseUrl: 'https://beamx-testnet-explorer.beam.mw',
+  apiBaseUrl: 'https://explorer-api.beam.mw/dappnet', //'', //masternet-explorer.beam.mw
   envTitle: 'beamx'
 };

@@ -116,6 +116,10 @@
     color: #333333;
 }
 
+.clickable {
+    cursor: pointer;
+}
+
 @media(max-width: 769px) {
     .details-content {
         width: 100%;
@@ -137,6 +141,11 @@
     .data-value {
         max-width: calc(100% - 170px);
     }
+}
+
+.beamxed {
+    width: 100px;
+    height: 100px;
 }
 
 img {

@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  web-http:
+    build:
+      context: ../../server
+    command: gunicorn blockex.wsgi:application --workers=4 --bind 0.0.0.0:8000 --log-level debug
+    expose:
+      - 8000
+    env_file:
+      - ./.env.mainnet
+    depends_on:
+      - db
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=hello_django
+      - POSTGRES_PASSWORD=hello_django
+      - POSTGRES_DB=hello_django_dev
+  redis:
+    image: redis:alpine
+  celery:
+    restart: always
+    build:
+      context: ../../server
+    command: celery -A blockex worker -l info
+    env_file:
+      - ./.env.mainnet
+    depends_on:
+      - db
+      - redis
+  web-sockets:
+    build: ../../server
+    command: daphne blockex.asgi:application --bind 0.0.0.0 --port 8001
+    env_file:
+      - ./.env.mainnet
+    expose:
+      - 8001
+    depends_on:
+      - db
+  nginx:
+    build: ../nginx
+    ports:
+      - 1338:80
+    depends_on:
+      - web-http
+volumes:
+  postgres_data:

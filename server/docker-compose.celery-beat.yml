@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  celery-beat:
+    build:
+      context: .
+    command: celery -A blockex beat -l info
+    env_file:
+      - ./.env-celery.dev

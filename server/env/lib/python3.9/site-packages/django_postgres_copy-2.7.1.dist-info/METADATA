@@ -1,0 +1,33 @@
+Metadata-Version: 2.1
+Name: django-postgres-copy
+Version: 2.7.1
+Summary: Quickly import and export delimited data with Django support for PostgreSQL’s COPY command
+Home-page: https://palewi.re/docs/django-postgres-copy/
+Author: Ben Welsh
+Author-email: b@palewi.re
+License: MIT
+Project-URL: Documentation, https://palewi.re/docs/django-postgres-copy/
+Project-URL: Source, https://github.com/palewire/django-postgres-copy
+Project-URL: Tracker, https://github.com/palewire/django-postgres-copy/issues
+Project-URL: Tests, https://github.com/palewire/django-postgres-copy/actions/workflows/test.yaml
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 3.2
+Classifier: Framework :: Django :: 4.0
+Classifier: License :: OSI Approved :: MIT License
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+### Links
+
+-  Documentation: [palewi.re/docs/django-postgres-copy](https://django-postgres-copy.readthedocs.io/en/latest/)
+-  Issues: [github.com/california-civic-data-coalition/django-postgres-copy/issues](https://github.com/california-civic-data-coalition/django-postgres-copy/issues)
+-  Packaging: [pypi.python.org/pypi/django-postgres-copy](https://pypi.python.org/pypi/django-postgres-copy)
+-  Testing: [github.com/california-civic-data-coalition/django-postgres-copy/actions](https://github.com/california-civic-data-coalition/django-postgres-copy/actions/workflows/test.yaml)

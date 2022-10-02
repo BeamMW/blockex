@@ -2,7 +2,6 @@
     <header class="header">
         <div class="header__content">
             <app-header-logo></app-header-logo>
-            <app-header-toggle-switch *ngIf="!isAssets"></app-header-toggle-switch>
             <app-header-search [isAssetsVal]=isAssets></app-header-search>
             <div class="header__content__assets-button" 
                     (click)="assetsClicked()" 

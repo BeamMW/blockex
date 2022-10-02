@@ -13,7 +13,14 @@ import * as exporting from 'highcharts/modules/exporting.src';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import { ContractDetailsComponent } from './containers/contract-details/contract-details.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { HttpClientModule } from '@angular/common/http';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 
 @NgModule({
   declarations: [
@@ -21,7 +28,8 @@ import { MatCardModule } from '@angular/material/card';
     BlockDetailsComponent,
     StatusCardsComponent,
     GraphsComponent,
-    TableComponent
+    TableComponent,
+    ContractDetailsComponent
   ],
   providers: [
     { provide: HIGHCHARTS_MODULES, useFactory: () => [ more, exporting ] }
@@ -34,7 +42,13 @@ import { MatCardModule } from '@angular/material/card';
     MatPaginatorModule,
     MatExpansionModule,
     MatCardModule,
-    MatTableModule
+    MatTableModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatButtonModule,
+    NgxJsonViewerModule,
+    HttpClientModule,
+    AngularSvgIconModule.forRoot()
   ]
 })
 export class HomepageModule { }

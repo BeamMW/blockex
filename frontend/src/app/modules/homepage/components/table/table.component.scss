@@ -41,7 +41,8 @@
 }
 
 :host ::ng-deep.mat-paginator-page-size div:last-of-type {
-    font-weight: bolder;
+    font-weight: 600;
+    opacity: .5;
     color: #333333;
 }
 
@@ -160,8 +161,12 @@
 }
 
 .mat-header-row .mat-header-cell {
-    font-weight: bolder !important;
+    font-weight: 600 !important;
     color: #333333;
+}
+
+.mat-cell {
+    cursor: pointer;
 }
 
 .mat-row:nth-child(odd){
@@ -174,8 +179,8 @@
 
 .height-cell,
 .height-cell-header {
-    max-width: 75px;
-    min-width: 60px;
+    max-width: 80px;
+    min-width: 75px;
 }
 
 .hash-cell,
@@ -186,6 +191,16 @@
 .age-cell,
 .age-cell-header {
     min-width: 190px;
+}
+
+.h-cell-header,
+.h-cell {
+    max-width: 80px;
+}
+
+.cid-cell-header,
+.cid-cell {
+    max-width: 500px;
 }
 
 .diff-cell,
@@ -226,6 +241,11 @@
     max-width: none;
 }
 
+.name-cell,
+.name-cell-header {
+    max-width: 85px;
+}
+
 .kernel-cell,
 .kernel-cell-header {
     min-width: 65px;
@@ -261,6 +281,10 @@
 
 .blocks-table.mobile {
     overflow: hidden;
+}
+
+.offers-table {
+    min-height: 700px;
 }
 
 .offers-table.mobile {
@@ -429,4 +453,40 @@
     .mat-row {
         min-height: 25px;
     }
+}
+
+.c {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+}
+
+.c_elem {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.c_elem:not(:first-child) {
+    //margin-top: 50px;
+}
+
+.c_elem:nth-child(odd){
+    background-color: rgba(0,0,0,.1);
+}
+
+.c_values {
+    margin-left: 20px;
+}
+
+.c_value:not(:first-child) {
+    margin-top: 10px;
+}
+.c_title:not(:first-child) {
+    margin-top: 10px;
+}
+
+.c_value {
+    height: 16px;
 }

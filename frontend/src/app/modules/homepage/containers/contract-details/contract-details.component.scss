@@ -1,0 +1,153 @@
+.c-data {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+}
+
+.assets {
+    display: flex;
+    flex-direction: column;
+}
+
+.asset-item {
+    display: flex;
+    flex-direction: row;
+    margin-left: 30px;
+    padding: 10px;
+    background-color: rgba($color: #000000, $alpha: .2);
+}
+
+.asset-item:not(:first-child) {
+    margin-top: 30px;
+}
+
+.extra {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: row;
+}
+
+.e-value {
+    margin-left: 20px;
+}
+
+.c-values {
+    margin-left: 50px;
+}
+
+.c-value:not(:first-child),
+.c-title:not(:first-child) {
+    margin-top: 25px;
+}
+
+.funds {
+    margin-top: 50px;
+}
+
+.expansion-data-panel {
+    background-color: rgba($color: #000000, $alpha: .2);
+    margin-top: 10px;
+}
+
+.call-item {
+    margin-left: 30px;
+}
+
+.back-control {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: inline-flex;
+    width: min-content;
+}
+
+.back-control-text {
+    font-weight: bold;
+    margin-left: 10px;
+    font-size: 20px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.back-icon {
+    display: flex;
+}
+
+.back-icon svg {
+    align-self: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.container__header {
+    background-color: rgb(251, 251, 251);
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+.container__header__titles {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.container__header__values {
+    font-size: 12px;
+    color: #333333;
+    font-weight: 400;
+    margin-left: 30px;
+}
+
+.container__header__titles div:not(:first-child),
+.container__header__values div:not(:first-child) {
+    margin-top: 20px;
+    height: 15px;
+}
+
+.container__funds {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.container__funds__title {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.container__funds__item {
+    color: #333333;
+    padding: 20px;
+    display: flex;
+    background-color: rgb(251, 251, 251);
+    flex-direction: row;
+}
+
+.container__funds__item:not(:first-child) {
+    margin-top: 10px;
+}
+
+.calls {
+    background-color: #cccaca;
+}
+
+.container__header__titles-calls{
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.container__header__values-calls {
+    font-size: 12px;
+    color: #333333;
+    font-weight: 400;
+    margin-left: 30px;
+}
+
+.container__header__titles-calls div:not(:first-child),
+.container__header__values-calls div:not(:first-child) {
+    margin-top: 10px;
+    height: 15px;
+}
