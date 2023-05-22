@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  beam-explorer-mongo:
+    image: mongo:6.0.3
+    container_name: beam-explorer-mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
+      - MONGO_USER
+      - MONGO_PASSWORD
+      - MONGO_DB_NAME
+    restart: always
+    ports:
+      - '27017:27017'
+  redis:
+    image: redis:alpine
+    ports:
+      - '6379:6379'
+    network_mode: host
+volumes:
+  dev-mongo-data:
+  dev-mongo-conf:
+  data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /data
+      o: bind
