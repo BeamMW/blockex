@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "lib": [
+      "es2017",
+      "es2019",
+      "es2020",
+      "dom"
+    ],
+    "outDir": "dist",
+    "rootDir": "app",
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "types": [
+      "node",
+      "jest"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "test"
+  ],
+  "include": [
+    "app"
+  ]
+}
