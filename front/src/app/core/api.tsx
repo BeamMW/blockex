@@ -1,0 +1,21 @@
+const API_URL = "http://127.0.0.1:4000/api/v1";
+
+async function callApi(route: string) {
+  //status check
+  const response = await fetch(route);
+  const formattedResponse = await response.json();
+  console.log(formattedResponse)
+  return formattedResponse.data;
+}
+
+export async function LoadBlocks(page: number = 0, perPage: number = 20) {
+  return await callApi(`${API_URL}/blocks?page=${page}&per_page=${perPage}`);
+}
+
+export async function LoadStatus() {
+  return await callApi(`${API_URL}/status`);
+}
+
+export async function LoadContracts(page: number = 0, perPage: number = 20) {
+  return await callApi(`${API_URL}/contracts?page=${page}&per_page=${perPage}`);
+}

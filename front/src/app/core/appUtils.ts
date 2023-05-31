@@ -1,6 +1,8 @@
 import { GROTHS_IN_BEAM } from '@app/shared/constants';
 
 const API_URL = 'https://api.coingecko.com/api/v3/simple/price';
+const MONTHS = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"];
 
 export const copyToClipboard = (value: string) => {
   let textField = document.createElement('textarea');
@@ -9,6 +11,20 @@ export const copyToClipboard = (value: string) => {
   textField.select();
   document.execCommand('copy');
   textField.remove();
+};
+
+const addLeadingZeros = (dt) => { 
+  return (dt < 10 ? '0' : '') + dt;
+}
+
+export const timestampToDate = (value: number) => {
+  const date = new Date(value * 1000);
+  const hours = date.getHours();
+  const dateFormat = MONTHS[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() + ", " +
+    addLeadingZeros(hours) + ":" + addLeadingZeros(date.getMinutes()) + ":" + addLeadingZeros(date.getSeconds()) + 
+    " " + (hours >= 12 ? 'PM' : 'AM');
+
+  return dateFormat;
 };
 
 export function compact(value: string, stringLength: number = 5): string {

@@ -1,5 +1,42 @@
 const Mongoose = require("mongoose");
 
+const lockedFundsSchema = new Mongoose.Schema(
+  {
+    aid: Number,
+    value: Number,
+  },
+  {
+    timestamps: false,
+    versionKey: false,
+    _id: false,
+  },
+);
+
+const ownedAssetsSchema = new Mongoose.Schema(
+  {
+    aid: Number,
+    metadata: String,
+    value: Number,
+  },
+  {
+    timestamps: false,
+    versionKey: false,
+    _id: false,
+  },
+);
+
+const versionsHistorySchema = new Mongoose.Schema(
+  {
+    version: String,
+    height: Number,
+  },
+  {
+    timestamps: false,
+    versionKey: false,
+    _id: false,
+  },
+);
+
 const contractSchema = new Mongoose.Schema(
   {
     cid: {
@@ -12,9 +49,22 @@ const contractSchema = new Mongoose.Schema(
       type: Number,
       required: true,
     },
-    locked_funds: [],
-    owned_assets: [],
-    version_history: [],
+    locked_funds: [
+      {
+        type: lockedFundsSchema,
+      },
+    ],
+    owned_assets: [
+      {
+        type: ownedAssetsSchema,
+      },
+    ],
+    version_history: [
+      {
+        type: versionsHistorySchema,
+      },
+    ],
+    calls_count: Number,
   },
   {
     timestamps: false,

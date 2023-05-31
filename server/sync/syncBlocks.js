@@ -133,7 +133,24 @@ const blockSchema = new Mongoose.Schema(
   },
 );
 
-const Block = Mongoose.model("Block", blockSchema);
+const statusSchema = new Mongoose.Schema(
+  {
+    subsidy: {
+      type: Number,
+      default: 0,
+    },
+    difficulty: {
+      type: Number,
+    },
+  },
+  {
+    timestamps: false,
+    versionKey: false,
+  },
+);
+
+const Blocks = Mongoose.model("Blocks", blockSchema);
+const Status = Mongoose.model("Status", statusSchema);
 
 const mongooseOptions = {
   useNewUrlParser: true,
@@ -150,23 +167,28 @@ const syncBlocks = async () => {
   console.log(status);
 
   const heightLoadUntil = status.height;
-  const lastLoadedInDbBlock = await Block.findOne().sort("-height");
+  const lastLoadedInDbBlock = await Blocks.findOne().sort("-height");
   if (lastLoadedInDbBlock) {
     fromHeight = lastLoadedInDbBlock.height + 1;
   }
 
+  let subsidySum = 0;
   while (fromHeight < heightLoadUntil) {
     const start = Date.now();
 
     let blocks = await getRequest("blocks?height=" + fromHeight.toString() + "&n=" + BLOCKS_STEP_SYNC.toString());
     blocks = blocks.filter((item) => item.found);
-    await Block.insertMany(blocks);
+    await Blocks.insertMany(blocks);
 
     const end = Date.now();
     console.log(`Last loaded height: ${fromHeight + BLOCKS_STEP_SYNC - 1} --- in ${end - start} ms`);
 
     fromHeight += BLOCKS_STEP_SYNC;
+
+    subsidySum += blocks.reduce((acc, block) => acc + block.subsidy, 0);
   }
+
+  await Status.create({ subsidy: subsidySum });
 
   if (fromHeight === heightLoadUntil) {
     console.log("Blocks sync ended!");

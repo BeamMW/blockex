@@ -1,20 +1,14 @@
 export const ROUTES = {
   MAIN: {
     BASE: '/',
-    RECEIVE: '/receive',
-    SEND: '/send',
-    SEND_BY_ADDRESS: '/send/:address',
-    CONNECT: '/connect'
+    BLOCK: '/block/:height',
   },
-};
-
-export const ROUTES_PATH = {
-  MAIN: {
-    BASE: '/',
-    RECEIVE: '/receive',
-    SEND: '/send',
-    SEND_BY_ADDRESS: '/send/:address',
-    CONNECT: '/connect'
+  CONTRACTS: {
+    BASE: '/contracts',
+    CONTRACT: '/contract/:cid',
   },
-  
+  ASSETS: {
+    BASE: '/assets',
+    ASSET: '/asset/:aid',
+  }
 };

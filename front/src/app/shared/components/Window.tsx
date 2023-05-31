@@ -68,7 +68,7 @@ const Container = styled.div`
   }
 `;
 
-const Window: React.FC<WindowProps> = ({
+const Window: React.FC<any> = ({
   children,
 }) => {
   const rootRef = useRef();

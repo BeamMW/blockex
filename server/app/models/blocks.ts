@@ -112,4 +112,4 @@ const blockSchema = new Mongoose.Schema(
   },
 );
 
-export const Block = Mongoose.model("Block", blockSchema);
+export const Blocks = Mongoose.model("Blocks", blockSchema);

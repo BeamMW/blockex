@@ -2,7 +2,7 @@ import React from 'react';
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
 import { IconWbtc, IconEth, IconDai, IconUsdt } from '@app/shared/icons';
-import { Currency } from '@app/core/types';
+// import { Currency } from '@app/core/types';
 import { Rate } from '.';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -11,7 +11,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   valid?: boolean;
   label?: string;
   variant?: 'amount' | 'common' | 'fee',
-  selectedCurrency?: Currency,
+  // selectedCurrency?: Currency,
   onChangeHandler?: (value: string) => void;
 }
 

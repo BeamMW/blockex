@@ -14,6 +14,43 @@ const getRequest = async (req) => {
   return response.data;
 };
 
+const lockedFundsSchema = new Mongoose.Schema(
+  {
+    aid: Number,
+    value: Number,
+  },
+  {
+    timestamps: false,
+    versionKey: false,
+    _id: false,
+  },
+);
+
+const ownedAssetsSchema = new Mongoose.Schema(
+  {
+    aid: Number,
+    metadata: String,
+    value: Number,
+  },
+  {
+    timestamps: false,
+    versionKey: false,
+    _id: false,
+  },
+);
+
+const versionsHistorySchema = new Mongoose.Schema(
+  {
+    version: String,
+    height: Number,
+  },
+  {
+    timestamps: false,
+    versionKey: false,
+    _id: false,
+  },
+);
+
 const contractSchema = new Mongoose.Schema(
   {
     cid: {
@@ -26,9 +63,22 @@ const contractSchema = new Mongoose.Schema(
       type: Number,
       required: true,
     },
-    locked_funds: [],
-    owned_assets: [],
-    version_history: [],
+    locked_funds: [
+      {
+        type: lockedFundsSchema,
+      },
+    ],
+    owned_assets: [
+      {
+        type: ownedAssetsSchema,
+      },
+    ],
+    version_history: [
+      {
+        type: versionsHistorySchema,
+      },
+    ],
+    calls_count: Number,
   },
   {
     timestamps: false,
@@ -93,39 +143,62 @@ const improoveCalls = (calls, cid) => {
   return calls;
 };
 
+const formatLockedFunds = (lockedFunds) => {
+  lockedFunds.shift();
+  lockedFunds.forEach((fund, i) => {
+    lockedFunds[i] = {
+      aid: fund[0].value,
+      value: fund[1].value,
+    };
+  });
+  return lockedFunds;
+};
+
+const formatOwnedAssets = (ownedAssets) => {
+  ownedAssets.shift();
+  ownedAssets.forEach((asset, i) => {
+    ownedAssets[i] = {
+      aid: asset[0].value,
+      metadata: asset[1],
+      value: asset[2].value,
+    };
+  });
+  return ownedAssets;
+};
+
+const formatVersionsHistory = (versionsHistory) => {
+  versionsHistory.shift();
+  versionsHistory.forEach((version, i) => {
+    versionsHistory[i] = {
+      height: version[0],
+      version: version[1],
+    };
+  });
+  return versionsHistory;
+};
+
 const syncContracts = async () => {
   const status = await getRequest("status");
   let contracts = await getRequest("contracts");
   contracts.shift();
 
   for (const contract of contracts) {
+    const cid = contract[0].value;
     let fromHeight = status.height;
+    let callsCount = 0;
+
     const contractData = await getRequest(`contract?hMax=${fromHeight}&nMaxTxs=1000&id=${contract[0].value}`);
     const initicalCalls = contractData["Calls history"].value;
-    const cid = contract[0].value;
     initicalCalls.shift();
-    const lockedFunds = contractData["Locked Funds"].value;
-    lockedFunds.shift();
-    const ownedAssets = contractData["Owned assets"].value;
-    ownedAssets.shift();
-    const versionHistory = contractData["Version History"].value;
-    versionHistory.shift();
-
-    const contractDataFormatted = {
-      cid,
-      locked_funds: lockedFunds,
-      owned_assets: ownedAssets,
-      version_history: versionHistory,
-      kind: contractData.kind,
-      height: contract[2],
-    };
-
-    await Contracts.create(contractDataFormatted);
+    callsCount = initicalCalls.length;
+    const lockedFunds = formatLockedFunds(contractData["Locked Funds"].value);
+    const ownedAssets = formatOwnedAssets(contractData["Owned assets"].value);
+    const versionHistory = formatVersionsHistory(contractData["Version History"].value);
 
     if (initicalCalls.length > 0) {
       const improvedInitialCalls = improoveCalls(initicalCalls, cid);
       await Calls.insertMany(improvedInitialCalls);
-      console.log(`Contract added updated between 
+      console.log(`Contract calls added between 
         ${fromHeight} - ${improvedInitialCalls[improvedInitialCalls.length - 1].value[0][0]}. 
         Added ${improvedInitialCalls.length}`);
       fromHeight = calcLastHeight(improvedInitialCalls);
@@ -134,6 +207,8 @@ const syncContracts = async () => {
         const contractDataExt = await getRequest(`contract?hMax=${fromHeight}&nMaxTxs=1000&id=${cid}`);
         const extCalls = contractDataExt["Calls history"].value;
         extCalls.shift();
+        callsCount += extCalls.length;
+
         if (extCalls.length > 0) {
           const improvedExtCalls = improoveCalls(extCalls, cid);
           await Calls.insertMany(improvedExtCalls);
@@ -146,6 +221,17 @@ const syncContracts = async () => {
           break;
         }
       }
+
+      const contractDataFormatted = {
+        cid,
+        locked_funds: lockedFunds,
+        owned_assets: ownedAssets,
+        version_history: versionHistory,
+        kind: contractData.kind,
+        height: contract[2],
+        calls_count: callsCount,
+      };
+      await Contracts.create(contractDataFormatted);
     } else {
       console.log("Calls loading ended! CID: ", cid);
     }

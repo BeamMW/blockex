@@ -109,7 +109,6 @@ css`
 
     body {
       font-size: 14px;
-      color: white;
     }    
 
     p {

@@ -16,8 +16,8 @@ export function* loadParamsSaga(
     action: ReturnType<typeof actions.loadAppParams.request>,
   ) : Generator {
     // const systemState = (yield select(selectSystemState())) as {account: string};
-    // const blocksData = (yield call(LoadBlocks)) as BlocksData;
-    // yield put(actions.setBlocksData(blocksData));
+    const blocksData = (yield call(LoadBlocks)) as BlocksData;
+    yield put(actions.setBlocksData(blocksData));
 
     const contractsData = (yield call(LoadContracts)) as ContractsData;
     yield put(actions.setContractsData(contractsData));
