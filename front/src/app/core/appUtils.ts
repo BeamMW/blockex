@@ -97,16 +97,6 @@ export function Base64DecodeUrl(str){
   return str.replace(/-/g, '+').replace(/_/g, '/');
 }
 
-export function getProposalId (id: number) {
-  if (id < 10) {
-      return '000' + id;
-  } else if (id < 100) {
-      return '00' + id;
-  } else if (id < 1000) {
-      return '0' + id;
-  } 
-}
-
 export function Base64EncodeUrl(str){
   return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
 }
@@ -137,29 +127,12 @@ async function loadRate (rate_id: string) {
   return promise;
 }
 
-async function loadGasPrice () {
-  const response = await fetch(`https://explorer-api.beam.mw/bridges/gasprice`);
-  return response.json();
-}
-
-interface GasPrice {
-  FastGasPrice: string,
-  LastBlock: string,
-  ProposeGasPrice: string,
-  SafeGasPrice: string,
-  gasUsedRatio: string,
-  suggestBaseFee: string
-}
-
-export async function calcSomeFee (rate_id: string) {
-  const RELAY_COSTS_IN_GAS = 120000;
-  const ETH_RATE_ID = 'ethereum';
-
-  const gasPrice:GasPrice = await loadGasPrice();
-  const ethRate = await loadRate(ETH_RATE_ID)
-  const relayCosts = RELAY_COSTS_IN_GAS * parseFloat(gasPrice.FastGasPrice) * parseFloat(ethRate[ETH_RATE_ID]['usd']) / Math.pow(10, 9);
-  const currRate = await loadRate(rate_id);
-
-  const RELAY_SAFETY_COEFF = 2;//1.1;
-  return RELAY_SAFETY_COEFF * relayCosts / parseFloat(currRate[rate_id]['usd']);
+export function parseMetadata(metadata) {
+  const splittedMetadata = metadata.split(';');
+  splittedMetadata.shift();
+  const obj = splittedMetadata.reduce((accumulator, value, index) => {
+    const data = value.split(/=(.*)/s);
+    return {...accumulator, [data[0]]: data[1]};
+  }, {});
+  return obj;
 }

@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import { styled } from '@linaria/react';
 import { useDispatch } from 'react-redux';
 import { IconBeamLogo } from '@app/shared/icons';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../constants';
 
 interface WindowProps {
   onPrevious?: React.MouseEventHandler | undefined;
@@ -35,6 +37,7 @@ const Container = styled.div`
     > .logo {
       cursor: pointer;
       display: flex;
+      align-self: start;
 
       > .icon {
         height: 38px;
@@ -73,11 +76,16 @@ const Window: React.FC<any> = ({
 }) => {
   const rootRef = useRef();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logoClicked = () => {
+    navigate(ROUTES.MAIN.BASE);
+  };
   
   return (
     <Container ref={rootRef}>
       <div className='header'>
-        <div className='logo'>
+        <div className='logo' onClick={logoClicked}>
           <IconBeamLogo className='icon'/>
           <span className='title'>
             <div className='beam'>BEAM</div>

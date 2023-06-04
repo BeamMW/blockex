@@ -1,7 +1,7 @@
 import { ParameterizedContext } from "koa";
 
 import { redisStore } from "../db/redis";
-import { Blocks, Contract, Call } from "../models";
+import { Blocks, Contract, Call, Assets } from "../models";
 
 const Joi = require("joi");
 
@@ -22,15 +22,6 @@ export const getStatus = async (ctx: ParameterizedContext) => {
   ctx.ok({
     status: "success",
     data: JSON.parse(status),
-  });
-};
-
-export const getAssets = async (ctx: ParameterizedContext) => {
-  // const status = await redisStore.get("status");
-
-  ctx.ok({
-    status: "success",
-    data: [], //JSON.parse(status),
   });
 };
 
@@ -70,6 +61,40 @@ export const getContracts = async (ctx: ParameterizedContext) => {
       status: "success",
       data: {
         contracts,
+        page: Number(page),
+        pages: Math.ceil(count / Number(per_page)),
+        count,
+      },
+    });
+  }
+};
+
+export const getAssets = async (ctx: ParameterizedContext) => {
+  const assetsQuerySchema = Joi.object({
+    per_page: Joi.number().integer().min(10).default(20),
+    page: Joi.number().integer().min(0).default(0),
+  });
+
+  const { error, value } = assetsQuerySchema.validate(ctx.request.query, {
+    abortEarly: false,
+    allowUnknown: true,
+  });
+
+  if (error) {
+    ctx.status = 400;
+    ctx.body = { error: error.details.map((detail: any) => detail.message) };
+  } else {
+    const { per_page, page } = ctx.request.query;
+    const assets = await Assets.aggregate([
+      { $sort: { lock_height: -1 } },
+      { $skip: Number(per_page) * Number(page) },
+      { $limit: Number(per_page) },
+    ]);
+    const count = await Assets.estimatedDocumentCount();
+    ctx.ok({
+      status: "success",
+      data: {
+        assets,
         page: Number(page),
         pages: Math.ceil(count / Number(per_page)),
         count,

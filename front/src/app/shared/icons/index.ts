@@ -62,6 +62,9 @@ import IconSendPink from './icon-send-pink.svg';
 
 import IconBeamLogo from './beam-logo.svg';
 
+import AssetIcon from './icon-asset.svg';
+import BeamIcon from './icon-beam.svg';
+
 export {
   IconBack,
   IconReceive,
@@ -124,5 +127,8 @@ export {
   IconClose,
   IconSendPink,
 
-  IconBeamLogo
+  IconBeamLogo,
+
+  AssetIcon,
+  BeamIcon,
 }

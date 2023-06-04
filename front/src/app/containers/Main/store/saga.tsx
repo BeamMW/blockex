@@ -3,7 +3,7 @@ import { actions } from '.';
 import store from '../../../../index';
 import { selectSystemState } from '@app/shared/store/selectors';
 // import { Balance, Currency } from '@app/core/types';
-import { CURRENCIES, ethId } from '@app/shared/constants';
+import { ethId } from '@app/shared/constants';
 import { LoadBlocks, LoadStatus, LoadContracts } from '@core/api';
 import { BlocksData, ContractsData, Status } from '@core/types';
 

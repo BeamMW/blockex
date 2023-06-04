@@ -17,12 +17,12 @@ export const MENU_TABS_CONFIG = [
   {
     name: 'blocks',
     disabled: false,
-    route: ROUTES.MAIN.BASE
+    route: ROUTES.MAIN.BASE,
   },
   {
     name: 'contracts',
     disabled: false,
-    route: ROUTES.CONTRACTS.BASE
+    route: ROUTES.CONTRACTS.BASE,
   },
   {
     name: 'dapps',
@@ -31,6 +31,7 @@ export const MENU_TABS_CONFIG = [
   {
     name: 'assets',
     disabled: false,
+    route: ROUTES.ASSETS.BASE,
   },
   {
     name: 'atomic swap offers',

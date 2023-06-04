@@ -9,13 +9,14 @@ import { ToastContainer } from 'react-toastify';
 
 import { ROUTES } from '@app/shared/constants';
 import {
-  Blocks, Contracts, ContractItem
+  Blocks, Contracts, ContractItem, Assets
 } from '@app/containers';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
 import './styles';
 
-const styleLink = document.createElement("link"); styleLink.rel = "stylesheet"; styleLink.href = "https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css"; document.head.appendChild(styleLink);
+const styleLink = document.createElement("link"); styleLink.rel = "stylesheet";
+  styleLink.href = "https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css"; document.head.appendChild(styleLink);
 
 
 const routes = () => [
@@ -30,6 +31,10 @@ const routes = () => [
   {
     path: ROUTES.CONTRACTS.CONTRACT,
     element: <ContractItem />,
+  },
+  {
+    path: ROUTES.ASSETS.BASE,
+    element: <Assets />,
   },
 ];
 

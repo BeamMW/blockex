@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
+import { Contract, ContractsData } from '@core/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { Window, Button, StatusCards } from '@app/shared/components';
-import { selectBlocksData, selectContractsData, selectStatusData } from '../../store/selectors';
-import { ROUTES } from '@app/shared/constants';
+import { selectContractsData } from '../../store/selectors';
+import { selectStatusData } from '@app/containers/Main/store/selectors';
+// import { IconSend, IconReceive } from '@app/shared/icons';
+import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
+import { selectSystemState, selectTransactions } from '@app/shared/store/selectors';
+// import { IconDeposit, IconConfirm } from '@app/shared/icons';
 import { timestampToDate } from '@core/appUtils';
 import { LoadBlocks, LoadContracts } from '@core/api';
-import { useSearchParams } from 'react-router-dom';
 
-import { Table, Search, Pagination, Menu } from 'semantic-ui-react';
+import { Table, Search, Pagination, Menu, Card } from 'semantic-ui-react';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
-import { setBlocksData, setContractsData } from '../../store/actions';
+import { setContractsData } from '../../store/actions';
 
 const Content = styled.div`
   width: 100%;
@@ -50,47 +54,38 @@ const StylesMenuControl = css`
   width: 100%;
 `;
 
-const Blocks: React.FC = () => {
-  const TABS_CONFIG = [
-    {
-      name: 'blocks',
-      disabled: false,
-    },
-    {
-      name: 'contracts',
-      disabled: false,
-    },
-    {
-      name: 'dapps',
-      disabled: true,
-    },
-    {
-      name: 'assets',
-      disabled: false,
-    },
-    {
-      name: 'atomic swap offers',
-      disabled: true,
-    }
-  ];
+const StylesTableRow = css`
+  cursor: pointer;
+`;
 
-  const blocksData = useSelector(selectBlocksData());
+const Assets: React.FC = () => {
   const [currentDate, setNewDate] = useState(null);
-  const [activeMenuItem, setActiveMenuItem] = useState<string>(TABS_CONFIG[0].name);
+  const [activeMenuItem, setActiveMenuItem] = useState(MENU_TABS_CONFIG[1].name);
   const onChange = (event, data) => setNewDate(data.value);
   const dispatch = useDispatch();
   const statusData = useSelector(selectStatusData());
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultPage = searchParams.get("page");
+  const contractsData = useSelector(selectContractsData());
   const navigate = useNavigate();
 
-  const handleSearchChange = async () => {
-
+  const handleSearchChange = () => {
+    
   };
 
+  const handleMenuItemClick = (newTab: string) => {
+    navigate(newTab);
+  };
+
+  const isActiveMenuItem = (name: string) => {
+    return name === activeMenuItem;
+  }
+
   const updateData = async (page: number) => {
-    const newData = await LoadBlocks(page - 1);
-    dispatch(setBlocksData(newData));
+    const newData = await LoadContracts(page - 1);
+    console.log(newData)
+    dispatch(setContractsData(newData));
   }
 
   useEffect(() => {
@@ -102,81 +97,65 @@ const Blocks: React.FC = () => {
     await updateData(data.activePage);
   };
 
-  const handleMenuItemClick = (newTab: string) => {
-    setActiveMenuItem(newTab);
-    navigate(ROUTES.CONTRACTS.BASE);
-  };
-
-  const isActiveMenuItem = (name: string) => {
-    // console.log(name === activeMenuItem);
-    return name === activeMenuItem;
-  }
+  const contractItemClicked = useCallback((cid: string) => {
+    navigate(`${ROUTES.CONTRACTS.CONTRACT.replace(':cid', '')}${cid}`);
+  }, [navigate]);
   
   return (
     <Window>
       <Content>
-        <StatusCards statusData={statusData}/>
+        <StatusCards statusData={statusData}></StatusCards>
       </Content>
       <div className={StylesMenuControl}>
         <Menu pointing secondary>
-          {TABS_CONFIG.map((tab, index) => 
+          { MENU_TABS_CONFIG.map((tab, index) => 
             (<Menu.Item key={index}
               name={tab.name}
               disabled={tab.disabled}
               active={isActiveMenuItem(tab.name)}
-              onClick={() => handleMenuItemClick(tab.name)}
+              onClick={() => handleMenuItemClick(tab.route)}
             />)
           )}
         </Menu>
       </div>
-      { blocksData.blocks ?
+      { contractsData && contractsData.contracts &&
       <>
         <div className={StylesOverTable}>
           <Search
-            disabled={true}
             placeholder='Search...'
             onSearchChange={handleSearchChange}
+            disabled={true}
             // results={results}
             // value={value}
           />
-          <SemanticDatepicker disabled={true} onChange={onChange} />
-          <Pagination defaultActivePage={defaultPage ? defaultPage : 1} onPageChange={paginationOnChange} totalPages={blocksData.pages} />
+          <Pagination defaultActivePage={defaultPage} onPageChange={paginationOnChange} totalPages={contractsData.pages} />
         </div>
         <div className={StylesTable}>
           <Table singleLine>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>HEIGHT:</Table.HeaderCell>
-                <Table.HeaderCell>HASH:</Table.HeaderCell>
-                <Table.HeaderCell>AGE:</Table.HeaderCell>
-                <Table.HeaderCell>DIFFICULTY:</Table.HeaderCell>
-                <Table.HeaderCell>#KERNELS:</Table.HeaderCell>
-                <Table.HeaderCell>#INPUTS:</Table.HeaderCell>
-                <Table.HeaderCell>#OUTPUTS:</Table.HeaderCell>
-                <Table.HeaderCell>FEES:</Table.HeaderCell>
+                <Table.HeaderCell>KIND:</Table.HeaderCell>
+                <Table.HeaderCell>CID:</Table.HeaderCell>
+                <Table.HeaderCell>#CALLS:</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 
             <Table.Body>
-              { blocksData.blocks.map((block, index)=> {
-                return (<Table.Row key={index}>
-                  <Table.Cell>{block.height}</Table.Cell>
-                  <Table.Cell>{block.hash}</Table.Cell>
-                  <Table.Cell>{timestampToDate(block.timestamp)}</Table.Cell>
-                  <Table.Cell>{block.difficulty}</Table.Cell>
-                  <Table.Cell>{block.kernelsCount}</Table.Cell>
-                  <Table.Cell>{block.inputsCount}</Table.Cell>
-                  <Table.Cell>{block.outputsCount}</Table.Cell>
-                  <Table.Cell>{block.fee}</Table.Cell>
+              { contractsData.contracts.map((contract: Contract, index: number)=> {
+                return (<Table.Row key={index} onClick={() => contractItemClicked(contract.cid)} className={StylesTableRow}>
+                  <Table.Cell>{contract.height}</Table.Cell>
+                  <Table.Cell>{typeof contract.kind === "string" ? contract.kind : contract.kind['Wrapper'] }</Table.Cell>
+                  <Table.Cell>{contract.cid}</Table.Cell>
+                  <Table.Cell>{contract.calls_count}</Table.Cell>
                 </Table.Row>);
-              }) }
-              
+              })}
             </Table.Body>
           </Table>
         </div>
-      </> : <></> }
+      </> }
     </Window>
   );
 };
 
-export default Blocks;
+export default Assets;

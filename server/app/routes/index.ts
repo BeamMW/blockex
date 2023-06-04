@@ -18,6 +18,7 @@ router.get("/status", (ctx) => getStatus(ctx));
 router.get("/contracts", (ctx) => getContracts(ctx));
 router.get("/contract", (ctx) => getContract(ctx));
 router.get("/blocks", (ctx) => getBlocks(ctx));
+router.get("/assets", (ctx) => getAssets(ctx));
 // router.post("/", (ctx) => metaMaskRoutingHandler(ctx));
 
 export default router;

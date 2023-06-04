@@ -203,7 +203,7 @@ const ContractItem: React.FC = () => {
             <Segment>{contractData.kind}</Segment>
           </Segment.Group>
         </Segment.Group>
-        { contractData.state && <>
+        { Object.keys(contractData.state).length > 0 && <>
             <Segment>
               <div className='subtitle'> STATE: </div>
               <GeneratedUI dataObj={contractData.state} margin={0}></GeneratedUI>

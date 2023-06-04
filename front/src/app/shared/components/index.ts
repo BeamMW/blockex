@@ -6,6 +6,5 @@ export { default as Rate } from './Rate';
 export { default as Toggle } from './Toggle';
 export { default as Select } from './Select';
 export { default as Table } from './Table';
-export { default as CurrInput } from './CurrInput';
 export { default as ActiveAccount } from './ActiveAccount';
 export { default as StatusCards } from './StatusCards';

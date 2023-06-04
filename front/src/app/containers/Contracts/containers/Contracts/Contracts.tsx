@@ -8,7 +8,7 @@ import { Window, Button, StatusCards } from '@app/shared/components';
 import { selectContractsData } from '../../store/selectors';
 import { selectStatusData } from '@app/containers/Main/store/selectors';
 // import { IconSend, IconReceive } from '@app/shared/icons';
-import { CURRENCIES, ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
+import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 import { selectSystemState, selectTransactions } from '@app/shared/store/selectors';
 // import { IconDeposit, IconConfirm } from '@app/shared/icons';
 import { timestampToDate } from '@core/appUtils';

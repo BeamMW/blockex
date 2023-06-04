@@ -1,9 +1,8 @@
 import { redisStore } from "./db/redis";
 import { sendExplorerNodeRequest } from "../app/shared/helpers/axios";
-import { Blocks, Contract, Call, Status } from "./models";
+import { Blocks, Contract, Call, Status, Assets } from "./models";
 
 const net = require("net");
-let isContractsUpdateInProgress = false;
 
 const BLOCKS_STEP_SYNC = 1000;
 const HEIGHT_STEP = 43800;
@@ -186,6 +185,26 @@ const updateContracts = async (status: any) => {
   console.log("Contracts update process ended!");
 };
 
+const updateAssets = async (status: any) => {
+  console.log("Assets update started");
+  let lastBlock = await sendExplorerNodeRequest("blocks?height=" + status.height + "&n=1");
+  for (const asset of lastBlock[0].assets) {
+    const assetHistory = await sendExplorerNodeRequest("asset?id=" + asset.aid);
+    await Contract.findOneAndUpdate(
+      { aid: asset.aid },
+      {
+        cid: asset.cid ? asset.cid.value : null,
+        lock_height: asset.lock_height,
+        metadata: asset.metadata.text,
+        owner: asset.owner ? asset.owner : null,
+        value: asset.value,
+        asset_history: assetHistory["Asset history"],
+      },
+    );
+  }
+  console.log("Assets update ended");
+};
+
 export const BeamController = async () => {
   const client = new net.Socket();
 
@@ -225,6 +244,7 @@ export const BeamController = async () => {
           const status = await sendExplorerNodeRequest("status"); //TODO: add routes to consts
           await updateBlocks(status);
           await updateContracts(status);
+          await updateAssets(status);
 
           const formattedStatus = await getFormattedStatus(status);
           await redisStore.set("status", JSON.stringify(formattedStatus));
