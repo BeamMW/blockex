@@ -13,9 +13,9 @@ export function* loadContractsParamsSaga(
     yield put(actions.loadAppParams.success([]));
 }
 
-function* mainSaga() {
+function* contractsSaga() {
     yield takeLatest(actions.loadAppParams.request, loadContractsParamsSaga);
     // yield takeLatest(actions.loadRate.request, loadRate);
 }
 
-export default mainSaga;
+export default contractsSaga;

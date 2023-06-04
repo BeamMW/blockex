@@ -76,22 +76,12 @@ const Blocks: React.FC = () => {
 
   const blocksData = useSelector(selectBlocksData());
   const [currentDate, setNewDate] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState<string>(TABS_CONFIG[0].name);
   const onChange = (event, data) => setNewDate(data.value);
   const dispatch = useDispatch();
   const statusData = useSelector(selectStatusData());
-  const location = useLocation();
-
-  const contractsData = useSelector(selectContractsData());
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultPage = searchParams.get("page");
-
-  // const state = { activeItem: 'home' }
-
-  // const handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
-
   const navigate = useNavigate();
 
   const handleSearchChange = async () => {
@@ -139,7 +129,7 @@ const Blocks: React.FC = () => {
           )}
         </Menu>
       </div>
-      { blocksData.blocks && activeMenuItem === TABS_CONFIG[0].name ?
+      { blocksData.blocks ?
       <>
         <div className={StylesOverTable}>
           <Search
@@ -181,41 +171,6 @@ const Blocks: React.FC = () => {
                 </Table.Row>);
               }) }
               
-            </Table.Body>
-          </Table>
-        </div>
-      </> : <></> }
-      { contractsData.contracts && activeMenuItem === TABS_CONFIG[1].name ?
-      <>
-        <div className={StylesOverTable}>
-          <Search
-            placeholder='Search...'
-            onSearchChange={handleSearchChange}
-            // results={results}
-            // value={value}
-          />
-          <Pagination defaultActivePage={1} onPageChange={paginationOnChange} totalPages={contractsData.pages} />
-        </div>
-        <div className={StylesTable}>
-          <Table singleLine>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>HEIGHT:</Table.HeaderCell>
-                <Table.HeaderCell>KIND:</Table.HeaderCell>
-                <Table.HeaderCell>CID:</Table.HeaderCell>
-                <Table.HeaderCell>#CALLS:</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
-              { contractsData.contracts.map((contract, index)=> {
-                return (<Table.Row key={index}>
-                  <Table.Cell>{contract.height}</Table.Cell>
-                  <Table.Cell>{typeof contract.kind === "string" ? contract.kind : contract.kind['Wrapper'] }</Table.Cell>
-                  <Table.Cell>{contract.cid}</Table.Cell>
-                  <Table.Cell>{contract.calls_count}</Table.Cell>
-                </Table.Row>);
-              })}
             </Table.Body>
           </Table>
         </div>

@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
-import { Contract } from '@core/types';
+import { Contract, ContractsData } from '@core/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { Window, Button, StatusCards } from '@app/shared/components';
-import { selectBlocksData, selectContractsData, selectStatusData } from '../../store/selectors';
+import { selectContractsData } from '../../store/selectors';
+import { selectStatusData } from '@app/containers/Main/store/selectors';
 // import { IconSend, IconReceive } from '@app/shared/icons';
 import { CURRENCIES, ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 import { selectSystemState, selectTransactions } from '@app/shared/store/selectors';
@@ -15,7 +16,7 @@ import { LoadBlocks, LoadContracts } from '@core/api';
 
 import { Table, Search, Pagination, Menu, Card } from 'semantic-ui-react';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
-// import { setBlocksData, setContractsData } from '../../store/actions';
+import { setContractsData } from '../../store/actions';
 
 const Content = styled.div`
   width: 100%;
@@ -58,32 +59,19 @@ const StylesTableRow = css`
 `;
 
 const Contracts: React.FC = () => {
-  const blocksData = useSelector(selectBlocksData());
   const [currentDate, setNewDate] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState(MENU_TABS_CONFIG[1].name);
   const onChange = (event, data) => setNewDate(data.value);
-  const dispatch = useDispatch();isLoading
+  const dispatch = useDispatch();
   const statusData = useSelector(selectStatusData());
   const location = useLocation();
-
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const defaultPage = searchParams.get("page");
   const contractsData = useSelector(selectContractsData());
-
-  // const state = { activeItem: 'home' }
-
-  // const handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
-
   const navigate = useNavigate();
 
   const handleSearchChange = () => {
     
-  };
-
-  const paginationOnChange = async (e, data) => {
-    // const newData = await LoadContracts(data.activePage - 1);
-    // dispatch(setContractsData(newData));
   };
 
   const handleMenuItemClick = (newTab: string) => {
@@ -93,6 +81,21 @@ const Contracts: React.FC = () => {
   const isActiveMenuItem = (name: string) => {
     return name === activeMenuItem;
   }
+
+  const updateData = async (page: number) => {
+    const newData = await LoadContracts(page - 1);
+    console.log(newData)
+    dispatch(setContractsData(newData));
+  }
+
+  useEffect(() => {
+    updateData(defaultPage ? Number(defaultPage) : 1);
+  }, []);
+
+  const paginationOnChange = async (e, data) => {
+    setSearchParams({["page"]: data.activePage});
+    await updateData(data.activePage);
+  };
 
   const contractItemClicked = useCallback((cid: string) => {
     navigate(`${ROUTES.CONTRACTS.CONTRACT.replace(':cid', '')}${cid}`);
@@ -115,7 +118,7 @@ const Contracts: React.FC = () => {
           )}
         </Menu>
       </div>
-      { contractsData.contracts &&
+      { contractsData && contractsData.contracts &&
       <>
         <div className={StylesOverTable}>
           <Search
@@ -125,7 +128,7 @@ const Contracts: React.FC = () => {
             // results={results}
             // value={value}
           />
-          <Pagination defaultActivePage={1} onPageChange={paginationOnChange} totalPages={contractsData.pages} />
+          <Pagination defaultActivePage={defaultPage} onPageChange={paginationOnChange} totalPages={contractsData.pages} />
         </div>
         <div className={StylesTable}>
           <Table singleLine>

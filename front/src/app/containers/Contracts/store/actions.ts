@@ -1,7 +1,7 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
-import { Contract } from '@core/types';
+import { ContractsData } from '@core/types';
 
-export const setContractData = createAction('@@MAIN/SET_CONTRACT_DATA')<Contract>();
+export const setContractsData = createAction('@@MAIN/SET_CONTRACTS_DATA')<ContractsData>();
 
 export const loadAppParams = createAsyncAction(
     '@@MAIN/LOAD_PARAMS',

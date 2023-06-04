@@ -101,7 +101,7 @@ export const getContract = async (ctx: ParameterizedContext) => {
       { $sort: { height: -1 } },
       { $skip: Number(per_page) * Number(page) },
       { $limit: Number(per_page) },
-      { $unset: ["_id"] },
+      { $unset: ["_id", "_contract"] },
     ]);
     const contract = await Contract.aggregate([
       { $match: { cid: id } },

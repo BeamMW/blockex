@@ -2,19 +2,11 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
 import { ContractData } from '@core/types';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, useSearchParams, useParams } from 'react-router-dom';
-import { Window, Button, StatusCards } from '@app/shared/components';
-import { selectBlocksData, selectContractsData, selectStatusData } from '../../store/selectors';
-// import { IconSend, IconReceive } from '@app/shared/icons';
-import { CURRENCIES, ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
-import { selectSystemState, selectTransactions } from '@app/shared/store/selectors';
-// import { IconDeposit, IconConfirm } from '@app/shared/icons';
-import { timestampToDate } from '@core/appUtils';
+import { Window } from '@app/shared/components';
+import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 import { LoadContract } from '@core/api';
-
-import { Table, Search, Pagination, Menu, Card, Segment } from 'semantic-ui-react';
-import SemanticDatepicker from 'react-semantic-ui-datepickers';
+import { Table, Pagination, Segment } from 'semantic-ui-react';
 
 const StylesOverTable = css`
   width: 100%;
@@ -78,7 +70,7 @@ const GeneratedRow = styled.div<{ margin: number }>`
   }
 `;
 
-const GeneratedTable: React.FC<{data: any}> = ({data}) => {
+const GeneratedTable = React.memo<{data: any}>(({data}) => {
   const headers = data.shift();
   return (<Table collapsing>
     <Table.Header>
@@ -92,42 +84,83 @@ const GeneratedTable: React.FC<{data: any}> = ({data}) => {
     <Table.Body>
       {data.map((item, index) => {
         return <Table.Row key={index}>
-          {item.map((value, i) => <Table.Cell key={i}>{value}</Table.Cell>)}
+          {item.map((itemValue, itemValueIndex) => <Table.Cell key={itemValueIndex}>{
+            itemValue.type ? itemValue.value : itemValue
+          }</Table.Cell>)}
         </Table.Row>
       })}
     </Table.Body>
   </Table>);
-}
+})
 
 const GeneratedUI: React.FC<{dataObj: any, margin: number}> = ({dataObj, margin}) => {
   return (<GeneratedRow margin={margin}>
-    { Object.keys(dataObj).map(key => {
-      if (key) {
-        if (typeof dataObj[key] === 'string' || typeof dataObj[key] === 'number') {
-          return <div className='generated-subrow'>
-            <span className='subtitle-inside'> {key}: </span>
-            <span>{dataObj[key]}</span>
-          </div>
-        } else if (dataObj[key].type === 'table') {
-          return <>
-            <div className='subtitle-inside'> {key}: </div>
-            <GeneratedTable data={dataObj[key].value}></GeneratedTable>
-          </>
-        } else {
-          return <>
-            <div className='subtitle-inside'> {key}: </div>
-            <GeneratedUI dataObj={dataObj[key]} margin={margin + 15}></GeneratedUI>
-          </>
-        }
+    { Object.keys(dataObj).map((key, keyIndex) => {
+      let child;
+      if (typeof dataObj[key] === 'string' || typeof dataObj[key] === 'number') {
+        child = <>
+          <span className='subtitle-inside'> {key}: </span>
+          <span>{dataObj[key]}</span>
+        </>
+      } else if (dataObj[key].type && dataObj[key].type === 'table') {
+        child = <>
+          <div className='subtitle-inside'> {key}: </div>
+          <GeneratedTable data={dataObj[key].value}></GeneratedTable>
+        </>
+      } else {
+        child = <>
+          <div className='subtitle-inside'> {key}: </div>
+          <GeneratedUI dataObj={dataObj[key]} margin={margin + 15}></GeneratedUI>
+        </>
       }
+
+      return <div className='generated-subrow' key={keyIndex}>{child}</div>
     }) }
     
   </GeneratedRow>);
-}
+};
+
+const CallRowValue: React.FC<{rowValue: any}> = ({rowValue}) => {
+ return <>
+    <Table.Row>
+      <Table.Cell>{rowValue[0]}</Table.Cell>
+      <Table.Cell>{rowValue[1].type ? rowValue[1].value : '-'}</Table.Cell>
+      <Table.Cell>{rowValue[2] ? rowValue[2].value : '-'}</Table.Cell>
+      <Table.Cell>{rowValue[3] ? rowValue[3] : '-'}</Table.Cell>
+      {/* <Table.Cell>{rowValue[4].length}</Table.Cell> */}
+      {/* <Table.Cell>funds</Table.Cell>
+      <Table.Cell>keys</Table.Cell> */}
+    </Table.Row>
+    <Table.Row className={StylesRow}>
+      <Table.Cell className={StylesSubrow} colSpan="7">
+        {rowValue[4] ? <Segment>
+          <div className='subtitle-inside'> ARGUMENTS: </div>
+          <GeneratedUI dataObj={rowValue[4]} margin={0}></GeneratedUI>
+        </Segment> : <></>}
+        {rowValue[5] ? <div>
+          <div className='subtitle-inside'> FUNDS: </div>
+          FUNDS TABLE HERE
+        </div> : <></>}
+      </Table.Cell>
+    </Table.Row>
+  </>
+};
+
+const CallTableRow: React.FC<{data: any}> = ({data}) => {
+  return <>
+    { data.type === 'single' ? 
+      <CallRowValue rowValue={data.value[0]}></CallRowValue> :
+      <>
+        {data.value.map((callItem, callItemIndex) => {
+          return <CallRowValue key={callItemIndex} rowValue={callItem}></CallRowValue>
+        })}
+      </>
+    }
+  </>
+};
 
 const ContractItem: React.FC = () => {
   const [contractData, setContractData] = useState<ContractData>();
-  const [activeMenuItem, setActiveMenuItem] = useState(MENU_TABS_CONFIG[1].name);
   const navigate = useNavigate();
   const { cid } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -191,32 +224,15 @@ const ContractItem: React.FC = () => {
                   <Table.HeaderCell>CID:</Table.HeaderCell>
                   <Table.HeaderCell>KIND:</Table.HeaderCell>
                   <Table.HeaderCell>METHOD:</Table.HeaderCell>
-                  <Table.HeaderCell>ARGUMENTS:</Table.HeaderCell>
-                  <Table.HeaderCell>FUND:</Table.HeaderCell>
-                  <Table.HeaderCell>KEYS:</Table.HeaderCell>
+                  {/* <Table.HeaderCell>ARGUMENTS:</Table.HeaderCell> */}
+                  {/* <Table.HeaderCell>FUND:</Table.HeaderCell>
+                  <Table.HeaderCell>KEYS:</Table.HeaderCell> */}
                 </Table.Row>
               </Table.Header>
 
               <Table.Body>
                 { contractData.calls.map((call, index)=> {
-                  return call.type === 'single' ? 
-                  <>
-                    <Table.Row key={index}>
-                      <Table.Cell>{call.value[0][0]}</Table.Cell>
-                      <Table.Cell>{call.value[0].value}</Table.Cell>
-                      <Table.Cell>{call.value[0][2]}</Table.Cell>
-                      <Table.Cell>{call.value[0][3]}</Table.Cell>
-                      <Table.Cell>{call.value[0][4].length}</Table.Cell>
-                      <Table.Cell>funds</Table.Cell>
-                      <Table.Cell>{call.value[0][5].value.length}</Table.Cell>
-                    </Table.Row>
-                    <Table.Row className={StylesRow} key={index+100}>
-                      <Table.Cell className={StylesSubrow} colSpan="7"></Table.Cell>
-                    </Table.Row>
-                  </> : 
-                  <>
-                    <Table.Row key={index}></Table.Row>
-                  </>
+                  return <CallTableRow key={index} data={call}></CallTableRow>
                 }) }
               </Table.Body>
             </Table>

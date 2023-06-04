@@ -19,9 +19,6 @@ export function* loadParamsSaga(
     // const blocksData = (yield call(LoadBlocks)) as BlocksData;
     // yield put(actions.setBlocksData(blocksData));
 
-    const contractsData = (yield call(LoadContracts)) as ContractsData;
-    yield put(actions.setContractsData(contractsData));
-
     const statusData = (yield call(LoadStatus)) as Status;
     yield put(actions.setStatusData(statusData));
 
