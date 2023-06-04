@@ -65,6 +65,7 @@ const contractSchema = new Mongoose.Schema(
       },
     ],
     calls_count: Number,
+    state: {},
   },
   {
     timestamps: false,

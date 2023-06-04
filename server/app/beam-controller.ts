@@ -13,7 +13,7 @@ const FIRST_YEAR_VALUE = 20;
 const REST_YEARS_VALUE = 10;
 const BLOCKS_STEP = 100;
 
-const improoveCalls = (calls: any, cid: string) => {
+const improoveCalls = (calls: any, cid: string, contractId: any) => {
   calls.forEach((doc: any, i: number) => {
     if (Array.isArray(doc)) {
       calls[i] = {
@@ -22,6 +22,7 @@ const improoveCalls = (calls: any, cid: string) => {
       };
     }
 
+    calls[i]["_contract"] = contractId;
     calls[i]["height"] = calls[i].value[0][0];
     calls[i]["cid"] = cid;
   });
@@ -153,7 +154,7 @@ const updateContracts = async (status: any) => {
       newCalls.shift();
 
       if (newCalls.length > 0) {
-        const improvedNewCalls = improoveCalls(newCalls, cid);
+        const improvedNewCalls = improoveCalls(newCalls, cid, contractInDb._id);
         await Call.insertMany(improvedNewCalls);
         console.log(`Contract calls inserted between ${lastLoadedHeight} - ${toHeight}. 
           Added ${improvedNewCalls.length}. CID: ${cid}`);
@@ -170,6 +171,7 @@ const updateContracts = async (status: any) => {
         kind: contractData.kind,
         height: contract[2],
         calls_count: contractInDb.calls_count + newCalls.length,
+        state: contractData["State"],
       };
 
       //TODO

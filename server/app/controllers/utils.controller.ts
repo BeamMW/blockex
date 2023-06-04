@@ -101,22 +101,23 @@ export const getContract = async (ctx: ParameterizedContext) => {
       { $sort: { height: -1 } },
       { $skip: Number(per_page) * Number(page) },
       { $limit: Number(per_page) },
+      { $unset: ["_id"] },
     ]);
-    const count = await Call.countDocuments({ cid: id }); //TODO: separate in task and store in contract doc
     const contract = await Contract.aggregate([
       { $match: { cid: id } },
       {
         $addFields: {
           calls,
           page,
-          count,
-          pages: Math.ceil(count / Number(per_page)),
         },
+      },
+      {
+        $unset: ["_id", "cid"],
       },
     ]);
     ctx.ok({
       status: "success",
-      data: contract,
+      data: contract[0],
     });
   }
 };

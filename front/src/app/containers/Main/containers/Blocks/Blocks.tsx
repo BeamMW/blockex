@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Window, Button, StatusCards } from '@app/shared/components';
 import { selectBlocksData, selectContractsData, selectStatusData } from '../../store/selectors';
 import { CURRENCIES, ROUTES } from '@app/shared/constants';
@@ -77,10 +77,11 @@ const Blocks: React.FC = () => {
   const blocksData = useSelector(selectBlocksData());
   const [currentDate, setNewDate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [activeMenuItem, setActiveMenuItem] = useState(TABS_CONFIG[0].name);
+  const [activeMenuItem, setActiveMenuItem] = useState<string>(TABS_CONFIG[0].name);
   const onChange = (event, data) => setNewDate(data.value);
-  const dispatch = useDispatch();isLoading
+  const dispatch = useDispatch();
   const statusData = useSelector(selectStatusData());
+  const location = useLocation();
 
   const contractsData = useSelector(selectContractsData());
   const [searchParams, setSearchParams] = useSearchParams();
@@ -93,40 +94,27 @@ const Blocks: React.FC = () => {
 
   const navigate = useNavigate();
 
-  // const getDate = (timestamp: number) => {
-  //   const date = new Date(timestamp * 1000);
-  //   const yearString = date.toLocaleDateString(undefined, { year: 'numeric' });
-  //   const monthString = date.toLocaleDateString(undefined, { month: 'numeric' });
-  //   const dayString = date.toLocaleDateString(undefined, { day: 'numeric' });
-  //   const time = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-  //   return `${dayString}.${monthString.length == 1 ? '0' + monthString.slice(-2) : monthString}.${yearString} ${time}`;
-  // };
-
   const handleSearchChange = async () => {
 
   };
 
   const updateData = async (page: number) => {
-    if (activeMenuItem === TABS_CONFIG[0].name) {
-      const newData = await LoadBlocks(page);
-      dispatch(setBlocksData(newData));
-    } else if (activeMenuItem === TABS_CONFIG[1].name) {
-      const newData = await LoadContracts(page);
-      dispatch(setContractsData(newData));
-    }
+    const newData = await LoadBlocks(page - 1);
+    dispatch(setBlocksData(newData));
   }
 
   useEffect(() => {
-    updateData(defaultPage ? Number(defaultPage) - 1 : 1);
+    updateData(defaultPage ? Number(defaultPage) : 1);
   }, []);
 
   const paginationOnChange = async (e, data) => {
-    setSearchParams({["page"]: data.activePage})
-    await updateData(data.activePage - 1);
+    setSearchParams({["page"]: data.activePage});
+    await updateData(data.activePage);
   };
 
   const handleMenuItemClick = (newTab: string) => {
     setActiveMenuItem(newTab);
+    navigate(ROUTES.CONTRACTS.BASE);
   };
 
   const isActiveMenuItem = (name: string) => {
@@ -232,51 +220,7 @@ const Blocks: React.FC = () => {
           </Table>
         </div>
       </> : <></> }
-      {/* <TableContent> */}
-        {/* <Navigation>
-          { TABS_CONFIG.map((tabItem) => {
-            return (<div className='tab'>{tabItem.title}</div>);
-          }) }
-        </Navigation> */}
-
-        
-      {/* </TableContent> */}
     </Window>
-    // <TableContent>
-    //   <Menu>
-    //     <Menu.Item>Home</Menu.Item>
-    //     <Menu.Item>About</Menu.Item>
-    //     <Menu.Item>Contact</Menu.Item>
-    //   </Menu>
-      
-    //   <Table celled>
-    //     <Table.Header>
-    //       <Table.Row>
-    //         <Table.HeaderCell>Name</Table.HeaderCell>
-    //         <Table.HeaderCell>Age</Table.HeaderCell>
-    //         <Table.HeaderCell>Gender</Table.HeaderCell>
-    //       </Table.Row>
-    //     </Table.Header>
-
-    //     <Table.Body>
-    //       <Table.Row>
-    //         <Table.Cell>John</Table.Cell>
-    //         <Table.Cell>25</Table.Cell>
-    //         <Table.Cell>Male</Table.Cell>
-    //       </Table.Row>
-    //       <Table.Row>
-    //         <Table.Cell>Jane</Table.Cell>
-    //         <Table.Cell>30</Table.Cell>
-    //         <Table.Cell>Female</Table.Cell>
-    //       </Table.Row>
-    //       <Table.Row>
-    //         <Table.Cell>Bob</Table.Cell>
-    //         <Table.Cell>35</Table.Cell>
-    //         <Table.Cell>Male</Table.Cell>
-    //       </Table.Row>
-    //     </Table.Body>
-    //   </Table>
-    // </TableContent>
   );
 };
 

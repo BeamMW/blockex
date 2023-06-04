@@ -23,7 +23,6 @@ import store from '../../../index';
 export function remoteEventChannel() {
   return eventChannel((emitter) => {
     setTimeout(()=>emitter({event: 'account_loaded'}), 0)
-    console.log('emitted')
     const unsubscribe = () => {
       emitter(END);
     };
@@ -55,7 +54,6 @@ export function remoteEventChannel() {
 
 function* sharedSaga() {
   const remoteChannel = yield call(remoteEventChannel);
-  console.log('asd')
   // store.dispatch(mainActions.loadAppParams.request(null));
   while (true) {
     try {
@@ -66,7 +64,6 @@ function* sharedSaga() {
   //     console.log(payload)
       switch (payload.event) {
         case 'account_loaded':
-          console.log("account_loaded !")
           store.dispatch(mainActions.loadAppParams.request(null));
   //         // if (payload.data.length === 0) {
   //         //   store.dispatch(setIsLoggedIn(false));

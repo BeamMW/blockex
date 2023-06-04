@@ -1,24 +1,21 @@
 import React, { useEffect } from 'react';
 import { css } from '@linaria/core';
-
 import { actions as sharedActions, selectors as sharedSelectors } from '@app/shared/store';
-import 'react-toastify/dist/ReactToastify.css';
-import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
-
 import { useNavigate, useRoutes, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
 // import 'semantic-ui-css/semantic.min.css';
 
-const styleLink = document.createElement("link"); styleLink.rel = "stylesheet"; styleLink.href = "https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css"; document.head.appendChild(styleLink);
-
-import './styles';
-
 import { ROUTES } from '@app/shared/constants';
 import {
-  Blocks
+  Blocks, Contracts, ContractItem
 } from '@app/containers';
+import 'react-toastify/dist/ReactToastify.css';
+import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
+import './styles';
+
+const styleLink = document.createElement("link"); styleLink.rel = "stylesheet"; styleLink.href = "https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css"; document.head.appendChild(styleLink);
 
 
 const routes = () => [
@@ -26,10 +23,14 @@ const routes = () => [
     path: ROUTES.MAIN.BASE,
     element: <Blocks />,
   },
-  // {
-  //   path: ROUTES.CONTRACTS.BASE,
-  //   element: <Contracts />,
-  // },
+  {
+    path: ROUTES.CONTRACTS.BASE,
+    element: <Contracts />,
+  },
+  {
+    path: ROUTES.CONTRACTS.CONTRACT,
+    element: <ContractItem />,
+  },
 ];
 
 declare global {

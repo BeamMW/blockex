@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
+import { Contract } from '@core/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { Window, Button } from '@app/shared/components';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Window, Button, StatusCards } from '@app/shared/components';
 import { selectBlocksData, selectContractsData, selectStatusData } from '../../store/selectors';
 // import { IconSend, IconReceive } from '@app/shared/icons';
-import { CURRENCIES, ROUTES } from '@app/shared/constants';
+import { CURRENCIES, ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 import { selectSystemState, selectTransactions } from '@app/shared/store/selectors';
 // import { IconDeposit, IconConfirm } from '@app/shared/icons';
 import { timestampToDate } from '@core/appUtils';
@@ -14,7 +15,7 @@ import { LoadBlocks, LoadContracts } from '@core/api';
 
 import { Table, Search, Pagination, Menu, Card } from 'semantic-ui-react';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
-import { setBlocksData, setContractsData } from '../../store/actions';
+// import { setBlocksData, setContractsData } from '../../store/actions';
 
 const Content = styled.div`
   width: 100%;
@@ -52,84 +53,20 @@ const StylesMenuControl = css`
   width: 100%;
 `;
 
-const StylesStatusCard = css`
-  height: 150px;
-  min-width: 530px;
-  width: 49% !important;
-  margin: 5px !important;
-  padding: 0 !important;
-  border-radius: 10px !important;
-  background-color: rgba(255, 255, 255, .05) !important;
-  border: none !important;
-  box-shadow: none !important;
-
-  > .card-content {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-
-    > .line {
-      display: flex;
-      flex-direction: row;
-
-      > .subline {
-        width: 50%;
-      }
-    }
-
-    > .line.bottom {
-      margin-top: auto;
-    }
-
-    .card-header {
-      opacity: .5;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .3px;
-      color: #fff;
-    }
-
-    .card-text {
-      margin-top: 10px;
-      font-weight: 400;
-      color: #fff;
-      font-size: 18px;
-      letter-spacing: .8px;
-    }
-  }
+const StylesTableRow = css`
+  cursor: pointer;
 `;
 
-const MainPage: React.FC = () => {
-  const TABS_CONFIG = [
-    {
-      name: 'blocks',
-      disabled: false,
-    },
-    {
-      name: 'contracts',
-      disabled: false,
-    },
-    {
-      name: 'dapps',
-      disabled: true,
-    },
-    {
-      name: 'assets',
-      disabled: false,
-    },
-    {
-      name: 'atomic swap offers',
-      disabled: true,
-    }
-  ];
-
+const Contracts: React.FC = () => {
   const blocksData = useSelector(selectBlocksData());
   const [currentDate, setNewDate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [activeMenuItem, setActiveMenuItem] = useState(TABS_CONFIG[0].name);
+  const [activeMenuItem, setActiveMenuItem] = useState(MENU_TABS_CONFIG[1].name);
   const onChange = (event, data) => setNewDate(data.value);
   const dispatch = useDispatch();isLoading
   const statusData = useSelector(selectStatusData());
+  const location = useLocation();
+
 
   const contractsData = useSelector(selectContractsData());
 
@@ -140,183 +77,51 @@ const MainPage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  // const getDate = (timestamp: number) => {
-  //   const date = new Date(timestamp * 1000);
-  //   const yearString = date.toLocaleDateString(undefined, { year: 'numeric' });
-  //   const monthString = date.toLocaleDateString(undefined, { month: 'numeric' });
-  //   const dayString = date.toLocaleDateString(undefined, { day: 'numeric' });
-  //   const time = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-  //   return `${dayString}.${monthString.length == 1 ? '0' + monthString.slice(-2) : monthString}.${yearString} ${time}`;
-  // };
-
   const handleSearchChange = () => {
     
   };
 
   const paginationOnChange = async (e, data) => {
-    if (activeMenuItem === TABS_CONFIG[0].name) {
-      const newData = await LoadBlocks(data.activePage - 1);
-      dispatch(setBlocksData(newData));
-    } else if (activeMenuItem === TABS_CONFIG[1].name) {
-      const newData = await LoadContracts(data.activePage - 1);
-      dispatch(setContractsData(newData));
-    }
+    // const newData = await LoadContracts(data.activePage - 1);
+    // dispatch(setContractsData(newData));
   };
 
   const handleMenuItemClick = (newTab: string) => {
-    setActiveMenuItem(newTab);
+    navigate(newTab);
   };
 
   const isActiveMenuItem = (name: string) => {
-    // console.log(name === activeMenuItem);
     return name === activeMenuItem;
   }
+
+  const contractItemClicked = useCallback((cid: string) => {
+    navigate(`${ROUTES.CONTRACTS.CONTRACT.replace(':cid', '')}${cid}`);
+  }, [navigate]);
   
   return (
     <Window>
       <Content>
-        <Card.Group>
-          <Card className={StylesStatusCard}>
-            <Card.Content className='card-content'>
-              <div className='line'>
-                <div className='subline'>
-                  <div className='card-header'>BLOCKCHAIN HEIGHT</div>
-                  <div className='card-text'>{statusData.height.toLocaleString()}</div>
-                </div>
-                <div className='subline'>
-                  <div className='card-header'>LATEST BLOCK</div>
-                  <div className='card-text'>{timestampToDate(statusData.timestamp)}</div>
-                </div>
-              </div>
-              <div className='line bottom'>
-                <div className='subline'>
-                  <div className='card-header'>HASHRATE</div>
-                  <div className='card-text'>{(statusData.difficulty / 60).toLocaleString(undefined, {maximumFractionDigits:2})} Sol/s</div>
-                </div>
-                <div className='subline'>
-                  <div className='card-header'>LATEST BLOCK DIFFICULTY</div>
-                  <div className='card-text'>{statusData.difficulty.toLocaleString()}</div>
-                </div>
-              </div>
-            </Card.Content>
-          </Card>
-
-          <Card className={StylesStatusCard}>
-            <Card.Content className='card-content'>
-              <div className='line'>
-                <div className='subline'>
-                  <div className='card-header'>TOTAL EMISSION</div>
-                  <div className='card-text'>{statusData.total_coins_emission.toLocaleString()} BEAM</div>
-                </div>
-                <div className='subline'>
-                  <div className='card-header'>NEXT TREASURY EMISSION</div>
-                  <div className='card-text'>{statusData.next_treasury_coins_amount.toLocaleString()} BEAM</div>
-                </div>
-              </div>
-              <div className='line bottom'>
-                <div className='subline'>
-                </div>
-                <div className='subline'>
-                  <div className='card-header'>NEXT TREASURY EMISSION (block height)</div>
-                  <div className='card-text'>{statusData.next_treasury_emission_height.toLocaleString()}</div>
-                </div>
-              </div>
-            </Card.Content>
-          </Card>
-
-          <Card className={StylesStatusCard}>
-            <Card.Content className='card-content'>
-              <div className='line'>
-                <div className='subline'>
-                  <div className='card-header'>TOTAL COINS IN CIRCULATION</div>
-                  <div className='card-text'>
-                    {(statusData.coins_in_circulation_mined + statusData.coins_in_circulation_treasury).toLocaleString()} BEAM
-                  </div>
-                </div>
-                <div className='subline'>
-                  <div className='card-header'>COINS IN CIRCULATION (mined)</div>
-                  <div className='card-text'>{statusData.coins_in_circulation_mined.toLocaleString()} BEAM</div>
-                </div>
-              </div>
-              <div className='line bottom'>
-                <div className='subline'>
-                </div>
-                <div className='subline'>
-                  <div className='card-header'>COINS IN CIRCULATION (treasury)</div>
-                  <div className='card-text'>{statusData.coins_in_circulation_treasury.toLocaleString()} BEAM</div>
-                </div>
-              </div>
-            </Card.Content>
-          </Card>
-
-          <Card className={StylesStatusCard}>
-          </Card>
-        </Card.Group>
+        <StatusCards statusData={statusData}></StatusCards>
       </Content>
       <div className={StylesMenuControl}>
         <Menu pointing secondary>
-          {TABS_CONFIG.map((tab, index) => 
+          { MENU_TABS_CONFIG.map((tab, index) => 
             (<Menu.Item key={index}
               name={tab.name}
               disabled={tab.disabled}
               active={isActiveMenuItem(tab.name)}
-              onClick={() => handleMenuItemClick(tab.name)}
+              onClick={() => handleMenuItemClick(tab.route)}
             />)
           )}
         </Menu>
       </div>
-      { blocksData.blocks && activeMenuItem === TABS_CONFIG[0].name ?
+      { contractsData.contracts &&
       <>
         <div className={StylesOverTable}>
           <Search
+            placeholder='Search...'
+            onSearchChange={handleSearchChange}
             disabled={true}
-            placeholder='Search...'
-            onSearchChange={handleSearchChange}
-            // results={results}
-            // value={value}
-          />
-          <SemanticDatepicker disabled={true} onChange={onChange} />
-          <Pagination defaultActivePage={1} onPageChange={paginationOnChange} totalPages={blocksData.pages} />
-        </div>
-        <div className={StylesTable}>
-          <Table singleLine>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>HEIGHT:</Table.HeaderCell>
-                <Table.HeaderCell>HASH:</Table.HeaderCell>
-                <Table.HeaderCell>AGE:</Table.HeaderCell>
-                <Table.HeaderCell>DIFFICULTY:</Table.HeaderCell>
-                <Table.HeaderCell>#KERNELS:</Table.HeaderCell>
-                <Table.HeaderCell>#INPUTS:</Table.HeaderCell>
-                <Table.HeaderCell>#OUTPUTS:</Table.HeaderCell>
-                <Table.HeaderCell>FEES:</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
-              { blocksData.blocks.map((block, index)=> {
-                return (<Table.Row key={index}>
-                  <Table.Cell>{block.height}</Table.Cell>
-                  <Table.Cell>{block.hash}</Table.Cell>
-                  <Table.Cell>{timestampToDate(block.timestamp)}</Table.Cell>
-                  <Table.Cell>{block.difficulty}</Table.Cell>
-                  <Table.Cell>{block.kernelsCount}</Table.Cell>
-                  <Table.Cell>{block.inputsCount}</Table.Cell>
-                  <Table.Cell>{block.outputsCount}</Table.Cell>
-                  <Table.Cell>{block.fee}</Table.Cell>
-                </Table.Row>);
-              }) }
-              
-            </Table.Body>
-          </Table>
-        </div>
-      </> : <></> }
-      { contractsData.contracts && activeMenuItem === TABS_CONFIG[1].name ?
-      <>
-        <div className={StylesOverTable}>
-          <Search
-            placeholder='Search...'
-            onSearchChange={handleSearchChange}
             // results={results}
             // value={value}
           />
@@ -334,8 +139,8 @@ const MainPage: React.FC = () => {
             </Table.Header>
 
             <Table.Body>
-              { contractsData.contracts.map((contract, index)=> {
-                return (<Table.Row key={index}>
+              { contractsData.contracts.map((contract: Contract, index: number)=> {
+                return (<Table.Row key={index} onClick={() => contractItemClicked(contract.cid)} className={StylesTableRow}>
                   <Table.Cell>{contract.height}</Table.Cell>
                   <Table.Cell>{typeof contract.kind === "string" ? contract.kind : contract.kind['Wrapper'] }</Table.Cell>
                   <Table.Cell>{contract.cid}</Table.Cell>
@@ -345,53 +150,9 @@ const MainPage: React.FC = () => {
             </Table.Body>
           </Table>
         </div>
-      </> : <></> }
-      {/* <TableContent> */}
-        {/* <Navigation>
-          { TABS_CONFIG.map((tabItem) => {
-            return (<div className='tab'>{tabItem.title}</div>);
-          }) }
-        </Navigation> */}
-
-        
-      {/* </TableContent> */}
+      </> }
     </Window>
-    // <TableContent>
-    //   <Menu>
-    //     <Menu.Item>Home</Menu.Item>
-    //     <Menu.Item>About</Menu.Item>
-    //     <Menu.Item>Contact</Menu.Item>
-    //   </Menu>
-      
-    //   <Table celled>
-    //     <Table.Header>
-    //       <Table.Row>
-    //         <Table.HeaderCell>Name</Table.HeaderCell>
-    //         <Table.HeaderCell>Age</Table.HeaderCell>
-    //         <Table.HeaderCell>Gender</Table.HeaderCell>
-    //       </Table.Row>
-    //     </Table.Header>
-
-    //     <Table.Body>
-    //       <Table.Row>
-    //         <Table.Cell>John</Table.Cell>
-    //         <Table.Cell>25</Table.Cell>
-    //         <Table.Cell>Male</Table.Cell>
-    //       </Table.Row>
-    //       <Table.Row>
-    //         <Table.Cell>Jane</Table.Cell>
-    //         <Table.Cell>30</Table.Cell>
-    //         <Table.Cell>Female</Table.Cell>
-    //       </Table.Row>
-    //       <Table.Row>
-    //         <Table.Cell>Bob</Table.Cell>
-    //         <Table.Cell>35</Table.Cell>
-    //         <Table.Cell>Male</Table.Cell>
-    //       </Table.Row>
-    //     </Table.Body>
-    //   </Table>
-    // </TableContent>
   );
 };
 
-export default MainPage;
+export default Contracts;
