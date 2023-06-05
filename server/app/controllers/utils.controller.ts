@@ -69,6 +69,16 @@ export const getContracts = async (ctx: ParameterizedContext) => {
   }
 };
 
+export const getAllAssets = async (ctx: ParameterizedContext) => {
+  const assets = await Assets.find({});
+  ctx.ok({
+    status: "success",
+    data: {
+      assets,
+    },
+  });
+};
+
 export const getAssets = async (ctx: ParameterizedContext) => {
   const assetsQuerySchema = Joi.object({
     per_page: Joi.number().integer().min(10).default(20),
@@ -85,7 +95,8 @@ export const getAssets = async (ctx: ParameterizedContext) => {
     ctx.body = { error: error.details.map((detail: any) => detail.message) };
   } else {
     const { per_page, page } = ctx.request.query;
-    const assets = await Assets.aggregate([
+    let assets;
+    assets = await Assets.aggregate([
       { $sort: { lock_height: -1 } },
       { $skip: Number(per_page) * Number(page) },
       { $limit: Number(per_page) },

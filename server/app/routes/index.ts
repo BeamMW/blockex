@@ -9,6 +9,7 @@ import {
   getContracts,
   getBlocks,
   getContract,
+  getAllAssets,
 } from "../controllers";
 
 const router = new Router({ prefix: "/api/v1" });
@@ -19,6 +20,7 @@ router.get("/contracts", (ctx) => getContracts(ctx));
 router.get("/contract", (ctx) => getContract(ctx));
 router.get("/blocks", (ctx) => getBlocks(ctx));
 router.get("/assets", (ctx) => getAssets(ctx));
+router.get("/all_assets", (ctx) => getAllAssets(ctx));
 // router.post("/", (ctx) => metaMaskRoutingHandler(ctx));
 
 export default router;

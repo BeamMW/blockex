@@ -77,4 +77,21 @@ export type ButtonVariant = 'regular' | 'ghost' | 'ghostBordered' | 'block' | 'v
     next_treasury_coins_amount: number,
     difficulty: number,
   }
+
+  export interface Asset {
+    aid: number,
+    cid: string,
+    lock_height: number,
+    metadata: string,
+    owner: string,
+    value: number,
+    asset_history: any
+  }
+
+  export interface AssetsData {
+    assets: Asset[],
+    page: number,
+    pages: number,
+    count: number,
+  }
   

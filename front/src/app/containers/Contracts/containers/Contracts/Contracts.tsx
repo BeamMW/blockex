@@ -128,7 +128,8 @@ const Contracts: React.FC = () => {
             // results={results}
             // value={value}
           />
-          <Pagination defaultActivePage={defaultPage} onPageChange={paginationOnChange} totalPages={contractsData.pages} />
+          <Pagination defaultActivePage={defaultPage ? defaultPage : 1} 
+            onPageChange={paginationOnChange} totalPages={contractsData.pages} />
         </div>
         <div className={StylesTable}>
           <Table singleLine>

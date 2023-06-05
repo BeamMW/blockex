@@ -1,22 +1,19 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
-import { Contract, ContractsData } from '@core/types';
+import { Asset } from '@core/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
-import { Window, Button, StatusCards } from '@app/shared/components';
-import { selectContractsData } from '../../store/selectors';
+import { Window, Button, StatusCards, AssetIcon } from '@app/shared/components';
+import { selectAssetsData } from '../../store/selectors';
 import { selectStatusData } from '@app/containers/Main/store/selectors';
-// import { IconSend, IconReceive } from '@app/shared/icons';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 import { selectSystemState, selectTransactions } from '@app/shared/store/selectors';
-// import { IconDeposit, IconConfirm } from '@app/shared/icons';
-import { timestampToDate } from '@core/appUtils';
-import { LoadBlocks, LoadContracts } from '@core/api';
+import { LoadAssets } from '@core/api';
 
 import { Table, Search, Pagination, Menu, Card } from 'semantic-ui-react';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
-import { setContractsData } from '../../store/actions';
+import { setAssetsData } from '../../store/actions';
 
 const Content = styled.div`
   width: 100%;
@@ -60,14 +57,14 @@ const StylesTableRow = css`
 
 const Assets: React.FC = () => {
   const [currentDate, setNewDate] = useState(null);
-  const [activeMenuItem, setActiveMenuItem] = useState(MENU_TABS_CONFIG[1].name);
+  const [activeMenuItem, setActiveMenuItem] = useState(MENU_TABS_CONFIG[3].name);
   const onChange = (event, data) => setNewDate(data.value);
   const dispatch = useDispatch();
   const statusData = useSelector(selectStatusData());
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultPage = searchParams.get("page");
-  const contractsData = useSelector(selectContractsData());
+  const assetsData = useSelector(selectAssetsData());
   const navigate = useNavigate();
 
   const handleSearchChange = () => {
@@ -83,9 +80,8 @@ const Assets: React.FC = () => {
   }
 
   const updateData = async (page: number) => {
-    const newData = await LoadContracts(page - 1);
-    console.log(newData)
-    dispatch(setContractsData(newData));
+    const newData = await LoadAssets(page - 1);
+    dispatch(setAssetsData(newData));
   }
 
   useEffect(() => {
@@ -97,8 +93,8 @@ const Assets: React.FC = () => {
     await updateData(data.activePage);
   };
 
-  const contractItemClicked = useCallback((cid: string) => {
-    navigate(`${ROUTES.CONTRACTS.CONTRACT.replace(':cid', '')}${cid}`);
+  const contractItemClicked = useCallback((aid: number) => {
+    // navigate(`${ROUTES.CONTRACTS.CONTRACT.replace(':cid', '')}${cid}`);
   }, [navigate]);
   
   return (
@@ -118,7 +114,7 @@ const Assets: React.FC = () => {
           )}
         </Menu>
       </div>
-      { contractsData && contractsData.contracts &&
+      { assetsData && assetsData.assets &&
       <>
         <div className={StylesOverTable}>
           <Search
@@ -128,26 +124,30 @@ const Assets: React.FC = () => {
             // results={results}
             // value={value}
           />
-          <Pagination defaultActivePage={defaultPage} onPageChange={paginationOnChange} totalPages={contractsData.pages} />
+          <Pagination defaultActivePage={defaultPage ? defaultPage : 1} 
+            onPageChange={paginationOnChange} totalPages={assetsData.pages} />
         </div>
         <div className={StylesTable}>
           <Table singleLine>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>HEIGHT:</Table.HeaderCell>
-                <Table.HeaderCell>KIND:</Table.HeaderCell>
+                <Table.HeaderCell>ASSET ID:</Table.HeaderCell>
                 <Table.HeaderCell>CID:</Table.HeaderCell>
-                <Table.HeaderCell>#CALLS:</Table.HeaderCell>
+                <Table.HeaderCell>LOCK HEIGHT:</Table.HeaderCell>
+                <Table.HeaderCell>OWNER:</Table.HeaderCell>
+                <Table.HeaderCell>VALUE:</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 
             <Table.Body>
-              { contractsData.contracts.map((contract: Contract, index: number)=> {
-                return (<Table.Row key={index} onClick={() => contractItemClicked(contract.cid)} className={StylesTableRow}>
-                  <Table.Cell>{contract.height}</Table.Cell>
-                  <Table.Cell>{typeof contract.kind === "string" ? contract.kind : contract.kind['Wrapper'] }</Table.Cell>
-                  <Table.Cell>{contract.cid}</Table.Cell>
-                  <Table.Cell>{contract.calls_count}</Table.Cell>
+              { assetsData.assets.map((asset: Asset, index: number)=> {
+                return (
+                <Table.Row key={index} onClick={() => contractItemClicked(asset.aid)} className={StylesTableRow}>
+                  <Table.Cell><AssetIcon asset_id={asset.aid}></AssetIcon> {asset.aid}</Table.Cell>
+                  <Table.Cell>{asset.cid ? asset.cid : '-'}</Table.Cell>
+                  <Table.Cell>{asset.lock_height}</Table.Cell>
+                  <Table.Cell>{asset.owner}</Table.Cell>
+                  <Table.Cell>{asset.value}</Table.Cell>
                 </Table.Row>);
               })}
             </Table.Body>

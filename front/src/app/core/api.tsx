@@ -22,3 +22,7 @@ export async function LoadContracts(page: number = 0, perPage: number = 20) {
 export async function LoadContract(cid: string, page: number = 0, perPage: number = 50) {
   return await callApi(`${API_URL}/contract?id=${cid}&page=${page}&per_page=${perPage}`);
 }
+
+export async function LoadAssets(page: number = 0, perPage: number = 50) {
+  return await callApi(`${API_URL}/assets?&page=${page}&per_page=${perPage}`);
+}

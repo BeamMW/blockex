@@ -3,7 +3,7 @@ import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
 import { ContractData } from '@core/types';
 import { useNavigate, useLocation, useSearchParams, useParams } from 'react-router-dom';
-import { Window } from '@app/shared/components';
+import { Window, AssetIcon, BackControl } from '@app/shared/components';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 import { LoadContract } from '@core/api';
 import { Table, Pagination, Segment } from 'semantic-ui-react';
@@ -38,6 +38,27 @@ const Content = styled.div`
     text-transform: uppercase;
   }
 
+  .arguments-section {
+    margin-right: 50px;
+    float: left;
+  }
+
+  .calls-table-header {
+    position: sticky !important;
+    top: 0;
+    z-index: 2;
+  }
+
+  .call-table-main-row {
+    background-color: rgb(249, 250, 251);
+  }
+
+  .long-title {
+    word-break: break-word;
+    white-space: pre-wrap;
+    -moz-white-space: pre-wrap;   
+  }
+
   > .calls {
     width: 100%;
   }
@@ -70,6 +91,55 @@ const GeneratedRow = styled.div<{ margin: number }>`
   }
 `;
 
+const AssetTableStyles = css`
+  .asset_id {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .asset_value {
+    font-size: 14px;
+  }
+`;
+
+// str.includes(substr)
+
+const GenerateArgumentItem: React.FC<{item: {type: string, value: number}, itemKey: string}> = ({item, itemKey}) => {
+  return (<>
+    {item.type === 'aid' && <div>
+      {itemKey}: <AssetIcon asset_id={item.value}></AssetIcon> {item.value}
+    </div>}
+    {item.type === 'amount' && <div>
+      {itemKey}: {item.value}
+    </div>}
+  </>);
+};
+
+const AssetsList: React.FC<{assets: {aid: number, value: number}[], isCallFunds?: boolean}> = ({assets, isCallFunds = false}) => {
+  return (<Table className={AssetTableStyles} collapsing>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell> Asset </Table.HeaderCell>
+                <Table.HeaderCell> Value </Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
+              {assets.map((asset, index) => {
+                return <Table.Row key={index}>
+                  <Table.Cell>
+                    <AssetIcon asset_id={isCallFunds ? asset[0].value : asset.aid}></AssetIcon>
+                    <span className='asset_id'>{isCallFunds ? asset[0].value : asset.aid}</span>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <span className='asset_value'>{isCallFunds ? asset[1].value : asset.value}</span>
+                  </Table.Cell>
+                </Table.Row>
+              })}
+            </Table.Body>
+          </Table>);
+}
+
 const GeneratedTable = React.memo<{data: any}>(({data}) => {
   const headers = data.shift();
   return (<Table collapsing>
@@ -83,9 +153,16 @@ const GeneratedTable = React.memo<{data: any}>(({data}) => {
 
     <Table.Body>
       {data.map((item, index) => {
+        //TODO: integrate arg item
         return <Table.Row key={index}>
           {item.map((itemValue, itemValueIndex) => <Table.Cell key={itemValueIndex}>{
-            itemValue.type ? itemValue.value : itemValue
+            itemValue.type !== undefined ? itemValue.value : (
+              Array.isArray(itemValue) ? (
+                itemValue.map((itemValueTmp, tmpIndex)=>{
+                  return <GenerateArgumentItem key={tmpIndex} itemKey={itemValueTmp.type} item={itemValueTmp}/>
+                })
+              ) : itemValue
+            )
           }</Table.Cell>)}
         </Table.Row>
       })}
@@ -122,27 +199,33 @@ const GeneratedUI: React.FC<{dataObj: any, margin: number}> = ({dataObj, margin}
 
 const CallRowValue: React.FC<{rowValue: any}> = ({rowValue}) => {
  return <>
-    <Table.Row>
+    <Table.Row className='call-table-main-row'>
       <Table.Cell>{rowValue[0]}</Table.Cell>
       <Table.Cell>{rowValue[1].type ? rowValue[1].value : '-'}</Table.Cell>
       <Table.Cell>{rowValue[2] ? rowValue[2].value : '-'}</Table.Cell>
       <Table.Cell>{rowValue[3] ? rowValue[3] : '-'}</Table.Cell>
-      {/* <Table.Cell>{rowValue[4].length}</Table.Cell> */}
-      {/* <Table.Cell>funds</Table.Cell>
-      <Table.Cell>keys</Table.Cell> */}
     </Table.Row>
-    <Table.Row className={StylesRow}>
+    {rowValue[4] || rowValue[5] ? <Table.Row className={StylesRow}>
       <Table.Cell className={StylesSubrow} colSpan="7">
-        {rowValue[4] ? <Segment>
-          <div className='subtitle-inside'> ARGUMENTS: </div>
-          <GeneratedUI dataObj={rowValue[4]} margin={0}></GeneratedUI>
-        </Segment> : <></>}
-        {rowValue[5] ? <div>
-          <div className='subtitle-inside'> FUNDS: </div>
-          FUNDS TABLE HERE
-        </div> : <></>}
+        {rowValue[4] ? <span className='arguments-section'>
+            <div className='subtitle-inside'> ARGUMENTS: </div>
+            {typeof rowValue[4] === 'string' ? 
+              <span className='long-title'>{rowValue[4]}</span> :
+              Object.keys(rowValue[4]).map((key, keyIndex) => {
+              const argItem = rowValue[4][key];
+              if (argItem.type !== undefined) { 
+                return <GenerateArgumentItem item={argItem} itemKey={key} key={keyIndex}/>
+              } else if (typeof argItem === 'string') {
+                return <div key={keyIndex}>{key}: {argItem}</div>
+              }
+            })}
+          </span> : <></>}
+        {rowValue[5] ? <span>
+            <div className='subtitle-inside'> FUNDS: </div>
+            <AssetsList assets={rowValue[5].value} isCallFunds={true}></AssetsList>
+          </span> : <></>}
       </Table.Cell>
-    </Table.Row>
+    </Table.Row> : <></>}
   </>
 };
 
@@ -179,10 +262,15 @@ const ContractItem: React.FC = () => {
     setSearchParams({["page"]: data.activePage});
     updateData(data.activePage);
   };
+
+  const onBackClicked = () => {
+    navigate(ROUTES.CONTRACTS.BASE);
+  };
   
   return (
     <Window>
       {contractData && <Content>
+        <BackControl onPrevious={onBackClicked}></BackControl>
         <Segment.Group>
           <Segment.Group horizontal>
             <Segment className='subtitle-segment'>
@@ -200,10 +288,22 @@ const ContractItem: React.FC = () => {
             <Segment className='subtitle-segment'>
               <div className='subtitle'> KIND: </div>
             </Segment>
-            <Segment>{contractData.kind}</Segment>
+            <Segment>{contractData.kind["Wrapper"] ? contractData.kind["Wrapper"] : contractData.kind}</Segment>
           </Segment.Group>
         </Segment.Group>
-        { Object.keys(contractData.state).length > 0 && <>
+        <Segment>
+          <div className='subtitle'> LOCKED FUNDS: </div>
+          {contractData.locked_funds.length > 0 ?
+            <AssetsList assets={contractData.locked_funds}></AssetsList> :
+            '-'}
+        </Segment>
+        <Segment>
+          <div className='subtitle'> OWNED ASSETS: </div>
+          {contractData.owned_assets.length > 0 ?
+            <AssetsList assets={contractData.owned_assets}></AssetsList> :
+            '-'}
+        </Segment>
+        { contractData.state && Object.keys(contractData.state).length > 0 && <>
             <Segment>
               <div className='subtitle'> STATE: </div>
               <GeneratedUI dataObj={contractData.state} margin={0}></GeneratedUI>
@@ -218,15 +318,12 @@ const ContractItem: React.FC = () => {
           </div>
           <div className={StylesTable}>
             <Table singleLine>
-              <Table.Header>
+              <Table.Header className='calls-table-header'>
                 <Table.Row>
                   <Table.HeaderCell>HEIGHT:</Table.HeaderCell>
                   <Table.HeaderCell>CID:</Table.HeaderCell>
                   <Table.HeaderCell>KIND:</Table.HeaderCell>
                   <Table.HeaderCell>METHOD:</Table.HeaderCell>
-                  {/* <Table.HeaderCell>ARGUMENTS:</Table.HeaderCell> */}
-                  {/* <Table.HeaderCell>FUND:</Table.HeaderCell>
-                  <Table.HeaderCell>KEYS:</Table.HeaderCell> */}
                 </Table.Row>
               </Table.Header>
 
