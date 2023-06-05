@@ -15,9 +15,23 @@ services:
       - '27017:27017'
   redis:
     image: redis:alpine
-    ports:
-      - '6379:6379'
     network_mode: host
+  server:
+    image: server
+    container_name: server
+    build:
+      context: .
+      dockerfile: dockerfile-backend
+    restart: always
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    ports:
+      - '4000:4000'
+    env_file:
+      - .env
+    depends_on:
+      - beam-explorer-mongo
+      - redis
 volumes:
   dev-mongo-data:
   dev-mongo-conf:

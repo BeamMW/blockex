@@ -5,7 +5,7 @@ const CALLS_STEP_SYNC = 1000;
 
 const getRequest = async (req) => {
   const options = {
-    url: "http://127.0.0.1:8899/" + req,
+    url: "http://host.docker.internal:8891/" + req,
     method: "GET",
   };
 
@@ -124,7 +124,15 @@ const mongooseOptions = {
   useUnifiedTopology: true,
 };
 
-Mongoose.connect("mongodb://localhost:27017/explorer", mongooseOptions);
+const connect = async () => {
+  try {
+    await Mongoose.connect("mongodb://beam-explorer-mongo:27017/explorer", mongooseOptions);
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.log("Could not connect to MongoDB");
+    throw error;
+  }
+};
 
 console.log("contracts sync started!");
 
@@ -189,6 +197,7 @@ const formatVersionsHistory = (versionsHistory) => {
 };
 
 const syncContracts = async () => {
+  await connect();
   const status = await getRequest("status");
   let contracts = await getRequest("contracts");
   contracts.shift();

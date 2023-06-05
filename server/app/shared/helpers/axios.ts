@@ -35,7 +35,7 @@ export async function sendRequest<Req, Resp>(params: Req): Promise<Resp> {
 
 export async function sendExplorerNodeRequest<Req>(query: string): Promise<any> {
   const options = {
-    url: "http://127.0.0.1:8899/" + query,
+    url: "http://host.docker.internal:8891/" + query,
     method: "GET",
   };
 
