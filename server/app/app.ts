@@ -10,7 +10,7 @@ import config from "./config";
 import middlewares from "./middlewares";
 import router from "./routes";
 import { ENVIRONMENT } from "./shared/constants";
-import { BeamController } from "./beam-controller";
+import { BeamController } from "./controllers/beam.controller";
 
 const mongooseOptions = {
   // useCreateIndex: true,

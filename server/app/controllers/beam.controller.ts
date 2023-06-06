@@ -1,8 +1,10 @@
-import { redisStore } from "./db/redis";
-import { sendExplorerNodeRequest } from "../app/shared/helpers/axios";
-import { Blocks, Contract, Call, Status, Assets } from "./models";
+import { redisStore } from "../db/redis";
+import { sendExplorerNodeRequest } from "../shared/helpers/axios";
+import { Blocks, Contract, Call, Status, Assets } from "../models";
 
 const net = require("net");
+
+const cron = require("node-cron");
 
 const BLOCKS_STEP_SYNC = 1000;
 const HEIGHT_STEP = 43800;
@@ -243,7 +245,6 @@ export const BeamController = async () => {
 
           const status = await sendExplorerNodeRequest("status"); //TODO: add routes to consts
           await updateBlocks(status);
-          // await updateContracts(status);
           await updateAssets(status);
 
           const formattedStatus = await getFormattedStatus(status);
@@ -255,6 +256,11 @@ export const BeamController = async () => {
 
       acc = "";
     }
+  });
+
+  cron.schedule("* * * * *", async () => {
+    const status = await sendExplorerNodeRequest("status");
+    await updateContracts(status);
   });
 
   client.on("close", () => {
