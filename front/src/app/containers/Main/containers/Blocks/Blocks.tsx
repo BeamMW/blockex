@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
 import { useDispatch, useSelector } from 'react-redux';
@@ -111,6 +111,10 @@ const Blocks: React.FC = () => {
     // console.log(name === activeMenuItem);
     return name === activeMenuItem;
   }
+
+  const blockItemClicked = useCallback((height: number) => {
+    navigate(`${ROUTES.MAIN.BLOCK.replace(':height', '')}${height}`);
+  }, [navigate]);
   
   return (
     <Window>
@@ -159,7 +163,7 @@ const Blocks: React.FC = () => {
 
             <Table.Body>
               { blocksData.blocks.map((block, index)=> {
-                return (<Table.Row key={index}>
+                return (<Table.Row onClick={() => blockItemClicked(block.cid)} key={index}>
                   <Table.Cell>{block.height}</Table.Cell>
                   <Table.Cell>{block.hash}</Table.Cell>
                   <Table.Cell>{timestampToDate(block.timestamp)}</Table.Cell>

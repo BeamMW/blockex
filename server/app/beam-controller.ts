@@ -208,7 +208,7 @@ const updateAssets = async (status: any) => {
 export const BeamController = async () => {
   const client = new net.Socket();
 
-  client.connect(10015, "host.docker.internal", () => {
+  client.connect(10005, "127.0.0.1", () => {
     const message =
       JSON.stringify({
         jsonrpc: "2.0",
