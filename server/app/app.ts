@@ -17,7 +17,17 @@ const mongooseOptions = {
   // useNewUrlParser: true,
 };
 // Connect to the MongoDB database
-Mongoose.connect("mongodb://localhost:27017/explorer", mongooseOptions);
+// const connect = async () => {
+//   try {
+//     await Mongoose.connect("mongodb://beam-explorer-mongo:27017/explorer", mongooseOptions);
+//     console.log("Connected to MongoDB");
+//   } catch (error) {
+//     console.log("Could not connect to MongoDB");
+//     throw error;
+//   }
+// };
+
+Mongoose.connect("mongodb://beam-explorer-mongo:27017/explorer", mongooseOptions);
 
 const { host, port, server_url, env } = config;
 
