@@ -15,7 +15,6 @@ services:
       - '27017:27017'
   redis-service:
     image: redis:alpine
-    network_mode: host
   server:
     image: server
     container_name: server
