@@ -243,7 +243,7 @@ export const BeamController = async () => {
 
           const status = await sendExplorerNodeRequest("status"); //TODO: add routes to consts
           await updateBlocks(status);
-          await updateContracts(status);
+          // await updateContracts(status);
           await updateAssets(status);
 
           const formattedStatus = await getFormattedStatus(status);
