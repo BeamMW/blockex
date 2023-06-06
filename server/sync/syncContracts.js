@@ -39,17 +39,17 @@ const ownedAssetsSchema = new Mongoose.Schema(
   },
 );
 
-const versionsHistorySchema = new Mongoose.Schema(
-  {
-    version: String,
-    height: Number,
-  },
-  {
-    timestamps: false,
-    versionKey: false,
-    _id: false,
-  },
-);
+// const versionsHistorySchema = new Mongoose.Schema(
+//   {
+//     version: String,
+//     height: Number,
+//   },
+//   {
+//     timestamps: false,
+//     versionKey: false,
+//     _id: false,
+//   },
+// );
 
 const contractSchema = new Mongoose.Schema(
   {
@@ -72,11 +72,12 @@ const contractSchema = new Mongoose.Schema(
         type: ownedAssetsSchema,
       },
     ],
-    version_history: [
-      {
-        type: versionsHistorySchema,
-      },
-    ],
+    version_history: {
+      //[
+      // {
+      //   type: versionsHistorySchema,
+      // },
+    }, //],
     state: {},
     calls_count: Number,
     // calls: [
