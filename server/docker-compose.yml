@@ -11,8 +11,6 @@ services:
       - MONGO_PASSWORD
       - MONGO_DB_NAME
     restart: always
-    ports:
-      - '27017:27017'
   redis-service:
     image: redis:alpine
   server:
