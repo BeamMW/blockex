@@ -52,7 +52,7 @@ export const getContracts = async (ctx: ParameterizedContext) => {
     const { per_page, page } = ctx.request.query;
     //TODO: add calls count by height (lookup?)
     const contracts = await Contract.aggregate([
-      { $sort: { kind: -1, calls_count: -1 } },
+      { $sort: { calls_count: -1 } },
       { $skip: Number(per_page) * Number(page) },
       { $limit: Number(per_page) },
     ]);
