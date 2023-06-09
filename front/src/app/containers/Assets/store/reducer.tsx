@@ -18,6 +18,7 @@ const initialState: AssetsStateType = {
 
 const reducer = createReducer<AssetsStateType, Action>(initialState)
   .handleAction(actions.setAssetsData, (state, action) => produce(state, (nexState) => {
+    console.log(123, action)
     nexState.assetsData = action.payload;
   }))
 export { reducer as AssetsReducer };

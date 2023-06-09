@@ -70,12 +70,11 @@ export const getContracts = async (ctx: ParameterizedContext) => {
 };
 
 export const getAllAssets = async (ctx: ParameterizedContext) => {
-  const assets = await Assets.find({});
+  const assets = await Assets.aggregate([{ $unset: ["_id"] }]);
+
   ctx.ok({
     status: "success",
-    data: {
-      assets,
-    },
+    data: assets,
   });
 };
 
@@ -100,6 +99,7 @@ export const getAssets = async (ctx: ParameterizedContext) => {
       { $sort: { lock_height: -1 } },
       { $skip: Number(per_page) * Number(page) },
       { $limit: Number(per_page) },
+      { $unset: ["_id", "cid", "lock_height", "metadata", "owner", "value", "asset_history"] },
     ]);
     const count = await Assets.estimatedDocumentCount();
     ctx.ok({

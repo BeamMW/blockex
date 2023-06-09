@@ -192,7 +192,7 @@ const updateAssets = async (status: any) => {
   let lastBlock = await sendExplorerNodeRequest("blocks?height=" + status.height + "&n=1");
   for (const asset of lastBlock[0].assets) {
     const assetHistory = await sendExplorerNodeRequest("asset?id=" + asset.aid);
-    await Contract.findOneAndUpdate(
+    await Assets.findOneAndUpdate(
       { aid: asset.aid },
       {
         cid: asset.cid ? asset.cid.value : null,
@@ -202,6 +202,10 @@ const updateAssets = async (status: any) => {
         value: asset.value,
         asset_history: assetHistory["Asset history"],
       },
+      {
+        upsert: true,
+        new: true,
+      },
     );
   }
   console.log("Assets update ended");
@@ -210,7 +214,7 @@ const updateAssets = async (status: any) => {
 export const BeamController = async () => {
   const client = new net.Socket();
 
-  client.connect(10015, "host.docker.internal", () => {
+  client.connect(10005, "127.0.0.1", () => {
     const message =
       JSON.stringify({
         jsonrpc: "2.0",

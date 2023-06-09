@@ -4,15 +4,16 @@ import { css } from '@linaria/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Window, Button, StatusCards } from '@app/shared/components';
-import { selectBlocksData, selectContractsData, selectStatusData } from '../../store/selectors';
-import { ROUTES } from '@app/shared/constants';
+import { selectBlocksData } from '../../store/selectors';
+import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
+import { selectStatusData } from '@app/shared/store/selectors';
 import { timestampToDate } from '@core/appUtils';
 import { LoadBlocks, LoadContracts } from '@core/api';
 import { useSearchParams } from 'react-router-dom';
 
 import { Table, Search, Pagination, Menu } from 'semantic-ui-react';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
-import { setBlocksData, setContractsData } from '../../store/actions';
+import { setBlocksData } from '../../store/actions';
 
 const Content = styled.div`
   width: 100%;
@@ -50,33 +51,14 @@ const StylesMenuControl = css`
   width: 100%;
 `;
 
-const Blocks: React.FC = () => {
-  const TABS_CONFIG = [
-    {
-      name: 'blocks',
-      disabled: false,
-    },
-    {
-      name: 'contracts',
-      disabled: false,
-    },
-    {
-      name: 'dapps',
-      disabled: true,
-    },
-    {
-      name: 'assets',
-      disabled: false,
-    },
-    {
-      name: 'atomic swap offers',
-      disabled: true,
-    }
-  ];
+const StylesTableContent = css`
+  min-height: 500px;
+`;
 
+const Blocks: React.FC = () => {
   const blocksData = useSelector(selectBlocksData());
   const [currentDate, setNewDate] = useState(null);
-  const [activeMenuItem, setActiveMenuItem] = useState<string>(TABS_CONFIG[0].name);
+  const [activeMenuItem, setActiveMenuItem] = useState<string>(MENU_TABS_CONFIG[0].name);
   const onChange = (event, data) => setNewDate(data.value);
   const dispatch = useDispatch();
   const statusData = useSelector(selectStatusData());
@@ -102,9 +84,8 @@ const Blocks: React.FC = () => {
     await updateData(data.activePage);
   };
 
-  const handleMenuItemClick = (newTab: string) => {
-    setActiveMenuItem(newTab);
-    navigate(ROUTES.CONTRACTS.BASE);
+  const handleMenuItemClick = (route: string) => {
+    navigate(route);
   };
 
   const isActiveMenuItem = (name: string) => {
@@ -119,18 +100,17 @@ const Blocks: React.FC = () => {
       </Content>
       <div className={StylesMenuControl}>
         <Menu pointing secondary>
-          {TABS_CONFIG.map((tab, index) => 
+          {MENU_TABS_CONFIG.map((tab, index) => 
             (<Menu.Item key={index}
               name={tab.name}
               disabled={tab.disabled}
               active={isActiveMenuItem(tab.name)}
-              onClick={() => handleMenuItemClick(tab.name)}
+              onClick={() => handleMenuItemClick(tab.route)}
             />)
           )}
         </Menu>
       </div>
-      { blocksData.blocks ?
-      <>
+      { blocksData.blocks && <div className={StylesTableContent}>
         <div className={StylesOverTable}>
           <Search
             disabled={true}
@@ -174,7 +154,7 @@ const Blocks: React.FC = () => {
             </Table.Body>
           </Table>
         </div>
-      </> : <></> }
+      </div> }
     </Window>
   );
 };

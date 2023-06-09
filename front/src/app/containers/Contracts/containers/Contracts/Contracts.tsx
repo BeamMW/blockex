@@ -4,12 +4,11 @@ import { css } from '@linaria/core';
 import { Contract, ContractsData } from '@core/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
-import { Window, Button, StatusCards } from '@app/shared/components';
+import { Window, Button, StatusCards, TableComponent } from '@app/shared/components';
 import { selectContractsData } from '../../store/selectors';
-import { selectStatusData } from '@app/containers/Main/store/selectors';
+import { selectStatusData } from '@app/shared/store/selectors';
 // import { IconSend, IconReceive } from '@app/shared/icons';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
-import { selectSystemState, selectTransactions } from '@app/shared/store/selectors';
 // import { IconDeposit, IconConfirm } from '@app/shared/icons';
 import { timestampToDate } from '@core/appUtils';
 import { LoadBlocks, LoadContracts } from '@core/api';
@@ -74,8 +73,8 @@ const Contracts: React.FC = () => {
     
   };
 
-  const handleMenuItemClick = (newTab: string) => {
-    navigate(newTab);
+  const handleMenuItemClick = (route: string) => {
+    navigate(route);
   };
 
   const isActiveMenuItem = (name: string) => {

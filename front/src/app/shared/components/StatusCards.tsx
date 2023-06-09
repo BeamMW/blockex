@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectSystemState } from '../store/selectors';
 import { Card } from 'semantic-ui-react';
 import { Status } from '@core/types';
 import { css } from '@linaria/core';

@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
+import { useSelector } from 'react-redux';
 import { ContractData } from '@core/types';
 import { useNavigate, useLocation, useSearchParams, useParams } from 'react-router-dom';
 import { Window, AssetIcon, BackControl } from '@app/shared/components';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 import { LoadContract } from '@core/api';
 import { Table, Pagination, Segment } from 'semantic-ui-react';
+import { selectAssetById } from '@app/shared/store/selectors';
+import { fromGroths } from '@core/appUtils';
 
 const StylesOverTable = css`
   width: 100%;
@@ -102,13 +105,34 @@ const AssetTableStyles = css`
   }
 `;
 
-// str.includes(substr)
+const AssetItem = styled.a`
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  color: #4183c4;
+  text-decoration: none;
+
+  > .icon {
+    margin-left: 5px;
+  }
+
+  > .text {
+    font-weight: 600;
+  }
+`;
 
 const GenerateArgumentItem: React.FC<{item: {type: string, value: number}, itemKey: string}> = ({item, itemKey}) => {
+  const assetData = item.type === 'aid' ? useSelector(selectAssetById(item.value)) : null;
+
   return (<>
-    {item.type === 'aid' && <div>
-      {itemKey}: <AssetIcon asset_id={item.value}></AssetIcon> {item.value}
-    </div>}
+    {item.type === 'aid' && 
+    <>
+      {itemKey}: <AssetItem>
+        <AssetIcon className='icon' asset_id={item.value}></AssetIcon>
+        <span className='text'>{item.value === 0 ? 'BEAM' : assetData.metadata['N']}</span>
+        ({item.value})
+      </AssetItem>
+    </>}
     {item.type === 'amount' && <div>
       {itemKey}: {item.value}
     </div>}
@@ -116,6 +140,10 @@ const GenerateArgumentItem: React.FC<{item: {type: string, value: number}, itemK
 };
 
 const AssetsList: React.FC<{assets: {aid: number, value: number}[], isCallFunds?: boolean}> = ({assets, isCallFunds = false}) => {
+  const onAssetClicked = (aid: number) => {
+    window.open(`${ROUTES.ASSETS.ASSET.replace(':aid', ''+aid)}`, '_blank')
+  }
+
   return (<Table className={AssetTableStyles} collapsing>
             <Table.Header>
               <Table.Row>
@@ -126,13 +154,19 @@ const AssetsList: React.FC<{assets: {aid: number, value: number}[], isCallFunds?
 
             <Table.Body>
               {assets.map((asset, index) => {
+                const aid = isCallFunds ? asset[0].value : asset.aid;
+                const assetData = useSelector(selectAssetById(aid));
+
                 return <Table.Row key={index}>
                   <Table.Cell>
-                    <AssetIcon asset_id={isCallFunds ? asset[0].value : asset.aid}></AssetIcon>
-                    <span className='asset_id'>{isCallFunds ? asset[0].value : asset.aid}</span>
+                    <AssetItem onClick={() => onAssetClicked(aid)}>
+                      <AssetIcon className='icon' asset_id={aid}></AssetIcon>
+                      <span className='text'>{aid === 0 ? 'BEAM' : assetData.metadata['N']}</span>
+                      ({aid})
+                    </AssetItem>
                   </Table.Cell>
                   <Table.Cell>
-                    <span className='asset_value'>{isCallFunds ? asset[1].value : asset.value}</span>
+                    <span className='asset_value'>{fromGroths(isCallFunds ? asset[1].value : asset.value)}</span>
                   </Table.Cell>
                 </Table.Row>
               })}
@@ -155,15 +189,16 @@ const GeneratedTable = React.memo<{data: any}>(({data}) => {
       {data.map((item, index) => {
         //TODO: integrate arg item
         return <Table.Row key={index}>
-          {item.map((itemValue, itemValueIndex) => <Table.Cell key={itemValueIndex}>{
-            itemValue.type !== undefined ? itemValue.value : (
-              Array.isArray(itemValue) ? (
-                itemValue.map((itemValueTmp, tmpIndex)=>{
-                  return <GenerateArgumentItem key={tmpIndex} itemKey={itemValueTmp.type} item={itemValueTmp}/>
-                })
-              ) : itemValue
-            )
-          }</Table.Cell>)}
+          {item.map((itemValue, itemValueIndex) => 
+            <Table.Cell key={itemValueIndex}>
+              {itemValue.type !== undefined ? itemValue.value : (
+                Array.isArray(itemValue) ? (
+                  itemValue.map((itemValueTmp, tmpIndex)=>{
+                    return <GenerateArgumentItem key={tmpIndex} itemKey={itemValueTmp.type} item={itemValueTmp}/>
+                  })
+                ) : itemValue
+              )}
+            </Table.Cell>)}
         </Table.Row>
       })}
     </Table.Body>
@@ -176,7 +211,7 @@ const GeneratedUI: React.FC<{dataObj: any, margin: number}> = ({dataObj, margin}
       let child;
       if (typeof dataObj[key] === 'string' || typeof dataObj[key] === 'number') {
         child = <>
-          <span className='subtitle-inside'> {key}: </span>
+          <span> {key}: </span>
           <span>{dataObj[key]}</span>
         </>
       } else if (dataObj[key].type && dataObj[key].type === 'table') {
@@ -184,6 +219,8 @@ const GeneratedUI: React.FC<{dataObj: any, margin: number}> = ({dataObj, margin}
           <div className='subtitle-inside'> {key}: </div>
           <GeneratedTable data={dataObj[key].value}></GeneratedTable>
         </>
+      } else if (dataObj[key].type) {
+        child = <GenerateArgumentItem item={dataObj[key]} itemKey={key}></GenerateArgumentItem>
       } else {
         child = <>
           <div className='subtitle-inside'> {key}: </div>

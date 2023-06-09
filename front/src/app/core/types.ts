@@ -82,7 +82,18 @@ export type ButtonVariant = 'regular' | 'ghost' | 'ghostBordered' | 'block' | 'v
     aid: number,
     cid: string,
     lock_height: number,
-    metadata: string,
+    metadata: {
+      N?: string
+      NTHUN?: string,
+      NTH_RATIO?: string,
+      OPT_COLOR?: string,
+      OPT_FAVICON_URL?: string,
+      OPT_LOGO_URL?: string,
+      OPT_LONG_DESC?: string,
+      OPT_SHORT_DESC?: string,
+      SN?: string,
+      UN?: string,
+    },
     owner: string,
     value: number,
     asset_history: any
