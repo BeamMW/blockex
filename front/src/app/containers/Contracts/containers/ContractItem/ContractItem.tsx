@@ -7,7 +7,7 @@ import { useNavigate, useLocation, useSearchParams, useParams } from 'react-rout
 import { Window, AssetIcon, BackControl } from '@app/shared/components';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 import { LoadContract } from '@core/api';
-import { Table, Pagination, Segment } from 'semantic-ui-react';
+import { Table, Pagination, Segment, List } from 'semantic-ui-react';
 import { selectAssetById } from '@app/shared/store/selectors';
 import { fromGroths } from '@core/appUtils';
 
@@ -121,21 +121,44 @@ const AssetItem = styled.a`
   }
 `;
 
-const GenerateArgumentItem: React.FC<{item: {type: string, value: number}, itemKey: string}> = ({item, itemKey}) => {
+const StyledArgAsset = css`
+  display: inline-flex;
+  align-items: center;
+`;
+
+const StyledCidItem = css`
+  cursor: pointer;
+  color: #4183c4;
+  text-decoration: none;
+`;
+
+const GenerateArgumentItem: React.FC<{item: {type: string, value: any}, itemKey: string}> = ({item, itemKey}) => {
   const assetData = item.type === 'aid' ? useSelector(selectAssetById(item.value)) : null;
+  const onContractClicked = (cid: string) => {
+    window.open(`${ROUTES.CONTRACTS.CONTRACT.replace(':cid', cid)}`, '_blank');
+  }
+  const { cid } = useParams();
 
   return (<>
     {item.type === 'aid' && 
-    <>
-      {itemKey}: <AssetItem>
+    <span className={StyledArgAsset}>
+      <span>{itemKey}</span>: <AssetItem>
         <AssetIcon className='icon' asset_id={item.value}></AssetIcon>
         <span className='text'>{item.value === 0 ? 'BEAM' : assetData.metadata['N']}</span>
         ({item.value})
       </AssetItem>
-    </>}
+    </span>}
     {item.type === 'amount' && <div>
-      {itemKey}: {item.value}
+      {itemKey}: {fromGroths(item.value)}
     </div>}
+    {item.type === 'cid' && 
+    <>
+      {itemKey ? `${itemKey}: ` : ''}
+      <a onClick={() => onContractClicked(item.value)}
+          className={item.value !== cid ? StyledCidItem : ''} >
+        {item.value}
+      </a>
+    </>}
   </>);
 };
 
@@ -238,7 +261,7 @@ const CallRowValue: React.FC<{rowValue: any}> = ({rowValue}) => {
  return <>
     <Table.Row className='call-table-main-row'>
       <Table.Cell>{rowValue[0]}</Table.Cell>
-      <Table.Cell>{rowValue[1].type ? rowValue[1].value : '-'}</Table.Cell>
+      <Table.Cell>{rowValue[1].type ? <GenerateArgumentItem item={rowValue[1]} itemKey={''}></GenerateArgumentItem> : '-'}</Table.Cell>
       <Table.Cell>{rowValue[2] ? rowValue[2].value : '-'}</Table.Cell>
       <Table.Cell>{rowValue[3] ? rowValue[3] : '-'}</Table.Cell>
     </Table.Row>
@@ -248,14 +271,25 @@ const CallRowValue: React.FC<{rowValue: any}> = ({rowValue}) => {
             <div className='subtitle-inside'> ARGUMENTS: </div>
             {typeof rowValue[4] === 'string' ? 
               <span className='long-title'>{rowValue[4]}</span> :
-              Object.keys(rowValue[4]).map((key, keyIndex) => {
-              const argItem = rowValue[4][key];
-              if (argItem.type !== undefined) { 
-                return <GenerateArgumentItem item={argItem} itemKey={key} key={keyIndex}/>
-              } else if (typeof argItem === 'string') {
-                return <div key={keyIndex}>{key}: {argItem}</div>
-              }
-            })}
+              <Segment>
+                <List divided relaxed>
+                  {
+                    Object.keys(rowValue[4]).map((key, keyIndex) => {
+                      const argItem = rowValue[4][key];
+                      if (argItem.type !== undefined) { 
+                        return <List.Item key={keyIndex}>
+                          <GenerateArgumentItem item={argItem} itemKey={key}/>
+                        </List.Item>
+                      } else if (typeof argItem === 'string') {
+                        return <List.Item key={keyIndex}>
+                          <div key={keyIndex}>{key}: {argItem}</div>
+                        </List.Item>
+                      }})
+                  }
+                </List>
+              </Segment>
+              
+            }
           </span> : <></>}
         {rowValue[5] ? <span>
             <div className='subtitle-inside'> FUNDS: </div>
