@@ -10,6 +10,13 @@ export const ROUTES = {
   ASSETS: {
     BASE: '/assets',
     ASSET: '/asset/:aid',
+  },
+  DAPPS: {
+    BASE: '/dapps',
+    DAPP: '/dapp/:id',
+  },
+  SWAPS: {
+    BASE: '/swaps',
   }
 };
 

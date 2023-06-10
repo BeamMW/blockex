@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:4000/api/v1";
+const API_URL = "https://explorer-api.beam.mw/dappnet/api/v1";
 
 async function callApi(route: string) {
   //status check

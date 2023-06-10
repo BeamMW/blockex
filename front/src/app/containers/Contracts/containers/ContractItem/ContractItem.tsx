@@ -132,6 +132,11 @@ const StyledCidItem = css`
   text-decoration: none;
 `;
 
+const StylesTableContent = css`
+  min-height: 900px;
+  width: 100%;
+`;
+
 const GenerateArgumentItem: React.FC<{item: {type: string, value: any}, itemKey: string}> = ({item, itemKey}) => {
   const assetData = item.type === 'aid' ? useSelector(selectAssetById(item.value)) : null;
   const onContractClicked = (cid: string) => {
@@ -381,7 +386,7 @@ const ContractItem: React.FC = () => {
             </Segment>
           </>
         }
-        { contractData.calls && <Segment>
+        { contractData.calls && <Segment className={StylesTableContent}>
           <div className='subtitle'> CALLS ({contractData.calls_count}): </div>
           <div className={StylesOverTable}>
             <Pagination defaultActivePage={defaultPage ? defaultPage : 1} className="pagination"

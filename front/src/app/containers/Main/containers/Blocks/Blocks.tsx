@@ -52,7 +52,8 @@ const StylesMenuControl = css`
 `;
 
 const StylesTableContent = css`
-  min-height: 500px;
+  min-height: 900px;
+  width: 100%;
 `;
 
 const Blocks: React.FC = () => {
