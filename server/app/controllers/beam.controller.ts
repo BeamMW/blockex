@@ -4,7 +4,7 @@ import { Blocks, Contract, Call, Status, Assets } from "../models";
 
 const net = require("net");
 
-const cron = require("node-cron");
+const Queue = require("bull");
 
 const BLOCKS_STEP_SYNC = 1000;
 const HEIGHT_STEP = 43800;
@@ -13,6 +13,9 @@ const MONTHS_IN_YEAR = 12;
 const FIRST_YEAR_VALUE = 20;
 const REST_YEARS_VALUE = 10;
 const BLOCKS_STEP = 100;
+const blocksQueue = new Queue("update Blocks queue");
+const contractsQueue = new Queue("update Contracts queue");
+const assetsQueue = new Queue("update Assets queue");
 
 const improoveCalls = (calls: any, cid: string, contractId: any) => {
   calls.forEach((doc: any, i: number) => {
@@ -93,18 +96,18 @@ const getFormattedStatus = async (status: any) => {
   };
 };
 
-const updateBlocks = async (status: any) => {
+blocksQueue.process(async function (job: any, done: any) {
   let fromHeight = 1;
+  console.log("Blocks sync started!");
+  const start = Date.now();
 
-  const heightLoadUntil = status.height;
+  const heightLoadUntil = job.data.status.height;
   const lastLoadedInDbBlock = await Blocks.findOne().sort("-height");
   if (lastLoadedInDbBlock) {
     fromHeight = lastLoadedInDbBlock.height + 1;
   }
 
   while (fromHeight <= heightLoadUntil) {
-    const start = Date.now();
-
     let blocks = await sendExplorerNodeRequest(
       `blocks?height=${fromHeight.toString()}&n=${BLOCKS_STEP_SYNC.toString()}`,
     );
@@ -123,24 +126,25 @@ const updateBlocks = async (status: any) => {
       },
     );
 
-    const end = Date.now();
-    console.log(`Last loaded height: ${fromHeight + BLOCKS_STEP_SYNC - 1} --- in ${end - start} ms`);
+    console.log(`Last loaded height: ${fromHeight + BLOCKS_STEP_SYNC - 1}`);
 
     fromHeight += BLOCKS_STEP_SYNC;
   }
 
-  if (fromHeight === heightLoadUntil) {
-    console.log("Blocks sync ended!");
-  }
-};
+  const end = Date.now();
+  console.log(`Blocks sync ended!  --- in ${end - start} ms`);
+  done();
+});
 
-const updateContracts = async (status: any) => {
+contractsQueue.process(async function (job: any, done: any) {
   console.log("Contracts update started!");
+  const start = Date.now();
+
   let contracts = await sendExplorerNodeRequest("contracts");
   contracts.shift();
 
   for (const contract of contracts) {
-    const toHeight = status.height;
+    const toHeight = job.data.status.height;
     const cid = contract[0].value;
 
     const contractInDb = await Contract.findOne({ cid });
@@ -184,12 +188,15 @@ const updateContracts = async (status: any) => {
     }
     //TODO: bot notification with new contract data
   }
-  console.log("Contracts update process ended!");
-};
+  const end = Date.now();
+  console.log(`Contracts update process ended! --- in ${end - start} ms`);
+  done();
+});
 
-const updateAssets = async (status: any) => {
+assetsQueue.process(async function (job: any, done: any) {
   console.log("Assets update started");
-  let lastBlock = await sendExplorerNodeRequest("blocks?height=" + status.height + "&n=1");
+  const start = Date.now();
+  let lastBlock = await sendExplorerNodeRequest("blocks?height=" + job.data.status.height + "&n=1");
   for (const asset of lastBlock[0].assets) {
     const assetHistory = await sendExplorerNodeRequest("asset?id=" + asset.aid);
     await Assets.findOneAndUpdate(
@@ -208,8 +215,10 @@ const updateAssets = async (status: any) => {
       },
     );
   }
-  console.log("Assets update ended");
-};
+  const end = Date.now();
+  console.log(`Assets update process ended! --- in ${end - start} ms`);
+  done();
+});
 
 export const BeamController = async () => {
   const client = new net.Socket();
@@ -245,12 +254,13 @@ export const BeamController = async () => {
         var res = JSON.parse(result);
         if (res["id"] === "ev_system_state") {
           // state updated
-          console.log(res["result"]["current_height"]);
+          console.log(`New block at - ${res["result"]["current_height"]}!`);
 
           const status = await sendExplorerNodeRequest("status"); //TODO: add routes to consts
-          await updateBlocks(status);
-          await updateAssets(status);
 
+          blocksQueue.add({ status });
+          assetsQueue.add({ status });
+          contractsQueue.add({ status });
           const formattedStatus = await getFormattedStatus(status);
           await redisStore.set("status", JSON.stringify(formattedStatus));
         }
@@ -260,11 +270,6 @@ export const BeamController = async () => {
 
       acc = "";
     }
-  });
-
-  cron.schedule("* * * * *", async () => {
-    const status = await sendExplorerNodeRequest("status");
-    await updateContracts(status);
   });
 
   client.on("close", () => {
