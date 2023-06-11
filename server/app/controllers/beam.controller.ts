@@ -14,9 +14,9 @@ const FIRST_YEAR_VALUE = 20;
 const REST_YEARS_VALUE = 10;
 const BLOCKS_STEP = 100;
 ///redis://redis-service:6379
-const blocksQueue = new Queue("update Blocks queue");
-const contractsQueue = new Queue("update Contracts queue");
-const assetsQueue = new Queue("update Assets queue");
+const blocksQueue = new Queue("update Blocks queue", "redis://redis-service:6379");
+const contractsQueue = new Queue("update Contracts queue", "redis://redis-service:6379");
+const assetsQueue = new Queue("update Assets queue", "redis://redis-service:6379");
 
 const improoveCalls = (calls: any, cid: string, contractId: any) => {
   calls.forEach((doc: any, i: number) => {
