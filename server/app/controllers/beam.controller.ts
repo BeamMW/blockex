@@ -13,9 +13,10 @@ const MONTHS_IN_YEAR = 12;
 const FIRST_YEAR_VALUE = 20;
 const REST_YEARS_VALUE = 10;
 const BLOCKS_STEP = 100;
-const blocksQueue = new Queue("update Blocks queue", "redis://redis-service:6379");
-const contractsQueue = new Queue("update Contracts queue", "redis://redis-service:6379");
-const assetsQueue = new Queue("update Assets queue", "redis://redis-service:6379");
+///redis://redis-service:6379
+const blocksQueue = new Queue("update Blocks queue");
+const contractsQueue = new Queue("update Contracts queue");
+const assetsQueue = new Queue("update Assets queue");
 
 const improoveCalls = (calls: any, cid: string, contractId: any) => {
   calls.forEach((doc: any, i: number) => {
@@ -96,7 +97,7 @@ const getFormattedStatus = async (status: any) => {
   };
 };
 
-blocksQueue.process(async function (job: any, done: any) {
+blocksQueue.process("blocksTask", async function (job: any, done: any) {
   let fromHeight = 1;
   console.log("Blocks sync started!");
   const start = Date.now();
@@ -136,7 +137,7 @@ blocksQueue.process(async function (job: any, done: any) {
   done();
 });
 
-contractsQueue.process(async function (job: any, done: any) {
+contractsQueue.process("contractsTask", async function (job: any, done: any) {
   console.log("Contracts update started!");
   const start = Date.now();
 
@@ -159,6 +160,7 @@ contractsQueue.process(async function (job: any, done: any) {
       newCalls.shift();
 
       if (newCalls.length > 0) {
+        /// no _id
         const improvedNewCalls = improoveCalls(newCalls, cid, contractInDb._id);
         await Call.insertMany(improvedNewCalls);
         console.log(`Contract calls inserted between ${lastLoadedHeight} - ${toHeight}. 
@@ -193,7 +195,7 @@ contractsQueue.process(async function (job: any, done: any) {
   done();
 });
 
-assetsQueue.process(async function (job: any, done: any) {
+assetsQueue.process("assetsTask", async function (job: any, done: any) {
   console.log("Assets update started");
   const start = Date.now();
   let lastBlock = await sendExplorerNodeRequest("blocks?height=" + job.data.status.height + "&n=1");
@@ -258,9 +260,14 @@ export const BeamController = async () => {
 
           const status = await sendExplorerNodeRequest("status"); //TODO: add routes to consts
 
-          blocksQueue.add({ status });
-          assetsQueue.add({ status });
-          contractsQueue.add({ status });
+          const blocksJob = blocksQueue.add("blocksTask", { status });
+          const assetsJob = assetsQueue.add("assetsTask", { status });
+          const contractsJob = contractsQueue.add("contractsTask", { status });
+
+          blocksQueue.process();
+          assetsQueue.process();
+          contractsQueue.process();
+
           const formattedStatus = await getFormattedStatus(status);
           await redisStore.set("status", JSON.stringify(formattedStatus));
         }
