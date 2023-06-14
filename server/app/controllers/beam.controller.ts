@@ -30,7 +30,6 @@ const mainQueue = new Queue("Main", {
     port: 6379,
   },
 });
-const mainQueueEvents = new QueueEvents("Main");
 
 const improoveCalls = (calls: any, cid: string) => {
   calls.forEach((doc: any, i: number) => {
