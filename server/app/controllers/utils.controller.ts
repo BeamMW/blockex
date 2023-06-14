@@ -16,6 +16,14 @@ export const getAliveHandler = async (ctx: ParameterizedContext) => {
   });
 };
 
+export const getBase = async (ctx: ParameterizedContext) => {
+  if (ctx.ws) {
+    const ws: any = await ctx.ws();
+    const status = await redisStore.get("status");
+    return ws.send(JSON.stringify({ status: JSON.parse(status) }));
+  }
+};
+
 export const getStatus = async (ctx: ParameterizedContext) => {
   const status = await redisStore.get("status");
 

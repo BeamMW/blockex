@@ -56,14 +56,14 @@ export function remoteEventChannel() {
 //   }
 // }
 
-function* sharedSaga() {
-  const allAssets = (yield call(LoadAllAssets)) as Asset[];
-  yield put(actions.setAllAssetsData(allAssets));
-
+function* sharedSaga() {  
   const statusData = (yield call(LoadStatus)) as Status;
   yield put(actions.setStatusData(statusData));
 
-  yield put(actions.setIsLoaded(true))
+  const allAssets = (yield call(LoadAllAssets)) as Asset[];
+  yield put(actions.setAllAssetsData(allAssets));
+
+  yield put(actions.setIsLoaded(true));
 
   const remoteChannel = yield call(remoteEventChannel);
   // store.dispatch(mainActions.loadAppParams.request(null));

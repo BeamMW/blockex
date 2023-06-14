@@ -1,4 +1,4 @@
-import { Queue, Worker, Job } from "bullmq";
+import { Queue, Worker, Job, QueueEvents } from "bullmq";
 
 import { redisStore } from "../db/redis";
 import { sendExplorerNodeRequest } from "../shared/helpers/axios";
@@ -16,18 +16,21 @@ const MONTHS_IN_YEAR = 12;
 const FIRST_YEAR_VALUE = 20;
 const REST_YEARS_VALUE = 10;
 const BLOCKS_STEP = 100;
+//redis-service
 const contractsQueue = new Queue("Contracts", {
   connection: {
     host: "redis-service",
     port: 6379,
   },
 });
+
 const mainQueue = new Queue("Main", {
   connection: {
     host: "redis-service",
     port: 6379,
   },
 });
+const mainQueueEvents = new QueueEvents("Main");
 
 const improoveCalls = (calls: any, cid: string) => {
   calls.forEach((doc: any, i: number) => {
@@ -149,49 +152,54 @@ const blocksUpdate = async (status: any) => {
 const worker = new Worker(
   "Contracts",
   async (job: Job) => {
-    const start = Date.now();
-    const toHeight = job.data.status.height;
-    const cid = job.data.contract[0].value;
-    const lastLoadedCall = await Call.findOne({ cid }).sort("-height");
-    const lastLoadedHeight = lastLoadedCall ? lastLoadedCall.height + 1 : 1;
+    //TODO: make sure with async is finished
+    return new Promise(async (resolve, reject) => {
+      const start = Date.now();
+      const toHeight = job.data.status.height;
+      const cid = job.data.contract[0].value;
+      const lastLoadedCall = await Call.findOne({ cid }).sort("-height");
+      const lastLoadedHeight = lastLoadedCall ? lastLoadedCall.height + 1 : 1;
 
-    if (lastLoadedHeight < toHeight) {
-      const contractData = await sendExplorerNodeRequest(
-        `contract?hMax=${toHeight}&hMin=${lastLoadedHeight}&id=${cid}`,
-      );
-      const newCalls = contractData["Calls history"].value;
-      newCalls.shift();
+      if (lastLoadedHeight < toHeight) {
+        const contractData = await sendExplorerNodeRequest(
+          `contract?hMax=${toHeight}&hMin=${lastLoadedHeight}&id=${cid}`,
+        );
+        const newCalls = contractData["Calls history"].value;
+        newCalls.shift();
 
-      if (newCalls.length > 0) {
-        const improvedNewCalls = improoveCalls(newCalls, cid);
-        await Call.insertMany(improvedNewCalls);
-        console.log(`Contract calls inserted between ${lastLoadedHeight} - ${toHeight}. 
-          Added ${improvedNewCalls.length}. CID: ${cid}`);
+        if (newCalls.length > 0) {
+          const improvedNewCalls = improoveCalls(newCalls, cid);
+          await Call.insertMany(improvedNewCalls);
+          console.log(`Contract calls inserted between ${lastLoadedHeight} - ${toHeight}. 
+            Added ${improvedNewCalls.length}. CID: ${cid}`);
+        }
+
+        const lockedFunds = formatLockedFunds(contractData["Locked Funds"].value);
+        const ownedAssets = formatOwnedAssets(contractData["Owned assets"].value);
+        const versionHistory = formatVersionsHistory(contractData["Version History"].value);
+        const contractDataFormatted = {
+          cid,
+          locked_funds: lockedFunds,
+          owned_assets: ownedAssets,
+          version_history: versionHistory,
+          kind: contractData.kind,
+          height: job.data.contract[2],
+          state: contractData["State"],
+        };
+
+        await Contract.findOneAndUpdate({ cid }, contractDataFormatted, {
+          $inc: {
+            calls_count: newCalls.length,
+          },
+          upsert: true,
+          new: true,
+        });
       }
 
-      const lockedFunds = formatLockedFunds(contractData["Locked Funds"].value);
-      const ownedAssets = formatOwnedAssets(contractData["Owned assets"].value);
-      const versionHistory = formatVersionsHistory(contractData["Version History"].value);
-      const contractDataFormatted = {
-        cid,
-        locked_funds: lockedFunds,
-        owned_assets: ownedAssets,
-        version_history: versionHistory,
-        kind: contractData.kind,
-        height: job.data.contract[2],
-        state: contractData["State"],
-      };
-
-      await Contract.findOneAndUpdate({ cid }, contractDataFormatted, {
-        $inc: {
-          calls_count: newCalls.length,
-        },
-        upsert: true,
-        new: true,
-      });
-    }
-    const end = Date.now();
-    console.log(`Contracts update process ended! --- in ${end - start} ms. CID: ${cid}`);
+      resolve(true);
+      const end = Date.now();
+      console.log(`Contracts update process ended! --- in ${end - start} ms. CID: ${cid}`);
+    });
   },
   {
     connection: {
@@ -204,8 +212,8 @@ const worker = new Worker(
 const mainWorker = new Worker(
   "Main",
   async (job: Job) => {
-    blocksUpdate(job.data.status);
     assetsUpdate(job.data.status);
+    return blocksUpdate(job.data.status);
   },
   {
     connection: {
@@ -219,10 +227,14 @@ const contractsUpdate = async (status: any) => {
   console.log("Contracts update started!");
   let contracts = await sendExplorerNodeRequest("contracts");
   contracts.shift();
+  contracts = contracts.map((item: any) => {
+    return {
+      name: "Contract",
+      data: { contract: item, status },
+    };
+  });
 
-  for (const contract of contracts) {
-    contractsQueue.add("Contract", { contract, status });
-  }
+  contractsQueue.addBulk(contracts);
   //TODO: bot notification with new contract data
 };
 
@@ -252,7 +264,7 @@ const assetsUpdate = async (status: any) => {
   console.log(`Assets update process ended! --- in ${end - start} ms`);
 };
 
-export const BeamController = async () => {
+export const BeamController = async (wsServer: any) => {
   const client = new net.Socket();
 
   client.connect(10015, "host.docker.internal", () => {
@@ -295,6 +307,15 @@ export const BeamController = async () => {
 
           const formattedStatus = await getFormattedStatus(status);
           await redisStore.set("status", JSON.stringify(formattedStatus));
+
+          mainWorker.on("completed", (job: Job) => {
+            mainWorker.removeAllListeners();
+            if (wsServer.clients) {
+              wsServer.clients.forEach((client: any) => {
+                client.send(JSON.stringify({ status: formattedStatus }));
+              });
+            }
+          });
         }
       } catch (e) {
         console.log(e);

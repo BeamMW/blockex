@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { Window, Button, StatusCards, TableComponent } from '@app/shared/components';
 import { selectContractsData } from '../../store/selectors';
-import { selectStatusData } from '@app/shared/store/selectors';
 // import { IconSend, IconReceive } from '@app/shared/icons';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 // import { IconDeposit, IconConfirm } from '@app/shared/icons';
@@ -62,10 +61,10 @@ const Contracts: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState(MENU_TABS_CONFIG[1].name);
   const onChange = (event, data) => setNewDate(data.value);
   const dispatch = useDispatch();
-  const statusData = useSelector(selectStatusData());
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultPage = searchParams.get("page");
+  const [activePage, setActivePage] = useState<number>(Number(defaultPage));
   const contractsData = useSelector(selectContractsData());
   const navigate = useNavigate();
 
@@ -93,7 +92,8 @@ const Contracts: React.FC = () => {
 
   const paginationOnChange = async (e, data) => {
     setSearchParams({["page"]: data.activePage});
-    await updateData(data.activePage);
+    setActivePage(activePage)
+    updateData(data.activePage);
   };
 
   const contractItemClicked = useCallback((cid: string) => {
@@ -103,7 +103,7 @@ const Contracts: React.FC = () => {
   return (
     <Window>
       <Content>
-        <StatusCards statusData={statusData}></StatusCards>
+        <StatusCards onUpdate={()=>updateData(activePage ? activePage : 1)}></StatusCards>
       </Content>
       <div className={StylesMenuControl}>
         <Menu pointing secondary>

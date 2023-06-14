@@ -4,7 +4,6 @@ import * as Koa from "koa";
 import { koaSwagger } from "koa2-swagger-ui";
 import Mongoose from "mongoose";
 // import * as Sentry from "@sentry/node";
-// import * as Router from "koa-router";
 
 import config from "./config";
 import middlewares from "./middlewares";
@@ -12,26 +11,18 @@ import router from "./routes";
 import { ENVIRONMENT } from "./shared/constants";
 import { BeamController } from "./controllers/beam.controller";
 
-const mongooseOptions = {
-  // useCreateIndex: true,
-  // useNewUrlParser: true,
-};
-// Connect to the MongoDB database
-// const connect = async () => {
-//   try {
-//     await Mongoose.connect("mongodb://beam-explorer-mongo:27017/explorer", mongooseOptions);
-//     console.log("Connected to MongoDB");
-//   } catch (error) {
-//     console.log("Could not connect to MongoDB");
-//     throw error;
-//   }
-// };
+const websocket = require("koa-easy-ws");
 
-Mongoose.connect("mongodb://beam-explorer-mongo:27017/explorer", mongooseOptions);
+Mongoose.connect("mongodb://beam-explorer-mongo:27017/explorer");
 
 const { host, port, server_url, env } = config;
 
 const app: Koa = new Koa();
+
+const websocketMiddleware = websocket();
+const websocketServer = websocketMiddleware.server;
+
+app.use(websocketMiddleware);
 
 app.use(middlewares());
 
@@ -50,7 +41,7 @@ app.use(
 );
 
 // Application error logging.
-app.on("error", (err, ctx) => {
+app.on("error", (err: any, ctx: any) => {
   console.error(err);
 });
 
@@ -60,7 +51,7 @@ server.listen(port, host, () => {
   console.log(`listening on http://${host}:${port}`);
 });
 
-BeamController();
+BeamController(websocketServer);
 
 export default {
   app,

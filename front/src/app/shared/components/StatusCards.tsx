@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Card } from 'semantic-ui-react';
 import { Status } from '@core/types';
 import { css } from '@linaria/core';
 import { timestampToDate } from '@core/appUtils';
+import useWebSocket from 'react-use-websocket';
+
+const WS_URL = 'wss://explorer-api.beam.mw/api/v1/ws';
 
 interface CardProps {
-  statusData: Status
+  onUpdate: () => void;
 }
 
 const StylesStatusCard = css`
@@ -57,47 +60,70 @@ const StylesStatusCard = css`
 `;
 
 const StatusCards: React.FC<CardProps> = ({
-  statusData,
+  onUpdate,
   ...rest
 }) => {
+
+  const {
+    lastMessage,
+  } = useWebSocket(WS_URL, {
+    onOpen: () => console.log('opened'),
+    //Will attempt to reconnect on all close events, such as server shutting down
+    shouldReconnect: (closeEvent) => true,
+  });
+  const [status, setStatus] = useState<Status>(null);
+
+  useEffect(() => {
+    if (lastMessage !== null) {
+      
+      const messageData = JSON.parse(lastMessage.data);
+
+      if (messageData.status) {
+        setStatus(messageData.status);
+        if (status) {
+          onUpdate();
+        }
+      }
+    }
+  }, [lastMessage]);
 
   return (
     <Card.Group>
       <Card className={StylesStatusCard}>
-        {statusData.height > 0 && <Card.Content className='card-content'>
+        {status && <Card.Content className='card-content'>
           <div className='line'>
             <div className='subline'>
               <div className='card-header'>BLOCKCHAIN HEIGHT</div>
-              <div className='card-text'>{statusData.height.toLocaleString()}</div>
+              <div className='card-text'>{status.height.toLocaleString()}</div>
             </div>
             <div className='subline'>
               <div className='card-header'>LATEST BLOCK</div>
-              <div className='card-text'>{timestampToDate(statusData.timestamp)}</div>
+              <div className='card-text'>{timestampToDate(status.timestamp)}</div>
             </div>
           </div>
           <div className='line bottom'>
             <div className='subline'>
               <div className='card-header'>HASHRATE</div>
-              <div className='card-text'>{(statusData.difficulty / 60).toLocaleString(undefined, {maximumFractionDigits:2})} Sol/s</div>
+              <div className='card-text'>{(status.difficulty / 60).toLocaleString(undefined, {maximumFractionDigits:2})} Sol/s</div>
             </div>
             <div className='subline'>
               <div className='card-header'>LATEST BLOCK DIFFICULTY</div>
-              <div className='card-text'>{statusData.difficulty.toLocaleString()}</div>
+              <div className='card-text'>{status.difficulty.toLocaleString()}</div>
             </div>
           </div>
         </Card.Content>}
       </Card>
 
       <Card className={StylesStatusCard}>
-        {statusData.height > 0 && <Card.Content className='card-content'>
+        {status && <Card.Content className='card-content'>
           <div className='line'>
             <div className='subline'>
               <div className='card-header'>TOTAL EMISSION</div>
-              <div className='card-text'>{statusData.total_coins_emission.toLocaleString()} BEAM</div>
+              <div className='card-text'>{status.total_coins_emission.toLocaleString()} BEAM</div>
             </div>
             <div className='subline'>
               <div className='card-header'>NEXT TREASURY EMISSION</div>
-              <div className='card-text'>{statusData.next_treasury_coins_amount.toLocaleString()} BEAM</div>
+              <div className='card-text'>{status.next_treasury_coins_amount.toLocaleString()} BEAM</div>
             </div>
           </div>
           <div className='line bottom'>
@@ -105,24 +131,24 @@ const StatusCards: React.FC<CardProps> = ({
             </div>
             <div className='subline'>
               <div className='card-header'>NEXT TREASURY EMISSION (block height)</div>
-              <div className='card-text'>{statusData.next_treasury_emission_height.toLocaleString()}</div>
+              <div className='card-text'>{status.next_treasury_emission_height.toLocaleString()}</div>
             </div>
           </div>
         </Card.Content>}
       </Card>
 
       <Card className={StylesStatusCard}>
-        {statusData.height > 0 && <Card.Content className='card-content'>
+        {status && <Card.Content className='card-content'>
           <div className='line'>
             <div className='subline'>
               <div className='card-header'>TOTAL COINS IN CIRCULATION</div>
               <div className='card-text'>
-                {(statusData.coins_in_circulation_mined + statusData.coins_in_circulation_treasury).toLocaleString()} BEAM
+                {(status.coins_in_circulation_mined + status.coins_in_circulation_treasury).toLocaleString()} BEAM
               </div>
             </div>
             <div className='subline'>
               <div className='card-header'>COINS IN CIRCULATION (mined)</div>
-              <div className='card-text'>{statusData.coins_in_circulation_mined.toLocaleString()} BEAM</div>
+              <div className='card-text'>{status.coins_in_circulation_mined.toLocaleString()} BEAM</div>
             </div>
           </div>
           <div className='line bottom'>
@@ -130,14 +156,14 @@ const StatusCards: React.FC<CardProps> = ({
             </div>
             <div className='subline'>
               <div className='card-header'>COINS IN CIRCULATION (treasury)</div>
-              <div className='card-text'>{statusData.coins_in_circulation_treasury.toLocaleString()} BEAM</div>
+              <div className='card-text'>{status.coins_in_circulation_treasury.toLocaleString()} BEAM</div>
             </div>
           </div>
         </Card.Content>}
       </Card>
 
       <Card className={StylesStatusCard}>
-        {statusData.height > 0 && <></>}
+        {status && <></>}
       </Card>
     </Card.Group>
   )

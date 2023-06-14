@@ -5496,6 +5496,13 @@ koa-convert@^2.0.0:
     co "^4.6.0"
     koa-compose "^4.1.0"
 
+koa-easy-ws@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/koa-easy-ws/-/koa-easy-ws-2.1.0.tgz#31e1ee1072fd1a72ffdc59706a0e54bc023e20ee"
+  integrity sha512-SF6RHIuHttkt9RdACWPRFlSOHPcVS87otBfChLx83vmB1en8uODmE5G1thuKd0qUPRZU8FvFHJXWIxf7ib9J1w==
+  dependencies:
+    debug "^4.1.1"
+
 koa-helmet@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/koa-helmet/-/koa-helmet-6.1.0.tgz#5ace72266b4b86c21c7a435ffcdaf3999e2d3a6d"
@@ -5574,16 +5581,6 @@ koa-router@^12.0.0:
     koa-compose "^4.1.0"
     methods "^1.1.2"
     path-to-regexp "^6.2.1"
-
-koa-websocket@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/koa-websocket/-/koa-websocket-7.0.0.tgz#29e77ccebf8621f00bf8db988275561645187ad3"
-  integrity sha512-MsHUFKqA4+j+0dpPKWtsvZfnpQ1NcgF+AaTZQZ4B3Xj/cWK31qqmKx9HnA5Gw1LV2aIDzqwy0IDBsZYRurTUAg==
-  dependencies:
-    co "^4.6.0"
-    debug "^4.3.4"
-    koa-compose "^4.1.0"
-    ws "^8.5.0"
 
 koa2-cors@^2.0.6:
   version "2.0.6"
@@ -7864,7 +7861,7 @@ ws@^7.0.0:
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.9.tgz#54fa7db29f4c7cec68b1ddd3a89de099942bb591"
   integrity sha512-F+P9Jil7UiSKSkppIiD94dN07AwvFixvLIj1Og1Rl9GGMuNipJnV9JzjD6XuqmAeiswGvUmNLjr5cFuXwNS77Q==
 
-ws@^8.11.0, ws@^8.5.0:
+ws@^8.11.0:
   version "8.13.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.13.0.tgz#9a9fb92f93cf41512a0735c8f4dd09b8a1211cd0"
   integrity sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==

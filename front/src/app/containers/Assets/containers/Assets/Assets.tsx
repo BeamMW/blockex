@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { Window, Button, StatusCards, AssetIcon } from '@app/shared/components';
 import { selectAssetsData } from '../../store/selectors';
-import { selectAllAssets, selectStatusData, selectIsLoaded } from '@app/shared/store/selectors';
+import { selectAllAssets, selectIsLoaded } from '@app/shared/store/selectors';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 import { Table, Search, Pagination, Menu, Card } from 'semantic-ui-react';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
@@ -72,10 +72,10 @@ const Assets: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState(MENU_TABS_CONFIG[3].name);
   const onChange = (event, data) => setNewDate(data.value);
   const dispatch = useDispatch();
-  const statusData = useSelector(selectStatusData());
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultPage = searchParams.get("page");
+  const [activePage, setActivePage] = useState<number>(Number(defaultPage));
   const assetsData = useSelector(selectAssetsData());
   const allAssets = useSelector(selectAllAssets());
   const navigate = useNavigate();
@@ -115,7 +115,7 @@ const Assets: React.FC = () => {
   return (
     <Window>
       <Content>
-        <StatusCards statusData={statusData}></StatusCards>
+        <StatusCards onUpdate={()=>updateData(activePage ? activePage : 1)}></StatusCards>
       </Content>
       <div className={StylesMenuControl}>
         <Menu pointing secondary>

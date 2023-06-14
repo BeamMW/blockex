@@ -6,7 +6,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Window, Button, StatusCards } from '@app/shared/components';
 import { selectBlocksData } from '../../store/selectors';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
-import { selectStatusData } from '@app/shared/store/selectors';
 import { timestampToDate } from '@core/appUtils';
 import { LoadBlocks, LoadContracts } from '@core/api';
 import { useSearchParams } from 'react-router-dom';
@@ -62,10 +61,10 @@ const Blocks: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState<string>(MENU_TABS_CONFIG[0].name);
   const onChange = (event, data) => setNewDate(data.value);
   const dispatch = useDispatch();
-  const statusData = useSelector(selectStatusData());
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultPage = searchParams.get("page");
   const navigate = useNavigate();
+  const [activePage, setActivePage] = useState<number>(Number(defaultPage));
 
   const handleSearchChange = async () => {
 
@@ -82,7 +81,8 @@ const Blocks: React.FC = () => {
 
   const paginationOnChange = async (e, data) => {
     setSearchParams({["page"]: data.activePage});
-    await updateData(data.activePage);
+    setActivePage(data.activePage);
+    updateData(data.activePage);
   };
 
   const handleMenuItemClick = (route: string) => {
@@ -97,7 +97,7 @@ const Blocks: React.FC = () => {
   return (
     <Window>
       <Content>
-        <StatusCards statusData={statusData}/>
+        <StatusCards onUpdate={()=>updateData(activePage ? activePage : 1)}/>
       </Content>
       <div className={StylesMenuControl}>
         <Menu pointing secondary>
