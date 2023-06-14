@@ -6,7 +6,7 @@ import { css } from '@linaria/core';
 import { timestampToDate } from '@core/appUtils';
 import useWebSocket from 'react-use-websocket';
 
-const WS_URL = 'wss://explorer-api.beam.mw/api/v1/ws';
+const WS_URL = 'wss://explorer-api.beam.mw/dappnet/ws/';
 
 interface CardProps {
   onUpdate: () => void;
