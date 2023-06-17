@@ -202,6 +202,7 @@ const worker = new Worker(
     });
   },
   {
+    concurrency: 50,
     connection: {
       host: config.redis_url,
       port: config.redis_port,
