@@ -9,7 +9,7 @@ import { ToastContainer } from 'react-toastify';
 
 import { ROUTES } from '@app/shared/constants';
 import {
-  Blocks, Contracts, ContractItem, Assets
+  Blocks, Contracts, ContractItem, Assets, BlockItem,
 } from '@app/containers';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
@@ -23,6 +23,10 @@ const routes = () => [
   {
     path: ROUTES.MAIN.BASE,
     element: <Blocks />,
+  },
+  {
+    path: ROUTES.MAIN.BLOCK,
+    element: <BlockItem />,
   },
   {
     path: ROUTES.CONTRACTS.BASE,

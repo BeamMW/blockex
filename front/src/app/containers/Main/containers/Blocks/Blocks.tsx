@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
 import { useDispatch, useSelector } from 'react-redux';
@@ -55,6 +55,10 @@ const StylesTableContent = css`
   width: 100%;
 `;
 
+const StylesTableRow = css`
+  cursor: pointer;
+`;
+
 const Blocks: React.FC = () => {
   const blocksData = useSelector(selectBlocksData());
   const [currentDate, setNewDate] = useState(null);
@@ -93,6 +97,10 @@ const Blocks: React.FC = () => {
     // console.log(name === activeMenuItem);
     return name === activeMenuItem;
   }
+
+  const blockItemClicked = useCallback((hash: string) => {
+    navigate(`${ROUTES.MAIN.BLOCK.replace(':hash', '')}${hash}`);
+  }, [navigate]);
   
   return (
     <Window>
@@ -140,15 +148,15 @@ const Blocks: React.FC = () => {
 
             <Table.Body>
               { blocksData.blocks.map((block, index)=> {
-                return (<Table.Row key={index}>
-                  <Table.Cell>{block.height}</Table.Cell>
+                return (<Table.Row key={index} onClick={() => blockItemClicked(block.hash)} className={StylesTableRow}>
+                  <Table.Cell>{block.height.toLocaleString()}</Table.Cell>
                   <Table.Cell>{block.hash}</Table.Cell>
                   <Table.Cell>{timestampToDate(block.timestamp)}</Table.Cell>
-                  <Table.Cell>{block.difficulty}</Table.Cell>
+                  <Table.Cell>{block.difficulty.toLocaleString()}</Table.Cell>
                   <Table.Cell>{block.kernelsCount}</Table.Cell>
                   <Table.Cell>{block.inputsCount}</Table.Cell>
                   <Table.Cell>{block.outputsCount}</Table.Cell>
-                  <Table.Cell>{block.fee}</Table.Cell>
+                  <Table.Cell>{block.fee.toLocaleString()}</Table.Cell>
                 </Table.Row>);
               }) }
               

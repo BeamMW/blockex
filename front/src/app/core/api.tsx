@@ -1,4 +1,4 @@
-const API_URL = "https://explorer-api.beam.mw/dappnet/api/v1";
+const API_URL = "http://127.0.0.1:4000/api/v1";
 
 async function callApi(route: string) {
   //status check
@@ -9,6 +9,10 @@ async function callApi(route: string) {
 
 export async function LoadBlocks(page: number = 0, perPage: number = 20) {
   return await callApi(`${API_URL}/blocks?page=${page}&per_page=${perPage}`);
+}
+
+export async function LoadBlock(hash: string) {
+  return await callApi(`${API_URL}/block?&hash=${hash}`);
 }
 
 export async function LoadStatus() {

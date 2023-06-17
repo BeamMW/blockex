@@ -1,7 +1,7 @@
 export const ROUTES = {
   MAIN: {
     BASE: '/',
-    BLOCK: '/block/:height',
+    BLOCK: '/block/:hash',
   },
   CONTRACTS: {
     BASE: '/contracts',

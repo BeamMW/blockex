@@ -166,6 +166,30 @@ export const getContract = async (ctx: ParameterizedContext) => {
   }
 };
 
+export const getBlock = async (ctx: ParameterizedContext) => {
+  const blocksQuerySchema = Joi.object({
+    hash: Joi.string().required(),
+  });
+
+  const { error, value } = blocksQuerySchema.validate(ctx.request.query, {
+    abortEarly: false,
+    allowUnknown: true,
+  });
+
+  if (error) {
+    ctx.status = 400;
+    ctx.body = { error: error.details.map((detail: any) => detail.message) };
+  } else {
+    const { hash } = ctx.request.query;
+    const block = await Blocks.findOne({ hash }).sort("-height");
+
+    ctx.ok({
+      status: "success",
+      data: block,
+    });
+  }
+};
+
 export const getBlocks = async (ctx: ParameterizedContext) => {
   const blocksQuerySchema = Joi.object({
     per_page: Joi.number().integer().min(10).default(20),

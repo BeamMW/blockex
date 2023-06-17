@@ -3,6 +3,7 @@ import { Queue, Worker, Job, QueueEvents } from "bullmq";
 import { redisStore } from "../db/redis";
 import { sendExplorerNodeRequest } from "../shared/helpers/axios";
 import { Blocks, Contract, Call, Status, Assets } from "../models";
+import config from "../config";
 
 const cluster = require("cluster");
 const net = require("net");
@@ -19,15 +20,15 @@ const BLOCKS_STEP = 100;
 //redis-service
 const contractsQueue = new Queue("Contracts", {
   connection: {
-    host: "redis-service",
-    port: 6379,
+    host: config.redis_url,
+    port: config.redis_port,
   },
 });
 
 const mainQueue = new Queue("Main", {
   connection: {
-    host: "redis-service",
-    port: 6379,
+    host: config.redis_url,
+    port: config.redis_port,
   },
 });
 
@@ -122,7 +123,7 @@ const blocksUpdate = async (status: any) => {
 
   while (fromHeight <= heightLoadUntil) {
     let blocks = await sendExplorerNodeRequest(
-      `blocks?height=${fromHeight.toString()}&n=${BLOCKS_STEP_SYNC.toString()}`,
+      `/blocks?height=${fromHeight.toString()}&n=${BLOCKS_STEP_SYNC.toString()}`,
     );
     blocks = blocks.filter((item: any) => item.found);
     await Blocks.insertMany(blocks);
@@ -161,7 +162,7 @@ const worker = new Worker(
 
       if (lastLoadedHeight < toHeight) {
         const contractData = await sendExplorerNodeRequest(
-          `contract?hMax=${toHeight}&hMin=${lastLoadedHeight}&id=${cid}`,
+          `/contract?hMax=${toHeight}&hMin=${lastLoadedHeight}&id=${cid}`,
         );
         const newCalls = contractData["Calls history"].value;
         newCalls.shift();
@@ -202,8 +203,8 @@ const worker = new Worker(
   },
   {
     connection: {
-      host: "redis-service",
-      port: 6379,
+      host: config.redis_url,
+      port: config.redis_port,
     },
   },
 );
@@ -216,15 +217,15 @@ const mainWorker = new Worker(
   },
   {
     connection: {
-      host: "redis-service",
-      port: 6379,
+      host: config.redis_url,
+      port: config.redis_port,
     },
   },
 );
 
 const contractsUpdate = async (status: any) => {
   console.log("Contracts update started!");
-  let contracts = await sendExplorerNodeRequest("contracts");
+  let contracts = await sendExplorerNodeRequest("/contracts");
   contracts.shift();
   contracts = contracts.map((item: any) => {
     return {
@@ -240,9 +241,9 @@ const contractsUpdate = async (status: any) => {
 const assetsUpdate = async (status: any) => {
   console.log("Assets update started");
   const start = Date.now();
-  let lastBlock = await sendExplorerNodeRequest("blocks?height=" + status.height + "&n=1");
+  let lastBlock = await sendExplorerNodeRequest("/blocks?height=" + status.height + "&n=1");
   for (const asset of lastBlock[0].assets) {
-    const assetHistory = await sendExplorerNodeRequest("asset?id=" + asset.aid);
+    const assetHistory = await sendExplorerNodeRequest("/asset?id=" + asset.aid);
     await Assets.findOneAndUpdate(
       { aid: asset.aid },
       {
@@ -266,7 +267,7 @@ const assetsUpdate = async (status: any) => {
 export const BeamController = async (wsServer: any) => {
   const client = new net.Socket();
 
-  client.connect(10015, "host.docker.internal", () => {
+  client.connect(config.beam_api_port, config.beam_api_url, () => {
     const message =
       JSON.stringify({
         jsonrpc: "2.0",
@@ -299,7 +300,15 @@ export const BeamController = async (wsServer: any) => {
           // state updated
           console.log(`New block at - ${res["result"]["current_height"]}!`);
 
-          const status = await sendExplorerNodeRequest("status"); //TODO: add routes to consts
+          const status = await sendExplorerNodeRequest("/status"); //TODO: add routes to consts
+
+          console.log(`Main queue status: active - ${(await mainQueue.getJobs(["active"])).length}, 
+          waiting - ${(await mainQueue.getJobs(["waiting"])).length}, 
+          delayed - ${(await mainQueue.getJobs(["delayed"])).length}`);
+
+          console.log(`Contracts queue status: active - ${(await contractsQueue.getJobs(["active"])).length}, 
+          waiting - ${(await contractsQueue.getJobs(["waiting"])).length}, 
+          delayed - ${(await contractsQueue.getJobs(["delayed"])).length}`);
 
           mainQueue.add("Main", { status });
           contractsUpdate(status);

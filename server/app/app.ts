@@ -13,9 +13,9 @@ import { BeamController } from "./controllers/beam.controller";
 
 const websocket = require("koa-easy-ws");
 
-Mongoose.connect("mongodb://beam-explorer-mongo:27017/explorer");
+const { host, port, server_url, env, db_host, db_name } = config;
 
-const { host, port, server_url, env } = config;
+Mongoose.connect(`mongodb://${db_host}:27017/${db_name}`);
 
 const app: Koa = new Koa();
 
