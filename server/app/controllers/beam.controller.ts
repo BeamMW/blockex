@@ -110,91 +110,92 @@ const getFormattedStatus = async (status: any) => {
   };
 };
 
-const blocksUpdate = async (status: any) => {
-  let fromHeight = 1;
-  console.log("Blocks sync started!");
-  const start = Date.now();
+const blocksUpdate = (status: any) => {
+  return new Promise(async (resolve, reject) => {
+    let fromHeight = 1;
+    console.log("Blocks sync started!");
+    const start = Date.now();
 
-  const heightLoadUntil = status.height;
-  const lastLoadedInDbBlock = await Blocks.findOne().sort("-height");
-  if (lastLoadedInDbBlock) {
-    fromHeight = lastLoadedInDbBlock.height + 1;
-  }
+    const heightLoadUntil = status.height;
+    const lastLoadedInDbBlock = await Blocks.findOne().sort("-height");
+    if (lastLoadedInDbBlock) {
+      fromHeight = lastLoadedInDbBlock.height + 1;
+    }
 
-  while (fromHeight <= heightLoadUntil) {
-    let blocks = await sendExplorerNodeRequest(
-      `/blocks?height=${fromHeight.toString()}&n=${BLOCKS_STEP_SYNC.toString()}`,
-    );
-    blocks = blocks.filter((item: any) => item.found);
-    await Blocks.insertMany(blocks);
+    while (fromHeight <= heightLoadUntil) {
+      let blocks = await sendExplorerNodeRequest(
+        `/blocks?height=${fromHeight.toString()}&n=${BLOCKS_STEP_SYNC.toString()}`,
+      );
+      blocks = blocks.filter((item: any) => item.found);
+      await Blocks.insertMany(blocks);
 
-    const storedStatus = await Status.find({});
-    const newSubsidy = blocks.reduce((acc: number, block: any) => acc + block.subsidy, storedStatus[0].subsidy);
-    await Status.updateOne(
-      { _id: storedStatus[0]._id },
-      {
-        $set: {
-          subsidy: newSubsidy,
-          difficulty: blocks[0].difficulty,
+      const storedStatus = await Status.find({});
+      const newSubsidy = blocks.reduce((acc: number, block: any) => acc + block.subsidy, storedStatus[0].subsidy);
+      await Status.updateOne(
+        { _id: storedStatus[0]._id },
+        {
+          $set: {
+            subsidy: newSubsidy,
+            difficulty: blocks[0].difficulty,
+          },
         },
-      },
-    );
+      );
 
-    console.log(`Last loaded height: ${fromHeight + BLOCKS_STEP_SYNC - 1}`);
+      console.log(`Last loaded height: ${fromHeight + BLOCKS_STEP_SYNC - 1}`);
 
-    fromHeight += BLOCKS_STEP_SYNC;
-  }
+      fromHeight += BLOCKS_STEP_SYNC;
+    }
 
-  const end = Date.now();
-  console.log(`Blocks sync ended!  --- in ${end - start} ms`);
+    const end = Date.now();
+    console.log(`Blocks sync ended!  --- in ${end - start} ms`);
+    resolve(true);
+  });
 };
 
 const worker = new Worker(
   "Contracts",
   async (job: Job) => {
-    //TODO: make sure with async is finished
     return new Promise(async (resolve, reject) => {
       const start = Date.now();
       const toHeight = job.data.status.height;
       const cid = job.data.contract[0].value;
-      const lastLoadedCall = await Call.findOne({ cid }).sort("-height");
-      const lastLoadedHeight = lastLoadedCall ? lastLoadedCall.height + 1 : 1;
+      const contract = await Contract.findOne({ cid });
+      const lastCheckedHeight = contract ? (contract.last_call_height ? contract.last_call_height : toHeight - 1) : 1;
 
-      if (lastLoadedHeight < toHeight) {
-        const contractData = await sendExplorerNodeRequest(
-          `/contract?hMax=${toHeight}&hMin=${lastLoadedHeight}&id=${cid}`,
-        );
-        const newCalls = contractData["Calls history"].value;
-        newCalls.shift();
+      const contractData = await sendExplorerNodeRequest(
+        `/contract?hMax=${toHeight}&hMin=${lastCheckedHeight}&id=${cid}`,
+      );
+      const newCalls = contractData["Calls history"].value;
+      newCalls.shift();
 
-        if (newCalls.length > 0) {
-          const improvedNewCalls = improoveCalls(newCalls, cid);
-          await Call.insertMany(improvedNewCalls);
-          console.log(`Contract calls inserted between ${lastLoadedHeight} - ${toHeight}. 
-            Added ${improvedNewCalls.length}. CID: ${cid}`);
-        }
-
-        const lockedFunds = formatLockedFunds(contractData["Locked Funds"].value);
-        const ownedAssets = formatOwnedAssets(contractData["Owned assets"].value);
-        const versionHistory = formatVersionsHistory(contractData["Version History"].value);
-        const contractDataFormatted = {
-          cid,
-          locked_funds: lockedFunds,
-          owned_assets: ownedAssets,
-          version_history: versionHistory,
-          kind: contractData.kind,
-          height: job.data.contract[2],
-          state: contractData["State"],
-        };
-
-        await Contract.findOneAndUpdate({ cid }, contractDataFormatted, {
-          $inc: {
-            calls_count: newCalls.length,
-          },
-          upsert: true,
-          new: true,
-        });
+      const improvedNewCalls = improoveCalls(newCalls, cid);
+      if (improvedNewCalls.length > 0) {
+        await Call.insertMany(improvedNewCalls);
+        console.log(`Contract calls inserted between ${lastCheckedHeight} - ${toHeight}. 
+          Added ${improvedNewCalls.length}. CID: ${cid}`);
       }
+
+      const lockedFunds = formatLockedFunds(contractData["Locked Funds"].value);
+      const ownedAssets = formatOwnedAssets(contractData["Owned assets"].value);
+      const versionHistory = formatVersionsHistory(contractData["Version History"].value);
+      const contractDataFormatted = {
+        cid,
+        locked_funds: lockedFunds,
+        owned_assets: ownedAssets,
+        version_history: versionHistory,
+        kind: contractData.kind,
+        height: job.data.contract[2],
+        state: contractData["State"],
+        last_call_height: toHeight,
+      };
+
+      await Contract.findOneAndUpdate({ cid }, contractDataFormatted, {
+        $inc: {
+          calls_count: newCalls.length,
+        },
+        upsert: true,
+        new: true,
+      });
 
       resolve(true);
       const end = Date.now();
@@ -202,7 +203,7 @@ const worker = new Worker(
     });
   },
   {
-    concurrency: 200,
+    concurrency: 5,
     connection: {
       host: config.redis_url,
       port: config.redis_port,
@@ -213,8 +214,9 @@ const worker = new Worker(
 const mainWorker = new Worker(
   "Main",
   async (job: Job) => {
-    assetsUpdate(job.data.status);
-    return blocksUpdate(job.data.status);
+    await assetsUpdate(job.data.status);
+    await blocksUpdate(job.data.status);
+    return true;
   },
   {
     connection: {
@@ -240,29 +242,33 @@ const contractsUpdate = async (status: any) => {
 };
 
 const assetsUpdate = async (status: any) => {
-  console.log("Assets update started");
-  const start = Date.now();
-  let lastBlock = await sendExplorerNodeRequest("/blocks?height=" + status.height + "&n=1");
-  for (const asset of lastBlock[0].assets) {
-    const assetHistory = await sendExplorerNodeRequest("/asset?id=" + asset.aid);
-    await Assets.findOneAndUpdate(
-      { aid: asset.aid },
-      {
-        cid: asset.cid ? asset.cid.value : null,
-        lock_height: asset.lock_height,
-        metadata: asset.metadata.text,
-        owner: asset.owner ? asset.owner : null,
-        value: asset.value,
-        asset_history: assetHistory["Asset history"],
-      },
-      {
-        upsert: true,
-        new: true,
-      },
-    );
-  }
-  const end = Date.now();
-  console.log(`Assets update process ended! --- in ${end - start} ms`);
+  return new Promise(async (resolve, reject) => {
+    console.log("Assets update started");
+    const start = Date.now();
+    let lastBlock = await sendExplorerNodeRequest("/blocks?height=" + status.height + "&n=1");
+    for (const asset of lastBlock[0].assets) {
+      const assetHistory = await sendExplorerNodeRequest("/asset?id=" + asset.aid);
+      await Assets.findOneAndUpdate(
+        { aid: asset.aid },
+        {
+          cid: asset.cid ? asset.cid.value : null,
+          lock_height: asset.lock_height,
+          metadata: asset.metadata.text,
+          owner: asset.owner ? asset.owner : null,
+          value: asset.value,
+          asset_history: assetHistory["Asset history"],
+        },
+        {
+          upsert: true,
+          new: true,
+        },
+      );
+    }
+    const end = Date.now();
+    console.log(`Assets update process ended! --- in ${end - start} ms`);
+
+    resolve(true);
+  });
 };
 
 export const BeamController = async (wsServer: any) => {

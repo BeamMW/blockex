@@ -80,6 +80,7 @@ const contractSchema = new Mongoose.Schema(
     }, //],
     state: {},
     calls_count: Number,
+    last_call_height: Number,
     // calls: [
     //   {
     //     type: Mongoose.Schema.Types.ObjectId,
@@ -255,6 +256,7 @@ const syncContracts = async () => {
         height: contract[2],
         calls_count: callsCount,
         state: contractData["State"],
+        last_call_height: status.height,
       };
       await Contracts.findOneAndUpdate({ cid }, contractDataFormatted);
       // await Contracts.create(contractDataFormatted);
