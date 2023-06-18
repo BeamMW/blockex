@@ -155,10 +155,10 @@ const BlockItem: React.FC = () => {
 
   const panels = [{
     key: `panel-1`,
-    title: "INPUTS",
+    title: `INPUTS: ${blockData ? blockData.inputs.length : 0}`,
     content: {
       content: (
-        blockData && <Table singleLine>
+        blockData && blockData.inputs.length > 0 && <Table singleLine>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>HEIGHT:</Table.HeaderCell>
@@ -179,10 +179,10 @@ const BlockItem: React.FC = () => {
     },
   }, {
     key: `panel-2`,
-    title: "OUTPUTS",
+    title: `OUTPUTS: ${blockData ? blockData.outputs.length : 0}`,
     content: {
       content: (
-        blockData && <Table singleLine>
+        blockData && blockData.outputs.length > 0 && <Table singleLine>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>COMMITMENT:</Table.HeaderCell>
@@ -201,10 +201,10 @@ const BlockItem: React.FC = () => {
     },
   }, {
     key: `panel-3`,
-    title: "KERNELS",
+    title: `KERNELS: ${blockData ? blockData.kernels.length : 0}`,
     content: {
       content: (
-        blockData && <Table singleLine>
+        blockData && blockData.kernels.length > 0 && <Table singleLine>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>ID:</Table.HeaderCell>
