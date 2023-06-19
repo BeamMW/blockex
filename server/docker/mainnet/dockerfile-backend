@@ -2,7 +2,7 @@ FROM node:19.7.0-alpine
 
 WORKDIR /usr/src/app
 
-COPY ../../../server/package*.json ./
+COPY ../../../server/package.json ./
 
 RUN yarn install
 
