@@ -29,6 +29,8 @@ services:
     depends_on:
       - beam-explorer-mongo-mainnet
       - redis-service-mainnet
+    volumes:
+      - ../../server:/app
 volumes:
   dev-mongo-data:
   dev-mongo-conf:
