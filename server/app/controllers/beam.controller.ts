@@ -317,8 +317,8 @@ export const BeamController = async (wsServer: any) => {
           waiting - ${(await contractsQueue.getJobs(["waiting"])).length}, 
           delayed - ${(await contractsQueue.getJobs(["delayed"])).length}`);
 
-          // mainQueue.add("Main", { status });
-          // contractsUpdate(status);
+          mainQueue.add("Main", { status });
+          contractsUpdate(status);
 
           const formattedStatus = await getFormattedStatus(status);
           await redisStore.set("status", JSON.stringify(formattedStatus));
