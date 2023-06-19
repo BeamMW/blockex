@@ -5,7 +5,7 @@ const BLOCKS_STEP_SYNC = 1000;
 
 const getRequest = async (req) => {
   const options = {
-    url: "http://host.docker.internal:8891/" + req,
+    url: "http://host.docker.internal:8899/" + req,
     method: "GET",
   };
 
