@@ -23,7 +23,7 @@ services:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     ports:
-      - '4000:4000'
+      - '4001:4001'
     env_file:
       - .env.mainnet
     depends_on:
