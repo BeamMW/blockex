@@ -128,7 +128,7 @@ const mongooseOptions = {
 
 const connect = async () => {
   try {
-    await Mongoose.connect("mongodb://beam-explorer-mongo:27017/explorer", mongooseOptions);
+    await Mongoose.connect("mongodb://beam-explorer-mongo-mainnet:27017/explorer", mongooseOptions);
     console.log("Connected to MongoDB");
   } catch (error) {
     console.log("Could not connect to MongoDB");
