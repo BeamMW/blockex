@@ -2,10 +2,10 @@ FROM node:19.7.0-alpine
 
 WORKDIR /usr/src/app
 
-COPY ../../package*.json ./
+COPY ../../../package*.json ./
 
 RUN yarn install
 
-COPY ../../. ./
+COPY . ./
 
 CMD yarn run dev
