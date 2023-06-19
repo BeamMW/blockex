@@ -29,5 +29,4 @@ jobs:
       - name: Deploy to Firebase Hosting
         run: |
           yarn global add firebase-tools
-          firebase use dappnet-block-explorer
-          firebase deploy --token "${{ secrets.FIREBASE_TOKEN_DAPPNET }}"
+          firebase deploy --token "${{ secrets.FIREBASE_DAPPNET_TOKEN }}"
