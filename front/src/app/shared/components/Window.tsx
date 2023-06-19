@@ -28,11 +28,11 @@ const Container = styled.div`
     background-attachment: fixed;
     background-blend-mode: normal, multiply, multiply, multiply;
     background-image:
-        linear-gradient(180deg, #000a16, #001f45),
-        radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5)),
-        linear-gradient(to left, rgba(255, 255, 255, 0.5), #d33b65),
-        linear-gradient(297deg, #156fc3, rgba(255, 255, 255, 0.5)),
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0), rgba(21, 6, 40, 0.12));
+      linear-gradient(180deg, #032e49, #0073a6),
+      radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5)),
+      linear-gradient(to left, rgba(255, 255, 255, 0.5), #d33b65),
+      linear-gradient(297deg, #156fc3, rgba(255, 255, 255, 0.5)),
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0), rgba(21, 6, 40, 0.12));
 
     > .logo {
       cursor: pointer;
