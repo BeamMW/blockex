@@ -13,8 +13,8 @@ services:
     restart: always
   redis-service:
     image: redis:alpine
-    ports:
-      - published: 6380
+    expose:
+      - "6380"
   server:
     image: server
     container_name: server
