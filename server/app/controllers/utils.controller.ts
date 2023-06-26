@@ -16,6 +16,14 @@ export const getAliveHandler = async (ctx: ParameterizedContext) => {
   });
 };
 
+export const getBase = async (ctx: ParameterizedContext) => {
+  if (ctx.ws) {
+    const ws: any = await ctx.ws();
+    const status = await redisStore.get("status");
+    return ws.send(JSON.stringify({ status: JSON.parse(status) }));
+  }
+};
+
 export const getStatus = async (ctx: ParameterizedContext) => {
   const status = await redisStore.get("status");
 
@@ -52,7 +60,7 @@ export const getContracts = async (ctx: ParameterizedContext) => {
     const { per_page, page } = ctx.request.query;
     //TODO: add calls count by height (lookup?)
     const contracts = await Contract.aggregate([
-      { $sort: { kind: -1 } },
+      { $sort: { calls_count: -1 } },
       { $skip: Number(per_page) * Number(page) },
       { $limit: Number(per_page) },
     ]);
@@ -70,12 +78,11 @@ export const getContracts = async (ctx: ParameterizedContext) => {
 };
 
 export const getAllAssets = async (ctx: ParameterizedContext) => {
-  const assets = await Assets.find({});
+  const assets = await Assets.aggregate([{ $unset: ["_id"] }]);
+
   ctx.ok({
     status: "success",
-    data: {
-      assets,
-    },
+    data: assets,
   });
 };
 
@@ -100,6 +107,7 @@ export const getAssets = async (ctx: ParameterizedContext) => {
       { $sort: { lock_height: -1 } },
       { $skip: Number(per_page) * Number(page) },
       { $limit: Number(per_page) },
+      { $unset: ["_id", "cid", "lock_height", "metadata", "owner", "value", "asset_history"] },
     ]);
     const count = await Assets.estimatedDocumentCount();
     ctx.ok({
@@ -154,6 +162,30 @@ export const getContract = async (ctx: ParameterizedContext) => {
     ctx.ok({
       status: "success",
       data: contract[0],
+    });
+  }
+};
+
+export const getBlock = async (ctx: ParameterizedContext) => {
+  const blocksQuerySchema = Joi.object({
+    hash: Joi.string().required(),
+  });
+
+  const { error, value } = blocksQuerySchema.validate(ctx.request.query, {
+    abortEarly: false,
+    allowUnknown: true,
+  });
+
+  if (error) {
+    ctx.status = 400;
+    ctx.body = { error: error.details.map((detail: any) => detail.message) };
+  } else {
+    const { hash } = ctx.request.query;
+    const block = await Blocks.findOne({ hash }).sort("-height");
+
+    ctx.ok({
+      status: "success",
+      data: block,
     });
   }
 };

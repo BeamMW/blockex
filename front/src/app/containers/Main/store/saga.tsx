@@ -1,11 +1,6 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 import { actions } from '.';
 import store from '../../../../index';
-import { selectSystemState } from '@app/shared/store/selectors';
-// import { Balance, Currency } from '@app/core/types';
-import { ethId } from '@app/shared/constants';
-import { LoadBlocks, LoadStatus, LoadContracts } from '@core/api';
-import { BlocksData, ContractsData, Status } from '@core/types';
 
 // const FETCH_INTERVAL = 310000;
 // const PRICE_API_URL = 'https://api.coingecko.com/api/v3/simple/price';
@@ -18,9 +13,6 @@ export function* loadParamsSaga(
     // const systemState = (yield select(selectSystemState())) as {account: string};
     // const blocksData = (yield call(LoadBlocks)) as BlocksData;
     // yield put(actions.setBlocksData(blocksData));
-
-    const statusData = (yield call(LoadStatus)) as Status;
-    yield put(actions.setStatusData(statusData));
 
     yield put(actions.loadAppParams.success([]));
 }

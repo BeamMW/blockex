@@ -5,7 +5,7 @@ const CALLS_STEP_SYNC = 1000;
 
 const getRequest = async (req) => {
   const options = {
-    url: "http://127.0.0.1:8899/" + req,
+    url: "http://host.docker.internal:8899/" + req,
     method: "GET",
   };
 
@@ -80,6 +80,7 @@ const contractSchema = new Mongoose.Schema(
     }, //],
     state: {},
     calls_count: Number,
+    last_call_height: Number,
     // calls: [
     //   {
     //     type: Mongoose.Schema.Types.ObjectId,
@@ -127,7 +128,7 @@ const mongooseOptions = {
 
 const connect = async () => {
   try {
-    await Mongoose.connect("mongodb://localhost:27017/explorer", mongooseOptions);
+    await Mongoose.connect("mongodb://beam-explorer-mongo-mainnet:27017/explorer", mongooseOptions);
     console.log("Connected to MongoDB");
   } catch (error) {
     console.log("Could not connect to MongoDB");
@@ -255,6 +256,7 @@ const syncContracts = async () => {
         height: contract[2],
         calls_count: callsCount,
         state: contractData["State"],
+        last_call_height: status.height,
       };
       await Contracts.findOneAndUpdate({ cid }, contractDataFormatted);
       // await Contracts.create(contractDataFormatted);

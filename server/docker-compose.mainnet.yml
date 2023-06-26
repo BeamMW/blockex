@@ -1,9 +1,9 @@
 version: "3.8"
 
 services:
-  beam-explorer-mongo:
+  beam-explorer-mongo-mainnet:
     image: mongo:6.0.3
-    container_name: beam-explorer-mongo
+    container_name: beam-explorer-mongo-mainnet
     environment:
       - MONGO_INITDB_ROOT_USERNAME
       - MONGO_INITDB_ROOT_PASSWORD
@@ -11,11 +11,11 @@ services:
       - MONGO_PASSWORD
       - MONGO_DB_NAME
     restart: always
-  redis-service:
+  redis-service-mainnet:
     image: redis:alpine
-  server:
-    image: server
-    container_name: server
+  server-mainnet:
+    image: server-mainnet
+    container_name: server-mainnet
     build:
       context: .
       dockerfile: dockerfile-backend
@@ -23,12 +23,12 @@ services:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     ports:
-      - '4000:4000'
+      - '4001:4001'
     env_file:
-      - .env
+      - .env.mainnet
     depends_on:
-      - beam-explorer-mongo
-      - redis-service
+      - beam-explorer-mongo-mainnet
+      - redis-service-mainnet
 volumes:
   dev-mongo-data:
   dev-mongo-conf:

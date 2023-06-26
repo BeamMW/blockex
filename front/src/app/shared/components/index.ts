@@ -5,7 +5,7 @@ export { default as Input } from './Input';
 export { default as Rate } from './Rate';
 export { default as Toggle } from './Toggle';
 export { default as Select } from './Select';
-export { default as Table } from './Table';
+export { default as TableComponent } from './TableComponent';
 export { default as ActiveAccount } from './ActiveAccount';
 export { default as StatusCards } from './StatusCards';
 export { default as AssetIcon } from './AssetIcon';

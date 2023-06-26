@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
+import { useSelector } from 'react-redux';
 import { ContractData } from '@core/types';
 import { useNavigate, useLocation, useSearchParams, useParams } from 'react-router-dom';
 import { Window, AssetIcon, BackControl } from '@app/shared/components';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 import { LoadContract } from '@core/api';
-import { Table, Pagination, Segment } from 'semantic-ui-react';
+import { Table, Pagination, Segment, List } from 'semantic-ui-react';
+import { selectAssetById } from '@app/shared/store/selectors';
+import { fromGroths } from '@core/appUtils';
 
 const StylesOverTable = css`
   width: 100%;
@@ -102,20 +105,73 @@ const AssetTableStyles = css`
   }
 `;
 
-// str.includes(substr)
+const AssetItem = styled.a`
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  color: #4183c4;
+  text-decoration: none;
 
-const GenerateArgumentItem: React.FC<{item: {type: string, value: number}, itemKey: string}> = ({item, itemKey}) => {
+  > .icon {
+    margin-left: 5px;
+  }
+
+  > .text {
+    font-weight: 600;
+  }
+`;
+
+const StyledArgAsset = css`
+  display: inline-flex;
+  align-items: center;
+`;
+
+const StyledCidItem = css`
+  cursor: pointer;
+  color: #4183c4;
+  text-decoration: none;
+`;
+
+const StylesTableContent = css`
+  min-height: 900px;
+  width: 100%;
+`;
+
+const GenerateArgumentItem: React.FC<{item: {type: string, value: any}, itemKey: string}> = ({item, itemKey}) => {
+  const assetData = item.type === 'aid' ? useSelector(selectAssetById(item.value)) : null;
+  const onContractClicked = (cid: string) => {
+    window.open(`${ROUTES.CONTRACTS.CONTRACT.replace(':cid', cid)}`, '_blank');
+  }
+  const { cid } = useParams();
+
   return (<>
-    {item.type === 'aid' && <div>
-      {itemKey}: <AssetIcon asset_id={item.value}></AssetIcon> {item.value}
-    </div>}
+    {item.type === 'aid' && 
+    <span className={StyledArgAsset}>
+      <span>{itemKey}</span>: <AssetItem>
+        <AssetIcon className='icon' asset_id={item.value}></AssetIcon>
+        <span className='text'>{item.value === 0 ? 'BEAM' : assetData.metadata['N']}</span>
+        ({item.value})
+      </AssetItem>
+    </span>}
     {item.type === 'amount' && <div>
-      {itemKey}: {item.value}
+      {itemKey}: {fromGroths(item.value)}
     </div>}
+    {item.type === 'cid' && 
+    <>
+      {itemKey ? `${itemKey}: ` : ''}
+      <a onClick={() => onContractClicked(item.value)}
+          className={item.value !== cid ? StyledCidItem : ''} >
+        {item.value}
+      </a>
+    </>}
   </>);
 };
 
 const AssetsList: React.FC<{assets: {aid: number, value: number}[], isCallFunds?: boolean}> = ({assets, isCallFunds = false}) => {
+  const onAssetClicked = (aid: number) => {
+    window.open(`${ROUTES.ASSETS.ASSET.replace(':aid', ''+aid)}`, '_blank')
+  }
+
   return (<Table className={AssetTableStyles} collapsing>
             <Table.Header>
               <Table.Row>
@@ -126,13 +182,19 @@ const AssetsList: React.FC<{assets: {aid: number, value: number}[], isCallFunds?
 
             <Table.Body>
               {assets.map((asset, index) => {
+                const aid = isCallFunds ? asset[0].value : asset.aid;
+                const assetData = useSelector(selectAssetById(aid));
+
                 return <Table.Row key={index}>
                   <Table.Cell>
-                    <AssetIcon asset_id={isCallFunds ? asset[0].value : asset.aid}></AssetIcon>
-                    <span className='asset_id'>{isCallFunds ? asset[0].value : asset.aid}</span>
+                    <AssetItem onClick={() => onAssetClicked(aid)}>
+                      <AssetIcon className='icon' asset_id={aid}></AssetIcon>
+                      <span className='text'>{aid === 0 ? 'BEAM' : assetData.metadata['N']}</span>
+                      ({aid})
+                    </AssetItem>
                   </Table.Cell>
                   <Table.Cell>
-                    <span className='asset_value'>{isCallFunds ? asset[1].value : asset.value}</span>
+                    <span className='asset_value'>{fromGroths(isCallFunds ? asset[1].value : asset.value)}</span>
                   </Table.Cell>
                 </Table.Row>
               })}
@@ -155,15 +217,16 @@ const GeneratedTable = React.memo<{data: any}>(({data}) => {
       {data.map((item, index) => {
         //TODO: integrate arg item
         return <Table.Row key={index}>
-          {item.map((itemValue, itemValueIndex) => <Table.Cell key={itemValueIndex}>{
-            itemValue.type !== undefined ? itemValue.value : (
-              Array.isArray(itemValue) ? (
-                itemValue.map((itemValueTmp, tmpIndex)=>{
-                  return <GenerateArgumentItem key={tmpIndex} itemKey={itemValueTmp.type} item={itemValueTmp}/>
-                })
-              ) : itemValue
-            )
-          }</Table.Cell>)}
+          {item.map((itemValue, itemValueIndex) => 
+            <Table.Cell key={itemValueIndex}>
+              {itemValue.type !== undefined ? itemValue.value : (
+                Array.isArray(itemValue) ? (
+                  itemValue.map((itemValueTmp, tmpIndex)=>{
+                    return <GenerateArgumentItem key={tmpIndex} itemKey={itemValueTmp.type} item={itemValueTmp}/>
+                  })
+                ) : itemValue
+              )}
+            </Table.Cell>)}
         </Table.Row>
       })}
     </Table.Body>
@@ -176,7 +239,7 @@ const GeneratedUI: React.FC<{dataObj: any, margin: number}> = ({dataObj, margin}
       let child;
       if (typeof dataObj[key] === 'string' || typeof dataObj[key] === 'number') {
         child = <>
-          <span className='subtitle-inside'> {key}: </span>
+          <span> {key}: </span>
           <span>{dataObj[key]}</span>
         </>
       } else if (dataObj[key].type && dataObj[key].type === 'table') {
@@ -184,6 +247,8 @@ const GeneratedUI: React.FC<{dataObj: any, margin: number}> = ({dataObj, margin}
           <div className='subtitle-inside'> {key}: </div>
           <GeneratedTable data={dataObj[key].value}></GeneratedTable>
         </>
+      } else if (dataObj[key].type) {
+        child = <GenerateArgumentItem item={dataObj[key]} itemKey={key}></GenerateArgumentItem>
       } else {
         child = <>
           <div className='subtitle-inside'> {key}: </div>
@@ -201,7 +266,7 @@ const CallRowValue: React.FC<{rowValue: any}> = ({rowValue}) => {
  return <>
     <Table.Row className='call-table-main-row'>
       <Table.Cell>{rowValue[0]}</Table.Cell>
-      <Table.Cell>{rowValue[1].type ? rowValue[1].value : '-'}</Table.Cell>
+      <Table.Cell>{rowValue[1].type ? <GenerateArgumentItem item={rowValue[1]} itemKey={''}></GenerateArgumentItem> : '-'}</Table.Cell>
       <Table.Cell>{rowValue[2] ? rowValue[2].value : '-'}</Table.Cell>
       <Table.Cell>{rowValue[3] ? rowValue[3] : '-'}</Table.Cell>
     </Table.Row>
@@ -211,14 +276,25 @@ const CallRowValue: React.FC<{rowValue: any}> = ({rowValue}) => {
             <div className='subtitle-inside'> ARGUMENTS: </div>
             {typeof rowValue[4] === 'string' ? 
               <span className='long-title'>{rowValue[4]}</span> :
-              Object.keys(rowValue[4]).map((key, keyIndex) => {
-              const argItem = rowValue[4][key];
-              if (argItem.type !== undefined) { 
-                return <GenerateArgumentItem item={argItem} itemKey={key} key={keyIndex}/>
-              } else if (typeof argItem === 'string') {
-                return <div key={keyIndex}>{key}: {argItem}</div>
-              }
-            })}
+              <Segment>
+                <List divided relaxed>
+                  {
+                    Object.keys(rowValue[4]).map((key, keyIndex) => {
+                      const argItem = rowValue[4][key];
+                      if (argItem.type !== undefined) { 
+                        return <List.Item key={keyIndex}>
+                          <GenerateArgumentItem item={argItem} itemKey={key}/>
+                        </List.Item>
+                      } else if (typeof argItem === 'string') {
+                        return <List.Item key={keyIndex}>
+                          <div key={keyIndex}>{key}: {argItem}</div>
+                        </List.Item>
+                      }})
+                  }
+                </List>
+              </Segment>
+              
+            }
           </span> : <></>}
         {rowValue[5] ? <span>
             <div className='subtitle-inside'> FUNDS: </div>
@@ -310,7 +386,7 @@ const ContractItem: React.FC = () => {
             </Segment>
           </>
         }
-        { contractData.calls && <Segment>
+        { contractData.calls && <Segment className={StylesTableContent}>
           <div className='subtitle'> CALLS ({contractData.calls_count}): </div>
           <div className={StylesOverTable}>
             <Pagination defaultActivePage={defaultPage ? defaultPage : 1} className="pagination"

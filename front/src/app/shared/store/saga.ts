@@ -4,8 +4,12 @@ import {
 
 import { eventChannel, END } from 'redux-saga';
 import { actions as mainActions } from '@app/containers/Main/store/index';
-import { navigate, setAccountState, setIsCorrectNetwork } from '@app/shared/store/actions';
+import { navigate } from '@app/shared/store/actions';
 import store from '../../../index';
+import { actions } from '.';
+
+import { LoadBlocks, LoadStatus, LoadAllAssets } from '@core/api';
+import { BlocksData, ContractsData, Status, Asset } from '@core/types';
 
 // import { actions } from '@app/shared/store/index';
 // import { ROUTES, CURRENCIES, ethId } from '@app/shared/constants';
@@ -52,7 +56,15 @@ export function remoteEventChannel() {
 //   }
 // }
 
-function* sharedSaga() {
+function* sharedSaga() {  
+  const statusData = (yield call(LoadStatus)) as Status;
+  yield put(actions.setStatusData(statusData));
+
+  const allAssets = (yield call(LoadAllAssets)) as Asset[];
+  yield put(actions.setAllAssetsData(allAssets));
+
+  yield put(actions.setIsLoaded(true));
+
   const remoteChannel = yield call(remoteEventChannel);
   // store.dispatch(mainActions.loadAppParams.request(null));
   while (true) {

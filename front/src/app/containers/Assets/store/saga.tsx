@@ -1,15 +1,27 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 import { actions } from '.';
+import { LoadAssets } from '@core/api';
+import { AssetsData, Asset } from '@app/core/types';
+import store from '../../../../index';
+import { parseMetadata } from '@core/appUtils';
+import { selectAssetById } from '@app/shared/store/selectors';
 
-export function* loadParamsSaga(
-    action: ReturnType<typeof actions.loadAppParams.request>,
+export function* loadAssetsSaga(
+    action: ReturnType<typeof actions.loadAssets.request>,
   ) : Generator {
-    // const systemState = (yield select(selectSystemState())) as {account: string};
-    yield put(actions.loadAppParams.success([]));
+    // const { assetsList } = store.getState().shared;
+    const assetsByPage = (yield call(LoadAssets, action.payload - 1)) as any;
+
+    for (const index of assetsByPage.assets.keys()) {
+      assetsByPage.assets[index] = yield select(selectAssetById(assetsByPage.assets[index].aid));
+    }
+
+    yield put(actions.setAssetsData(assetsByPage));
+    yield put(actions.loadAssets.success([]));
 }
 
-function* mainSaga() {
-    yield takeLatest(actions.loadAppParams.request, loadParamsSaga);
+function* assetsSaga() {
+    yield takeLatest(actions.loadAssets.request, loadAssetsSaga);
 }
 
-export default mainSaga;
+export default assetsSaga;

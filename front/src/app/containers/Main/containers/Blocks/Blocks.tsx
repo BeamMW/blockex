@@ -4,15 +4,15 @@ import { css } from '@linaria/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Window, Button, StatusCards } from '@app/shared/components';
-import { selectBlocksData, selectContractsData, selectStatusData } from '../../store/selectors';
-import { ROUTES } from '@app/shared/constants';
+import { selectBlocksData } from '../../store/selectors';
+import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 import { timestampToDate } from '@core/appUtils';
 import { LoadBlocks, LoadContracts } from '@core/api';
 import { useSearchParams } from 'react-router-dom';
 
 import { Table, Search, Pagination, Menu } from 'semantic-ui-react';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
-import { setBlocksData, setContractsData } from '../../store/actions';
+import { setBlocksData } from '../../store/actions';
 
 const Content = styled.div`
   width: 100%;
@@ -50,39 +50,25 @@ const StylesMenuControl = css`
   width: 100%;
 `;
 
-const Blocks: React.FC = () => {
-  const TABS_CONFIG = [
-    {
-      name: 'blocks',
-      disabled: false,
-    },
-    {
-      name: 'contracts',
-      disabled: false,
-    },
-    {
-      name: 'dapps',
-      disabled: true,
-    },
-    {
-      name: 'assets',
-      disabled: false,
-    },
-    {
-      name: 'atomic swap offers',
-      disabled: true,
-    }
-  ];
+const StylesTableContent = css`
+  min-height: 900px;
+  width: 100%;
+`;
 
+const StylesTableRow = css`
+  cursor: pointer;
+`;
+
+const Blocks: React.FC = () => {
   const blocksData = useSelector(selectBlocksData());
   const [currentDate, setNewDate] = useState(null);
-  const [activeMenuItem, setActiveMenuItem] = useState<string>(TABS_CONFIG[0].name);
+  const [activeMenuItem, setActiveMenuItem] = useState<string>(MENU_TABS_CONFIG[0].name);
   const onChange = (event, data) => setNewDate(data.value);
   const dispatch = useDispatch();
-  const statusData = useSelector(selectStatusData());
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultPage = searchParams.get("page");
   const navigate = useNavigate();
+  const [activePage, setActivePage] = useState<number>(Number(defaultPage));
 
   const handleSearchChange = async () => {
 
@@ -99,12 +85,12 @@ const Blocks: React.FC = () => {
 
   const paginationOnChange = async (e, data) => {
     setSearchParams({["page"]: data.activePage});
-    await updateData(data.activePage);
+    setActivePage(data.activePage);
+    updateData(data.activePage);
   };
 
-  const handleMenuItemClick = (newTab: string) => {
-    setActiveMenuItem(newTab);
-    navigate(ROUTES.CONTRACTS.BASE);
+  const handleMenuItemClick = (route: string) => {
+    navigate(route);
   };
 
   const isActiveMenuItem = (name: string) => {
@@ -112,29 +98,28 @@ const Blocks: React.FC = () => {
     return name === activeMenuItem;
   }
 
-  const blockItemClicked = useCallback((height: number) => {
-    navigate(`${ROUTES.MAIN.BLOCK.replace(':height', '')}${height}`);
+  const blockItemClicked = useCallback((hash: string) => {
+    navigate(`${ROUTES.MAIN.BLOCK.replace(':hash', '')}${hash}`);
   }, [navigate]);
   
   return (
     <Window>
       <Content>
-        <StatusCards statusData={statusData}/>
+        <StatusCards onUpdate={()=>updateData(activePage ? activePage : 1)}/>
       </Content>
       <div className={StylesMenuControl}>
         <Menu pointing secondary>
-          {TABS_CONFIG.map((tab, index) => 
+          {MENU_TABS_CONFIG.map((tab, index) => 
             (<Menu.Item key={index}
               name={tab.name}
               disabled={tab.disabled}
               active={isActiveMenuItem(tab.name)}
-              onClick={() => handleMenuItemClick(tab.name)}
+              onClick={() => handleMenuItemClick(tab.route)}
             />)
           )}
         </Menu>
       </div>
-      { blocksData.blocks ?
-      <>
+      { blocksData.blocks && <div className={StylesTableContent}>
         <div className={StylesOverTable}>
           <Search
             disabled={true}
@@ -163,22 +148,22 @@ const Blocks: React.FC = () => {
 
             <Table.Body>
               { blocksData.blocks.map((block, index)=> {
-                return (<Table.Row onClick={() => blockItemClicked(block.cid)} key={index}>
-                  <Table.Cell>{block.height}</Table.Cell>
+                return (<Table.Row key={index} onClick={() => blockItemClicked(block.hash)} className={StylesTableRow}>
+                  <Table.Cell>{block.height.toLocaleString()}</Table.Cell>
                   <Table.Cell>{block.hash}</Table.Cell>
                   <Table.Cell>{timestampToDate(block.timestamp)}</Table.Cell>
-                  <Table.Cell>{block.difficulty}</Table.Cell>
+                  <Table.Cell>{block.difficulty.toLocaleString()}</Table.Cell>
                   <Table.Cell>{block.kernelsCount}</Table.Cell>
                   <Table.Cell>{block.inputsCount}</Table.Cell>
                   <Table.Cell>{block.outputsCount}</Table.Cell>
-                  <Table.Cell>{block.fee}</Table.Cell>
+                  <Table.Cell>{block.fee.toLocaleString()}</Table.Cell>
                 </Table.Row>);
               }) }
               
             </Table.Body>
           </Table>
         </div>
-      </> : <></> }
+      </div> }
     </Window>
   );
 };

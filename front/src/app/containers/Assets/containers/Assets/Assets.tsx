@@ -6,14 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { Window, Button, StatusCards, AssetIcon } from '@app/shared/components';
 import { selectAssetsData } from '../../store/selectors';
-import { selectStatusData } from '@app/containers/Main/store/selectors';
+import { selectAllAssets, selectIsLoaded } from '@app/shared/store/selectors';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
-import { selectSystemState, selectTransactions } from '@app/shared/store/selectors';
-import { LoadAssets } from '@core/api';
-
 import { Table, Search, Pagination, Menu, Card } from 'semantic-ui-react';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
-import { setAssetsData } from '../../store/actions';
+import { loadAssets, setAssetsData } from '../../store/actions';
+import { fromGroths} from '@core/appUtils';
 
 const Content = styled.div`
   width: 100%;
@@ -44,6 +42,15 @@ const StylesTable = css`
   padding: 0 100px;
   width: 100%;
   margin: 0 !important;
+
+  .centered {
+    display: flex;
+    align-items: center;
+
+    > .text {
+      font-weight: 600;
+    }
+  }
 `;
 
 const StylesMenuControl = css`
@@ -55,24 +62,31 @@ const StylesTableRow = css`
   cursor: pointer;
 `;
 
+const StylesTableContent = css`
+  min-height: 900px;
+  width: 100%;
+`;
+
 const Assets: React.FC = () => {
   const [currentDate, setNewDate] = useState(null);
   const [activeMenuItem, setActiveMenuItem] = useState(MENU_TABS_CONFIG[3].name);
   const onChange = (event, data) => setNewDate(data.value);
   const dispatch = useDispatch();
-  const statusData = useSelector(selectStatusData());
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultPage = searchParams.get("page");
+  const [activePage, setActivePage] = useState<number>(Number(defaultPage));
   const assetsData = useSelector(selectAssetsData());
+  const allAssets = useSelector(selectAllAssets());
   const navigate = useNavigate();
+  const isLoaded = useSelector(selectIsLoaded());
 
   const handleSearchChange = () => {
     
   };
 
-  const handleMenuItemClick = (newTab: string) => {
-    navigate(newTab);
+  const handleMenuItemClick = (route: string) => {
+    navigate(route);
   };
 
   const isActiveMenuItem = (name: string) => {
@@ -80,13 +94,14 @@ const Assets: React.FC = () => {
   }
 
   const updateData = async (page: number) => {
-    const newData = await LoadAssets(page - 1);
-    dispatch(setAssetsData(newData));
+    dispatch(loadAssets.request(page));
   }
 
   useEffect(() => {
-    updateData(defaultPage ? Number(defaultPage) : 1);
-  }, []);
+    if (isLoaded) {
+      updateData(defaultPage ? Number(defaultPage) : 1);
+    }
+  }, [isLoaded]);
 
   const paginationOnChange = async (e, data) => {
     setSearchParams({["page"]: data.activePage});
@@ -100,7 +115,7 @@ const Assets: React.FC = () => {
   return (
     <Window>
       <Content>
-        <StatusCards statusData={statusData}></StatusCards>
+        <StatusCards onUpdate={()=>updateData(activePage ? activePage : 1)}></StatusCards>
       </Content>
       <div className={StylesMenuControl}>
         <Menu pointing secondary>
@@ -115,7 +130,7 @@ const Assets: React.FC = () => {
         </Menu>
       </div>
       { assetsData && assetsData.assets &&
-      <>
+      <div className={StylesTableContent}>
         <div className={StylesOverTable}>
           <Search
             placeholder='Search...'
@@ -131,11 +146,11 @@ const Assets: React.FC = () => {
           <Table singleLine>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>ASSET ID:</Table.HeaderCell>
-                <Table.HeaderCell>CID:</Table.HeaderCell>
+                <Table.HeaderCell>ASSET:</Table.HeaderCell>
+                <Table.HeaderCell>NAME:</Table.HeaderCell>
                 <Table.HeaderCell>LOCK HEIGHT:</Table.HeaderCell>
-                <Table.HeaderCell>OWNER:</Table.HeaderCell>
                 <Table.HeaderCell>VALUE:</Table.HeaderCell>
+                <Table.HeaderCell>MINTED BY:</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 
@@ -143,17 +158,23 @@ const Assets: React.FC = () => {
               { assetsData.assets.map((asset: Asset, index: number)=> {
                 return (
                 <Table.Row key={index} onClick={() => contractItemClicked(asset.aid)} className={StylesTableRow}>
-                  <Table.Cell><AssetIcon asset_id={asset.aid}></AssetIcon> {asset.aid}</Table.Cell>
-                  <Table.Cell>{asset.cid ? asset.cid : '-'}</Table.Cell>
+                  <Table.Cell>
+                    <div className='centered'>
+                      <AssetIcon asset_id={asset.aid}></AssetIcon>
+                      <span className='text'>{asset.metadata['SN']}</span>
+                      ({asset.aid})
+                    </div>
+                  </Table.Cell>
+                  <Table.Cell>{asset.metadata['N']}</Table.Cell>
                   <Table.Cell>{asset.lock_height}</Table.Cell>
-                  <Table.Cell>{asset.owner}</Table.Cell>
-                  <Table.Cell>{asset.value}</Table.Cell>
+                  <Table.Cell>{fromGroths(asset.value)}</Table.Cell>
+                  <Table.Cell>{asset.owner ? `OWNER: ${asset.owner}` : `CONTRACT: ${asset.cid}`}</Table.Cell>
                 </Table.Row>);
               })}
             </Table.Body>
           </Table>
         </div>
-      </> }
+      </div> }
     </Window>
   );
 };

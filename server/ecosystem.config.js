@@ -6,8 +6,9 @@ module.exports = {
   apps: [
     {
       name: "API",
-      script: "./dist/app.js",
-      instances: "max",
+      script: "./app/app.ts",
+      instances: 1,
+      interpreter: "node_modules/.bin/ts-node",
     },
   ],
 };
