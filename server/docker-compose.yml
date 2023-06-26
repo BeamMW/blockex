@@ -14,7 +14,7 @@ services:
   redis-service:
     image: redis:alpine
     ports:
-      - target: 6380
+      - published: 6380
   server:
     image: server
     container_name: server
