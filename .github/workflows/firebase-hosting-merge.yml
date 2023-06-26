@@ -6,11 +6,11 @@ name: Deploy to Firebase Hosting on merge
   push:
     branches:
       - dappnet
-  defaults:
-    run:
-      working-directory: front
 jobs:
   build_and_deploy:
+    defaults:
+      run:
+        working-directory: front
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
