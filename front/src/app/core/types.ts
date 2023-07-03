@@ -137,3 +137,9 @@ export interface Block {
   inputs: Input[],
   outputs: Output[],
 }
+
+export interface SearchState {
+  loading?: boolean,
+  results?: any,
+  value?: string,
+}

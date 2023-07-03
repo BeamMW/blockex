@@ -3,6 +3,7 @@ version: "3.8"
 services:
   beam-explorer-mongo:
     image: mongo:6.0.3
+    command: mongod --port 27018
     container_name: beam-explorer-mongo
     environment:
       - MONGO_INITDB_ROOT_USERNAME

@@ -4,34 +4,13 @@ import { css } from '@linaria/core';
 import { Contract, ContractsData } from '@core/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
-import { Window, Button, StatusCards, TableComponent } from '@app/shared/components';
+import { Window, Button, StatusCards, Search } from '@app/shared/components';
 import { selectContractsData } from '../../store/selectors';
-// import { IconSend, IconReceive } from '@app/shared/icons';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
-// import { IconDeposit, IconConfirm } from '@app/shared/icons';
-import { timestampToDate } from '@core/appUtils';
-import { LoadBlocks, LoadContracts } from '@core/api';
-
-import { Table, Search, Pagination, Menu, Card } from 'semantic-ui-react';
-import SemanticDatepicker from 'react-semantic-ui-datepickers';
+import { LoadContracts, ContractSearch } from '@core/api';
+import { Table, Pagination, Menu, Label } from 'semantic-ui-react';
 import { setContractsData } from '../../store/actions';
-
-const Content = styled.div`
-  width: 100%;
-  min-height: 400px;
-  padding: 20px 140px;
-  background-attachment: fixed;
-  background-blend-mode: normal, multiply, multiply, multiply;
-  background-image:
-      linear-gradient(180deg, #000a16, #001f45),
-      radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5)),
-      linear-gradient(to left, rgba(255, 255, 255, 0.5), #d33b65),
-      linear-gradient(297deg, #156fc3, rgba(255, 255, 255, 0.5)),
-      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0), rgba(21, 6, 40, 0.12));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import { selectStatusData } from '@app/shared/store/selectors';
 
 const StylesOverTable = css`
   width: 100%;
@@ -56,21 +35,22 @@ const StylesTableRow = css`
   cursor: pointer;
 `;
 
+const StyledResultItem = css`
+  text-overflow: ellipsis;
+  overflow: hidden; 
+  width: 200px; 
+  white-space: nowrap;
+`;
+
 const Contracts: React.FC = () => {
-  const [currentDate, setNewDate] = useState(null);
   const [activeMenuItem, setActiveMenuItem] = useState(MENU_TABS_CONFIG[1].name);
-  const onChange = (event, data) => setNewDate(data.value);
   const dispatch = useDispatch();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultPage = searchParams.get("page");
-  const [activePage, setActivePage] = useState<number>(Number(defaultPage));
   const contractsData = useSelector(selectContractsData());
   const navigate = useNavigate();
-
-  const handleSearchChange = () => {
-    
-  };
+  const status = useSelector(selectStatusData());
 
   const handleMenuItemClick = (route: string) => {
     navigate(route);
@@ -82,29 +62,40 @@ const Contracts: React.FC = () => {
 
   const updateData = async (page: number) => {
     const newData = await LoadContracts(page - 1);
-    console.log(newData)
     dispatch(setContractsData(newData));
   }
 
   useEffect(() => {
     updateData(defaultPage ? Number(defaultPage) : 1);
-  }, []);
+  }, [status]);
 
   const paginationOnChange = async (e, data) => {
     setSearchParams({["page"]: data.activePage});
-    setActivePage(activePage)
     updateData(data.activePage);
   };
+
+  const searchResultRenderer = (resultItem) => {
+    return (<Label content={`Contract ${resultItem.title}`}
+                  onClick={() => contractItemClicked(resultItem.title)}
+                  className={StyledResultItem} />);
+  };
+
+  const searchMethod = async (searchBy: string) => {
+    const searchResult = await ContractSearch(searchBy);
+
+    return searchResult.map((item: any) => {
+      return {
+        title: item.cid,
+      }
+    });
+  }
 
   const contractItemClicked = useCallback((cid: string) => {
     navigate(`${ROUTES.CONTRACTS.CONTRACT.replace(':cid', '')}${cid}`);
   }, [navigate]);
   
   return (
-    <Window>
-      <Content>
-        <StatusCards onUpdate={()=>updateData(activePage ? activePage : 1)}></StatusCards>
-      </Content>
+    <Window isStatusEnabled={true}>
       <div className={StylesMenuControl}>
         <Menu pointing secondary>
           { MENU_TABS_CONFIG.map((tab, index) => 
@@ -120,13 +111,7 @@ const Contracts: React.FC = () => {
       { contractsData && contractsData.contracts &&
       <>
         <div className={StylesOverTable}>
-          <Search
-            placeholder='Search...'
-            onSearchChange={handleSearchChange}
-            disabled={true}
-            // results={results}
-            // value={value}
-          />
+          <Search searchMethod={searchMethod} placeholder="Search by cid, kind" resultRenderer={searchResultRenderer}/>
           <Pagination defaultActivePage={defaultPage ? defaultPage : 1} 
             onPageChange={paginationOnChange} totalPages={contractsData.pages} />
         </div>

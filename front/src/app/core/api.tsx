@@ -28,9 +28,21 @@ export async function LoadContract(cid: string, page: number = 0, perPage: numbe
 }
 
 export async function LoadAssets(page: number = 0, perPage: number = 50) {
-  return await callApi(`${API_URL}/assets?&page=${page}&per_page=${perPage}`);
+  return await callApi(`${API_URL}/assets?page=${page}&per_page=${perPage}`);
 }
 
 export async function LoadAllAssets() {
   return await callApi(`${API_URL}/all_assets`);
+}
+
+export async function BlockSearch(string: string) {
+  return (await callApi(`${API_URL}/block_search?string=${string}`)) as [];
+}
+
+export async function ContractSearch(string: string) {
+  return (await callApi(`${API_URL}/contract_search?string=${string}`)) as [];
+}
+
+export async function AssetSearch(string: string) {
+  return (await callApi(`${API_URL}/asset_search?string=${string}`)) as [];
 }

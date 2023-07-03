@@ -46,7 +46,7 @@ const contractSchema = new Mongoose.Schema(
     },
     kind: {},
     height: {
-      type: Number,
+      type: String,
       required: true,
     },
     locked_funds: [

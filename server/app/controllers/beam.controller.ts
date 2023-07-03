@@ -5,10 +5,7 @@ import { sendExplorerNodeRequest } from "../shared/helpers/axios";
 import { Blocks, Contract, Call, Status, Assets } from "../models";
 import config from "../config";
 
-const cluster = require("cluster");
 const net = require("net");
-
-const numWorkers = 8;
 
 const BLOCKS_STEP_SYNC = 1000;
 const HEIGHT_STEP = 43800;
@@ -127,6 +124,10 @@ const blocksUpdate = (status: any) => {
         `/blocks?height=${fromHeight.toString()}&n=${BLOCKS_STEP_SYNC.toString()}`,
       );
       blocks = blocks.filter((item: any) => item.found);
+      for (let block of blocks) {
+        block.timestamp = block.timestamp * 1000;
+        block.height_index = block.height;
+      }
       await Blocks.insertMany(blocks);
 
       const storedStatus = await Status.find({});
