@@ -7,6 +7,9 @@ const assetSchema = new Mongoose.Schema(
       unique: true,
       required: true,
     },
+    aid_index: {
+      type: String,
+    },
     cid: {
       type: String,
     },
@@ -29,5 +32,7 @@ const assetSchema = new Mongoose.Schema(
     versionKey: false,
   },
 );
+
+assetSchema.index({ aid: "text", cid: "text", owner: "text" });
 
 export const Assets = Mongoose.model("Assets", assetSchema);

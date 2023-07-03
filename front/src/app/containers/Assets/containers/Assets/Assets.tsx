@@ -4,31 +4,14 @@ import { css } from '@linaria/core';
 import { Asset } from '@core/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
-import { Window, Button, StatusCards, AssetIcon } from '@app/shared/components';
+import { Window, Button, Search, AssetIcon } from '@app/shared/components';
 import { selectAssetsData } from '../../store/selectors';
-import { selectAllAssets, selectIsLoaded } from '@app/shared/store/selectors';
+import { selectAllAssets, selectIsLoaded, selectStatusData } from '@app/shared/store/selectors';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
-import { Table, Search, Pagination, Menu, Card } from 'semantic-ui-react';
-import SemanticDatepicker from 'react-semantic-ui-datepickers';
+import { Table, Pagination, Menu, Label } from 'semantic-ui-react';
 import { loadAssets, setAssetsData } from '../../store/actions';
 import { fromGroths} from '@core/appUtils';
-
-const Content = styled.div`
-  width: 100%;
-  min-height: 400px;
-  padding: 20px 140px;
-  background-attachment: fixed;
-  background-blend-mode: normal, multiply, multiply, multiply;
-  background-image:
-    linear-gradient(180deg, #032e49, #0073a6),
-    radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5)),
-    linear-gradient(to left, rgba(255, 255, 255, 0.5), #d33b65),
-    linear-gradient(297deg, #156fc3, rgba(255, 255, 255, 0.5)),
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0), rgba(21, 6, 40, 0.12));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import { AssetSearch } from '@core/api';
 
 const StylesOverTable = css`
   width: 100%;
@@ -67,6 +50,13 @@ const StylesTableContent = css`
   width: 100%;
 `;
 
+const StyledResultItem = css`
+  text-overflow: ellipsis;
+  overflow: hidden; 
+  width: 200px; 
+  white-space: nowrap;
+`;
+
 const Assets: React.FC = () => {
   const [currentDate, setNewDate] = useState(null);
   const [activeMenuItem, setActiveMenuItem] = useState(MENU_TABS_CONFIG[3].name);
@@ -75,15 +65,10 @@ const Assets: React.FC = () => {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultPage = searchParams.get("page");
-  const [activePage, setActivePage] = useState<number>(Number(defaultPage));
   const assetsData = useSelector(selectAssetsData());
-  const allAssets = useSelector(selectAllAssets());
   const navigate = useNavigate();
   const isLoaded = useSelector(selectIsLoaded());
-
-  const handleSearchChange = () => {
-    
-  };
+  const status = useSelector(selectStatusData());
 
   const handleMenuItemClick = (route: string) => {
     navigate(route);
@@ -101,22 +86,35 @@ const Assets: React.FC = () => {
     if (isLoaded) {
       updateData(defaultPage ? Number(defaultPage) : 1);
     }
-  }, [isLoaded]);
+  }, [isLoaded, status]);
 
   const paginationOnChange = async (e, data) => {
     setSearchParams({["page"]: data.activePage});
     await updateData(data.activePage);
   };
 
+  const searchResultRenderer = (resultItem) => {
+    return (<Label content={`Asset (${resultItem.title})`}
+                  onClick={() => contractItemClicked(resultItem.title)}
+                  className={StyledResultItem} />);
+  };
+
+  const searchMethod = async (searchBy: string) => {
+    const searchResult = await AssetSearch(searchBy);
+
+    return searchResult.map((item: any) => {
+      return {
+        title: item.aid,
+      }
+    });
+  }
+
   const contractItemClicked = useCallback((aid: number) => {
-    // navigate(`${ROUTES.CONTRACTS.CONTRACT.replace(':cid', '')}${cid}`);
+    navigate(`${ROUTES.ASSETS.ASSET.replace(':aid', '')}${aid}`);
   }, [navigate]);
   
   return (
-    <Window>
-      <Content>
-        <StatusCards onUpdate={()=>updateData(activePage ? activePage : 1)}></StatusCards>
-      </Content>
+    <Window isStatusEnabled={true}>
       <div className={StylesMenuControl}>
         <Menu pointing secondary>
           { MENU_TABS_CONFIG.map((tab, index) => 
@@ -132,13 +130,7 @@ const Assets: React.FC = () => {
       { assetsData && assetsData.assets &&
       <div className={StylesTableContent}>
         <div className={StylesOverTable}>
-          <Search
-            placeholder='Search...'
-            onSearchChange={handleSearchChange}
-            disabled={true}
-            // results={results}
-            // value={value}
-          />
+          <Search searchMethod={searchMethod} placeholder="Search by asset ID, minted by" resultRenderer={searchResultRenderer}/>
           <Pagination defaultActivePage={defaultPage ? defaultPage : 1} 
             onPageChange={paginationOnChange} totalPages={assetsData.pages} />
         </div>

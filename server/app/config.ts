@@ -17,6 +17,7 @@ const common: ConfigInterface = {
   beam_node_url: process.env.BEAM_NODE_URL,
   db_name: process.env.DB_NAME,
   db_host: process.env.DB_HOST,
+  db_port: process.env.DB_PORT,
 };
 
 const development: ConfigInterface = {

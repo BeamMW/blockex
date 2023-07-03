@@ -9,36 +9,37 @@ import { ToastContainer } from 'react-toastify';
 
 import { ROUTES } from '@app/shared/constants';
 import {
-  Blocks, Contracts, ContractItem, Assets, BlockItem,
+  Blocks, Contracts, ContractItem, Assets, BlockItem, Maintenance,
 } from '@app/containers';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
 import './styles';
+import { selectIsLoaded } from './shared/store/selectors';
 
 const styleLink = document.createElement("link"); styleLink.rel = "stylesheet";
   styleLink.href = "https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css"; document.head.appendChild(styleLink);
 
 
-const routes = () => [
+const routes = (isLoaded: boolean) => [
   {
     path: ROUTES.MAIN.BASE,
-    element: <Blocks />,
+    element: isLoaded !== false ? <Blocks /> : <Maintenance />,
   },
   {
     path: ROUTES.MAIN.BLOCK,
-    element: <BlockItem />,
+    element: isLoaded !== false ? <BlockItem /> : <Maintenance />,
   },
   {
     path: ROUTES.CONTRACTS.BASE,
-    element: <Contracts />,
+    element: isLoaded !== false ? <Contracts /> : <Maintenance />,
   },
   {
     path: ROUTES.CONTRACTS.CONTRACT,
-    element: <ContractItem />,
+    element: isLoaded !== false ? <ContractItem /> : <Maintenance />,
   },
   {
     path: ROUTES.ASSETS.BASE,
-    element: <Assets />,
+    element: isLoaded !== false ? <Assets /> : <Maintenance />,
   },
 ];
 
@@ -50,7 +51,8 @@ declare global {
 
 const App = () => {
   const dispatch = useDispatch();
-  const content = useRoutes(routes());
+  const isLoaded = useSelector(selectIsLoaded());
+  const content = useRoutes(routes(isLoaded));
   const navigate = useNavigate();
   const navigateURL = useSelector(sharedSelectors.selectRouterLink());
   

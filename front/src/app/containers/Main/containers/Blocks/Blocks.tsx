@@ -2,34 +2,19 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Window, Button, StatusCards } from '@app/shared/components';
+import { useNavigate } from 'react-router-dom';
+import { Window, Search } from '@app/shared/components';
 import { selectBlocksData } from '../../store/selectors';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 import { timestampToDate } from '@core/appUtils';
 import { LoadBlocks, LoadContracts } from '@core/api';
 import { useSearchParams } from 'react-router-dom';
+import { BlockSearch } from '@core/api';
 
-import { Table, Search, Pagination, Menu } from 'semantic-ui-react';
+import { Table, Pagination, Menu, Label } from 'semantic-ui-react';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
 import { setBlocksData } from '../../store/actions';
-
-const Content = styled.div`
-  width: 100%;
-  min-height: 400px;
-  padding: 20px 140px;
-  background-attachment: fixed;
-  background-blend-mode: normal, multiply, multiply, multiply;
-  background-image:
-    linear-gradient(180deg, #032e49, #0073a6),
-    radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5)),
-    linear-gradient(to left, rgba(255, 255, 255, 0.5), #d33b65),
-    linear-gradient(297deg, #156fc3, rgba(255, 255, 255, 0.5)),
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0), rgba(21, 6, 40, 0.12));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import { selectStatusData } from '@app/shared/store/selectors';
 
 const StylesOverTable = css`
   width: 100%;
@@ -59,34 +44,43 @@ const StylesTableRow = css`
   cursor: pointer;
 `;
 
+const StyledResultItem = css`
+  text-overflow: ellipsis;
+  overflow: hidden; 
+  width: 200px; 
+  white-space: nowrap;
+`;
+
 const Blocks: React.FC = () => {
   const blocksData = useSelector(selectBlocksData());
   const [currentDate, setNewDate] = useState(null);
   const [activeMenuItem, setActiveMenuItem] = useState<string>(MENU_TABS_CONFIG[0].name);
-  const onChange = (event, data) => setNewDate(data.value);
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultPage = searchParams.get("page");
   const navigate = useNavigate();
-  const [activePage, setActivePage] = useState<number>(Number(defaultPage));
+  const status = useSelector(selectStatusData());
+  const [activePage, setActivePage] = useState();
 
-  const handleSearchChange = async () => {
-
+  type UpdateBlocksParams = {
+    page?: number,
+    timestamp?: number,
+    perPage?: number,
   };
 
-  const updateData = async (page: number) => {
-    const newData = await LoadBlocks(page - 1);
+  const updateData = async (params: UpdateBlocksParams) => {
+    const newData = await LoadBlocks(params);
     dispatch(setBlocksData(newData));
+    setActivePage(newData.page + 1);
   }
 
   useEffect(() => {
-    updateData(defaultPage ? Number(defaultPage) : 1);
-  }, []);
+    updateData({page: defaultPage ? Number(defaultPage) : 1});
+  }, [status]);
 
   const paginationOnChange = async (e, data) => {
     setSearchParams({["page"]: data.activePage});
-    setActivePage(data.activePage);
-    updateData(data.activePage);
+    updateData({page: data.activePage});
   };
 
   const handleMenuItemClick = (route: string) => {
@@ -94,19 +88,39 @@ const Blocks: React.FC = () => {
   };
 
   const isActiveMenuItem = (name: string) => {
-    // console.log(name === activeMenuItem);
     return name === activeMenuItem;
+  }
+
+  const searchResultRenderer = (resultItem) => {
+    return (<Label content={`Block ${resultItem.title}`} onClick={() => blockItemClicked(resultItem.hash)} className={StyledResultItem} />)
+  };
+
+  const searchMethod = async (searchBy: string) => {
+    const searchResult = await BlockSearch(searchBy);
+
+    return searchResult.map((item: any) => {
+      return {
+        title: item.height.toString(),
+        hash: item.hash,
+      }
+    });
   }
 
   const blockItemClicked = useCallback((hash: string) => {
     navigate(`${ROUTES.MAIN.BLOCK.replace(':hash', '')}${hash}`);
   }, [navigate]);
+
+  const onDatepickerChange = (event, data) => {
+    if (data.value) {
+      updateData({timestamp: new Date(data.value).getTime()});
+      setNewDate(data.value);
+    } else {
+      updateData({page: defaultPage ? Number(defaultPage) : 1});
+    }
+  }
   
   return (
-    <Window>
-      <Content>
-        <StatusCards onUpdate={()=>updateData(activePage ? activePage : 1)}/>
-      </Content>
+    <Window isStatusEnabled={true}>
       <div className={StylesMenuControl}>
         <Menu pointing secondary>
           {MENU_TABS_CONFIG.map((tab, index) => 
@@ -121,15 +135,12 @@ const Blocks: React.FC = () => {
       </div>
       { blocksData.blocks && <div className={StylesTableContent}>
         <div className={StylesOverTable}>
-          <Search
-            disabled={true}
-            placeholder='Search...'
-            onSearchChange={handleSearchChange}
-            // results={results}
-            // value={value}
-          />
-          <SemanticDatepicker disabled={true} onChange={onChange} />
-          <Pagination defaultActivePage={defaultPage ? defaultPage : 1} onPageChange={paginationOnChange} totalPages={blocksData.pages} />
+          <Search searchMethod={searchMethod} placeholder="Search by height, hash, kernel ID" resultRenderer={searchResultRenderer}/>
+          <SemanticDatepicker onChange={onDatepickerChange} />
+          <Pagination defaultActivePage={defaultPage ? defaultPage : 1}
+            activePage={activePage}
+            onPageChange={paginationOnChange}
+            totalPages={blocksData.pages} />
         </div>
         <div className={StylesTable}>
           <Table singleLine>

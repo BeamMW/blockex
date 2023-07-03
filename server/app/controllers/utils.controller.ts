@@ -190,10 +190,9 @@ export const getBlock = async (ctx: ParameterizedContext) => {
   }
 };
 
-export const getBlocks = async (ctx: ParameterizedContext) => {
+export const blockSearch = async (ctx: ParameterizedContext) => {
   const blocksQuerySchema = Joi.object({
-    per_page: Joi.number().integer().min(10).default(20),
-    page: Joi.number().integer().min(0).default(0),
+    string: Joi.string().required(),
   });
 
   const { error, value } = blocksQuerySchema.validate(ctx.request.query, {
@@ -205,11 +204,149 @@ export const getBlocks = async (ctx: ParameterizedContext) => {
     ctx.status = 400;
     ctx.body = { error: error.details.map((detail: any) => detail.message) };
   } else {
-    const { per_page, page } = ctx.request.query;
+    const { string } = ctx.request.query;
+    const result = await Blocks.find(
+      {
+        $text: {
+          $search: string,
+        },
+      },
+      {
+        score: {
+          $meta: "textScore",
+        },
+      },
+    ).sort({ score: { $meta: "textScore" } });
+
+    ctx.ok({
+      status: "success",
+      data: result,
+    });
+  }
+};
+
+export const contractSearch = async (ctx: ParameterizedContext) => {
+  const contractQuerySchema = Joi.object({
+    string: Joi.string().required(),
+  });
+
+  const { error, value } = contractQuerySchema.validate(ctx.request.query, {
+    abortEarly: false,
+    allowUnknown: true,
+  });
+
+  if (error) {
+    ctx.status = 400;
+    ctx.body = { error: error.details.map((detail: any) => detail.message) };
+  } else {
+    const { string } = ctx.request.query;
+    const result = await Contract.find(
+      {
+        $text: {
+          $search: string,
+        },
+      },
+      {
+        score: {
+          $meta: "textScore",
+        },
+      },
+    ).sort({ score: { $meta: "textScore" } });
+
+    ctx.ok({
+      status: "success",
+      data: result,
+    });
+  }
+};
+
+export const assetSearch = async (ctx: ParameterizedContext) => {
+  const assetQuerySchema = Joi.object({
+    string: Joi.string().required(),
+  });
+
+  const { error, value } = assetQuerySchema.validate(ctx.request.query, {
+    abortEarly: false,
+    allowUnknown: true,
+  });
+
+  if (error) {
+    ctx.status = 400;
+    ctx.body = { error: error.details.map((detail: any) => detail.message) };
+  } else {
+    const { string } = ctx.request.query;
+    const result = await Assets.find(
+      {
+        $text: {
+          $search: string,
+        },
+      },
+      {
+        score: {
+          $meta: "textScore",
+        },
+      },
+    ).sort({ score: { $meta: "textScore" } });
+
+    ctx.ok({
+      status: "success",
+      data: result,
+    });
+  }
+};
+
+export const getBlocks = async (ctx: ParameterizedContext) => {
+  const count = await Blocks.estimatedDocumentCount();
+  const blocksQuerySchema = Joi.object({
+    per_page: Joi.number().integer().min(10).default(20),
+    page: Joi.number().integer().min(0).default(0),
+    timestamp: Joi.number().integer().default(null),
+  });
+
+  const { error, value } = blocksQuerySchema.validate(ctx.request.query, {
+    abortEarly: false,
+    allowUnknown: true,
+  });
+
+  if (error) {
+    ctx.status = 400;
+    ctx.body = { error: error.details.map((detail: any) => detail.message) };
+  } else {
+    const { per_page, page, timestamp } = ctx.request.query;
+    let specificPage = 0;
+    if (timestamp) {
+      const nearestBlock = await Blocks.aggregate([
+        {
+          $match: {
+            timestamp: {
+              $lte: new Date(Number(timestamp)),
+            },
+          },
+        },
+        {
+          $sort: {
+            timestamp: -1,
+          },
+        },
+        {
+          $limit: 1,
+        },
+      ]);
+
+      specificPage = nearestBlock.length > 0 ? Number(nearestBlock[0].height) : 0;
+      if (specificPage > count) {
+        specificPage = specificPage > 0 ? specificPage - (specificPage % Number(per_page)) + Number(per_page) : count;
+      } else {
+        specificPage = Number(per_page);
+      }
+    }
+
+    console.log(page !== undefined ? Number(per_page) * Number(page) : count - specificPage);
+
     //TODO: add calls count by height (lookup?)
     const blocks = await Blocks.aggregate([
       { $sort: { height: -1 } },
-      { $skip: Number(per_page) * Number(page) },
+      { $skip: page !== undefined ? Number(per_page) * Number(page) : count - specificPage },
       { $limit: Number(per_page) },
       {
         $addFields: {
@@ -242,12 +379,14 @@ export const getBlocks = async (ctx: ParameterizedContext) => {
         ],
       },
     ]);
-    const count = await Blocks.estimatedDocumentCount();
     ctx.ok({
       status: "success",
       data: {
         blocks,
-        page: Number(page),
+        page:
+          page !== undefined
+            ? Number(page)
+            : Math.ceil(count / Number(per_page)) - Math.ceil(specificPage / Number(per_page)),
         pages: Math.ceil(count / Number(per_page)),
         count,
       },

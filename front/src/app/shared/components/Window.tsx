@@ -4,10 +4,12 @@ import { useDispatch } from 'react-redux';
 import { IconBeamLogo } from '@app/shared/icons';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants';
+import { StatusCards } from './';
 
 interface WindowProps {
   onPrevious?: React.MouseEventHandler | undefined;
   state?: 'content';
+  isStatusEnabled?: boolean;
 }
 
 const Container = styled.div`
@@ -71,8 +73,25 @@ const Container = styled.div`
   }
 `;
 
+const StatusContent = styled.div`
+  width: 100%;
+  min-height: 400px;
+  padding: 20px 140px;
+  background-attachment: fixed;
+  background-blend-mode: normal, multiply, multiply, multiply;
+  background-image:
+    linear-gradient(180deg, #032e49, #0073a6),
+    radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5)),
+    linear-gradient(to left, rgba(255, 255, 255, 0.5), #d33b65),
+    linear-gradient(297deg, #156fc3, rgba(255, 255, 255, 0.5)),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0), rgba(21, 6, 40, 0.12));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const Window: React.FC<any> = ({
-  children,
+  children, isStatusEnabled = false,
 }) => {
   const rootRef = useRef();
   const dispatch = useDispatch();
@@ -94,6 +113,9 @@ const Window: React.FC<any> = ({
         </div>
       </div>
       <>
+      { isStatusEnabled && <StatusContent>
+        <StatusCards/>
+      </StatusContent> }
       { children }
       </>
     </Container>

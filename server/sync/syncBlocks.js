@@ -1,11 +1,13 @@
 const Mongoose = require("mongoose");
 const axios = require("axios");
 
+require("dotenv").config();
+
 const BLOCKS_STEP_SYNC = 1000;
 
 const getRequest = async (req) => {
   const options = {
-    url: "http://host.docker.internal:8899/" + req,
+    url: `http://${process.env.BEAM_NODE_URL}/${req}`,
     method: "GET",
   };
 
@@ -85,6 +87,10 @@ const blockSchema = new Mongoose.Schema(
       type: Number,
       required: true,
     },
+    height_index: {
+      type: String,
+      required: true,
+    },
     chainwork: {
       type: String,
       requred: true,
@@ -98,7 +104,7 @@ const blockSchema = new Mongoose.Schema(
       required: true,
     },
     timestamp: {
-      type: Number,
+      type: Date,
       required: true,
     },
     subsidy: {
@@ -133,6 +139,8 @@ const blockSchema = new Mongoose.Schema(
   },
 );
 
+blockSchema.index({ hash: "text", height_index: "text", "kernels.id": "text" });
+
 const statusSchema = new Mongoose.Schema(
   {
     subsidy: {
@@ -159,7 +167,10 @@ const mongooseOptions = {
 
 const connect = async () => {
   try {
-    await Mongoose.connect("mongodb://beam-explorer-mongo-mainnet:27017/explorer", mongooseOptions);
+    await Mongoose.connect(
+      `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+      mongooseOptions,
+    );
     console.log("Connected to MongoDB");
   } catch (error) {
     console.log("Could not connect to MongoDB");
@@ -185,6 +196,11 @@ const syncBlocks = async () => {
     const start = Date.now();
 
     let blocks = await getRequest("blocks?height=" + fromHeight.toString() + "&n=" + BLOCKS_STEP_SYNC.toString());
+    for (let block of blocks) {
+      block.timestamp = block.timestamp * 1000;
+      block.height_index = block.height;
+    }
+
     blocks = blocks.filter((item) => item.found);
     await Blocks.insertMany(blocks);
 

@@ -12,4 +12,5 @@ export interface ConfigInterface {
   beam_node_url: string;
   db_name: string;
   db_host: string;
+  db_port: string;
 }

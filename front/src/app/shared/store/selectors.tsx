@@ -12,3 +12,4 @@ export const selectAssetById = (id: number) => createSelector(selectShared, (sta
     return state.assetsList.find((asset) => asset.aid === id);
 });
 export const selectStatusData = () => createSelector(selectShared, (state) => state.status);
+export const selectSearchState = () => createSelector(selectShared, (state) => state.searchState);
