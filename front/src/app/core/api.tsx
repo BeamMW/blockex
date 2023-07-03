@@ -7,8 +7,15 @@ async function callApi(route: string) {
   return formattedResponse.data;
 }
 
-export async function LoadBlocks(page: number = 0, perPage: number = 20) {
-  return await callApi(`${API_URL}/blocks?page=${page}&per_page=${perPage}`);
+export async function LoadBlocks(params: {page?: number, perPage?: number, timestamp?: number}) {
+  if (params.page) {
+    params.page = params.page - 1;
+  }
+
+  if (!params.perPage) {
+    params.perPage = 20;
+  }
+  return await callApi(`${API_URL}/blocks?per_page=${params.perPage}${params.timestamp ? `&timestamp=${params.timestamp}` : ''}${params.page !== undefined ? `&page=${params.page}` : ''}`);
 }
 
 export async function LoadBlock(hash: string) {

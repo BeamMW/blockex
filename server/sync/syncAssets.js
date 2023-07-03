@@ -19,9 +19,12 @@ const getRequest = async (req) => {
 const assetSchema = new Mongoose.Schema(
   {
     aid: {
-      type: String,
+      type: Number,
       unique: true,
       required: true,
+    },
+    aid_index: {
+      type: String,
     },
     cid: {
       type: String,
@@ -46,7 +49,7 @@ const assetSchema = new Mongoose.Schema(
   },
 );
 
-assetSchema.index({ aid: "text", cid: "text", owner: "text" });
+assetSchema.index({ aid_index: "text", cid: "text", owner: "text" });
 
 const Assets = Mongoose.model("Assets", assetSchema);
 
@@ -74,6 +77,7 @@ const formatAssets = async (assets) => {
       const assetHistory = await getRequest("asset?id=" + asset.aid + "&n=1");
       return {
         aid: asset.aid,
+        aid_index: asset.aid,
         cid: asset.cid ? asset.cid.value : null,
         lock_height: asset.lock_height,
         metadata: asset.metadata.text,

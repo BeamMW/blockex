@@ -55,25 +55,32 @@ const Blocks: React.FC = () => {
   const blocksData = useSelector(selectBlocksData());
   const [currentDate, setNewDate] = useState(null);
   const [activeMenuItem, setActiveMenuItem] = useState<string>(MENU_TABS_CONFIG[0].name);
-  const onChange = (event, data) => setNewDate(data.value);
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultPage = searchParams.get("page");
   const navigate = useNavigate();
   const status = useSelector(selectStatusData());
+  const [activePage, setActivePage] = useState();
 
-  const updateData = async (page: number) => {
-    const newData = await LoadBlocks(page - 1);
+  type UpdateBlocksParams = {
+    page?: number,
+    timestamp?: number,
+    perPage?: number,
+  };
+
+  const updateData = async (params: UpdateBlocksParams) => {
+    const newData = await LoadBlocks(params);
     dispatch(setBlocksData(newData));
+    setActivePage(newData.page + 1);
   }
 
   useEffect(() => {
-    updateData(defaultPage ? Number(defaultPage) : 1);
+    updateData({page: defaultPage ? Number(defaultPage) : 1});
   }, [status]);
 
   const paginationOnChange = async (e, data) => {
     setSearchParams({["page"]: data.activePage});
-    updateData(data.activePage);
+    updateData({page: data.activePage});
   };
 
   const handleMenuItemClick = (route: string) => {
@@ -102,6 +109,15 @@ const Blocks: React.FC = () => {
   const blockItemClicked = useCallback((hash: string) => {
     navigate(`${ROUTES.MAIN.BLOCK.replace(':hash', '')}${hash}`);
   }, [navigate]);
+
+  const onDatepickerChange = (event, data) => {
+    if (data.value) {
+      updateData({timestamp: new Date(data.value).getTime()});
+      setNewDate(data.value);
+    } else {
+      updateData({page: defaultPage ? Number(defaultPage) : 1});
+    }
+  }
   
   return (
     <Window isStatusEnabled={true}>
@@ -120,8 +136,11 @@ const Blocks: React.FC = () => {
       { blocksData.blocks && <div className={StylesTableContent}>
         <div className={StylesOverTable}>
           <Search searchMethod={searchMethod} placeholder="Search by height, hash, kernel ID" resultRenderer={searchResultRenderer}/>
-          <SemanticDatepicker onChange={onChange} />
-          <Pagination defaultActivePage={defaultPage ? defaultPage : 1} onPageChange={paginationOnChange} totalPages={blocksData.pages} />
+          <SemanticDatepicker onChange={onDatepickerChange} />
+          <Pagination defaultActivePage={defaultPage ? defaultPage : 1}
+            activePage={activePage}
+            onPageChange={paginationOnChange}
+            totalPages={blocksData.pages} />
         </div>
         <div className={StylesTable}>
           <Table singleLine>

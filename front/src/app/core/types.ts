@@ -6,7 +6,7 @@ export type ButtonVariant = 'regular' | 'ghost' | 'ghostBordered' | 'block' | 'v
 export interface Block {
   hash: string,
   height: number,
-  timestamp: number,
+  timestamp: string,
   difficulty: number,
   inputsCount: number,
   outputsCount: number,
@@ -122,13 +122,13 @@ export interface Output {
   commitment: string,
 }
 
-export interface Block {
+export interface BlockItemData {
   hash: string,
   height: number,
   chainwork: string,
   found: boolean,
   prev: string,
-  timestamp: number,
+  timestamp: string,
   subsidy: number,
   rate_btc: string,
   rate_usd: string,

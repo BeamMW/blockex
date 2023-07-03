@@ -1,9 +1,5 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 import { actions } from '.';
-import store from '../../../../index';
-// import { Balance, Currency } from '@app/core/types';
-import { ethId } from '@app/shared/constants';
-import { LoadBlocks, LoadStatus, LoadContracts } from '@core/api';
 import {  } from '@core/types';
 
 export function* loadContractsParamsSaga(

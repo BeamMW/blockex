@@ -68,7 +68,7 @@ const StatusCards: React.FC = ({
             </div>
             <div className='subline'>
               <div className='card-header'>LATEST BLOCK</div>
-              <div className='card-text'>{timestampToDate(status.timestamp)}</div>
+              <div className='card-text'>{timestampToDate(status.timestamp, true)}</div>
             </div>
           </div>
           <div className='line bottom'>

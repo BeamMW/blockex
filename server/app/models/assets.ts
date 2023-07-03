@@ -3,9 +3,12 @@ const Mongoose = require("mongoose");
 const assetSchema = new Mongoose.Schema(
   {
     aid: {
-      type: String,
+      type: Number,
       unique: true,
       required: true,
+    },
+    aid_index: {
+      type: String,
     },
     cid: {
       type: String,

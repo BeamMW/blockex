@@ -8,7 +8,7 @@ import { navigate } from '@app/shared/store/actions';
 import store from '../../../index';
 import { actions } from '.';
 
-import { LoadBlocks, LoadStatus, LoadAllAssets } from '@core/api';
+import { LoadStatus, LoadAllAssets } from '@core/api';
 import { BlocksData, ContractsData, Status, Asset } from '@core/types';
 
 const WS_URL = 'ws://127.0.0.1:4000/api/v1/ws';

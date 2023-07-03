@@ -181,6 +181,7 @@ const worker = new Worker(
       const versionHistory = formatVersionsHistory(contractData["Version History"].value);
       const contractDataFormatted = {
         cid,
+        cid_index: cid,
         locked_funds: lockedFunds,
         owned_assets: ownedAssets,
         version_history: versionHistory,

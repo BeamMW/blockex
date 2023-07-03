@@ -296,6 +296,7 @@ export const assetSearch = async (ctx: ParameterizedContext) => {
 };
 
 export const getBlocks = async (ctx: ParameterizedContext) => {
+  const count = await Blocks.estimatedDocumentCount();
   const blocksQuerySchema = Joi.object({
     per_page: Joi.number().integer().min(10).default(20),
     page: Joi.number().integer().min(0).default(0),
@@ -331,13 +332,21 @@ export const getBlocks = async (ctx: ParameterizedContext) => {
           $limit: 1,
         },
       ]);
-      specificPage = Math.ceil(Number(nearestBlock[0].height) / Number(per_page));
+
+      specificPage = nearestBlock.length > 0 ? Number(nearestBlock[0].height) : 0;
+      if (specificPage > count) {
+        specificPage = specificPage > 0 ? specificPage - (specificPage % Number(per_page)) + Number(per_page) : count;
+      } else {
+        specificPage = Number(per_page);
+      }
     }
+
+    console.log(page !== undefined ? Number(per_page) * Number(page) : count - specificPage);
 
     //TODO: add calls count by height (lookup?)
     const blocks = await Blocks.aggregate([
       { $sort: { height: -1 } },
-      { $skip: Number(per_page) * Number(page) },
+      { $skip: page !== undefined ? Number(per_page) * Number(page) : count - specificPage },
       { $limit: Number(per_page) },
       {
         $addFields: {
@@ -370,12 +379,14 @@ export const getBlocks = async (ctx: ParameterizedContext) => {
         ],
       },
     ]);
-    const count = await Blocks.estimatedDocumentCount();
     ctx.ok({
       status: "success",
       data: {
         blocks,
-        page: page ? Number(page) : specificPage,
+        page:
+          page !== undefined
+            ? Number(page)
+            : Math.ceil(count / Number(per_page)) - Math.ceil(specificPage / Number(per_page)),
         pages: Math.ceil(count / Number(per_page)),
         count,
       },

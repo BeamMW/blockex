@@ -1,15 +1,14 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
-import { useSelector } from 'react-redux';
-import { Block, ContractData, Kernel, Output, Input } from '@core/types';
+import { BlockItemData, Kernel, Output, Input } from '@core/types';
 import { useNavigate, useLocation, useSearchParams, useParams } from 'react-router-dom';
 import { Window, AssetIcon, BackControl } from '@app/shared/components';
 import { ROUTES, MENU_TABS_CONFIG } from '@app/shared/constants';
 import { LoadBlock, LoadContract } from '@core/api';
 import { Table, Accordion, Segment } from 'semantic-ui-react';
 import { selectAssetById } from '@app/shared/store/selectors';
-import { fromGroths } from '@core/appUtils';
+import { timestampToDate } from '@core/appUtils';
 
 const StylesOverTable = css`
   width: 100%;
@@ -138,7 +137,7 @@ const StylesTableContent = css`
 `;
 
 const BlockItem: React.FC = () => {
-  const [blockData, setBlockData] = useState<Block>();
+  const [blockData, setBlockData] = useState<BlockItemData>();
   const navigate = useNavigate();
   const { hash } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -262,7 +261,7 @@ const BlockItem: React.FC = () => {
             <Segment className='subtitle-segment'>
               <div className='subtitle'> AGE: </div>
             </Segment>
-            <Segment>{blockData.height}</Segment>
+            <Segment>{timestampToDate(blockData.timestamp)}</Segment>
           </Segment.Group>
           <Segment.Group horizontal>
             <Segment className='subtitle-segment'>
