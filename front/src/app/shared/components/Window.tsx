@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
 import { styled } from '@linaria/react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IconBeamLogo } from '@app/shared/icons';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants';
 import { StatusCards } from './';
+import { selectIsLoaded } from '../store/selectors';
 
 interface WindowProps {
   onPrevious?: React.MouseEventHandler | undefined;
@@ -96,6 +97,7 @@ const Window: React.FC<any> = ({
   const rootRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isLoaded = useSelector(selectIsLoaded());
 
   const logoClicked = () => {
     navigate(ROUTES.MAIN.BASE);
@@ -113,7 +115,7 @@ const Window: React.FC<any> = ({
         </div>
       </div>
       <>
-      { isStatusEnabled && <StatusContent>
+      { isStatusEnabled && isLoaded && <StatusContent>
         <StatusCards/>
       </StatusContent> }
       { children }
