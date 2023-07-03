@@ -1,11 +1,13 @@
 const Mongoose = require("mongoose");
 const axios = require("axios");
 
+require("dotenv").config();
+
 const CALLS_STEP_SYNC = 1000;
 
 const getRequest = async (req) => {
   const options = {
-    url: "http://host.docker.internal:8899/" + req,
+    url: `http://${process.env.BEAM_NODE_URL}/${req}`,
     method: "GET",
   };
 
@@ -60,7 +62,7 @@ const contractSchema = new Mongoose.Schema(
     },
     kind: {},
     height: {
-      type: Number,
+      type: String,
     },
     locked_funds: [
       {
@@ -93,6 +95,8 @@ const contractSchema = new Mongoose.Schema(
     versionKey: false,
   },
 );
+
+contractSchema.index({ kind: "text", height: "text", cid: "text" });
 
 const CallSchema = new Mongoose.Schema(
   {
@@ -128,7 +132,10 @@ const mongooseOptions = {
 
 const connect = async () => {
   try {
-    await Mongoose.connect("mongodb://beam-explorer-mongo-mainnet:27017/explorer", mongooseOptions);
+    await Mongoose.connect(
+      `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+      mongooseOptions,
+    );
     console.log("Connected to MongoDB");
   } catch (error) {
     console.log("Could not connect to MongoDB");

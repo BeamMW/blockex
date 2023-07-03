@@ -65,6 +65,9 @@ const blockSchema = new Mongoose.Schema(
       type: Number,
       required: true,
     },
+    height_index: {
+      type: String,
+    },
     chainwork: {
       type: String,
       requred: true,

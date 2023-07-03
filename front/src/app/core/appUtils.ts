@@ -17,8 +17,8 @@ const addLeadingZeros = (dt) => {
   return (dt < 10 ? '0' : '') + dt;
 }
 
-export const timestampToDate = (value: number) => {
-  const date = new Date(value * 1000);
+export const timestampToDate = (value: any, isTimestamp: boolean = false) => {
+  const date = new Date(isTimestamp ? value * 1000 : value);
   const hours = date.getHours();
   const dateFormat = MONTHS[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() + ", " +
     addLeadingZeros(hours) + ":" + addLeadingZeros(date.getMinutes()) + ":" + addLeadingZeros(date.getSeconds()) + 

@@ -2,6 +2,7 @@ export const ROUTES = {
   MAIN: {
     BASE: '/',
     BLOCK: '/block/:hash',
+    MAINTENANCE: '/maintenance',
   },
   CONTRACTS: {
     BASE: '/contracts',

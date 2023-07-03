@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Card } from 'semantic-ui-react';
-import { Status } from '@core/types';
 import { css } from '@linaria/core';
 import { timestampToDate } from '@core/appUtils';
-import useWebSocket from 'react-use-websocket';
-
-const WS_URL = 'wss://explorer-api.beam.mw/dappnet/ws/';
-
-interface CardProps {
-  onUpdate: () => void;
-}
+import { selectStatusData } from '../store/selectors';
 
 const StylesStatusCard = css`
   height: 150px;
@@ -59,33 +52,10 @@ const StylesStatusCard = css`
   }
 `;
 
-const StatusCards: React.FC<CardProps> = ({
-  onUpdate,
+const StatusCards: React.FC = ({
   ...rest
 }) => {
-
-  const {
-    lastMessage,
-  } = useWebSocket(WS_URL, {
-    onOpen: () => console.log('opened'),
-    //Will attempt to reconnect on all close events, such as server shutting down
-    shouldReconnect: (closeEvent) => true,
-  });
-  const [status, setStatus] = useState<Status>(null);
-
-  useEffect(() => {
-    if (lastMessage !== null) {
-      
-      const messageData = JSON.parse(lastMessage.data);
-
-      if (messageData.status) {
-        setStatus(messageData.status);
-        if (status) {
-          onUpdate();
-        }
-      }
-    }
-  }, [lastMessage]);
+  const status = useSelector(selectStatusData());
 
   return (
     <Card.Group>
@@ -98,7 +68,7 @@ const StatusCards: React.FC<CardProps> = ({
             </div>
             <div className='subline'>
               <div className='card-header'>LATEST BLOCK</div>
-              <div className='card-text'>{timestampToDate(status.timestamp)}</div>
+              <div className='card-text'>{timestampToDate(status.timestamp, true)}</div>
             </div>
           </div>
           <div className='line bottom'>

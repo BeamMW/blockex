@@ -10,7 +10,7 @@ type Action = ActionType<typeof actions>;
 const initialState: SharedStateType = {
   routerLink: '',
   errorMessage: null,
-  isLoaded: false,
+  isLoaded: null,
   assetsList: [],
   status: {
     height: 0,
@@ -22,6 +22,11 @@ const initialState: SharedStateType = {
     next_treasury_emission_height: 0,
     timestamp: 0,
   },
+  searchState: {
+    loading: false,
+    results: [],
+    value: ''
+  }
 };
 
 const reducer = createReducer<SharedStateType, Action>(initialState)
@@ -39,6 +44,18 @@ const reducer = createReducer<SharedStateType, Action>(initialState)
   }))
   .handleAction(actions.setIsLoaded, (state, action) => produce(state, (nexState) => {
     nexState.isLoaded  = action.payload;
+  }))
+  .handleAction(actions.searchCleanQuery, (state, action) => produce(state, (nexState) => {
+    nexState.searchState = initialState.searchState;
+  }))
+  .handleAction(actions.searchStart, (state, action) => produce(state, (nexState) => {
+    nexState.searchState = {loading: true, value: action.payload.value};
+  }))
+  .handleAction(actions.searchFinish, (state, action) => produce(state, (nexState) => {
+    nexState.searchState = {loading: false, results: action.payload.results};
+  }))
+  .handleAction(actions.searchUpdateSelection, (state, action) => produce(state, (nexState) => {
+    nexState.searchState = {value: action.payload.value};
   }));
 
 export { reducer as SharedReducer };

@@ -12,7 +12,7 @@ const initialState: AppStateType = {
     count: 0,
     page: 0,
     pages: 0,
-  },
+  }
 };
 
 const reducer = createReducer<AppStateType, Action>(initialState)

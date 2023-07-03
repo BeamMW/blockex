@@ -1,11 +1,13 @@
 const Mongoose = require("mongoose");
 const axios = require("axios");
 
+require("dotenv").config();
+
 const BLOCKS_STEP_SYNC = 1000;
 
 const getRequest = async (req) => {
   const options = {
-    url: "http://host.docker.internal:8899/" + req,
+    url: `http://${process.env.BEAM_NODE_URL}/${req}`,
     method: "GET",
   };
 
@@ -20,6 +22,9 @@ const assetSchema = new Mongoose.Schema(
       type: Number,
       unique: true,
       required: true,
+    },
+    aid_index: {
+      type: String,
     },
     cid: {
       type: String,
@@ -44,6 +49,8 @@ const assetSchema = new Mongoose.Schema(
   },
 );
 
+assetSchema.index({ aid_index: "text", cid: "text", owner: "text" });
+
 const Assets = Mongoose.model("Assets", assetSchema);
 
 const mongooseOptions = {
@@ -53,7 +60,10 @@ const mongooseOptions = {
 
 const connect = async () => {
   try {
-    await Mongoose.connect("mongodb://beam-explorer-mongo-mainnet:27017/explorer", mongooseOptions);
+    await Mongoose.connect(
+      `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+      mongooseOptions,
+    );
     console.log("Connected to MongoDB");
   } catch (error) {
     console.log("Could not connect to MongoDB");
@@ -67,6 +77,7 @@ const formatAssets = async (assets) => {
       const assetHistory = await getRequest("asset?id=" + asset.aid + "&n=1");
       return {
         aid: asset.aid,
+        aid_index: asset.aid,
         cid: asset.cid ? asset.cid.value : null,
         lock_height: asset.lock_height,
         metadata: asset.metadata.text,

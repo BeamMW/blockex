@@ -10,3 +10,4 @@ export { default as ActiveAccount } from './ActiveAccount';
 export { default as StatusCards } from './StatusCards';
 export { default as AssetIcon } from './AssetIcon';
 export { default as BackControl } from './BackControl';
+export { default as Search } from './Search';

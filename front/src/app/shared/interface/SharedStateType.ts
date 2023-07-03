@@ -1,4 +1,4 @@
-import { Asset, Status, BlocksData } from '@core/types';
+import { Asset, Status, BlocksData, SearchState } from '@core/types';
 
 export interface SharedStateType {
   routerLink: string;
@@ -6,4 +6,5 @@ export interface SharedStateType {
   isLoaded: boolean;
   assetsList: Asset[]
   status: Status;
+  searchState: SearchState;
 }
