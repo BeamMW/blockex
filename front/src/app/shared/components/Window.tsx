@@ -114,12 +114,12 @@ const Window: React.FC<any> = ({
           </span>
         </div>
       </div>
-      {isLoaded && <>
-      { isStatusEnabled && <StatusContent>
+      <>
+      { isStatusEnabled && isLoaded && <StatusContent>
         <StatusCards/>
       </StatusContent> }
       { children }
-      </>}
+      </>
     </Container>
   );
 };
